@@ -1,0 +1,6 @@
+# Git Folder
+.git
+# Next Folder
+.next
+# Folder Node Modules
+node_modules
