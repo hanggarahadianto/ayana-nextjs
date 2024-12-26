@@ -11,20 +11,7 @@ function MyApp() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <Container mt={30}>
-          <Paper p={40}>
-            <Text
-              mt={5}
-              size="xl"
-              fw={900}
-              variant="gradient"
-              gradient={{ from: "teal", to: "cyan", deg: 90 }}
-            >
-              Gradient Text
-            </Text>
-            <Button color="primary">Button</Button>
-          </Paper>
-        </Container>
+        <Container mt={30}></Container>
         <ProductsPage />
       </QueryClientProvider>
     </>

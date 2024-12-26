@@ -1,49 +1,33 @@
 import React from "react";
-import {
-  Card,
-  Button,
-  CardHeader,
-  CardBody,
-  CardFooter,
-} from "@nextui-org/react";
+
 import Image from "next/image";
 import Link from "next/link";
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
+import { AspectRatio, Card, Container, SimpleGrid, Text } from "@mantine/core";
 
-interface ProductCardProps {
-  id: string;
-  name: string;
-  image: string;
-}
+const ProductCard: React.FC<> = () => {
+  const cards = product.map(
+    (article: {
+      title: React.Key | null | undefined;
+      image: string | StaticImport;
+      date: any;
+    }) => (
+      <Card key={article.title} p="md" radius="md" component="a" href="#">
+        <AspectRatio ratio={1920 / 1080}>
+          <Image src={article.image} alt={""} />
+        </AspectRatio>
+        <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
+          {article.date}
+        </Text>
+        <Text mt={5}>{article.title}</Text>
+      </Card>
+    )
+  );
 
-const ProductCard: React.FC<ProductCardProps> = ({ id, name, image }) => {
-  console.log("id", id);
   return (
-    <Card>
-      {/* <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-        <p className="text-tiny uppercase font-bold">Daily Mix</p>
-        <small className="text-default-500">12 Tracks</small>
-        <h4 className="font-bold text-large">Frontend Radio</h4>
-      </CardHeader> */}
-      <CardBody className="overflow-visible py-2">
-        {/* <Image
-          height={180}
-          alt="Card background"
-          className="object-cover rounded-xl"
-          src="https://nextui.org/images/hero-card-complete.jpeg"
-          width={270}
-        /> */}
-      </CardBody>
-      <CardFooter className="gap-3">
-        <div className="flex gap-1">
-          <p className="font-semibold text-default-400 text-small">{}</p>
-          <p className=" text-default-400 text-small">{id}</p>
-        </div>
-        <div className="flex gap-1">
-          <p className="font-semibold text-default-400 text-small">{name}</p>
-          {/* <p className="text-default-400 text-small">Followers</p> */}
-        </div>
-      </CardFooter>
-    </Card>
+    <Container py="xl">
+      <SimpleGrid cols={{ base: 1, sm: 2 }}>{cards}</SimpleGrid>
+    </Container>
   );
 };
 
