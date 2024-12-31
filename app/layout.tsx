@@ -7,8 +7,7 @@ import {
   MantineProvider,
 } from "@mantine/core";
 import { theme } from "@/theme";
-import Navbar from "./landing/navbar";
-import LandingPage from "./landing/landingpage";
+import "@mantine/carousel/styles.css";
 
 export const metadata = {
   title: "Mantine Next.js template",
@@ -27,11 +26,7 @@ export default function RootLayout({ children }: { children: any }) {
         />
       </head>
       <body>
-        <MantineProvider theme={theme}>
-          <Navbar />
-          <LandingPage />
-          {children}
-        </MantineProvider>
+        <MantineProvider theme={theme}>{children}</MantineProvider>
       </body>
     </html>
   );

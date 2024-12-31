@@ -13,9 +13,7 @@ import {
 } from "@mantine/core";
 // import { Link } from "react-router-dom";
 
-const NavbarComponent = () => {
-  const theme = useMantineTheme();
-
+const Testimony = () => {
   return (
     <Paper p="md" h={10}>
       <SimpleGrid bg="yellow" h={80}>
@@ -71,4 +69,4 @@ const NavbarComponent = () => {
   );
 };
 
-export default NavbarComponent;
+export default Testimony;
