@@ -16,7 +16,7 @@ import { FaInstagram, FaYoutube, FaTiktok } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <SimpleGrid p="md" h={400} mt={400} bg={"yellow"}>
+    <SimpleGrid p="md" h={490} mt={400} bg={"#363a3d"}>
       <Grid>
         <Grid.Col span={4}>
           <Stack p={40}>
@@ -33,36 +33,66 @@ const Footer = () => {
         <Grid.Col span={4}>
           <Stack p={20}>
             <Text
-              size="xl"
-              fw={900}
+              mb={30}
+              fw={700}
+              style={{ fontFamily: "GalanoGrotesque", fontSize: "2rem" }}
               variant="gradient"
-              gradient={{ from: "blue", to: "cyan", deg: 90 }}
+              gradient={{ from: "white", to: "white", deg: 90 }}
             >
-              Story of Ayana
+              Sitemap
             </Text>
-            <Text>Tetimony</Text>
-            <Text>News & Updated</Text>
+            <Text
+              fw={500}
+              style={{ fontFamily: "GalanoGrotesque", fontSize: "1.25rem" }}
+              variant="gradient"
+              gradient={{ from: "white", to: "white", deg: 90 }}
+            >
+              Tetimony
+            </Text>
+            <Text
+              fw={500}
+              style={{ fontFamily: "GalanoGrotesque", fontSize: "1.25rem" }}
+              variant="gradient"
+              gradient={{ from: "white", to: "white", deg: 90 }}
+            >
+              News & Updated
+            </Text>
           </Stack>
         </Grid.Col>
         <Grid.Col span={4}>
           <Stack p={20}>
             <Text
-              size="xl"
-              fw={900}
+              mb={30}
+              fw={700}
+              style={{ fontFamily: "GalanoGrotesque", fontSize: "2rem" }}
               variant="gradient"
-              gradient={{ from: "blue", to: "cyan", deg: 90 }}
+              gradient={{ from: "white", to: "white", deg: 90 }}
             >
               Contact Us
             </Text>
-            <Text>+62 8749973043</Text>
-            <Text>AYANA@GMAIL.COM</Text>
+            <Text
+              fw={500}
+              style={{ fontFamily: "GalanoGrotesque", fontSize: "1.25rem" }}
+              variant="gradient"
+              gradient={{ from: "white", to: "white", deg: 90 }}
+            >
+              +62 8749973043
+            </Text>
+            <Text
+              fw={700}
+              style={{ fontFamily: "GalanoGrotesque", fontSize: "1.25rem" }}
+              variant="gradient"
+              gradient={{ from: "white", to: "white", deg: 90 }}
+            >
+              AYANA@GMAIL.COM
+            </Text>
           </Stack>
           <Stack p={20}>
             <Text
-              size="xl"
-              fw={900}
+              fw={700}
+              style={{ fontFamily: "GalanoGrotesque", fontSize: "2rem" }}
               variant="gradient"
-              gradient={{ from: "blue", to: "cyan", deg: 90 }}
+              gradient={{ from: "white", to: "white", deg: 90 }}
             >
               Connect With Us
             </Text>
@@ -76,7 +106,7 @@ const Footer = () => {
               >
                 <Box
                   style={{
-                    borderRadius: "300px",
+                    borderRadius: "200px",
                     backgroundColor: "teal",
                     width: 60,
                     height: 60,
@@ -96,7 +126,7 @@ const Footer = () => {
               >
                 <Box
                   style={{
-                    borderRadius: "300px",
+                    borderRadius: "200px",
                     backgroundColor: "red",
                     width: 60,
                     height: 60,
@@ -116,7 +146,7 @@ const Footer = () => {
               >
                 <Box
                   style={{
-                    borderRadius: "300px",
+                    borderRadius: "200px",
                     backgroundColor: "dark",
                     width: 60,
                     height: 60,
@@ -133,7 +163,9 @@ const Footer = () => {
         </Grid.Col>
       </Grid>
       <Divider my="md" variant="dashed" />
-      <Text>© 2022 Cendana Homes All Rights Reserved.</Text>
+      <Text ml={30} c="white">
+        © 2025 Ayana Homes All Rights Reserved.
+      </Text>
     </SimpleGrid>
   );
 };

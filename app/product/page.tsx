@@ -36,7 +36,7 @@ const ProductsPage = () => {
 
   return (
     <>
-      <SimpleGrid cols={1} bg={"#a48060"} h={"80vh"}>
+      <SimpleGrid cols={1} bg={"#a48060"} h={"100vh"}>
         <Stack align="center" justify="center">
           <Text
             mt={0}
@@ -57,9 +57,6 @@ const ProductsPage = () => {
             ON SALE PROJECT
           </Text>
         </Stack>
-        {/* <Stack align="center" justify="center" mt={-400}>
-          <ProductCard products={productData?.data || []} />
-        </Stack> */}
 
         <ProductCard products={productData?.data || []} />
       </SimpleGrid>

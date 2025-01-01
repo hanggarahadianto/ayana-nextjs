@@ -41,10 +41,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ products }) => {
         <Text size="sm" c="dimmed">
           {home.content}
         </Text>
-
-        {/* <Button color="blue" fullWidth mt="md" radius="md">
-          Book classic tour now
-        </Button> */}
       </Card>
     </Carousel.Slide>
   ));

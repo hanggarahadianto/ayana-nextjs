@@ -6,6 +6,7 @@ import ProductsPage from "./product/page";
 import Navbar from "./landing/navbar";
 import LandingPage from "./landing/landingpage";
 import Footer from "./landing/footer";
+import Testimony from "./landing/testimony";
 
 const queryClient = new QueryClient();
 
@@ -16,6 +17,7 @@ function MyApp() {
         <Navbar />
         <LandingPage />
         <ProductsPage />
+        <Testimony />
         <Footer />
       </QueryClientProvider>
     </>
