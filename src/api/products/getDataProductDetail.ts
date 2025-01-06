@@ -1,14 +1,13 @@
 import { APIAxiosInstance } from "@/src/api";
 
-export const getDataProductDetail = async ({ params }: { params: string }) => {
+export const getDataProductDetail = async (id: string) => {
   try {
-    const url = `home/getById/${params}`;
+    const url = `home/getById/${id}`;
 
     const response = await APIAxiosInstance.get(url);
-    // const response = await APIAxiosInstance.get(url, httpHeader(token));
 
     console.log("Response:", response.data.data);
-    return response.data as ProductResponse;
+    return response.data.data as ProductResponse;
   } catch (error: any) {
     console.error("Error fetching data:", error.message || error);
     throw error;

@@ -5,14 +5,10 @@ import {
   Text,
   Group,
   Button,
-  Avatar,
-  useMantineTheme,
   Flex,
-  SimpleGrid,
   Image,
   Grid,
   Card,
-  Badge,
   Box,
   Stack,
 } from "@mantine/core";
@@ -21,9 +17,14 @@ import Marquee from "react-fast-marquee";
 
 const Testimony = () => {
   return (
-    <Paper h={"65vh"}>
+    <Paper h={"85vh"}>
       <Grid style={{ height: "100%" }}>
-        <Grid.Col span={4} mt={0} style={{ backgroundColor: "#22492a" }}>
+        <Grid.Col
+          span={4}
+          mt={0}
+          style={{ backgroundColor: "#22492a" }}
+          h={"85vh"}
+        >
           {/* <div
             style={{
               backgroundImage: "url(/images/testimony.png)",
@@ -93,7 +94,7 @@ const Testimony = () => {
             </Flex>
           </Card>
         </Grid.Col>
-        <Grid.Col span={8} bg={"#486245"} style={{ height: "69vh" }}>
+        <Grid.Col span={8} bg={"#486245"} h={"85vh"}>
           <Stack ml={300} align="start" justify="center" mt={120} gap={1}>
             <Text c="white" style={{ fontFamily: "Lora", fontSize: "5rem" }}>
               What They Say of

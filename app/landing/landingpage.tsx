@@ -20,7 +20,7 @@ const imageSize = { height: 400, width: 500 };
 const LandingPage = () => {
   return (
     <div>
-      <Container {...demoProps} fluid h="135vh" bg="#25492c">
+      <Container {...demoProps} fluid h="215vh" bg="#25492c">
         <AspectRatio ratio={1080 / 1080} maw={1800} mx="auto">
           <Image
             className="rounded-tl-3xl"
@@ -47,7 +47,7 @@ const LandingPage = () => {
               <Text
                 size="xl"
                 fw={900}
-                color="darksalmon"
+                c="darksalmon"
                 style={{ fontFamily: "Lora", fontSize: "5rem" }}
               >
                 LIVABLE CITY
@@ -77,7 +77,7 @@ const LandingPage = () => {
             </Stack>
           </Grid.Col>
         </Grid>
-        <Stack justify="center" align="center" mt={80} mb={20}>
+        <Stack justify="center" align="center" mt={160} mb={20}>
           <Text
             variant="gradient"
             gradient={{ from: "white", to: "cyan", deg: 90 }}
@@ -93,7 +93,7 @@ const LandingPage = () => {
         h="40vh"
         spacing="lg"
       >
-        <Flex align="center" justify="center" mt={-200}>
+        <Flex align="center" justify="center" mt={-300}>
           <Grid p="md">
             <Grid.Col span={12}>
               <Stack align="start">

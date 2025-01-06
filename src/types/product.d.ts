@@ -7,6 +7,9 @@ interface Product {
   bathroom: string;
   bedroom: string;
   square: string;
+  status: string;
+  price: number;
+  quantity: number;
   reservation: any;
   created_at: string;
   updated_at: string;
