@@ -16,7 +16,8 @@ import { FaInstagram, FaYoutube, FaTiktok } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <SimpleGrid p="md" h={490} mt={400} bg={"#363a3d"}>
+    // <SimpleGrid p="md" h={490} bg={"white"}>
+    <SimpleGrid p="md" h={490} bg={"#363a3d"}>
       <Grid>
         <Grid.Col span={4}>
           <Stack p={40}>

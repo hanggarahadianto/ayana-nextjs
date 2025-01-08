@@ -17,7 +17,7 @@ import Marquee from "react-fast-marquee";
 
 const Testimony = () => {
   return (
-    <Paper h={"85vh"}>
+    <Paper h={"85vh"} mb={400}>
       <Grid style={{ height: "100%" }}>
         <Grid.Col
           span={4}

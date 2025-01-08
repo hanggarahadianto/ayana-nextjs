@@ -1,0 +1,34 @@
+import { useMutation } from "@tanstack/react-query"; // Correct import from '@tanstack/react-query'
+import { showNotification } from "@mantine/notifications";
+import { APIAxiosInstance } from "@/src/api";
+
+const handleSubmitReservationForm = async (values: any, id: string) => {
+  console.log("values on fetching", values);
+  const response = await APIAxiosInstance.post(
+    `reservation/post/${id}`,
+    values
+  );
+  return response.data; // Return the response data
+};
+
+// Custom hook for the mutation
+export const useSubmitReservationForm = (id: string) => {
+  return useMutation({
+    mutationFn: (values: any) => handleSubmitReservationForm(values, id),
+    onSuccess: (data: any) => {
+      showNotification({
+        title: "Data Berhasil Disimpan",
+        message: `${data.message}`,
+        color: "green",
+      });
+    },
+    onError: (data: any) => {
+      showNotification({
+        title: "Data Gagal Disimpan",
+        message: `${data.message}`,
+        color: "red",
+      });
+    },
+    onSettled: () => {},
+  });
+};

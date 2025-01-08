@@ -8,6 +8,7 @@ import {
 } from "@mantine/core";
 import { theme } from "@/theme";
 import "@mantine/carousel/styles.css";
+import "@mantine/notifications/styles.css";
 
 export const metadata = {
   title: "Mantine Next.js template",
