@@ -100,7 +100,7 @@ const ProductsPage = () => {
 
   return (
     <>
-      <SimpleGrid cols={1} bg={"#a48060"} h={"130vh"}>
+      <SimpleGrid cols={1} bg={"#a48060"} h={"100vh"}>
         <Stack align="center" justify="center">
           <Text
             size="xl"

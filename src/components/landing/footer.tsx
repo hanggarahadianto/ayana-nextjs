@@ -22,11 +22,12 @@ import {
   FaEnvelope,
   FaFacebookMessenger,
 } from "react-icons/fa";
+import Link from "next/link";
 
 const Footer = () => {
   return (
     // <SimpleGrid p="md" h={490} bg={"white"}>
-    <SimpleGrid p="md" h={490} bg={"#363a3d"}>
+    <SimpleGrid p="md" h={520} bg={"#363a3d"}>
       <Grid>
         <Grid.Col span={4}>
           <Stack p={20}>
@@ -83,6 +84,20 @@ const Footer = () => {
             >
               Testimony
             </Text>
+            <Link
+              href="/banking-partners"
+              passHref
+              style={{ textDecoration: "none" }}
+            >
+              <Text
+                fw={500}
+                style={{ fontFamily: "GalanoGrotesque", fontSize: "1.25rem" }}
+                variant="gradient"
+                gradient={{ from: "white", to: "white", deg: 90 }}
+              >
+                Bank Partners
+              </Text>
+            </Link>
             <Text
               fw={500}
               style={{ fontFamily: "GalanoGrotesque", fontSize: "1.25rem" }}
@@ -224,7 +239,7 @@ const Footer = () => {
           </Stack>
         </Grid.Col>
       </Grid>
-      <Divider my="md" variant="dashed" />
+      <Divider variant="dashed" />
       <Text ml={30} c="white">
         © 2025 Ayana Homes All Rights Reserved.
       </Text>

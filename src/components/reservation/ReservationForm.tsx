@@ -10,6 +10,7 @@ interface ReservationFormProps {
 }
 
 const containerProps = {
+  ml: 120,
   mt: 40,
   p: 40,
   bg: "slate",
@@ -51,7 +52,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
               <Text size="lg" w={900} style={{ fontFamily: "Poppins" }} mt={20}>
                 Mulai dari
               </Text>
-              <Text fw={600} style={{ fontSize: "2.5rem" }} variant="A1">
+              <Text fw={600} style={{ fontSize: "2rem" }} variant="A1">
                 {start_price} / bulan
               </Text>
               <Text size="lg" w={900} style={{ fontFamily: "Poppins" }} mt={20}>

@@ -52,7 +52,14 @@ export function BankingPartnerComponent() {
         </GridCol>
       </Grid>
 
-      <Carousel slideSize="20%" slideGap="xl" withIndicators loop>
+      <Carousel
+        slideSize="20%"
+        slideGap="xl"
+        withIndicators
+        loop
+        mb={80}
+        p={40}
+      >
         {banks.map((bank) => (
           <Carousel.Slide key={bank.id}>
             <Card shadow="sm" p="md" radius="md" withBorder>

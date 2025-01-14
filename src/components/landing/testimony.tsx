@@ -17,7 +17,7 @@ import Marquee from "react-fast-marquee";
 
 const Testimony = () => {
   return (
-    <Paper h={"85vh"} mb={400}>
+    <Paper h={"60vh"} mb={400}>
       <Grid style={{ height: "100%" }}>
         <Grid.Col
           span={4}
@@ -25,18 +25,6 @@ const Testimony = () => {
           style={{ backgroundColor: "#22492a" }}
           h={"85vh"}
         >
-          {/* <div
-            style={{
-              backgroundImage: "url(/images/testimony.png)",
-              height: "710px",
-              width: "1200px",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-
-              position: "absolute",
-            }}
-          /> */}
-
           <Card
             shadow="sm"
             radius="md"

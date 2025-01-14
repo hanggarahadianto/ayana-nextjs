@@ -19,7 +19,7 @@ const imageSize = { height: 400, width: 500 };
 const LandingPage = () => {
   return (
     <div>
-      <Container {...demoProps} fluid h="215vh" bg="#25492c">
+      <Container {...demoProps} fluid h="160vh" bg="#25492c">
         <AspectRatio ratio={1080 / 1080} maw={1800} mx="auto">
           <Image
             className="rounded-tl-3xl"
@@ -87,13 +87,12 @@ const LandingPage = () => {
         </Stack>
       </Container>
       <SimpleGrid
-        // mt={140}
         cols={1}
         style={{ backgroundColor: "#ece6dc" }}
-        h="60vh"
+        h="28vh"
         spacing="lg"
       >
-        <Flex align="center" justify="center" mt={-340}>
+        <Flex align="center" justify="center" mt={-400}>
           <Grid p="md">
             <Grid.Col span={12}>
               <Stack align="start">
@@ -167,7 +166,6 @@ const LandingPage = () => {
             </Grid.Col>
           </Grid>
         </Flex>
-        {/* </Group> */}
       </SimpleGrid>
     </div>
   );

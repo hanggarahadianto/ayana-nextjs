@@ -4,6 +4,7 @@ import {
   Button,
   Center,
   Container,
+  Divider,
   Flex,
   Group,
   Image,
@@ -23,6 +24,7 @@ import Footer from "@/src/components/landing/footer";
 import { Navbar } from "@/src/components/landing/navbar";
 import AdditionalInfoProduct from "@/src/components/product/additional-info-product";
 import { getDataAdditionalInfo } from "@/src/api/additional-info/getDataAdditionalInfo";
+import Link from "next/link";
 
 interface ProductProps {
   params: Promise<{
@@ -82,7 +84,7 @@ const ProductDetailPage: FC<ProductProps> = ({ params }) => {
       </Grid>
       <Stack p={120} mt={-150}>
         <Grid gutter="md">
-          <Grid.Col span={7} mr={80}>
+          <Grid.Col span={7}>
             <Text
               w={900}
               style={{ fontFamily: "Lora", fontSize: "3.5rem" }}
@@ -113,6 +115,8 @@ const ProductDetailPage: FC<ProductProps> = ({ params }) => {
               {productDataDetail?.content}
             </Text>
 
+            <Divider mt={20} />
+
             <Stack>
               <Text mt={40} size="xl" fw={800} style={{ fontFamily: "Lora" }}>
                 Spesifikasi Unit
@@ -140,8 +144,10 @@ const ProductDetailPage: FC<ProductProps> = ({ params }) => {
                   </Stack>
                 </Grid.Col>
               </Grid>
+              <Divider mt={20} />
             </Stack>
           </Grid.Col>
+
           <Grid.Col span={4}>
             <ReservationForm
               id={productId}
@@ -154,6 +160,22 @@ const ProductDetailPage: FC<ProductProps> = ({ params }) => {
           maps={additionalInfo?.maps}
           nearBy={additionalInfo?.nearBy || []}
         />
+        <Link
+          href="/banking-partners"
+          passHref
+          style={{ textDecoration: "none" }}
+        >
+          <Button bg={"orange"} mt={40} h={40}>
+            <Text
+              fw={900}
+              style={{ fontFamily: "GalanoGrotesque", fontSize: "1.25rem" }}
+              variant="gradient"
+              gradient={{ from: "white", to: "white", deg: 90 }}
+            >
+              Temukan Bank Partners
+            </Text>
+          </Button>
+        </Link>
       </Stack>
 
       <Box
