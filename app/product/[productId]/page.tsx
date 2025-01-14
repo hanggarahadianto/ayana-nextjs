@@ -23,8 +23,9 @@ import {
 import { Box, Grid } from "@mantine/core";
 import { FaBath, FaBed, FaLandmark } from "react-icons/fa";
 import ReservationForm from "@/src/components/reservation/ReservationForm";
-import Footer from "@/app/landing/footer";
-import { useSearchParams } from "next/navigation";
+import Footer from "@/src/components/landing/footer";
+import { Navbar } from "@/src/components/landing/navbar";
+import AdditionalInfoProduct from "@/src/components/product/additional-info-product";
 
 interface ProductProps {
   params: Promise<{
@@ -44,51 +45,33 @@ const ProductDetailPage: FC<ProductProps> = ({ params }) => {
   } = useQuery({
     queryKey: ["getProducDetailtData"],
     queryFn: () => getDataProductDetail(productId),
-    // queryFn: () => getDataProductDetail(unwrappedParams.id),
+
     // enabled: !!token,
     refetchOnWindowFocus: false,
   });
 
-  console.log("product detail", productDataDetail);
-
   return (
     <SimpleGrid>
-      <Stack
-        bg="#beab96"
-        p="md"
-        style={{ position: "sticky", top: 0, zIndex: 1000 }}
-      >
-        <Flex justify="space-between" align="center">
+      <Navbar />
+      <Grid bg={"#fafafa"} w={"full"} p={90}>
+        <Grid.Col span={6}>
           <Image
-            className="rounded-tl-3xl"
-            src="/images/ayana.png"
-            height={60}
-            width={60}
-            alt=""
+            height={400}
+            src={productDataDetail?.image}
             style={{ borderRadius: "15px" }}
+            alt="Large Preview"
           />
-        </Flex>
-      </Stack>
-      <Container fluid h="160vh" p={120}>
-        <Grid gutter="md">
-          <Grid.Col span={6}>
-            <Image
-              height={400}
-              src={productDataDetail?.image}
-              style={{ borderRadius: "15px" }}
-              alt="Large Preview"
-            />
-          </Grid.Col>
-          <Grid.Col span={6}>
-            <Image
-              height={400}
-              src={productDataDetail?.image}
-              style={{ borderRadius: "15px" }}
-              alt="Large Preview"
-            />
-          </Grid.Col>
-        </Grid>
-
+        </Grid.Col>
+        <Grid.Col span={6}>
+          <Image
+            height={400}
+            src={productDataDetail?.image}
+            style={{ borderRadius: "15px" }}
+            alt="Large Preview"
+          />
+        </Grid.Col>
+      </Grid>
+      <Stack p={120} mt={-150}>
         <Grid gutter="md">
           <Grid.Col span={7} mr={80}>
             <Text
@@ -106,12 +89,14 @@ const ProductDetailPage: FC<ProductProps> = ({ params }) => {
               </Group>
 
               {productDataDetail?.status !== "sold" && (
-                <Text ml={40} mt={24} c={"green"}>
-                  {new Intl.NumberFormat("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  }).format(productDataDetail?.price || 0)}
-                </Text>
+                <>
+                  <Text ml={40} mt={24} c={"green"}>
+                    {new Intl.NumberFormat("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                    }).format(productDataDetail?.price || 0)}
+                  </Text>
+                </>
               )}
             </Flex>
 
@@ -124,7 +109,7 @@ const ProductDetailPage: FC<ProductProps> = ({ params }) => {
                 Spesifikasi Unit
               </Text>
               <Grid>
-                <Grid.Col span={1}>
+                <Grid.Col span={1} ml={12}>
                   <Stack>
                     <FaLandmark size={22}></FaLandmark>
                     <FaBed size={22}></FaBed>
@@ -138,7 +123,7 @@ const ProductDetailPage: FC<ProductProps> = ({ params }) => {
                     <Text size="lg">Bathroom</Text>
                   </Stack>
                 </Grid.Col>
-                <Grid.Col span={1}>
+                <Grid.Col span={2}>
                   <Stack gap={12} mb={2}>
                     <Text>{productDataDetail?.square}</Text>
                     <Text mt={2}>{productDataDetail?.bedroom}</Text>
@@ -152,7 +137,10 @@ const ProductDetailPage: FC<ProductProps> = ({ params }) => {
             <ReservationForm id={productId} />
           </Grid.Col>
         </Grid>
-      </Container>
+
+        <AdditionalInfoProduct id={productId} />
+      </Stack>
+
       <Box
         style={{
           backgroundColor: "#1C7ED6", // Mantine blue[7]
@@ -181,6 +169,7 @@ const ProductDetailPage: FC<ProductProps> = ({ params }) => {
           </Center>
         </Container>
       </Box>
+
       <Footer />
     </SimpleGrid>
   );

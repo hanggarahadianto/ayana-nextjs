@@ -13,7 +13,6 @@ import {
   Image,
   Flex,
   Group,
-  Divider,
   Badge,
 } from "@mantine/core";
 
@@ -35,38 +34,35 @@ const ProductsPage = () => {
 
   console.log("product data", productData);
 
-  console.log("productdata", productData);
-
   const products = productData;
 
   const cards = products?.data.map((home) => {
     return (
-      <Carousel.Slide key={home.ID}>
+      <Carousel.Slide key={home.id}>
         <Card shadow="sm" padding="lg" radius="md" withBorder>
-          <Link href={`/product/${home.ID}`} passHref>
+          <Link href={`/product/${home.id}`} passHref>
             <Card.Section>
               <Image height={300} src={home.image} alt={home.title} />
             </Card.Section>
           </Link>
 
           <Flex justify="space-between">
-            <Group gap={4} align="start" mt={20}>
+            <Group gap={4} align="start" mt={40}>
               <Text>{home.address}</Text>
-              <Divider orientation="vertical" />
-              <Text>{home.square}</Text>
-              <Divider orientation="vertical" />
-              <Text>{home.bathroom}</Text>
-              <Divider orientation="vertical" />
-              <Text>{home.bedroom}</Text>
             </Group>
 
             {home.status !== "sold" && (
-              <Text mt={20} c={"green"}>
-                {new Intl.NumberFormat("id-ID", {
-                  style: "currency",
-                  currency: "IDR",
-                }).format(home.price)}
-              </Text>
+              <Flex mt={40}>
+                <Text mr={12} fw={600} mt={3}>
+                  Start from
+                </Text>
+                <Text size="lg" c={"green"}>
+                  {new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                  }).format(home.price)}
+                </Text>
+              </Flex>
             )}
           </Flex>
 

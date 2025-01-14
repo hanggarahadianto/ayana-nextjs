@@ -48,7 +48,7 @@ const Footer = () => {
               variant="gradient"
               gradient={{ from: "white", to: "white", deg: 90 }}
             >
-              Tetimony
+              Testimony
             </Text>
             <Text
               fw={500}

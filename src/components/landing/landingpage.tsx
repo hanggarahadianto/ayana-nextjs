@@ -4,8 +4,6 @@ import {
   Container,
   Flex,
   Grid,
-  Group,
-  LoadingOverlay,
   SimpleGrid,
   Stack,
   Text,
@@ -22,22 +20,6 @@ const LandingPage = () => {
   return (
     <div>
       <Container {...demoProps} fluid h="215vh" bg="#25492c">
-        <Stack
-          bg="#beab96"
-          p="md"
-          style={{ position: "sticky", top: 0, zIndex: 1000 }}
-        >
-          <Flex justify="space-between" align="center">
-            <Image
-              className="rounded-tl-3xl"
-              src="/images/ayana.png"
-              height={60}
-              width={60}
-              alt=""
-              style={{ borderRadius: "15px" }}
-            />
-          </Flex>
-        </Stack>
         <AspectRatio ratio={1080 / 1080} maw={1800} mx="auto">
           <Image
             className="rounded-tl-3xl"
@@ -94,7 +76,7 @@ const LandingPage = () => {
             </Stack>
           </Grid.Col>
         </Grid>
-        <Stack justify="center" align="center" mt={160}>
+        <Stack justify="center" align="center" mt={100}>
           <Text
             variant="gradient"
             gradient={{ from: "white", to: "cyan", deg: 90 }}
@@ -105,13 +87,13 @@ const LandingPage = () => {
         </Stack>
       </Container>
       <SimpleGrid
-        mt={140}
+        // mt={140}
         cols={1}
         style={{ backgroundColor: "#ece6dc" }}
-        h="40vh"
+        h="60vh"
         spacing="lg"
       >
-        <Flex align="center" justify="center" mt={-300}>
+        <Flex align="center" justify="center" mt={-340}>
           <Grid p="md">
             <Grid.Col span={12}>
               <Stack align="start">

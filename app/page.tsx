@@ -1,26 +1,11 @@
-"use client";
+import { Center } from "@mantine/core";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-import ProductsPage from "./product/page";
-
-import LandingPage from "./landing/landingpage";
-import Footer from "./landing/footer";
-import Testimony from "./landing/testimony";
-
-const queryClient = new QueryClient();
-
-function MyApp() {
+export default function Page() {
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <LandingPage />
-        <ProductsPage />
-        <Testimony />
-        <Footer />
-      </QueryClientProvider>
+      <Center id="main_content">
+        <h1>Oops The page is not found !</h1>
+      </Center>
     </>
   );
 }
-
-export default MyApp;

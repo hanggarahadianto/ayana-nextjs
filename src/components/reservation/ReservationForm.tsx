@@ -43,10 +43,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ id }) => {
 
           return (
             <Form>
-              <Text size="lg" w={900} style={{ fontFamily: "Lora" }} mt={20}>
-                Tanpa DP, Free Smarthome, Free CCTV Cicilan 14jt/Bulan
-              </Text>
-              <Text size="lg" w={900} style={{ fontFamily: "Lora" }} mt={20}>
+              <Text size="lg" w={900} style={{ fontFamily: "Poppins" }} mt={20}>
                 Dapatkan Update Promo & Harga Terbaru
               </Text>
               <Field name="name">

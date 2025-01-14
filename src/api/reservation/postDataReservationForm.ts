@@ -16,9 +16,10 @@ export const useSubmitReservationForm = (id: string) => {
   return useMutation({
     mutationFn: (values: any) => handleSubmitReservationForm(values, id),
     onSuccess: (data: any) => {
+      console.log("pesan sukses terkirim");
       showNotification({
-        title: "Data Berhasil Disimpan",
-        message: `${data.message}`,
+        title: "Data Berhasil Dikirim",
+        message: "",
         color: "green",
       });
     },

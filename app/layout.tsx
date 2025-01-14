@@ -1,23 +1,20 @@
-import "@mantine/core/styles.css";
+"use client";
 
-import React from "react";
-import {
-  ColorSchemeScript,
-  mantineHtmlProps,
-  MantineProvider,
-} from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
+import { ColorSchemeScript } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { theme } from "@/theme";
-import "@mantine/carousel/styles.css";
-import "@mantine/notifications/styles.css";
 
-export const metadata = {
-  title: "Mantine Next.js template",
-  description: "I am using Mantine with Next.js!",
-};
+const queryClient = new QueryClient(); // Create a QueryClient instance directly
 
-export default function RootLayout({ children }: { children: any }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" {...mantineHtmlProps}>
+    <html lang="en">
       <head>
         <ColorSchemeScript />
         <link rel="shortcut icon" href="/favicon.svg" />
@@ -27,7 +24,12 @@ export default function RootLayout({ children }: { children: any }) {
         />
       </head>
       <body>
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+        <MantineProvider>
+          <QueryClientProvider client={queryClient}>
+            <Notifications position="bottom-right" zIndex={1000} />
+            {children}
+          </QueryClientProvider>
+        </MantineProvider>
       </body>
     </html>
   );
