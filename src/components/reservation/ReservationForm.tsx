@@ -6,6 +6,7 @@ import { getInitialValuesReservationForm } from "./InitialValuesReservationForm"
 
 interface ReservationFormProps {
   id: string;
+  start_price: any;
 }
 
 const containerProps = {
@@ -20,13 +21,17 @@ const containerProps = {
 
 // Mock function for handling form submission
 
-const ReservationForm: React.FC<ReservationFormProps> = ({ id }) => {
+const ReservationForm: React.FC<ReservationFormProps> = ({
+  id,
+  start_price,
+}) => {
+  console.log("ID", id);
   const { mutate: postData, isPending: isLoadingSubmitPropertyData } =
-    useSubmitReservationForm(id);
+    useSubmitReservationForm();
 
   const handleSubmit = (values: Reservation, { setSubmitting }: any) => {
     console.log("Form values submitted:", values);
-    postData(values);
+    postData({ ...values, home_id: id });
     setSubmitting(false);
   };
 
@@ -43,6 +48,12 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ id }) => {
 
           return (
             <Form>
+              <Text size="lg" w={900} style={{ fontFamily: "Poppins" }} mt={20}>
+                Mulai dari
+              </Text>
+              <Text fw={600} style={{ fontSize: "2.5rem" }} variant="A1">
+                {start_price} / bulan
+              </Text>
               <Text size="lg" w={900} style={{ fontFamily: "Poppins" }} mt={20}>
                 Dapatkan Update Promo & Harga Terbaru
               </Text>

@@ -2,19 +2,16 @@ import { useMutation } from "@tanstack/react-query"; // Correct import from '@ta
 import { showNotification } from "@mantine/notifications";
 import { APIAxiosInstance } from "@/src/api";
 
-const handleSubmitReservationForm = async (values: any, id: string) => {
+const handleSubmitReservationForm = async (values: any) => {
   console.log("values on fetching", values);
-  const response = await APIAxiosInstance.post(
-    `reservation/post/${id}`,
-    values
-  );
+  const response = await APIAxiosInstance.post(`reservation/post`, values);
   return response.data; // Return the response data
 };
 
 // Custom hook for the mutation
-export const useSubmitReservationForm = (id: string) => {
+export const useSubmitReservationForm = () => {
   return useMutation({
-    mutationFn: (values: any) => handleSubmitReservationForm(values, id),
+    mutationFn: (values: any) => handleSubmitReservationForm(values),
     onSuccess: (data: any) => {
       console.log("pesan sukses terkirim");
       showNotification({

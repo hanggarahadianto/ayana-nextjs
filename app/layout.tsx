@@ -1,20 +1,27 @@
 "use client";
+import "@mantine/core/styles.css";
 
-import { MantineProvider } from "@mantine/core";
-import { ColorSchemeScript } from "@mantine/core";
+import React from "react";
+import {
+  ColorSchemeScript,
+  mantineHtmlProps,
+  MantineProvider,
+  Notification,
+} from "@mantine/core";
+// import { theme } from "@/theme";
+import "@mantine/carousel/styles.css";
+import "@mantine/notifications/styles.css";
 import { Notifications } from "@mantine/notifications";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { theme } from "@/theme";
+import { ReactNode, useState } from "react";
+import theme from "@/theme";
 
-const queryClient = new QueryClient(); // Create a QueryClient instance directly
+export default function RootLayout({ children }: { children: ReactNode }) {
+  const [queryClient] = useState(() => new QueryClient());
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
   return (
-    <html lang="en">
+    <html lang="en" {...mantineHtmlProps}>
       <head>
         <ColorSchemeScript />
         <link rel="shortcut icon" href="/favicon.svg" />
@@ -24,12 +31,12 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <MantineProvider>
-          <QueryClientProvider client={queryClient}>
-            <Notifications position="bottom-right" zIndex={1000} />
+        <QueryClientProvider client={queryClient}>
+          <MantineProvider theme={theme}>
+            <Notifications />
             {children}
-          </QueryClientProvider>
-        </MantineProvider>
+          </MantineProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );

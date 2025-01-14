@@ -1,97 +1,30 @@
-"use client";
+import { createTheme, MantineTheme } from "@mantine/core";
 
-import { createTheme } from "@mantine/core";
-
-export const theme = createTheme({
-  /* Put your mantine theme override here */
-  colors: {
-    // from light to dark
-    indigo: [
-      "#ccdbea",
-      "#b3cadf",
-      "#99b8d4",
-      "#80a6ca",
-      "#6694bf",
-      "#4d82b4",
-      "#3371a9",
-      "#1a5f9f",
-      "#004d94",
-      "#222D69",
-    ],
-    red: [
-      "#feecec",
-      "#fcd8d8",
-      "#fbc5c5",
-      "#f9b1b1",
-      "#f89e9e",
-      "#f68a8a",
-      "#f57777",
-      "#f36363",
-      "#f25050",
-      "#f03c3c",
-    ],
-    blue: [
-      "#e9eeff",
-      "#d3dcfe",
-      "#bdcbfe",
-      "#a7b9fe",
-      "#91a8fe",
-      "#7a96fd",
-      "#6485fd",
-      "#4e73fd",
-      "#3862fc",
-      "#2250fc",
-    ],
-    gray: [
-      "#f2f2f2",
-      "#e5e5e5",
-      "#d9d9d9",
-      "#cccccc",
-      "#bfbfbf",
-      "#b2b2b2",
-      "#a5a5a5",
-      "#999999",
-      "#8c8c8c",
-      "#7f7f7f",
-    ],
-    green: [
-      "#e9f7ec",
-      "#d3eeda",
-      "#bde6c7",
-      "#a7deb4",
-      "#91d6a2",
-      "#7bcd8f",
-      "#65c57c",
-      "#4fbd69",
-      "#39b457",
-      "#23ac44",
-    ],
-    orange: [
-      "#fff7e7",
-      "#fff0cf",
-      "#ffe8b7",
-      "#ffe09f",
-      "#ffd987",
-      "#ffd16e",
-      "#ffc956",
-      "#ffc13e",
-      "#ffba26",
-      "#ffb20e",
-    ],
-    white: [
-      "#ffffff",
-      "#ffffff",
-      "#ffffff",
-      "#ffffff",
-      "#ffffff",
-      "#ffffff",
-      "#ffffff",
-      "#ffffff",
-      "#ffffff",
-      "#ffffff",
-    ],
+const theme = createTheme({
+  // ... other theme settings ...
+  other: {
+    textStyles: {
+      A1: {
+        fontSize: "3xl",
+        fontWeight: 700,
+        fontFamily: `
+          Poppins,
+          ui-sans-serif,
+          system-ui,
+          sans-serif,
+          "Apple Color Emoji",
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+          "Noto Color Emoji"
+        `,
+        styles: {
+          root: {
+            marginTop: 20,
+          },
+        },
+      },
+    },
   },
-  fontFamily: "Open sans",
-  primaryColor: "indigo",
-  primaryShade: 8,
 });
+
+export default theme;

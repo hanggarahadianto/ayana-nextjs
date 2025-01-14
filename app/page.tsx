@@ -1,11 +1,12 @@
-import { Center } from "@mantine/core";
+export const metadata = {
+  title: "Mantine Next.js template",
+  description: "I am using Mantine with Next.js!",
+};
 
 export default function Page() {
   return (
-    <>
-      <Center id="main_content">
-        <h1>Oops The page is not found !</h1>
-      </Center>
-    </>
+    <main>
+      <h1>halo</h1>
+    </main>
   );
 }

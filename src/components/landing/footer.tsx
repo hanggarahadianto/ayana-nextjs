@@ -9,10 +9,19 @@ import {
   Button,
   Flex,
   Box,
+  Group,
 } from "@mantine/core";
 // import { Link } from "react-router-dom";
 import Image from "next/image";
-import { FaInstagram, FaYoutube, FaTiktok } from "react-icons/fa";
+import {
+  FaInstagram,
+  FaYoutube,
+  FaTiktok,
+  FaLocationArrow,
+  FaExclamationCircle,
+  FaEnvelope,
+  FaFacebookMessenger,
+} from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -20,15 +29,39 @@ const Footer = () => {
     <SimpleGrid p="md" h={490} bg={"#363a3d"}>
       <Grid>
         <Grid.Col span={4}>
-          <Stack p={40}>
+          <Stack p={20}>
             <Image
               className="rounded-tl-3xl"
               src="/images/ayana.png"
-              height={200}
-              width={200}
+              height={280}
+              width={280}
               alt=""
               style={{ borderRadius: "15px" }}
             />
+            <Group>
+              <FaLocationArrow color="white" />
+              <Text
+                ml={10}
+                fw={500}
+                style={{ fontFamily: "GalanoGrotesque", fontSize: "1.25rem" }}
+                variant="gradient"
+                gradient={{ from: "white", to: "white", deg: 90 }}
+              >
+                Jalan Pujowiyoto No 7 Purbalingga Wetan
+              </Text>
+            </Group>
+            <Group>
+              <FaEnvelope color="white" />
+              <Text
+                ml={10}
+                fw={500}
+                style={{ fontFamily: "GalanoGrotesque", fontSize: "1rem" }}
+                variant="gradient"
+                gradient={{ from: "white", to: "white", deg: 90 }}
+              >
+                ayanagroup99@gmail.com
+              </Text>
+            </Group>
           </Stack>
         </Grid.Col>
         <Grid.Col span={4}>
@@ -63,7 +96,6 @@ const Footer = () => {
         <Grid.Col span={4}>
           <Stack p={20}>
             <Text
-              mb={30}
               fw={700}
               style={{ fontFamily: "GalanoGrotesque", fontSize: "2rem" }}
               variant="gradient"
@@ -71,22 +103,51 @@ const Footer = () => {
             >
               Contact Us
             </Text>
-            <Text
-              fw={500}
-              style={{ fontFamily: "GalanoGrotesque", fontSize: "1.25rem" }}
-              variant="gradient"
-              gradient={{ from: "white", to: "white", deg: 90 }}
-            >
-              +62 8749973043
-            </Text>
-            <Text
-              fw={700}
-              style={{ fontFamily: "GalanoGrotesque", fontSize: "1.25rem" }}
-              variant="gradient"
-              gradient={{ from: "white", to: "white", deg: 90 }}
-            >
-              AYANA@GMAIL.COM
-            </Text>
+
+            <Flex gap={20}>
+              <Group>
+                <Button
+                  w={200}
+                  h={60}
+                  component="a"
+                  href="https://wa.me/your-phone-number"
+                  target="_blank"
+                  variant="filled"
+                  color="green"
+                  leftSection={<FaFacebookMessenger />}
+                >
+                  0852847294828420
+                </Button>
+              </Group>
+              <Group>
+                <Button
+                  w={200}
+                  h={60}
+                  component="a"
+                  href="https://wa.me/your-phone-number"
+                  target="_blank"
+                  variant="filled"
+                  color="green"
+                  leftSection={<FaFacebookMessenger />}
+                >
+                  WhatsApp
+                </Button>
+              </Group>
+            </Flex>
+            <Group>
+              <Button
+                w={200}
+                h={60}
+                component="a"
+                href="https://wa.me/your-phone-number"
+                target="_blank"
+                variant="filled"
+                color="green"
+                leftSection={<FaFacebookMessenger />}
+              >
+                WhatsApp
+              </Button>
+            </Group>
           </Stack>
           <Stack p={20}>
             <Text

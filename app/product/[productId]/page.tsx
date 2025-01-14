@@ -15,17 +15,14 @@ import {
 import React, { FC, use } from "react";
 
 import { getDataProductDetail } from "@/src/api/products/getDataProductDetail";
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Box, Grid } from "@mantine/core";
 import { FaBath, FaBed, FaLandmark } from "react-icons/fa";
 import ReservationForm from "@/src/components/reservation/ReservationForm";
 import Footer from "@/src/components/landing/footer";
 import { Navbar } from "@/src/components/landing/navbar";
 import AdditionalInfoProduct from "@/src/components/product/additional-info-product";
+import { getDataAdditionalInfo } from "@/src/api/additional-info/getDataAdditionalInfo";
 
 interface ProductProps {
   params: Promise<{
@@ -45,6 +42,18 @@ const ProductDetailPage: FC<ProductProps> = ({ params }) => {
   } = useQuery({
     queryKey: ["getProducDetailtData"],
     queryFn: () => getDataProductDetail(productId),
+
+    // enabled: !!token,
+    refetchOnWindowFocus: false,
+  });
+
+  const {
+    data: additionalInfo,
+    isLoading: isLoadingGetAdditionalInfoData,
+    refetch: refetchAdditionalInfoData,
+  } = useQuery({
+    queryKey: ["getAdditionalInfoData"],
+    queryFn: () => getDataAdditionalInfo(productId),
 
     // enabled: !!token,
     refetchOnWindowFocus: false,
@@ -76,7 +85,7 @@ const ProductDetailPage: FC<ProductProps> = ({ params }) => {
           <Grid.Col span={7} mr={80}>
             <Text
               w={900}
-              style={{ fontFamily: "Lora", fontSize: "4rem" }}
+              style={{ fontFamily: "Lora", fontSize: "3.5rem" }}
               mt={20}
             >
               {productDataDetail?.title}
@@ -134,11 +143,17 @@ const ProductDetailPage: FC<ProductProps> = ({ params }) => {
             </Stack>
           </Grid.Col>
           <Grid.Col span={4}>
-            <ReservationForm id={productId} />
+            <ReservationForm
+              id={productId}
+              start_price={additionalInfo?.start_price}
+            />
           </Grid.Col>
         </Grid>
 
-        <AdditionalInfoProduct id={productId} />
+        <AdditionalInfoProduct
+          maps={additionalInfo?.maps}
+          nearBy={additionalInfo?.nearBy || []}
+        />
       </Stack>
 
       <Box
@@ -175,19 +190,4 @@ const ProductDetailPage: FC<ProductProps> = ({ params }) => {
   );
 };
 
-const queryClient = new QueryClient();
-interface ProductDetailWrapperProps {
-  params: Promise<{
-    productId: string;
-  }>;
-}
-
-const ProductDetailWrapper: FC<ProductDetailWrapperProps> = ({ params }) => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <ProductDetailPage params={params} />
-    </QueryClientProvider>
-  );
-};
-
-export default ProductDetailWrapper;
+export default ProductDetailPage;
