@@ -4,7 +4,7 @@ import { BankingPartnerComponent } from "@/src/components/banking-partner/bankin
 import Footer from "@/src/components/landing/footer";
 import { Navbar } from "@/src/components/landing/navbar";
 
-const BankingPartners = () => {
+const BankingPartnersPage = () => {
   return (
     <>
       <Navbar />
@@ -14,4 +14,4 @@ const BankingPartners = () => {
   );
 };
 
-export default BankingPartners;
+export default BankingPartnersPage;

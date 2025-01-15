@@ -98,6 +98,16 @@ const Footer = () => {
                 Bank Partners
               </Text>
             </Link>
+            <Link href="/internal" passHref style={{ textDecoration: "none" }}>
+              <Text
+                fw={500}
+                style={{ fontFamily: "GalanoGrotesque", fontSize: "1.25rem" }}
+                variant="gradient"
+                gradient={{ from: "white", to: "white", deg: 90 }}
+              >
+                Internal
+              </Text>
+            </Link>
             <Text
               fw={500}
               style={{ fontFamily: "GalanoGrotesque", fontSize: "1.25rem" }}
