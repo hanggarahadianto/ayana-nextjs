@@ -1,7 +1,7 @@
 // app/internal/layout.tsx
 "use client";
 
-import HeaderNav from "@/src/components/HeaderNav";
+// import HeaderNav from "@/src/components/HeaderNav";
 import {
   AppShell,
   Burger,
@@ -41,7 +41,7 @@ export default function InternalLayout({
           boxShadow: tablet_match ? theme.shadows.md : theme.shadows.sm,
         }}
       >
-        {/* <div
+        <div
           style={{
             display: "flex",
             alignItems: "center",
@@ -50,26 +50,32 @@ export default function InternalLayout({
           }}
         >
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-          <Text>App Logo</Text>
-        </div> */}
+          <Text p={20}>Seach</Text>
+        </div>
 
         <Container fluid py="sm" px="lg">
-          <HeaderNav
+          {/* <HeaderNav
           // mobileOpened={mobileOpened}
           // toggleMobile={toggleMobile}
           // sidebarState={sidebarState}
           // onSidebarStateChange={toggleSidebarState}
-          />
+          /> */}
         </Container>
       </AppShell.Header>
 
-      {/* <AppShell.Navbar p="md">
+      <AppShell.Navbar p="xl">
         <Stack>
           <Link
-            href="/internal/sidebar/dashboard"
+            href="/internal/sidebar/task"
             style={{ textDecoration: "none", color: theme.colors.dark[9] }}
           >
-            Dashboard
+            Task
+          </Link>
+          <Link
+            href="/internal/sidebar/project"
+            style={{ textDecoration: "none", color: theme.colors.dark[9] }}
+          >
+            Project
           </Link>
           <Link
             href="/internal/sidebar/profile"
@@ -84,7 +90,7 @@ export default function InternalLayout({
             Setting
           </Link>
         </Stack>
-      </AppShell.Navbar> */}
+      </AppShell.Navbar>
 
       <AppShell.Main>{children}</AppShell.Main>
     </AppShell>

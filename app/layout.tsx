@@ -6,12 +6,19 @@ import {
   ColorSchemeScript,
   mantineHtmlProps,
   MantineProvider,
-  Notification,
 } from "@mantine/core";
 // import { theme } from "@/theme";
+
 import "@mantine/carousel/styles.css";
 import "@mantine/notifications/styles.css";
+import "@mantine/dates/styles.css";
+
 import { Notifications } from "@mantine/notifications";
+
+import dayjs from "dayjs";
+import "dayjs/locale/id";
+
+dayjs.locale("id");
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactNode, useState } from "react";

@@ -1,4 +1,4 @@
-interface Product {
+interface IProduct {
   id: string;
   title: string;
   content: string;
@@ -15,7 +15,7 @@ interface Product {
   updated_at: string;
 }
 
-interface ProductResponse {
-  data: Product[];
+interface IProductResponse {
+  data: IProduct[];
   status: string;
 }

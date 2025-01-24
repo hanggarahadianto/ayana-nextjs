@@ -1,9 +1,5 @@
 "use client";
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import {
   Card,
@@ -36,7 +32,7 @@ const ProductsPage = () => {
 
   const products = productData;
 
-  const cards = products?.data.map((home) => {
+  const cards = products?.data.map((home: IProduct) => {
     return (
       <Carousel.Slide key={home.id}>
         <Card shadow="sm" padding="lg" radius="md" withBorder>

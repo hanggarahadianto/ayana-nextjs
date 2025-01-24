@@ -83,6 +83,7 @@ function Settings() {
       </>
       <Container fluid>
         <Stack gap="lg">
+          <h1>setting</h1>
           {/* <PageHeader title="Settings" breadcrumbItems={items} />
           <Grid>
             <Grid.Col span={{ base: 12, md: 8 }}>
