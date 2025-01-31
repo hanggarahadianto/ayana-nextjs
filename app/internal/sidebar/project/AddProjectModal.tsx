@@ -11,13 +11,14 @@ import {
   Stack,
   InputWrapper,
   NumberInput,
+  ActionIcon,
 } from "@mantine/core";
 
 import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import { initialValueProject } from "./initialValuesProject";
-import { IconCalendar } from "@tabler/icons-react";
+import { IconCalendar, IconPlus } from "@tabler/icons-react";
 import { useSubmitProjectForm } from "@/src/api/project/postDataProject";
 
 const AddProjectModal = ({
@@ -27,19 +28,6 @@ const AddProjectModal = ({
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "done":
-        return "teal"; // Green
-      case "pending":
-        return "yellow"; // Yellow
-      case "inprogress":
-        return "blue"; // Blue
-      default:
-        return "gray"; // Default color
-    }
-  };
-
   const { mutate: postData, isPending: isLoadingSubmitProjectData } =
     useSubmitProjectForm(refetchProjectData, close);
 
@@ -47,12 +35,6 @@ const AddProjectModal = ({
     console.log("Form values submitted:", values);
     postData(values);
     setSubmitting(false);
-  };
-
-  const addProjectField = (setFieldValue: any, tasks: any) => {
-    // Add a new task to the task array
-    const newWeeklyProgress = { name: "", status: "pending" };
-    setFieldValue("weekly_progress", [...tasks, newWeeklyProgress]);
   };
 
   const formatIDR = (value: any) => {
@@ -73,9 +55,21 @@ const AddProjectModal = ({
 
   return (
     <>
-      <Button onClick={open}>Tambah Project</Button>
-
-      <Modal opened={opened} onClose={close} size={"xl"}>
+      <ActionIcon
+        onClick={open}
+        size="3.5rem" // Bigger size
+        radius="xl"
+        variant="gradient"
+        gradient={{ from: "green", to: "lime", deg: 90 }}
+      >
+        <IconPlus size="1.5rem" /> {/* Adjust icon size */}
+      </ActionIcon>
+      <Modal
+        opened={opened}
+        onClose={close}
+        size="xl"
+        yOffset="100px" // Moves modal down
+      >
         <Formik
           initialValues={initialValueProject}
           validateOnBlur={false}
@@ -135,8 +129,8 @@ const AddProjectModal = ({
                   </Group>
 
                   <TextInput
-                    label="Nama Penanggung Jawab Proyek"
-                    placeholder="Masukan Nama Penanggung Jawab Proyek"
+                    label="Penanggung Jawab"
+                    placeholder="Masukan Penanggung Jawab"
                     onChange={(event) =>
                       setFieldValue("project_leader", event.currentTarget.value)
                     }

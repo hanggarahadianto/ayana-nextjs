@@ -1,13 +1,13 @@
 import { APIAxiosInstance } from "@/src/api";
 
-export const getDataWeeklyProgress = async (id: string) => {
+export const getDataCashFlow = async (id: string) => {
   try {
-    const url = `weeklyprogress/getById/${id}`;
+    const url = `cashflow/getById/${id}`;
 
     const response = await APIAxiosInstance.get(url);
 
     // console.log("Response:", response.data.data);
-    return response.data as IWeeklyProgressResponse;
+    return response.data as ICashFlowResponse;
   } catch (error: any) {
     console.error("Error fetching data:", error.message || error);
     throw error;

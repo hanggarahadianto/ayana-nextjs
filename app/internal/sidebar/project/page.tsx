@@ -39,16 +39,19 @@ const TaskPage = () => {
 
   return (
     <>
-      <AddProjectModal refetchProjectData={refetchProjectData} />
+      <Group justify="space-between">
+        <Text fw={900} size="2rem">
+          Daftar Project
+        </Text>
+        <AddProjectModal refetchProjectData={refetchProjectData} />
+      </Group>
 
       <SimpleGrid
         mt={40}
         cols={4} // Default to 4 columns
         spacing="lg" // Spacing between cards
-        // Adjust minimum width for responsiveness
       >
         {projectData?.data.map((project) => {
-          // Log the project data to the console
           console.log(project);
 
           return (

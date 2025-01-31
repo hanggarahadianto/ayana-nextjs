@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   TextInput,
@@ -10,62 +10,60 @@ import {
   Text,
   Stack,
   NumberInput,
-  ActionIcon,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
-import { useSubmitWeeklyProgressForm } from "@/src/api/weekly-progress/postDataWeeklyProgress";
-import { initialValueWeeklyProgressCreate } from "./initialValuesWeeklyProgress";
-import { IconPlus } from "@tabler/icons-react";
+import { useUpdateWeeklyProgressForm } from "@/src/api/weekly-progress/editDataWeeklyProgress";
 
-const AddWeeklyProgressModal = ({
+const EditWeeklyProgressModal = ({
   projectId,
   refetchWeeklyProgressData,
+  initialData, // Assuming initialData contains the current progress data
 }: {
   projectId: any;
   refetchWeeklyProgressData: () => void;
+  initialData: IWeeklyProgressUpdate; // The existing data to pre-fill the form
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const { mutate: postData, isPending: isLoadingSubmitProjectData } =
-    useSubmitWeeklyProgressForm(refetchWeeklyProgressData, close);
+  console.log(initialData);
 
-  const handleSubmit = (values: IWeeklyProgressCreate) => {
+  const { mutate: updateData, isPending: isLoadingSubmitProjectData } =
+    useUpdateWeeklyProgressForm(refetchWeeklyProgressData, close);
+
+  const handleSubmit = (values: IWeeklyProgressUpdate) => {
     // Add project_id to the values object before submitting
-    const formData = { ...values, project_id: projectId };
+    const formData = { ...values, id: initialData?.id, project_id: projectId };
 
     console.log("Form values submitted:", formData);
 
-    postData(formData);
+    updateData(formData);
   };
+
+  useEffect(() => {
+    // Open the modal when initialData is available
+    if (initialData) {
+      open();
+    }
+  }, [initialData]);
 
   return (
     <>
-      <ActionIcon
-        onClick={open}
-        size="3.5rem" // Bigger size
-        radius="xl"
-        variant="gradient"
-        gradient={{ from: "green", to: "lime", deg: 90 }}
-      >
-        <IconPlus size="1.5rem" /> {/* Adjust icon size */}
-      </ActionIcon>
-
       <Modal
         opened={opened}
         onClose={close}
-        title="Tambah Progress Mingguan"
+        title="Edit Progress Mingguan"
         size={"55rem"}
       >
         <Formik
-          initialValues={initialValueWeeklyProgressCreate}
+          initialValues={initialData}
           validateOnBlur={false}
           enableReinitialize={true}
           validateOnChange={true}
           validateOnMount={false}
           onSubmit={handleSubmit}
         >
-          {({ values, errors, setFieldValue }) => {
+          {({ values, setFieldValue }) => {
             console.log(values);
 
             const addWorkerField = (worker: IWorker[]) => {
@@ -103,14 +101,10 @@ const AddWeeklyProgressModal = ({
               field: T,
               value: IWorker[T]
             ) => {
-              // Clone the worker array
               const updatedWorkers = [...values.worker];
-              // Safely update the worker's field
               updatedWorkers[index][field] = value;
-              // Update the worker state
               setFieldValue("worker", updatedWorkers);
 
-              // Recalculate amount_worker (if needed)
               const totalWorkers = updatedWorkers.filter(
                 (worker) => worker.worker_name.trim() !== ""
               ).length;
@@ -125,13 +119,11 @@ const AddWeeklyProgressModal = ({
               const updatedMaterial = [...values.material];
               updatedMaterial[index][field] = value;
 
-              // Recalculate the total cost for all materials
               const totalCost = updatedMaterial.reduce(
                 (acc, material) => acc + (material.total_cost || 0),
                 0
               );
 
-              // Update the state
               setFieldValue("material", updatedMaterial);
               setFieldValue("amount_material", totalCost);
             };
@@ -145,6 +137,7 @@ const AddWeeklyProgressModal = ({
                     onChange={(value: any) => {
                       setFieldValue("week_number", value);
                     }}
+                    value={values?.week_number}
                     data={[
                       { value: "1", label: "1" },
                       { value: "2", label: "2" },
@@ -160,47 +153,41 @@ const AddWeeklyProgressModal = ({
                   <Stack mt="md">
                     {values.worker.map((worker: any, index: any) => (
                       <Card key={index} shadow="sm" padding="lg" radius="md">
-                        <div key={index}>
-                          <Group>
-                            <TextInput
-                              label={`Nama Pekerja ${index + 1}`}
-                              placeholder="Masukan nama pekerja"
-                              value={worker.worker_name || ""}
-                              onChange={(event) =>
-                                handleWorkerChange(
-                                  index,
-                                  "worker_name",
-                                  event.currentTarget.value
-                                )
-                              }
-                            />
-                            <Select
-                              label={`Posisi Pekerja ${index + 1}`}
-                              placeholder="Pilih posisi"
-                              value={worker.position || ""}
-                              onChange={(value) =>
-                                handleWorkerChange(
-                                  index,
-                                  "position",
-                                  value || ""
-                                )
-                              }
-                              data={[
-                                { value: "Tukang", label: "Tukang" },
-                                { value: "Kuli", label: "Kuli" },
-                              ]}
-                            />
-                            <Button
-                              color="red"
-                              onClick={() =>
-                                deleteWorkerField(values.worker, index)
-                              }
-                              mt="23"
-                            >
-                              Hapus Pekerja
-                            </Button>
-                          </Group>
-                        </div>
+                        <Group>
+                          <TextInput
+                            label={`Nama Pekerja ${index + 1}`}
+                            placeholder="Masukan nama pekerja"
+                            value={worker.worker_name || ""}
+                            onChange={(event) =>
+                              handleWorkerChange(
+                                index,
+                                "worker_name",
+                                event.currentTarget.value
+                              )
+                            }
+                          />
+                          <Select
+                            label={`Posisi Pekerja ${index + 1}`}
+                            placeholder="Pilih posisi"
+                            value={worker.position || ""}
+                            onChange={(value) =>
+                              handleWorkerChange(index, "position", value || "")
+                            }
+                            data={[
+                              { value: "Tukang", label: "Tukang" },
+                              { value: "Kuli", label: "Kuli" },
+                            ]}
+                          />
+                          <Button
+                            color="red"
+                            onClick={() =>
+                              deleteWorkerField(values.worker, index)
+                            }
+                            mt="23"
+                          >
+                            Hapus Pekerja
+                          </Button>
+                        </Group>
                       </Card>
                     ))}
                     <Button
@@ -215,58 +202,55 @@ const AddWeeklyProgressModal = ({
                   <Stack mt="md">
                     {values.material.map((material: any, index: any) => (
                       <Card key={index} shadow="sm" padding="lg" radius="md">
-                        <div key={index}>
-                          <Group>
-                            <TextInput
-                              label={`Nama Material ${index + 1}`}
-                              placeholder="Masukan Nama Material"
-                              value={material.material_name || ""}
-                              onChange={(event) =>
-                                handleMaterialChange(
-                                  index,
-                                  "material_name",
-                                  event.currentTarget.value
-                                )
-                              }
-                            />
-                            <NumberInput
-                              hideControls
-                              label={"Kuantitas"}
-                              placeholder="Masukan Kuantitas"
-                              value={material.quantity || ""}
-                              onChange={(value) =>
-                                handleMaterialChange(
-                                  index,
-                                  "quantity",
-                                  (value as number) || 0
-                                )
-                              }
-                            />
-
-                            <NumberInput
-                              hideControls
-                              label={"Total"}
-                              placeholder="Masukan Total"
-                              value={material.total_cost || ""}
-                              onChange={(value) =>
-                                handleMaterialChange(
-                                  index,
-                                  "total_cost",
-                                  (value as number) || 0
-                                )
-                              }
-                            />
-                            <Button
-                              color="red"
-                              onClick={() =>
-                                deleteMaterialField(values.material, index)
-                              }
-                              mt="23"
-                            >
-                              Hapus Material
-                            </Button>
-                          </Group>
-                        </div>
+                        <Group>
+                          <TextInput
+                            label={`Nama Material ${index + 1}`}
+                            placeholder="Masukan Nama Material"
+                            value={material.material_name || ""}
+                            onChange={(event) =>
+                              handleMaterialChange(
+                                index,
+                                "material_name",
+                                event.currentTarget.value
+                              )
+                            }
+                          />
+                          <NumberInput
+                            hideControls
+                            label={"Kuantitas"}
+                            placeholder="Masukan Kuantitas"
+                            value={material.quantity || ""}
+                            onChange={(value) =>
+                              handleMaterialChange(
+                                index,
+                                "quantity",
+                                (value as number) || 0
+                              )
+                            }
+                          />
+                          <NumberInput
+                            hideControls
+                            label={"Total"}
+                            placeholder="Masukan Total"
+                            value={material.total_cost || ""}
+                            onChange={(value) =>
+                              handleMaterialChange(
+                                index,
+                                "total_cost",
+                                (value as number) || 0
+                              )
+                            }
+                          />
+                          <Button
+                            color="red"
+                            onClick={() =>
+                              deleteMaterialField(values.material, index)
+                            }
+                            mt="23"
+                          >
+                            Hapus Material
+                          </Button>
+                        </Group>
                       </Card>
                     ))}
                     <Group p={20}>
@@ -292,13 +276,9 @@ const AddWeeklyProgressModal = ({
                       hideControls
                       label="Persentase"
                       placeholder="Persentase"
-                      value={values.percentage ? String(values.percentage) : ""} // Ensure value is a string
-                      onChange={
-                        (value) =>
-                          setFieldValue(
-                            "percentage",
-                            value ? String(value) : ""
-                          ) // Convert value to string before saving
+                      value={values.percentage ? String(values.percentage) : ""}
+                      onChange={(value) =>
+                        setFieldValue("percentage", value ? String(value) : "")
                       }
                       rightSection={
                         <Text size="sm" c="gray">
@@ -321,7 +301,7 @@ const AddWeeklyProgressModal = ({
                       Cancel
                     </Button>
                     <Button type="submit" color="blue">
-                      Tambah
+                      Update
                     </Button>
                   </Group>
                 </Form>
@@ -334,4 +314,4 @@ const AddWeeklyProgressModal = ({
   );
 };
 
-export default AddWeeklyProgressModal;
+export default EditWeeklyProgressModal;

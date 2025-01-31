@@ -1,23 +1,16 @@
 "use client";
 
 import { getDataProjectDetail } from "@/src/api/project/getDataProjectDetail";
-import {
-  Button,
-  Card,
-  Grid,
-  Group,
-  InputWrapper,
-  NumberInput,
-  SimpleGrid,
-  Stack,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import { ActionIcon, Box, Button, Card, Divider, Grid, Group, SimpleGrid, Stack, Text, TextInput } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import React, { FC, use } from "react";
+import React, { FC, use, useState } from "react";
 import { getDataWeeklyProgress } from "@/src/api/weekly-progress/getDataWeeklyProgress";
-import Link from "next/link";
 import AddWeeklyProgressModal from "./AddWeeklyProgressModal";
+import EditWeeklyProgressModal from "../EditProjectModal";
+import AddCashFlowReportModal from "./AddCashFlowReportModal";
+import { IconEye, IconSettings } from "@tabler/icons-react";
+import { getDataCashFlow } from "@/src/api/cash-flow/getDataCashFlow";
+import GetCashFlowReportModal from "./GetCashFlowReportModal";
 
 interface ProjectProps {
   params: Promise<{
@@ -29,7 +22,6 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   const unwrappedParams = use(params);
   const projectId = unwrappedParams.projectId;
 
-  // Fetch project data
   const {
     data: projectDataDetail,
     isLoading: isLoadingGetProjectData,
@@ -50,39 +42,114 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
     queryFn: () => getDataWeeklyProgress(projectId),
     refetchOnWindowFocus: false,
   });
+  const {
+    data: cashFlowData,
+    isLoading: isLoadingCashFlowData,
+    refetch: refetchCashFlowData,
+  } = useQuery({
+    queryKey: ["getCashFlowData"],
+    queryFn: () => getDataCashFlow(projectId),
+    refetchOnWindowFocus: false,
+  });
 
-  console.log("weekly progress", weeklyProgressData);
+  // console.log("weekly progress", weeklyProgressData);
+  console.log("cashflow", cashFlowData);
+
+  const [selectedProgress, setSelectedProgress] = useState<IWeeklyProgress | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleCardClick = (weeklyProgress: IWeeklyProgress) => {
+    setSelectedProgress(weeklyProgress);
+    setIsModalOpen(true);
+  };
 
   return (
     <>
-      <Text>{projectDataDetail?.project_name}</Text>
-      <Text>{projectDataDetail?.project_leader}</Text>
-      <Text>DETAIL</Text>
-      <AddWeeklyProgressModal />
-      <SimpleGrid
-        mt={40}
-        cols={4} // Default to 4 columns
-        spacing="lg" // Spacing between cards
+      <Card
+        shadow="md"
+        padding="lg"
+        radius="md"
+        style={{
+          background: "linear-gradient(135deg, #16a34a, #22c55e)", // Green gradient
+          color: "white",
+          width: "450px",
+        }}
       >
-        {weeklyProgressData?.data.map((weeklyProgress: IWeeklyProgress) => {
-          // Log to ensure the map function runs
-          console.log("Rendering Card", weeklyProgress);
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Stack>
+            <Text fw={900} size={"2.5rem"}>
+              {projectDataDetail?.project_name}
+            </Text>
+            <Text fw={700}>{projectDataDetail?.project_leader}</Text>
+            <Text fw={700}>
+              {new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              }).format(projectDataDetail?.total_cost || 0)}
+            </Text>
+            <Card
+              shadow="md"
+              padding="lg"
+              radius="md"
+              style={{
+                background: "linear-gradient(135deg, #16a34a, #22c55e)", // Green gradient
+                color: "white",
+                width: "450px",
+              }}
+            >
+              <Text fw={900} mb={12}>
+                Buku Kas Umum
+              </Text>
+              <Group gap={16}>
+                <AddCashFlowReportModal
+                  projectName={projectDataDetail?.project_name}
+                  refetchCashFlowData={refetchCashFlowData}
+                  projectId={projectDataDetail?.id}
+                />
+                <GetCashFlowReportModal
+                  projectName={projectDataDetail?.project_name}
+                  cashFlowData={cashFlowData?.data || []}
+                  refetchWeeklyProgressData={refetchWeeklyProgressData}
+                  totalCost={projectDataDetail?.total_cost}
+                />
+              </Group>
+            </Card>
+          </Stack>
+        </Box>
+      </Card>
+      <Divider mt={40} mb={20} />
 
+      <Group justify="space-between">
+        <Text fw={700} size="1.5rem">
+          Progress Mingguan
+        </Text>
+        <AddWeeklyProgressModal refetchWeeklyProgressData={refetchWeeklyProgressData} projectId={projectDataDetail?.id} />
+      </Group>
+
+      <SimpleGrid mt={40} cols={4} spacing="lg">
+        {weeklyProgressData?.data.map((weeklyProgress: IWeeklyProgress) => {
           return (
             <Card
+              onClick={() => handleCardClick(weeklyProgress)}
               key={weeklyProgress.id} // Ensure unique key for each card
               style={{
-                background:
-                  "linear-gradient(135deg, rgba(255, 0, 150, 0.5), rgba(0, 204, 255, 0.5))",
+                background: "linear-gradient(135deg, rgba(255, 0, 150, 0.5), rgba(0, 204, 255, 0.5))",
                 backdropFilter: "blur(8px)",
                 borderRadius: "16px",
                 boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
                 padding: "20px",
+                cursor: "pointer",
               }}
             >
               <Stack gap={4} align="start">
                 <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
-                  {weeklyProgress.week_number}
+                  Minggu Ke {weeklyProgress.week_number}
                 </Text>
                 <Grid w={400}>
                   <Grid.Col span={6}>
@@ -107,6 +174,15 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
           );
         })}
       </SimpleGrid>
+
+      {/* Edit Modal */}
+      {isModalOpen && selectedProgress && (
+        <EditWeeklyProgressModal
+          projectId={projectDataDetail?.id}
+          refetchWeeklyProgressData={refetchWeeklyProgressData}
+          initialData={selectedProgress}
+        />
+      )}
     </>
   );
 };
