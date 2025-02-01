@@ -38,21 +38,21 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData }: { proj
           {({ values, errors, setFieldValue }) => {
             console.log(values);
 
-            const addWorkerField = (worker: IWorker[]) => {
-              const newWorker: IWorker = {
+            const addWorkerField = (worker: IWorkerCreate[]) => {
+              const newWorker: IWorkerCreate = {
                 worker_name: "",
                 position: "",
               };
               setFieldValue("worker", [...worker, newWorker]);
             };
 
-            const deleteWorkerField = (worker: IWorker[], index: number) => {
+            const deleteWorkerField = (worker: IWorkerCreate[], index: number) => {
               const updatedWorkers = worker.filter((_, i) => i !== index);
               setFieldValue("worker", updatedWorkers);
             };
 
-            const addMaterialField = (material: IMaterial[]) => {
-              const newMaterial: IMaterial = {
+            const addMaterialField = (material: IMaterialCreate[]) => {
+              const newMaterial: IMaterialCreate = {
                 material_name: "",
                 quantity: 0,
                 total_cost: 0,
@@ -60,12 +60,12 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData }: { proj
               setFieldValue("material", [...material, newMaterial]);
             };
 
-            const deleteMaterialField = (worker: IMaterial[], index: number) => {
+            const deleteMaterialField = (worker: IMaterialCreate[], index: number) => {
               const updatedMaterials = worker.filter((_, i) => i !== index);
               setFieldValue("material", updatedMaterials);
             };
 
-            const handleWorkerChange = <T extends keyof IWorker>(index: number, field: T, value: IWorker[T]) => {
+            const handleWorkerChange = <T extends keyof IWorkerCreate>(index: number, field: T, value: IWorkerCreate[T]) => {
               // Clone the worker array
               const updatedWorkers = [...values.worker];
               // Safely update the worker's field
@@ -78,7 +78,7 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData }: { proj
               setFieldValue("amount_worker", totalWorkers);
             };
 
-            const handleMaterialChange = <T extends keyof IMaterial>(index: number, field: T, value: IMaterial[T]) => {
+            const handleMaterialChange = <T extends keyof IMaterialCreate>(index: number, field: T, value: IMaterialCreate[T]) => {
               const updatedMaterial = [...values.material];
               updatedMaterial[index][field] = value;
 

@@ -1,50 +1,23 @@
 import React, { useState } from "react";
-import {
-  Modal,
-  TextInput,
-  Button,
-  Group,
-  Select,
-  Textarea,
-  Card,
-  Text,
-  Stack,
-  InputWrapper,
-  NumberInput,
-  ActionIcon,
-} from "@mantine/core";
+import { Modal, TextInput, Button, Group, Select, Textarea, Card, Text, Stack, InputWrapper, NumberInput, ActionIcon } from "@mantine/core";
 
 import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
-import { initialValueProject } from "./initialValuesProject";
 import { IconCalendar, IconPlus } from "@tabler/icons-react";
 import { useSubmitProjectForm } from "@/src/api/project/postDataProject";
+import { initialValueProjectCreate } from "./initialValuesProject";
+import { FiSettings } from "react-icons/fi";
 
-const AddProjectModal = ({
-  refetchProjectData,
-}: {
-  refetchProjectData: () => void;
-}) => {
+const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const { mutate: postData, isPending: isLoadingSubmitProjectData } =
-    useSubmitProjectForm(refetchProjectData, close);
+  const { mutate: postData, isPending: isLoadingSubmitProjectData } = useSubmitProjectForm(refetchProjectData, close);
 
   const handleSubmit = (values: IProjectCreate, { setSubmitting }: any) => {
     console.log("Form values submitted:", values);
     postData(values);
     setSubmitting(false);
-  };
-
-  const formatIDR = (value: any) => {
-    if (!value) return "";
-    return `Rp ${value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} `;
-  };
-
-  const parseIDR = (value: any) => {
-    if (!value) return "";
-    return value.replace(/[^0-9]/g, "");
   };
 
   const [formData, setFormData] = useState({
@@ -71,7 +44,7 @@ const AddProjectModal = ({
         yOffset="100px" // Moves modal down
       >
         <Formik
-          initialValues={initialValueProject}
+          initialValues={initialValueProjectCreate}
           validateOnBlur={false}
           enableReinitialize={true}
           validateOnChange={true}
@@ -81,21 +54,13 @@ const AddProjectModal = ({
           {({ values, errors, setFieldValue, handleBlur }) => {
             console.log(values);
 
-            const handleInputChange = (
-              setFieldValue: any,
-              field: string,
-              value: any
-            ) => {
+            const handleInputChange = (setFieldValue: any, field: string, value: any) => {
               setFieldValue(field, value); // Update field value in Formik
             };
 
-            const handleProjectName = (
-              field: "location" | "unit",
-              value: string
-            ) => {
+            const handleProjectName = (field: "location" | "unit", value: string) => {
               const updatedData = { ...formData, [field]: value };
-              updatedData.projectName =
-                `${updatedData.location} - ${updatedData.unit}`.trim();
+              updatedData.projectName = `${updatedData.location} - ${updatedData.unit}`.trim();
               setFormData(updatedData);
               setFieldValue("project_name", updatedData?.projectName);
             };
@@ -110,9 +75,7 @@ const AddProjectModal = ({
                     <Select
                       label="Nama Lokasi"
                       placeholder="Pilih Lokasi"
-                      onChange={(value: any) =>
-                        handleProjectName("location", value)
-                      }
+                      onChange={(value: any) => handleProjectName("location", value)}
                       data={[
                         { value: "GAW", label: "GAW" },
                         { value: "ABW", label: "ABW" },
@@ -122,18 +85,14 @@ const AddProjectModal = ({
                     <TextInput
                       label="Nama Blok"
                       placeholder="Masukan Nama Blok"
-                      onChange={(event) =>
-                        handleProjectName("unit", event.target.value)
-                      }
+                      onChange={(event) => handleProjectName("unit", event.target.value)}
                     />
                   </Group>
 
                   <TextInput
                     label="Penanggung Jawab"
                     placeholder="Masukan Penanggung Jawab"
-                    onChange={(event) =>
-                      setFieldValue("project_leader", event.currentTarget.value)
-                    }
+                    onChange={(event) => setFieldValue("project_leader", event.currentTarget.value)}
                     mt="md"
                   />
                   <NumberInput
@@ -175,11 +134,7 @@ const AddProjectModal = ({
                         onChange={(value: Date | null) => {
                           if (value) {
                             const formattedDate = value.toISOString(); // Convert to ISO format (e.g., "2025-01-01T00:00:00Z")
-                            handleInputChange(
-                              setFieldValue,
-                              "project_start",
-                              formattedDate
-                            );
+                            handleInputChange(setFieldValue, "project_start", formattedDate);
                           }
                         }}
                         onBlur={handleBlur}
@@ -200,11 +155,7 @@ const AddProjectModal = ({
                         onChange={(value: Date | null) => {
                           if (value) {
                             const formattedDate = value.toISOString(); // Convert to ISO format (e.g., "2025-06-01T00:00:00Z")
-                            handleInputChange(
-                              setFieldValue,
-                              "project_end",
-                              formattedDate
-                            );
+                            handleInputChange(setFieldValue, "project_end", formattedDate);
                           }
                         }}
                         onBlur={handleBlur}
@@ -215,9 +166,7 @@ const AddProjectModal = ({
                   <Textarea
                     label="Note"
                     placeholder="Enter additional information"
-                    onChange={(event) =>
-                      setFieldValue("note", event.currentTarget.value)
-                    }
+                    onChange={(event) => setFieldValue("note", event.currentTarget.value)}
                     mt="md"
                   />
                   <Group justify="flex-end" mt="md">

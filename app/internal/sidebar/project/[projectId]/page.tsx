@@ -11,6 +11,8 @@ import { IconEye, IconSettings } from "@tabler/icons-react";
 import { getDataCashFlow } from "@/src/api/cash-flow/getDataCashFlow";
 import GetCashFlowReportModal from "./GetCashFlowReportModal";
 import EditWeeklyProgressModal from "./EditWeeklyProgressModal";
+import { FiSettings } from "react-icons/fi";
+import EditProjectModal from "../EditProjectModal";
 
 interface ProjectProps {
   params: Promise<{
@@ -88,9 +90,16 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
           }}
         >
           <Stack>
-            <Text fw={900} size={"2.5rem"}>
-              {projectDataDetail?.project_name}
-            </Text>
+            <Group justify="space-between">
+              <Text fw={900} size={"2.5rem"}>
+                {projectDataDetail?.project_name}
+              </Text>
+              <Group variant="white" mr={40} style={{ cursor: "pointer" }}>
+                {/* <FiSettings size={24} /> */}
+                <EditProjectModal initialData={projectDataDetail as IProjectUpdate} refetchProjectData={refetchProjectData} />
+              </Group>
+            </Group>
+
             <Text fw={700}>{projectDataDetail?.project_leader}</Text>
             <Text fw={700}>
               {new Intl.NumberFormat("id-ID", {
@@ -111,7 +120,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
               <Text fw={900} mb={12}>
                 Buku Kas Umum
               </Text>
-              <Group gap={16}>
+              <Group gap={24}>
                 <AddCashFlowReportModal
                   projectName={projectDataDetail?.project_name}
                   refetchCashFlowData={refetchCashFlowData}

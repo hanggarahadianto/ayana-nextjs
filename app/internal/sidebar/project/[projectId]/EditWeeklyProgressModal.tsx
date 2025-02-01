@@ -14,8 +14,8 @@ const EditWeeklyProgressModal = ({
 }: {
   projectId: any;
   refetchWeeklyProgressData: () => void;
-  initialData: IWeeklyProgressUpdate; // The existing data to pre-fill the form
-  onClose: () => void; // Define onClose prop type
+  initialData: IWeeklyProgressUpdate;
+  onClose: () => void;
 }) => {
   const [opened, { open }] = useDisclosure(false);
 
@@ -24,7 +24,6 @@ const EditWeeklyProgressModal = ({
   const { mutate: updateData, isPending: isLoadingSubmitProjectData } = useUpdateWeeklyProgressForm(refetchWeeklyProgressData, close);
 
   const handleSubmit = (values: IWeeklyProgressUpdate) => {
-    // Add project_id to the values object before submitting
     const formData = { ...values, id: initialData?.id, project_id: projectId };
 
     console.log("Form values submitted:", formData);
@@ -61,7 +60,7 @@ const EditWeeklyProgressModal = ({
               setFieldValue("worker", [...worker, newWorker]);
             };
 
-            const deleteWorkerField = (worker: IWorker[], index: number) => {
+            const deleteWorkerField = (worker: IWorkerCreate[], index: number) => {
               const updatedWorkers = worker.filter((_, i) => i !== index);
               setFieldValue("worker", updatedWorkers);
             };
@@ -75,12 +74,12 @@ const EditWeeklyProgressModal = ({
               setFieldValue("material", [...material, newMaterial]);
             };
 
-            const deleteMaterialField = (worker: IMaterial[], index: number) => {
+            const deleteMaterialField = (worker: IMaterialCreate[], index: number) => {
               const updatedMaterials = worker.filter((_, i) => i !== index);
               setFieldValue("material", updatedMaterials);
             };
 
-            const handleWorkerChange = <T extends keyof IWorker>(index: number, field: T, value: IWorker[T]) => {
+            const handleWorkerChange = <T extends keyof IWorkerCreate>(index: number, field: T, value: IWorker[T]) => {
               const updatedWorkers = [...values.worker];
               updatedWorkers[index][field] = value;
               setFieldValue("worker", updatedWorkers);
@@ -89,7 +88,7 @@ const EditWeeklyProgressModal = ({
               setFieldValue("amount_worker", totalWorkers);
             };
 
-            const handleMaterialChange = <T extends keyof IMaterial>(index: number, field: T, value: IMaterial[T]) => {
+            const handleMaterialChange = <T extends keyof IMaterialCreate>(index: number, field: T, value: IMaterial[T]) => {
               const updatedMaterial = [...values.material];
               updatedMaterial[index][field] = value;
 
@@ -131,8 +130,8 @@ const EditWeeklyProgressModal = ({
                       <Text>Ubah Pekerja</Text>
                       <ButtonAdd onClick={() => addWorkerField(values.worker)} size={"xl"} />
                     </Group>
-                    {values.worker.map((worker: IWorker, index: number) => (
-                      <Card key={worker.id} shadow="sm" padding="lg" radius="md">
+                    {values.worker.map((worker: IWorkerCreate, index: number) => (
+                      <Card key={worker.worker_name} shadow="sm" padding="lg" radius="md">
                         <Group>
                           <TextInput
                             label={`Nama Pekerja ${index + 1}`}
@@ -162,8 +161,8 @@ const EditWeeklyProgressModal = ({
                       <Text>Ubah Material</Text>
                       <ButtonAdd onClick={() => addMaterialField(values.material)} size={"xl"} />
                     </Group>
-                    {values.material.map((material: IMaterial, index: number) => (
-                      <Card key={material.id} shadow="sm" padding="lg" radius="md">
+                    {values.material.map((material: IMaterialCreate, index: number) => (
+                      <Card key={material.material_name} shadow="sm" padding="lg" radius="md">
                         <Group>
                           <TextInput
                             label={`Nama Material ${index + 1}`}

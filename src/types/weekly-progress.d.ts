@@ -10,6 +10,7 @@ interface IWorker {
   worker_name: string;
   position: string;
 }
+
 interface IMaterialCreate {
   material_name: string;
   quantity: number;
@@ -17,6 +18,18 @@ interface IMaterialCreate {
 }
 
 interface IWorkerCreate {
+  worker_name: string;
+  position: string;
+}
+interface IMaterialUpdate {
+  id: string;
+  material_name: string;
+  quantity: number;
+  total_cost: number;
+}
+
+interface IWorkerUpdate {
+  id: string;
   worker_name: string;
   position: string;
 }
@@ -41,8 +54,8 @@ interface IWeeklyProgressCreate {
   amount_worker: number;
   amount_material: number;
   project_id: string;
-  material: IMaterial[];
-  worker: IWorker[];
+  material: IMaterialCreate[];
+  worker: IWorkerCreate[];
 }
 
 interface IWeeklyProgressUpdate {
@@ -52,8 +65,8 @@ interface IWeeklyProgressUpdate {
   amount_worker: number;
   amount_material: number;
   project_id: string;
-  material: IMaterial[];
-  worker: IWorker[];
+  material: IMaterialCreate[];
+  worker: IWorkerCreate[];
 }
 
 interface IWeeklyProgressResponse {

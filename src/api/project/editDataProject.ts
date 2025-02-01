@@ -2,22 +2,22 @@ import { useMutation } from "@tanstack/react-query"; // Correct import from '@ta
 import { showNotification } from "@mantine/notifications";
 import { APIAxiosInstance } from "@/src/api";
 
-const handleEditWeeklyProgressForm = async (values: IWeeklyProgressCreate) => {
+const handleEditProjectForm = async (values: IProjectUpdate) => {
   console.log("values on fetching", values);
-  const response = await APIAxiosInstance.put(`/weeklyprogress/edit`, values);
+  const response = await APIAxiosInstance.put(`/project/edit`, values);
   return response.data; // Return the response data
 };
 
 // Custom hook for the mutation
-export const useUpdateWeeklyProgressForm = (refetchProjectData: () => void, closeModal: () => void) => {
+export const useUpdateProjectForm = (refetchProjectData: () => void, closeModal: () => void) => {
   return useMutation({
-    mutationFn: (values: any) => handleEditWeeklyProgressForm(values),
+    mutationFn: (values: any) => handleEditProjectForm(values),
     onSuccess: (data: any) => {
       console.log("pesan sukses terkirim");
       refetchProjectData();
       closeModal();
       showNotification({
-        title: "Data Berhasil Dikirim",
+        title: "Data Berhasil Diubah",
         message: "",
         color: "green",
       });

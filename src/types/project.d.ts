@@ -21,6 +21,16 @@ interface IProjectCreate {
   project_end: string;
   note: string;
 }
+interface IProjectUpdate {
+  id: string;
+  project_name: string;
+  project_leader: string;
+  project_time: string;
+  total_cost: number;
+  project_start: string;
+  project_end: string;
+  note: string;
+}
 
 interface IProjectResponse {
   data: IProject[];
