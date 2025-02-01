@@ -14,6 +14,7 @@ import {
   ActionIcon,
   Flex,
   Grid,
+  Divider,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
@@ -127,12 +128,21 @@ const AddCashFlowReportModal = ({
                       </Text>
                     </Grid.Col>
                     <Grid.Col span={4}>
-                      <Stack>
-                        <Text size="md">💰 Cash In: Rp {values.cash_in.toLocaleString()}</Text>
-                        <Text size="md">💸 Cash Out: Rp {values.cash_out.toLocaleString()}</Text>
-                        <Text size="md" fw={700} c={balanceColor}>
-                          🔹 Account Balance: Rp {accountBalance.toLocaleString()}
-                        </Text>
+                      <Stack justify="end" align="end" w="100%">
+                        <Grid w={400}>
+                          <Grid.Col span={6}>
+                            <Text size="md">💰 Uang Masuk</Text>
+                            <Text size="md">💸 Uang Keluar</Text>
+                            <Text size="md" fw={700} c={accountBalance < 0 ? "red" : "green"}>
+                              🔹 Uang Tersisa
+                            </Text>
+                          </Grid.Col>
+                          <Grid.Col span={6}>
+                            <Text> : Rp {cashIn.toLocaleString()}</Text>
+                            <Text> : Rp {cashOut.toLocaleString()}</Text>
+                            <Text c={accountBalance < 0 ? "red" : "green"}> : Rp {accountBalance.toLocaleString()}</Text>
+                          </Grid.Col>
+                        </Grid>
                       </Stack>
                     </Grid.Col>
                   </Grid>
@@ -167,14 +177,17 @@ const AddCashFlowReportModal = ({
                       }}
                     />
                   </Group>
+
+                  <Divider mt={20} />
+
                   <Group justify="space-between" p={20}>
                     <Text fw={700}>Tambahkan Daftar Pengeluaran</Text>
-                    <ButtonAdd onClick={() => addGoodField(values.good || [])} />
+                    <ButtonAdd onClick={() => addGoodField(values.good || [])} size="3.5rem" />
                   </Group>
 
                   <Stack mt="md">
                     {values.good?.map((good: IGoods, index: any) => (
-                      <Card key={index} shadow="sm" padding="lg" radius="md">
+                      <Card key={index} shadow="lg" padding="lg" radius="md">
                         <div>
                           <Group>
                             <TextInput
@@ -187,13 +200,17 @@ const AddCashFlowReportModal = ({
                             <Select
                               label="Status"
                               placeholder="Pilih Status"
-                              value={good.status || "tunai"} // Default to "tunai"
+                              value={good.status} // Default to "tunai"
                               onChange={(value: string | null) => {
                                 if (value) {
-                                  handleGoodChange(index, "status", value);
+                                  handleGoodChange(index, "status", value); // Update status first
+
+                                  // Ensure the state updates first, then apply the date changes
                                   if (value === "tunai") {
-                                    handleGoodChange(index, "good_purchase_date", today);
-                                    handleGoodChange(index, "good_settlement_date", today);
+                                    setTimeout(() => {
+                                      handleGoodChange(index, "good_purchase_date", today);
+                                      handleGoodChange(index, "good_settlement_date", today);
+                                    }, 0);
                                   }
                                 }
                               }}

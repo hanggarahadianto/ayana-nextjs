@@ -1,7 +1,7 @@
 import { createTheme, MantineTheme } from "@mantine/core";
 
 const theme = createTheme({
-  // ... other theme settings ...
+  cursorType: "pointer",
   other: {
     textStyles: {
       A1: {

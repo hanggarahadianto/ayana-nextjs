@@ -6,11 +6,11 @@ import { useQuery } from "@tanstack/react-query";
 import React, { FC, use, useState } from "react";
 import { getDataWeeklyProgress } from "@/src/api/weekly-progress/getDataWeeklyProgress";
 import AddWeeklyProgressModal from "./AddWeeklyProgressModal";
-import EditWeeklyProgressModal from "../EditProjectModal";
 import AddCashFlowReportModal from "./AddCashFlowReportModal";
 import { IconEye, IconSettings } from "@tabler/icons-react";
 import { getDataCashFlow } from "@/src/api/cash-flow/getDataCashFlow";
 import GetCashFlowReportModal from "./GetCashFlowReportModal";
+import EditWeeklyProgressModal from "./EditWeeklyProgressModal";
 
 interface ProjectProps {
   params: Promise<{
@@ -61,6 +61,11 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   const handleCardClick = (weeklyProgress: IWeeklyProgress) => {
     setSelectedProgress(weeklyProgress);
     setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false); // Close the modal
+    setSelectedProgress(null); // Optionally reset selected progress
   };
 
   return (
@@ -181,6 +186,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
           projectId={projectDataDetail?.id}
           refetchWeeklyProgressData={refetchWeeklyProgressData}
           initialData={selectedProgress}
+          onClose={handleModalClose}
         />
       )}
     </>

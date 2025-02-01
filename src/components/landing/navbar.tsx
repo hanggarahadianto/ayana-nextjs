@@ -1,46 +1,46 @@
 "use client";
 
-import {
-  Flex,
-  Stack,
-  Image,
-  Text,
-  Group,
-  SimpleGrid,
-  Button,
-  useMantineColorScheme,
-} from "@mantine/core";
+import { Flex, Image, Text, Group, SimpleGrid, Switch, useMantineColorScheme, createTheme, Stack } from "@mantine/core";
 import Link from "next/link";
+import { FiSun, FiMoon } from "react-icons/fi";
 
 export const Navbar = () => {
-  const { setColorScheme, clearColorScheme } = useMantineColorScheme();
+  const { colorScheme, setColorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === "dark";
 
   return (
-    <SimpleGrid
-      bg="#beab96"
-      p="md"
-      style={{ position: "sticky", top: 0, zIndex: 1000 }}
-    >
+    <SimpleGrid bg={isDark ? "#1a1b1e" : "#beab96"} p="md" style={{ position: "sticky", top: 0, zIndex: 1000 }}>
       <Flex justify="space-between" align="center">
-        <Link href={"/home"} passHref>
-          <Image
-            ml={12}
-            className="rounded-tl-3xl"
-            src="/images/ayana.png"
-            height={28}
-            width={60}
-            alt=""
-            style={{ borderRadius: "15px" }}
-          />
-        </Link>
-        <Link href={"/about"} passHref style={{ textDecoration: "none" }}>
-          <Text mr={20} c={"black"}>
-            Tentang Kami
-          </Text>
-        </Link>
-        <Group>
-          <Button onClick={() => setColorScheme("light")}>Light</Button>
-          <Button onClick={() => setColorScheme("dark")}>Dark</Button>
+        <Stack>
+          <Link href={"/home"} passHref>
+            <Image
+              ml={12}
+              className="rounded-tl-3xl"
+              src="/images/ayana.png"
+              height={28}
+              width={60}
+              alt="Logo"
+              style={{ borderRadius: "15px" }}
+            />
+          </Link>
+        </Stack>
+
+        <Group gap={20}>
+          <Link href={"/about"} passHref style={{ textDecoration: "none" }}>
+            <Text mr={20} c={isDark ? "white" : "black"}>
+              Tentang Kami
+            </Text>
+          </Link>
+          <Group mr={20}>
+            <Switch
+              checked={isDark}
+              onChange={(event) => setColorScheme(event.currentTarget.checked ? "dark" : "light")}
+              size="lg"
+              onLabel={<FiSun size={16} />}
+              offLabel={<FiMoon size={16} />}
+              color="yellow"
+            />
+          </Group>
         </Group>
       </Flex>
     </SimpleGrid>
