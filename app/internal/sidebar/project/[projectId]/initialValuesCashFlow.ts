@@ -26,3 +26,69 @@ export const initialValuesCashFlowUpdate: ICashFlowUpdate = {
   project_id: "",
   good: [], // Empty array for goods
 };
+
+import * as Yup from "yup";
+
+export const validationSchemaCashFlowCreate = Yup.object({
+  week_number: Yup.string().required("Week number is required").matches(/^\d+$/, "Week number must be a number"),
+
+  cash_in: Yup.number().required("Cash in is required").min(0, "Cash in cannot be negative"),
+
+  cash_out: Yup.number().required("Cash out is required").min(0, "Cash out cannot be negative"),
+
+  outstanding: Yup.number().required("Outstanding is required").min(0, "Outstanding cannot be negative"),
+
+  project_id: Yup.string().required("Project ID is required"),
+
+  good: Yup.array()
+    .of(
+      Yup.object({
+        good_name: Yup.string().required("Good name is required"),
+
+        status: Yup.string().required("Status is required"),
+
+        quantity: Yup.number().required("Quantity is required").min(1, "Quantity must be greater than 0"),
+
+        good_purchase_date: Yup.date().required("Purchase date is required").max(new Date(), "Purchase date cannot be in the future"),
+
+        good_settlement_date: Yup.date()
+          .required("Settlement date is required")
+          .min(Yup.ref("good_purchase_date"), "Settlement date must be after purchase date"),
+
+        total_cost: Yup.number().required("Total cost is required").min(0, "Total cost cannot be negative"),
+      })
+    )
+    .min(1, "At least one good is required"),
+});
+
+export const validationSchemaCashFlowUpdate = Yup.object({
+  id: Yup.string().required("ID is required"),
+
+  week_number: Yup.string().required("Week number is required").matches(/^\d+$/, "Week number must be a number"),
+
+  cash_in: Yup.number().required("Cash in is required").min(0, "Cash in cannot be negative"),
+
+  cash_out: Yup.number().required("Cash out is required").min(0, "Cash out cannot be negative"),
+
+  outstanding: Yup.number().required("Outstanding is required").min(0, "Outstanding cannot be negative"),
+
+  project_id: Yup.string().required("Project ID is required"),
+
+  good: Yup.array().of(
+    Yup.object({
+      good_name: Yup.string().required("Good name is required"),
+
+      status: Yup.string().required("Status is required"),
+
+      quantity: Yup.number().required("Quantity is required").min(1, "Quantity must be greater than 0"),
+
+      good_purchase_date: Yup.date().required("Purchase date is required").max(new Date(), "Purchase date cannot be in the future"),
+
+      good_settlement_date: Yup.date()
+        .required("Settlement date is required")
+        .min(Yup.ref("good_purchase_date"), "Settlement date must be after purchase date"),
+
+      total_cost: Yup.number().required("Total cost is required").min(0, "Total cost cannot be negative"),
+    })
+  ),
+});

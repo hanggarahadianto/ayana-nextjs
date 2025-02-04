@@ -1,8 +1,6 @@
-// app/internal/layout.tsx
 "use client";
 
 import { Navbar } from "@/src/components/landing/navbar";
-// import HeaderNav from "@/src/components/HeaderNav";
 import {
   AppShell,
   Burger,
@@ -13,16 +11,16 @@ import {
   Stack,
   Text,
   useMantineTheme,
+  Title,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
+import { FaTasks, FaProjectDiagram, FaUser, FaCog } from "react-icons/fa"; // Added icons for better visualization
 
-export default function InternalLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function InternalLayout({ children }: { children: React.ReactNode }) {
   const theme = useMantineTheme();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme(); // For dark mode toggle
   const [opened, { toggle }] = useDisclosure();
   const tablet_match = useMediaQuery("(max-width: 768px)");
 
@@ -35,7 +33,7 @@ export default function InternalLayout({
           layout="alt"
           header={{ height: 60 }}
           navbar={{
-            width: 300,
+            width: 220,
             breakpoint: "sm",
             collapsed: { mobile: !opened },
           }}
@@ -44,6 +42,7 @@ export default function InternalLayout({
             style={{
               height: rem(60),
               boxShadow: tablet_match ? theme.shadows.md : theme.shadows.sm,
+              backgroundColor: colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[0], // Background for dark mode
             }}
           >
             <div
@@ -52,53 +51,70 @@ export default function InternalLayout({
                 alignItems: "center",
                 height: "100%",
                 justifyContent: "space-between",
+                padding: "0 20px",
               }}
             >
-              <Burger
-                opened={opened}
-                onClick={toggle}
-                hiddenFrom="sm"
-                size="sm"
-              />
-              <Text p={20}>Seach</Text>
+              <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+              <Title order={3} style={{ marginLeft: "20px", color: colorScheme === "dark" ? theme.colors.gray[0] : theme.colors.dark[9] }}>
+                Search
+              </Title>
             </div>
-
-            <Container fluid py="sm" px="lg">
-              {/* <HeaderNav
-          // mobileOpened={mobileOpened}
-          // toggleMobile={toggleMobile}
-          // sidebarState={sidebarState}
-          // onSidebarStateChange={toggleSidebarState}
-          /> */}
-            </Container>
           </AppShell.Header>
 
           <AppShell.Navbar p="xl" mt={40}>
-            <Stack>
-              <Link
+            <Stack mt={40}>
+              <NavLink
+                component={Link}
                 href="/internal/sidebar/task"
-                style={{ textDecoration: "none", color: theme.colors.dark[9] }}
-              >
-                Task
-              </Link>
-              <Link
+                style={{
+                  color: colorScheme === "dark" ? theme.colors.gray[0] : theme.colors.dark[9], // Adjust text color based on theme
+                  transition: "background-color 0.3s ease", // Smooth transition for hover
+                }}
+                label="Task"
+                leftSection={<FaTasks />}
+                active={false}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = theme.colors.blue[6])} // Hover effect
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")} // Reset hover
+              />
+              <NavLink
+                component={Link}
                 href="/internal/sidebar/project"
-                style={{ textDecoration: "none", color: theme.colors.dark[9] }}
-              >
-                Project
-              </Link>
-              <Link
+                style={{
+                  color: colorScheme === "dark" ? theme.colors.gray[0] : theme.colors.dark[9],
+                  transition: "background-color 0.3s ease",
+                }}
+                label="Project"
+                leftSection={<FaProjectDiagram />}
+                active={false}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = theme.colors.blue[6])}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+              />
+              <NavLink
+                component={Link}
                 href="/internal/sidebar/profile"
-                style={{ textDecoration: "none", color: theme.colors.dark[9] }}
-              >
-                Profile
-              </Link>
-              <Link
+                style={{
+                  color: colorScheme === "dark" ? theme.colors.gray[0] : theme.colors.dark[9],
+                  transition: "background-color 0.3s ease",
+                }}
+                label="Profile"
+                leftSection={<FaUser />}
+                active={false}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = theme.colors.blue[6])}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+              />
+              <NavLink
+                component={Link}
                 href="/internal/sidebar/setting"
-                style={{ textDecoration: "none", color: theme.colors.dark[9] }}
-              >
-                Setting
-              </Link>
+                style={{
+                  color: colorScheme === "dark" ? theme.colors.gray[0] : theme.colors.dark[9],
+                  transition: "background-color 0.3s ease",
+                }}
+                label="Setting"
+                leftSection={<FaCog />}
+                active={false}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = theme.colors.blue[6])}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+              />
             </Stack>
           </AppShell.Navbar>
 

@@ -29,7 +29,6 @@ const GetCashFlowReportModal = ({
   refetchWeeklyProgressData: () => void;
   totalCost: any;
 }) => {
-  console.log("total Cost", totalCost);
   const [opened, { open, close }] = useDisclosure(false);
 
   const groupedByWeek = cashFlowData.reduce((acc: any, item: any) => {
@@ -177,16 +176,22 @@ const GetCashFlowReportModal = ({
                             <Table.Thead>{tableTitle}</Table.Thead>
                             <Table.Tbody>{rows}</Table.Tbody>
                           </Table>
-                          <Group justify="space-between">
-                            <Text></Text>
-                            <Flex direction="column" gap="sm" mt="sm">
-                              <Text size="md">💰 Uang Masuk: Rp {row.cash_in.toLocaleString()}</Text>
-                              <Text size="md">💸 Uang Keluar: Rp {row.cash_out.toLocaleString()}</Text>
-                              <Text size="md" fw={700} c={balance < 0 ? "red" : "green"}>
-                                🔹 Uang Tersisa: Rp {balance.toLocaleString()}
-                              </Text>
-                            </Flex>
-                          </Group>
+                          <Stack justify="end" align="end" p={10}>
+                            <Grid w={400}>
+                              <Grid.Col span={6}>
+                                <Text size="md">💰 Uang Masuk </Text>
+                                <Text size="md">💸 Uang Keluar</Text>
+                                <Text size="md" fw={700} c={balance < 0 ? "red" : "green"}>
+                                  🔹 Uang Tersisa
+                                </Text>
+                              </Grid.Col>
+                              <Grid.Col span={6}>
+                                <Text>: Rp {row.cash_in.toLocaleString()}</Text>
+                                <Text>: Rp {row.cash_out.toLocaleString()}</Text>
+                                <Text c={balance < 0 ? "red" : "green"}>: Rp {balance.toLocaleString()}</Text>
+                              </Grid.Col>
+                            </Grid>
+                          </Stack>
                         </div>
                       );
                     })}

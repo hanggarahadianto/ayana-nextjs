@@ -34,7 +34,6 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
     refetchOnWindowFocus: false,
   });
 
-  // Fetch weekly progress data
   const {
     data: weeklyProgressData,
     isLoading: isLoadingGetWeeklyProgressData,
@@ -53,9 +52,6 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
     queryFn: () => getDataCashFlow(projectId),
     refetchOnWindowFocus: false,
   });
-
-  // console.log("weekly progress", weeklyProgressData);
-  console.log("cashflow", cashFlowData);
 
   const [selectedProgress, setSelectedProgress] = useState<IWeeklyProgress | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -165,8 +161,8 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
                 <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
                   Minggu Ke {weeklyProgress.week_number}
                 </Text>
-                <Grid w={400}>
-                  <Grid.Col span={6}>
+                <Grid w={400} mt={12}>
+                  <Grid.Col span={5}>
                     <Text fw={500} size="lg" style={{ color: "#ffffff" }}>
                       Biaya Material
                     </Text>
@@ -174,9 +170,12 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
                       Jumlah Pekerja
                     </Text>
                   </Grid.Col>
-                  <Grid.Col span={6}>
-                    <Text fw={500} size="lg" style={{ color: "#ffffff" }}>
-                      {weeklyProgress.amount_material}
+                  <Grid.Col span={7}>
+                    <Text fw={500} style={{ color: "#ffffff" }}>
+                      {new Intl.NumberFormat("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                      }).format(weeklyProgress.amount_material || 0)}
                     </Text>
                     <Text fw={500} size="lg" style={{ color: "#ffffff" }}>
                       {weeklyProgress.amount_worker} Orang

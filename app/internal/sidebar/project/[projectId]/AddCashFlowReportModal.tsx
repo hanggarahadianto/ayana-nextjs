@@ -55,7 +55,6 @@ const AddCashFlowReportModal = ({
     <>
       <ActionIcon variant="white" size="lg" onClick={open}>
         <IconPlus size="1.5rem" />
-        {/* <FiPlus /> */}
       </ActionIcon>
 
       <Modal
