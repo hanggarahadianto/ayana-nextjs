@@ -5,6 +5,7 @@ export const initialValueWeeklyProgressCreate: IWeeklyProgressCreate = {
   percentage: "",
   amount_worker: 0,
   amount_material: 0,
+  note: "",
   project_id: "",
   material: [
     {
@@ -28,6 +29,7 @@ export const initialValueWeeklyProgressUpdate: IWeeklyProgressUpdate = {
   percentage: "",
   amount_worker: 0,
   amount_material: 0,
+  note: "",
   project_id: "",
   material: [
     {
@@ -135,6 +137,7 @@ export function getInitialValuesUpdateWeeklyProgress(weeklyProgressData: IWeekly
     percentage: weeklyProgressData?.percentage || "",
     amount_worker: weeklyProgressData?.amount_worker || 0,
     amount_material: weeklyProgressData?.amount_material || 0,
+    note: weeklyProgressData?.note || "",
     project_id: weeklyProgressData?.project_id || "",
     material: weeklyProgressData?.material?.length
       ? weeklyProgressData.material

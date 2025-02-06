@@ -44,6 +44,7 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData: IP
           onSubmit={handleSubmit}
         >
           {({ values, errors, touched, setFieldValue, handleBlur }) => {
+            console.log(values);
             const handleInputChange = (setFieldValue: any, field: string, value: any) => {
               setFieldValue(field, value); // Update field value in Formik
             };
@@ -107,11 +108,9 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData: IP
                         radius="sm"
                         valueFormat="DD MMMM YYYY"
                         rightSection={<IconCalendar size={18} />}
+                        value={values.project_start ? new Date(values.project_start) : null} // ✅ Ensure it's always a Date
                         onChange={(value: Date | null) => {
-                          if (value) {
-                            const formattedDate = value.toISOString(); // Convert to ISO format (e.g., "2025-01-01T00:00:00Z")
-                            handleInputChange(setFieldValue, "project_start", formattedDate);
-                          }
+                          handleInputChange(setFieldValue, "project_start", value ? value.toISOString() : null);
                         }}
                         onBlur={handleBlur}
                       />
@@ -132,11 +131,9 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData: IP
                         radius="sm"
                         valueFormat="DD MMMM YYYY"
                         rightSection={<IconCalendar size={18} />}
+                        value={values.project_end ? new Date(values.project_end) : null} // ✅ Ensure it's always a Date
                         onChange={(value: Date | null) => {
-                          if (value) {
-                            const formattedDate = value.toISOString(); // Convert to ISO format (e.g., "2025-06-01T00:00:00Z")
-                            handleInputChange(setFieldValue, "project_end", formattedDate);
-                          }
+                          handleInputChange(setFieldValue, "project_end", value ? value.toISOString() : null);
                         }}
                         onBlur={handleBlur}
                       />

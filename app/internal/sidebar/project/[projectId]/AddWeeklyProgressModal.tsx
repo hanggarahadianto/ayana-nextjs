@@ -216,22 +216,23 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData }: { proj
                               value={material.material_name || ""}
                               onChange={(event) => handleMaterialChange(index, "material_name", event.currentTarget.value)}
                             />
-                            <Select
-                              w={100}
-                              label={"Satuan"}
-                              placeholder="Satuan"
-                              value={material.unit || ""}
-                              data={satuan}
-                              onChange={(value) => handleMaterialChange(index, "unit", value || "")}
-                            />
 
                             <NumberInput
-                              w={140}
+                              w={100}
                               hideControls
                               label={"Kuantitas"}
                               placeholder="Masukan Kuantitas"
                               value={material.quantity || ""}
                               onChange={(value) => handleMaterialChange(index, "quantity", (value as number) || 0)}
+                            />
+
+                            <Select
+                              w={140}
+                              label={"Satuan"}
+                              placeholder="Satuan"
+                              value={material.unit || ""}
+                              data={satuan}
+                              onChange={(value) => handleMaterialChange(index, "unit", value || "")}
                             />
 
                             <NumberInput

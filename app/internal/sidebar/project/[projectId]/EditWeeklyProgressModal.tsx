@@ -26,7 +26,7 @@ const EditWeeklyProgressModal = ({
   const { mutate: updateData, isPending: isLoadingSubmitProjectData } = useUpdateWeeklyProgressForm(refetchWeeklyProgressData, close);
 
   const handleSubmit = (values: IWeeklyProgressUpdate) => {
-    const formData = { ...values, id: initialData?.id, project_id: projectId };
+    const formData = { ...values, id: initialData?.id, amount_worker: values?.worker?.length, project_id: projectId };
 
     console.log("Form values submitted:", formData);
 
@@ -53,6 +53,8 @@ const EditWeeklyProgressModal = ({
           {({ values, errors, touched, setFieldValue }) => {
             console.log("VALUES", values);
 
+            console.log("VALUES PEKERJA", values.worker.length);
+
             // worker
             const addWorkerField = () => {
               const newWorker: IWorkerCreate = { worker_name: "", position: "" };
@@ -61,6 +63,7 @@ const EditWeeklyProgressModal = ({
 
             const deleteWorkerField = (worker: IWorkerCreate[], index: number) => {
               const updatedWorkers = worker.filter((_, i) => i !== index);
+              console.log("UPDATE WORKER", updatedWorkers);
               setFieldValue("worker", updatedWorkers);
             };
 
@@ -83,7 +86,6 @@ const EditWeeklyProgressModal = ({
             };
 
             const deleteMaterialField = (worker: IMaterialCreate[], index: number) => {
-              // Remove the selected material
               const updatedMaterials = worker.filter((_, i) => i !== index);
 
               // Recalculate the total cost after deletion
@@ -109,9 +111,6 @@ const EditWeeklyProgressModal = ({
 
               // Recalculate the total amount for all materials
               const totalCost = updatedMaterial.reduce((acc, material) => acc + (material.total_cost || 0), 0);
-
-              console.log("Updated Material:", updatedMaterial);
-              console.log("Total Cost:", totalCost);
 
               setFieldValue("material", updatedMaterial);
               setFieldValue("amount_material", totalCost);
@@ -190,22 +189,23 @@ const EditWeeklyProgressModal = ({
                               value={material.material_name || ""}
                               onChange={(event) => handleMaterialChange(index, "material_name", event.currentTarget.value)}
                             />
-                            <Select
+                            <NumberInput
+                              hideControls
                               w={100}
+                              label={"Kuantitas"}
+                              placeholder="Masukan Kuantitas"
+                              value={material.quantity || ""}
+                              onChange={(value) => handleMaterialChange(index, "quantity", (value as number) || 0)}
+                            />
+                            <Select
+                              w={140}
                               label={"Satuan"}
                               placeholder="Satuan"
                               value={material.unit || ""}
                               data={satuan}
                               onChange={(value) => handleMaterialChange(index, "unit", value || "")}
                             />
-                            <NumberInput
-                              hideControls
-                              w={140}
-                              label={"Kuantitas"}
-                              placeholder="Masukan Kuantitas"
-                              value={material.quantity || ""}
-                              onChange={(value) => handleMaterialChange(index, "quantity", (value as number) || 0)}
-                            />
+
                             <NumberInput
                               w={140}
                               hideControls
@@ -256,6 +256,7 @@ const EditWeeklyProgressModal = ({
                     <Textarea
                       label="Note"
                       placeholder="Enter additional information"
+                      value={values?.note}
                       onChange={(event) => setFieldValue("note", event.currentTarget.value)}
                       mt="md"
                     />

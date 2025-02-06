@@ -6,7 +6,6 @@ export const getDataProductDetail = async (id: string) => {
 
     const response = await APIAxiosInstance.get(url);
 
-    // console.log("Response:", response.data.data);
     return response.data.data as IProduct;
   } catch (error: any) {
     console.error("Error fetching data:", error.message || error);

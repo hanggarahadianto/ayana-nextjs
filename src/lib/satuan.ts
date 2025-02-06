@@ -1,1 +1,1 @@
-export const satuan: string[] = ["pcs", "lembar", "kotak", "galon", "liter", "rol", "batang", "sak", "m2", "ton"];
+export const satuan: string[] = ["pcs", "sak", "lembar", "kotak", "galon", "liter", "rol", "batang", "m2", "ton"];

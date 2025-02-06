@@ -1,15 +1,29 @@
 import { ActionIcon } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
+import { modals } from "@mantine/modals";
 
 interface ButtonDeleteProps {
-  onClick: () => void;
+  id: string;
+  onDelete: (id: string) => void;
+  description: string;
 }
 
-const ButtonDelete: React.FC<ButtonDeleteProps> = ({ onClick }) => {
+const ButtonDeleteWithConfirmation: React.FC<ButtonDeleteProps> = ({ id, onDelete, description }) => {
+  const openDeleteModal = () => {
+    modals.openConfirmModal({
+      title: "Konfirmasi Hapus",
+      children: <p>{description}</p>,
+      labels: { confirm: "Ya", cancel: "Tidak" },
+      confirmProps: { color: "red" },
+      onConfirm: () => onDelete(id),
+      centered: true,
+    });
+  };
+
   return (
     <ActionIcon
-      mt={2}
-      onClick={onClick}
+      mt={22}
+      onClick={openDeleteModal}
       size="2.5rem"
       radius="xl"
       variant="gradient"
@@ -31,4 +45,4 @@ const ButtonDelete: React.FC<ButtonDeleteProps> = ({ onClick }) => {
   );
 };
 
-export default ButtonDelete;
+export default ButtonDeleteWithConfirmation;

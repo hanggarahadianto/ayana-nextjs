@@ -2,15 +2,12 @@
 import "@mantine/core/styles.css";
 
 import React from "react";
-import {
-  mantineHtmlProps,
-  MantineProvider,
-  ColorSchemeScript,
-} from "@mantine/core";
+import { mantineHtmlProps, MantineProvider, ColorSchemeScript } from "@mantine/core";
 // import { theme } from "@/theme";
 import "@mantine/carousel/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/dates/styles.css";
+import { ModalsProvider } from "@mantine/modals";
 
 import { Notifications } from "@mantine/notifications";
 
@@ -31,16 +28,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <ColorSchemeScript />
         <link rel="shortcut icon" href="/favicon.svg" />
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
-        />
+        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no" />
       </head>
       <body>
         <QueryClientProvider client={queryClient}>
           <MantineProvider theme={theme} defaultColorScheme="dark">
-            <Notifications />
-            {children}
+            <ModalsProvider>
+              <Notifications />
+              {children}
+            </ModalsProvider>
           </MantineProvider>
         </QueryClientProvider>
       </body>

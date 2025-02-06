@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  AspectRatio,
-  Container,
-  Flex,
-  Grid,
-  SimpleGrid,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { AspectRatio, Container, Flex, Grid, SimpleGrid, Stack, Text, useMantineTheme } from "@mantine/core";
 import Image from "next/image";
 
 const demoProps = {
@@ -21,34 +13,17 @@ const LandingPage = () => {
     <div>
       <Container {...demoProps} fluid h="160vh" bg="#25492c">
         <AspectRatio ratio={1080 / 1080} maw={1800} mx="auto">
-          <Image
-            className="rounded-tl-3xl"
-            src="/images/new-in.jpg"
-            height={600}
-            width={900}
-            alt=""
-          />
+          <Image className="rounded-tl-3xl" src="/images/new-in.jpg" height={600} width={900} alt="" />
         </AspectRatio>
         <Grid>
           <Grid.Col span={6}>
             <Stack p={40} ml={200}>
-              <Image
-                className="rounded-tl-3xl"
-                src="/images/sublanding.png"
-                height={300}
-                width={300}
-                alt=""
-              />
+              <Image className="rounded-tl-3xl" src="/images/sublanding.png" height={300} width={300} alt="" />
             </Stack>
           </Grid.Col>
           <Grid.Col span={6}>
             <Stack mt={140}>
-              <Text
-                size="xl"
-                fw={900}
-                c="darksalmon"
-                style={{ fontFamily: "Lora", fontSize: "5rem" }}
-              >
+              <Text size="xl" fw={900} c="darksalmon" style={{ fontFamily: "Lora", fontSize: "5rem" }}>
                 LIVABLE CITY
               </Text>
 
@@ -61,37 +36,21 @@ const LandingPage = () => {
               >
                 Inside The City
               </Text>
-              <Text
-                size="xl"
-                fw={300}
-                variant="gradient"
-                gradient={{ from: "white", to: "white", deg: 90 }}
-              >
-                True to our name, all we know do revolve around one simple,
-                profound mission: To make your dream home a reality. This is to
-                appreciate you hustlers, dreamers, and visionaries. Who dare to
-                take responsibly the biggest leap of faith in life; to decide on
-                a home of your own
+              <Text size="xl" fw={300} variant="gradient" gradient={{ from: "white", to: "white", deg: 90 }}>
+                True to our name, all we know do revolve around one simple, profound mission: To make your dream home a reality. This is to
+                appreciate you hustlers, dreamers, and visionaries. Who dare to take responsibly the biggest leap of faith in life; to
+                decide on a home of your own
               </Text>
             </Stack>
           </Grid.Col>
         </Grid>
         <Stack justify="center" align="center" mt={100}>
-          <Text
-            variant="gradient"
-            gradient={{ from: "white", to: "cyan", deg: 90 }}
-            style={{ fontFamily: "Lora", fontSize: "6rem" }}
-          >
+          <Text variant="gradient" gradient={{ from: "white", to: "cyan", deg: 90 }} style={{ fontFamily: "Lora", fontSize: "6rem" }}>
             Why Ayana
           </Text>
         </Stack>
       </Container>
-      <SimpleGrid
-        cols={1}
-        style={{ backgroundColor: "#ece6dc" }}
-        h="28vh"
-        spacing="lg"
-      >
+      <SimpleGrid cols={1} style={{ backgroundColor: "#ece6dc" }} h="28vh" spacing="lg">
         <Flex align="center" justify="center" mt={-400}>
           <Grid p="md">
             <Grid.Col span={12}>
@@ -103,17 +62,11 @@ const LandingPage = () => {
                   width={imageSize.width}
                   style={{ borderRadius: "15px" }}
                 />
-                <Text
-                  size="xl"
-                  fw={900}
-                  style={{ fontFamily: "Lora", color: "#af8967" }}
-                >
+                <Text size="xl" fw={900} style={{ fontFamily: "Lora", color: "black" }}>
                   STYLISH AFFORDABLE HOUSING
                 </Text>
-
-                <Text size="md" style={{ fontFamily: "Lora" }}>
-                  Ayana presents affordable housing for you, fellow first
-                  homeowner
+                <Text size="md" style={{ fontFamily: "Lora", color: "black" }}>
+                  Ayana presents affordable housing for you, fellow first homeowner
                 </Text>
               </Stack>
             </Grid.Col>
@@ -128,16 +81,11 @@ const LandingPage = () => {
                   width={imageSize.width}
                   style={{ borderRadius: "15px" }}
                 />
-                <Text
-                  style={{ fontFamily: "Lora", color: "#af8967" }}
-                  size="xl"
-                  fw={900}
-                >
+                <Text size="xl" fw={900} style={{ fontFamily: "Lora", color: "black" }}>
                   INTEGRATED ECOSYSTEM
                 </Text>
-                <Text size="md" style={{ fontFamily: "Lora" }}>
-                  Enjoy the integrated ecosystem for a more effective and
-                  efficient life
+                <Text size="md" style={{ fontFamily: "Lora", color: "black" }}>
+                  Enjoy the integrated ecosystem for a more effective and efficient life
                 </Text>
               </Stack>
             </Grid.Col>
@@ -152,15 +100,11 @@ const LandingPage = () => {
                   width={imageSize.width}
                   style={{ borderRadius: "15px" }}
                 />
-                <Text
-                  size="xl"
-                  fw={900}
-                  style={{ fontFamily: "Lora", color: "#af8967" }}
-                >
+                <Text size="xl" fw={900} style={{ fontFamily: "Lora", color: "black" }}>
                   PLACE TO LIVE AND GROW
                 </Text>
-                <Text size="md" style={{ fontFamily: "Lora" }}>
-                  Plan your life for decases ahead with Cendana
+                <Text size="md" style={{ fontFamily: "Lora", color: "black" }}>
+                  Plan your life for decades ahead with Cendana
                 </Text>
               </Stack>
             </Grid.Col>

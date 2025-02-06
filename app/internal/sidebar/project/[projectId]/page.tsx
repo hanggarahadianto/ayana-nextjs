@@ -66,6 +66,8 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
     setSelectedProgress(null); // Optionally reset selected progress
   };
 
+  console.log("weeklyProgressdata", weeklyProgressData?.data);
+
   return (
     <>
       <Card

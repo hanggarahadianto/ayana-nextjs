@@ -14,25 +14,25 @@ export const initialValueProjectCreate: IProjectCreate = {
 };
 
 export const validationSchemaProject = Yup.object({
-  location: Yup.string().required("Nama Lokasi is required"),
-  unit: Yup.string().required("Nama Blok is required"),
-  type: Yup.string().required("Nama Tipe is required"),
-  project_leader: Yup.string().required("Penanggung Jawab is required"),
-  total_cost: Yup.number().required("Biaya Proyek is required").positive("Biaya Proyek must be a positive number"),
-  project_time: Yup.string().required("Durasi Project is required"),
-  project_start: Yup.string().required("Tanggal Mulai is required"),
-  project_end: Yup.string().required("Tanggal Selesai is required"),
+  location: Yup.string().required("Nama Lokasi harus diisi"),
+  unit: Yup.string().required("Nama Blok harus diisi"),
+  type: Yup.string().required("Nama Tipe harus diisi"),
+  project_leader: Yup.string().required("Penanggung Jawab harus diisi"),
+  total_cost: Yup.number().required("Biaya Proyek harus diisi").positive("Biaya Proyek harus angka"),
+  project_time: Yup.string().required("Durasi Project harus diisi"),
+  project_start: Yup.string().required("Tanggal Mulai harus diisi"),
+  project_end: Yup.string().required("Tanggal Selesai harus diisi"),
   note: Yup.string().optional(),
 });
 
 export const getInitialValuesUpdateProject = (initialData: IProjectUpdate) => ({
-  id: initialData.id || "",
-  project_name: initialData.project_name || "",
-  project_leader: initialData.project_leader || "",
-  project_time: initialData.project_time || "",
-  total_cost: initialData.total_cost || 0,
-  project_start: initialData.project_start || "",
-  project_end: initialData.project_end || "",
-  type: initialData.type || "",
-  note: initialData.note || "",
+  id: initialData?.id || "",
+  project_name: initialData?.project_name || "",
+  project_leader: initialData?.project_leader || "",
+  project_time: initialData?.project_time || "",
+  total_cost: initialData?.total_cost || 0,
+  project_start: initialData?.project_start ? new Date(initialData.project_start) : null,
+  project_end: initialData?.project_end ? new Date(initialData.project_end) : null,
+  type: initialData?.type || "",
+  note: initialData?.note || "",
 });
