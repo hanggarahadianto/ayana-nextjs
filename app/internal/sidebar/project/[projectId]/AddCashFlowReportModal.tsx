@@ -27,6 +27,7 @@ import ButtonAdd from "@/src/components/button/buttonAdd";
 import ButtonDelete from "@/src/components/button/butttonDelete";
 import { FiPlus } from "react-icons/fi";
 import { initialValuesCashFlowCreate } from "./initialValuesCashFlow";
+import BreathingActionIcon from "@/src/components/button/buttonAction";
 
 const AddCashFlowReportModal = ({
   projectName,
@@ -53,9 +54,7 @@ const AddCashFlowReportModal = ({
 
   return (
     <>
-      <ActionIcon variant="white" size="lg" onClick={open}>
-        <IconPlus size="1.5rem" />
-      </ActionIcon>
+      <BreathingActionIcon onClick={open} icon={<IconPlus size="1rem" />} />
 
       <Modal
         opened={opened}
@@ -277,7 +276,9 @@ const AddCashFlowReportModal = ({
                             onChange={(value) => handleGoodChange(index, "total_cost", (value as number) || 0)}
                           />
 
-                          <ButtonDelete onClick={() => deleteGoodField(values?.good || [], index)} />
+                          <Stack mt={20}>
+                            <ButtonDelete onClick={() => deleteGoodField(values?.good || [], index)} />
+                          </Stack>
                         </Group>
                       </Card>
                     ))}

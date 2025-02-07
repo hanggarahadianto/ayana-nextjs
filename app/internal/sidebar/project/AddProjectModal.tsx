@@ -29,7 +29,8 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
   const { mutate: postData, isPending: isLoadingSubmitProjectData } = useSubmitProjectForm(refetchProjectData, close);
 
   const handleSubmit = (values: IProjectCreate, { setSubmitting }: any) => {
-    const projectName = values.location && values.unit ? `${values.location} - ${values.unit}` : "Unnamed Project";
+    const projectName =
+      values.location && values.unit && values.type ? `${values.location} - ${values.unit} - ${values.type}` : "Unnamed Project";
 
     const updatedValues = {
       ...values,
@@ -40,6 +41,7 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
     postData(updatedValues);
     setSubmitting(false);
   };
+
   return (
     <>
       <ActionIcon

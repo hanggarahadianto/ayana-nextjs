@@ -186,7 +186,9 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData }: { proj
                                 { value: "Kuli", label: "Kuli" },
                               ]}
                             />
-                            <ButtonDelete onClick={() => deleteWorkerField(values.worker, index)} />
+                            <Stack mt={20}>
+                              <ButtonDelete onClick={() => deleteWorkerField(values.worker, index)} />
+                            </Stack>
                           </Group>
                         </Card>
                       ))}
@@ -207,54 +209,62 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData }: { proj
                     </Group>
 
                     <Stack mt="md">
-                      {values.material.map((material: IMaterialCreate, index: any) => (
-                        <Card key={index} shadow="sm" padding="lg" radius="md">
-                          <Group>
-                            <TextInput
-                              label={`Nama Material ${index + 1}`}
-                              placeholder="Masukan Nama Material"
-                              value={material.material_name || ""}
-                              onChange={(event) => handleMaterialChange(index, "material_name", event.currentTarget.value)}
-                            />
+                      {values.material.map((material: IMaterialCreate, index: any) => {
+                        const [materialDisplayValue, setMaterialDisplayValue] = useState(material.price || "");
+                        return (
+                          <Card key={index} shadow="sm" padding="lg" radius="md">
+                            <Group>
+                              <TextInput
+                                label={`Nama Material ${index + 1}`}
+                                placeholder="Masukan Nama Material"
+                                value={material.material_name || ""}
+                                onChange={(event) => handleMaterialChange(index, "material_name", event.currentTarget.value)}
+                              />
 
-                            <NumberInput
-                              w={100}
-                              hideControls
-                              label={"Kuantitas"}
-                              placeholder="Masukan Kuantitas"
-                              value={material.quantity || ""}
-                              onChange={(value) => handleMaterialChange(index, "quantity", (value as number) || 0)}
-                            />
+                              <NumberInput
+                                w={100}
+                                hideControls
+                                label={"Kuantitas"}
+                                placeholder="Masukan Kuantitas"
+                                value={material.quantity || ""}
+                                onChange={(value) => handleMaterialChange(index, "quantity", (value as number) || 0)}
+                              />
 
-                            <Select
-                              w={140}
-                              label={"Satuan"}
-                              placeholder="Satuan"
-                              value={material.unit || ""}
-                              data={satuan}
-                              onChange={(value) => handleMaterialChange(index, "unit", value || "")}
-                            />
+                              <Select
+                                w={140}
+                                label={"Satuan"}
+                                placeholder="Satuan"
+                                value={material.unit || ""}
+                                data={satuan}
+                                onChange={(value) => handleMaterialChange(index, "unit", value || "")}
+                              />
 
-                            <NumberInput
-                              w={140}
-                              hideControls
-                              label={"Harga"}
-                              placeholder="Masukan Harga"
-                              value={material.price || ""}
-                              onChange={(value) => handleMaterialChange(index, "price", (value as number) || 0)}
-                            />
+                              <TextInput
+                                w={140}
+                                label="Harga"
+                                placeholder="Masukan Harga"
+                                value={materialDisplayValue}
+                                onChange={(event) => {
+                                  const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+                                  const numericValue = Number(rawValue) || 0;
+                                  setMaterialDisplayValue(numericValue.toLocaleString("id-ID")); // Format displayed value
+                                  handleMaterialChange(index, "price", numericValue); // Store numeric value in state
+                                }}
+                              />
 
-                            <TextInput
-                              label={"Total"}
-                              value={material.total_cost?.toLocaleString("id-ID") || "0"} // Format as currency if needed
-                              readOnly
-                              styles={{ input: { fontWeight: "bold", cursor: "not-allowed" } }} // Light background to indicate it's view-only
-                            />
-
-                            <ButtonDelete onClick={() => deleteMaterialField(values.material, index)} />
-                          </Group>
-                        </Card>
-                      ))}
+                              <TextInput
+                                label={"Total"}
+                                value={material.total_cost?.toLocaleString("id-ID") || "0"} // Format as currency if needed
+                                readOnly
+                                styles={{ input: { fontWeight: "bold", cursor: "not-allowed" } }} // Light background to indicate it's view-only
+                              />
+                              <Stack mt={20}>
+                                <ButtonDelete onClick={() => deleteMaterialField(values.material, index)} />
+                              </Stack>
+                            </Group>
+                          </Card>
+                        );
+                      })}
                       <Group p={20}>
                         <Text size="xl" fw={900}>
                           Total Biaya Material

@@ -17,6 +17,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconEye, IconPlus } from "@tabler/icons-react";
+import BreathingActionIcon from "@/src/components/button/buttonAction";
 
 const GetCashFlowReportModal = ({
   projectName,
@@ -64,9 +65,7 @@ const GetCashFlowReportModal = ({
 
   return (
     <>
-      <ActionIcon variant="white" size="lg" onClick={open}>
-        <IconEye size="1.5rem" />
-      </ActionIcon>
+      <BreathingActionIcon onClick={open} icon={<IconEye size="1rem" />} />
 
       <Modal
         opened={opened}

@@ -7,6 +7,7 @@ import { IconCalendar, IconEdit } from "@tabler/icons-react";
 import { useUpdateProjectForm } from "@/src/api/project/editDataProject";
 import { getInitialValuesUpdateProject } from "./initialValuesProject";
 import { FiSettings } from "react-icons/fi";
+import BreathingActionIcon from "@/src/components/button/buttonAction";
 
 const EditProjectModal = ({ initialData, refetchProjectData }: { initialData: IProjectUpdate; refetchProjectData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -31,9 +32,8 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData: IP
 
   return (
     <>
-      <ActionIcon onClick={open} size="3rem" radius="lg" variant="white">
-        <FiSettings size="1rem" />
-      </ActionIcon>
+      <BreathingActionIcon icon={<FiSettings size="1rem" />} onClick={open} />
+
       <Modal opened={opened} onClose={close} size="xl" yOffset="100px">
         <Formik
           initialValues={getInitialValuesUpdateProject(initialData)}

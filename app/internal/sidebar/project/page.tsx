@@ -21,7 +21,7 @@ const ProjectPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  const { mutate: mutateDeleteDataProject, isPending: isLoadingDeleteLinmas } = useDeleteDataProject(refetchProjectData); // Use the custom hook
+  const { mutate: mutateDeleteDataProject, isPending: isLoadingDeleteDataProject } = useDeleteDataProject(refetchProjectData);
 
   const handleDeleteProject = (idToDelete: string) => {
     mutateDeleteDataProject(idToDelete); // Pass only the string, not an object
@@ -48,37 +48,44 @@ const ProjectPage = () => {
               borderRadius: "16px",
               boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
               padding: "20px",
+              position: "relative", // Ensures delete button positioning works
+              cursor: "pointer",
             }}
           >
-            {/* <Link href={`/internal/sidebar/project/${project.id}`} passHref style={{ textDecoration: "none" }}> */}
-            <Stack gap={4} align="start">
-              <Group justify="space-between" w="100%">
-                <Link href={`/internal/sidebar/project/${project.id}`} passHref style={{ textDecoration: "none" }}>
-                  <Text fw={900} size="xl" style={{ color: "#ffffff", cursor: "pointer" }}>
-                    {project.project_name}
+            {/* Make the entire card clickable */}
+            <Link href={`/internal/sidebar/project/${project.id}`} passHref legacyBehavior>
+              <a style={{ textDecoration: "none", color: "inherit", display: "block", width: "100%", height: "100%" }}>
+                <Stack gap={4} align="start">
+                  <Group justify="space-between" w="100%">
+                    <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
+                      {project.project_name}
+                    </Text>
+                  </Group>
+
+                  <Text fw={500} mt={16} size="lg" style={{ color: "#ffffff" }}>
+                    {project.project_leader}
                   </Text>
-                </Link>
-                <Stack mt={-10}>
-                  <ButtonDeleteWithConfirmation
-                    id={project.id}
-                    onDelete={handleDeleteProject}
-                    description="Apakah Anda akan menghapus project ini?"
-                  />
+
+                  <Text fw={500} style={{ color: "#ffffff" }}>
+                    {new Intl.NumberFormat("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                    }).format(project.total_cost || 0)}
+                  </Text>
                 </Stack>
-              </Group>
+              </a>
+            </Link>
 
-              <Text fw={500} mt={16} size="lg" style={{ color: "#ffffff" }}>
-                {project.project_leader}
-              </Text>
-
-              <Text fw={500} style={{ color: "#ffffff" }}>
-                {new Intl.NumberFormat("id-ID", {
-                  style: "currency",
-                  currency: "IDR",
-                }).format(project.total_cost || 0)}
-              </Text>
-            </Stack>
-            {/* </Link> */}
+            <div
+              style={{ position: "absolute", top: 10, right: 10 }}
+              onClick={(e) => e.stopPropagation()} // Stop event propagation
+            >
+              <ButtonDeleteWithConfirmation
+                id={project.id}
+                onDelete={handleDeleteProject}
+                description={`Apakah anda ingin menghapus proyek ${project?.project_name}`}
+              />
+            </div>
           </Card>
         ))}
       </SimpleGrid>

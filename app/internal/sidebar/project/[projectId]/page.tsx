@@ -1,18 +1,18 @@
 "use client";
 
 import { getDataProjectDetail } from "@/src/api/project/getDataProjectDetail";
-import { ActionIcon, Box, Button, Card, Divider, Grid, Group, SimpleGrid, Stack, Text, TextInput } from "@mantine/core";
+import { Box, Card, Divider, Grid, Group, Progress, RingProgress, SimpleGrid, Stack, Text, Tooltip } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import React, { FC, use, useState } from "react";
 import { getDataWeeklyProgress } from "@/src/api/weekly-progress/getDataWeeklyProgress";
 import AddWeeklyProgressModal from "./AddWeeklyProgressModal";
 import AddCashFlowReportModal from "./AddCashFlowReportModal";
-import { IconEye, IconSettings } from "@tabler/icons-react";
 import { getDataCashFlow } from "@/src/api/cash-flow/getDataCashFlow";
 import GetCashFlowReportModal from "./GetCashFlowReportModal";
 import EditWeeklyProgressModal from "./EditWeeklyProgressModal";
-import { FiSettings } from "react-icons/fi";
 import EditProjectModal from "../EditProjectModal";
+import { useDeleteDataWeeklyProgress } from "@/src/api/weekly-progress/deleteDataWeeklyProgress";
+import ButtonDeleteWithConfirmation from "@/src/components/button/buttonDeleteConfirmation";
 
 interface ProjectProps {
   params: Promise<{
@@ -53,12 +53,19 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
     refetchOnWindowFocus: false,
   });
 
+  const { mutate: mutateDeleteDataWeeklyProgress, isPending: isLoadingDeleteDataWeeklyProgress } =
+    useDeleteDataWeeklyProgress(refetchWeeklyProgressData);
+
   const [selectedProgress, setSelectedProgress] = useState<IWeeklyProgress | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCardClick = (weeklyProgress: IWeeklyProgress) => {
     setSelectedProgress(weeklyProgress);
     setIsModalOpen(true);
+  };
+
+  const handleDeleteWeeklyProgress = (idToDelete: string) => {
+    mutateDeleteDataWeeklyProgress(idToDelete); // Pass only the string, not an object
   };
 
   const handleModalClose = () => {
@@ -68,73 +75,95 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
 
   console.log("weeklyProgressdata", weeklyProgressData?.data);
 
+  const totalPercentage = (weeklyProgressData?.data ?? []).reduce((sum, progress) => sum + Number(progress.percentage), 0);
   return (
     <>
-      <Card
-        shadow="md"
-        padding="lg"
-        radius="md"
-        style={{
-          background: "linear-gradient(135deg, #16a34a, #22c55e)", // Green gradient
-          color: "white",
-          width: "450px",
-        }}
-      >
-        <Box
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Stack>
-            <Group justify="space-between">
-              <Text fw={900} size={"2.5rem"}>
-                {projectDataDetail?.project_name}
-              </Text>
-              <Group variant="white" mr={40} style={{ cursor: "pointer" }}>
-                {/* <FiSettings size={24} /> */}
-                <EditProjectModal initialData={projectDataDetail as IProjectUpdate} refetchProjectData={refetchProjectData} />
-              </Group>
-            </Group>
-
-            <Text fw={700}>{projectDataDetail?.project_leader}</Text>
-            <Text fw={700}>
-              {new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR",
-              }).format(projectDataDetail?.total_cost || 0)}
-            </Text>
-            <Card
-              shadow="md"
-              padding="lg"
-              radius="md"
+      <Grid>
+        <Grid.Col span={5}>
+          <Card
+            shadow="md"
+            padding="lg"
+            radius="md"
+            style={{
+              background: "linear-gradient(135deg, #16a34a, #22c55e)", // Green gradient
+              color: "white",
+              width: "520px",
+            }}
+          >
+            <Box
               style={{
-                background: "linear-gradient(135deg, #16a34a, #22c55e)", // Green gradient
-                color: "white",
-                width: "450px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
-              <Text fw={900} mb={12}>
-                Buku Kas Umum
-              </Text>
-              <Group gap={24}>
-                <AddCashFlowReportModal
-                  projectName={projectDataDetail?.project_name}
-                  refetchCashFlowData={refetchCashFlowData}
-                  projectId={projectDataDetail?.id}
-                />
-                <GetCashFlowReportModal
-                  projectName={projectDataDetail?.project_name}
-                  cashFlowData={cashFlowData?.data || []}
-                  refetchWeeklyProgressData={refetchWeeklyProgressData}
-                  totalCost={projectDataDetail?.total_cost}
-                />
-              </Group>
-            </Card>
+              <SimpleGrid>
+                <Group justify="space-between">
+                  <Text fw={900} size={"2.5rem"}>
+                    {projectDataDetail?.project_name}
+                  </Text>
+                  <Group variant="white" mr={0} style={{ cursor: "pointer" }}>
+                    <EditProjectModal initialData={projectDataDetail as IProjectUpdate} refetchProjectData={refetchProjectData} />
+                  </Group>
+                </Group>
+
+                <Text fw={700} size="xl">
+                  {projectDataDetail?.project_leader}
+                </Text>
+                <Text fw={700} size="xl">
+                  {new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                  }).format(projectDataDetail?.total_cost || 0)}
+                </Text>
+                <Card
+                  w={800}
+                  shadow="md"
+                  padding="lg"
+                  radius="md"
+                  style={{
+                    background: "linear-gradient(135deg, #16a34a, #22c55e)", // Green gradient
+                    color: "white",
+                    width: "450px",
+                  }}
+                >
+                  <Text fw={900} mb={12}>
+                    Buku Kas Umum
+                  </Text>
+                  <Group gap={24}>
+                    <AddCashFlowReportModal
+                      projectName={projectDataDetail?.project_name}
+                      refetchCashFlowData={refetchCashFlowData}
+                      projectId={projectDataDetail?.id}
+                    />
+                    <GetCashFlowReportModal
+                      projectName={projectDataDetail?.project_name}
+                      cashFlowData={cashFlowData?.data || []}
+                      refetchWeeklyProgressData={refetchWeeklyProgressData}
+                      totalCost={projectDataDetail?.total_cost}
+                    />
+                  </Group>
+                </Card>
+              </SimpleGrid>
+            </Box>
+          </Card>
+        </Grid.Col>
+        <Grid.Col span={6}>
+          <Stack mt={40}>
+            <Text size="xl" fw={900}>
+              Progress Proyek
+            </Text>
+            <Progress.Root size={40} w={800}>
+              <Tooltip label={`Progress Proyek: ${totalPercentage}%`}>
+                <Progress.Section value={totalPercentage} color="blue">
+                  <Progress.Label>{totalPercentage}%</Progress.Label>
+                </Progress.Section>
+              </Tooltip>
+            </Progress.Root>
           </Stack>
-        </Box>
-      </Card>
+        </Grid.Col>
+      </Grid>
+
       <Divider mt={40} mb={20} />
 
       <Group justify="space-between">
@@ -148,8 +177,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
         {weeklyProgressData?.data.map((weeklyProgress: IWeeklyProgress) => {
           return (
             <Card
-              onClick={() => handleCardClick(weeklyProgress)}
-              key={weeklyProgress.id} // Ensure unique key for each card
+              key={weeklyProgress.id}
               style={{
                 background: "linear-gradient(135deg, rgba(255, 0, 150, 0.5), rgba(0, 204, 255, 0.5))",
                 backdropFilter: "blur(8px)",
@@ -159,11 +187,23 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
                 cursor: "pointer",
               }}
             >
-              <Stack gap={4} align="start">
-                <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
-                  Minggu Ke {weeklyProgress.week_number}
-                </Text>
-                <Grid w={400} mt={12}>
+              <Stack gap={4} onClick={() => handleCardClick(weeklyProgress)}>
+                <Group justify="space-between">
+                  <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
+                    Minggu Ke {weeklyProgress.week_number}
+                  </Text>
+
+                  <RingProgress
+                    size={100}
+                    sections={[{ value: Number(weeklyProgress.percentage), color: "cyan" }]}
+                    label={
+                      <Text c="blue" fw={700} ta="center" size="xl">
+                        {weeklyProgress.percentage}%
+                      </Text>
+                    }
+                  />
+                </Group>
+                <Grid w={400} mt={22}>
                   <Grid.Col span={5}>
                     <Text fw={500} size="lg" style={{ color: "#ffffff" }}>
                       Biaya Material
@@ -184,6 +224,13 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
                     </Text>
                   </Grid.Col>
                 </Grid>
+              </Stack>
+              <Stack align="flex-end">
+                <ButtonDeleteWithConfirmation
+                  id={weeklyProgress?.id}
+                  onDelete={handleDeleteWeeklyProgress}
+                  description={`Apakah anda yakin ingin menghapus progress minggu ke ${weeklyProgress?.week_number} ?`}
+                />
               </Stack>
             </Card>
           );
