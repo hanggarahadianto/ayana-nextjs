@@ -1,8 +1,8 @@
 import { APIAxiosInstance } from "@/src/api";
 
-export const getDataCashFlow = async (id: string) => {
+export const getDataCashFlowListByProjectId = async (id: string) => {
   try {
-    const url = `cashflow/getById/${id}`;
+    const url = `cashflow/getByProjectId/${id}`;
 
     const response = await APIAxiosInstance.get(url);
 

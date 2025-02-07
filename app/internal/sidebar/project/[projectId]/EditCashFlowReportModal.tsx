@@ -14,6 +14,8 @@ import {
   Flex,
   Grid,
   Divider,
+  Tabs,
+  FloatingIndicator,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
@@ -28,7 +30,7 @@ import { initialValuesCashFlowCreate, validationSchemaCashFlowCreate } from "./i
 import BreathingActionIcon from "@/src/components/button/buttonAction";
 import { satuan } from "@/src/lib/satuan";
 
-const AddCashFlowReportModal = ({
+const EditCashFlowReportModal = ({
   projectName,
   projectId,
   refetchCashFlowData,
@@ -43,6 +45,14 @@ const AddCashFlowReportModal = ({
 
   const { mutate: postData, isPending: isLoadingSubmitProjectData } = useSubmitCashFlowForm(refetchCashFlowData, close);
 
+  const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null);
+  const [value, setValue] = useState<string | null>("1");
+  const [controlsRefs, setControlsRefs] = useState<Record<string, HTMLButtonElement | null>>({});
+  const setControlRef = (val: string) => (node: HTMLButtonElement) => {
+    controlsRefs[val] = node;
+    setControlsRefs(controlsRefs);
+  };
+
   const handleSubmit = (values: ICashFlowCreate) => {
     const formData = { ...values, project_id: projectId };
 
@@ -53,7 +63,7 @@ const AddCashFlowReportModal = ({
 
   return (
     <>
-      <BreathingActionIcon onClick={open} size={"3rem"} icon={<IconPlus size="1rem" />} />
+      <BreathingActionIcon onClick={open} size={"3rem"} icon={<IconEdit size="1rem" />} />
 
       <Modal
         opened={opened}
@@ -135,6 +145,25 @@ const AddCashFlowReportModal = ({
             return (
               <SimpleGrid p={20}>
                 <Form>
+                  <Tabs variant="none" value={value} onChange={setValue}>
+                    <Tabs.List ref={setRootRef}>
+                      <Tabs.Tab value="1" ref={setControlRef("1")}>
+                        First tab
+                      </Tabs.Tab>
+                      <Tabs.Tab value="2" ref={setControlRef("2")}>
+                        Second tab
+                      </Tabs.Tab>
+                      <Tabs.Tab value="3" ref={setControlRef("3")}>
+                        Third tab
+                      </Tabs.Tab>
+
+                      <FloatingIndicator target={value ? controlsRefs[value] : null} parent={rootRef} />
+                    </Tabs.List>
+
+                    <Tabs.Panel value="1">First tab content</Tabs.Panel>
+                    <Tabs.Panel value="2">Second tab content</Tabs.Panel>
+                    <Tabs.Panel value="3">Third tab content</Tabs.Panel>
+                  </Tabs>
                   <Grid>
                     <Grid.Col span={8}>
                       <Text size="xl" fw={900}>
@@ -367,4 +396,4 @@ const AddCashFlowReportModal = ({
   );
 };
 
-export default AddCashFlowReportModal;
+export default EditCashFlowReportModal;

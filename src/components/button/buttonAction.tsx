@@ -3,10 +3,11 @@ import { useState, ReactNode } from "react";
 
 interface BreathingActionIconProps {
   onClick: () => void;
+  size: any;
   icon: ReactNode;
 }
 
-const BreathingActionIcon = ({ onClick, icon }: BreathingActionIconProps) => {
+const BreathingActionIcon = ({ onClick, size, icon }: BreathingActionIconProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -23,7 +24,7 @@ const BreathingActionIcon = ({ onClick, icon }: BreathingActionIconProps) => {
 
       <ActionIcon
         onClick={onClick}
-        size="2.8rem"
+        size={size}
         radius="lg"
         variant="white"
         style={{

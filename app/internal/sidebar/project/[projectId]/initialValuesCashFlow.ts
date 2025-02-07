@@ -10,9 +10,12 @@ export const initialValuesCashFlowCreate: ICashFlowCreate = {
       good_name: "",
       status: "",
       quantity: 0,
+      costs_due: 0,
+      unit: "",
       good_purchase_date: "",
       good_settlement_date: "",
       total_cost: 0,
+      price: 0,
     },
   ], // One initial empty good
 };
@@ -30,7 +33,7 @@ export const initialValuesCashFlowUpdate: ICashFlowUpdate = {
 import * as Yup from "yup";
 
 export const validationSchemaCashFlowCreate = Yup.object({
-  week_number: Yup.string().required("Week number is required").matches(/^\d+$/, "Week number must be a number"),
+  week_number: Yup.string().required("Minggu ke harus diisi").matches(/^\d+$/, "Week number must be a number"),
 
   cash_in: Yup.number().required("Cash in is required").min(0, "Cash in cannot be negative"),
 

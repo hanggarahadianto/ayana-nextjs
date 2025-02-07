@@ -32,7 +32,7 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData: IP
 
   return (
     <>
-      <BreathingActionIcon icon={<FiSettings size="1rem" />} onClick={open} />
+      <BreathingActionIcon onClick={open} size={"3.5rem"} icon={<FiSettings size="1.6rem" />} />
 
       <Modal opened={opened} onClose={close} size="xl" yOffset="100px">
         <Formik

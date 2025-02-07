@@ -52,9 +52,8 @@ const ProjectPage = () => {
               cursor: "pointer",
             }}
           >
-            {/* Make the entire card clickable */}
             <Link href={`/internal/sidebar/project/${project.id}`} passHref legacyBehavior>
-              <a style={{ textDecoration: "none", color: "inherit", display: "block", width: "100%", height: "100%" }}>
+              <Group justify="space-between">
                 <Stack gap={4} align="start">
                   <Group justify="space-between" w="100%">
                     <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
@@ -73,19 +72,16 @@ const ProjectPage = () => {
                     }).format(project.total_cost || 0)}
                   </Text>
                 </Stack>
-              </a>
-            </Link>
 
-            <div
-              style={{ position: "absolute", top: 10, right: 10 }}
-              onClick={(e) => e.stopPropagation()} // Stop event propagation
-            >
-              <ButtonDeleteWithConfirmation
-                id={project.id}
-                onDelete={handleDeleteProject}
-                description={`Apakah anda ingin menghapus proyek ${project?.project_name}`}
-              />
-            </div>
+                <Stack mt={-100}>
+                  <ButtonDeleteWithConfirmation
+                    id={project.id}
+                    onDelete={handleDeleteProject}
+                    description={`Apakah anda ingin menghapus proyek a${project?.project_name} ?`}
+                  />
+                </Stack>
+              </Group>
+            </Link>
           </Card>
         ))}
       </SimpleGrid>

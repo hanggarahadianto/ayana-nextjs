@@ -7,12 +7,14 @@ import React, { FC, use, useState } from "react";
 import { getDataWeeklyProgress } from "@/src/api/weekly-progress/getDataWeeklyProgress";
 import AddWeeklyProgressModal from "./AddWeeklyProgressModal";
 import AddCashFlowReportModal from "./AddCashFlowReportModal";
-import { getDataCashFlow } from "@/src/api/cash-flow/getDataCashFlow";
+import { getDataCashFlowById } from "@/src/api/cash-flow/getDataCashFlowById";
 import GetCashFlowReportModal from "./GetCashFlowReportModal";
 import EditWeeklyProgressModal from "./EditWeeklyProgressModal";
 import EditProjectModal from "../EditProjectModal";
 import { useDeleteDataWeeklyProgress } from "@/src/api/weekly-progress/deleteDataWeeklyProgress";
 import ButtonDeleteWithConfirmation from "@/src/components/button/buttonDeleteConfirmation";
+import EditCashFlowReportModal from "./EditCashFlowReportModal";
+import { getDataCashFlowListByProjectId } from "@/src/api/cash-flow/getCashFlowListyProject";
 
 interface ProjectProps {
   params: Promise<{
@@ -49,7 +51,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
     refetch: refetchCashFlowData,
   } = useQuery({
     queryKey: ["getCashFlowData"],
-    queryFn: () => getDataCashFlow(projectId),
+    queryFn: () => getDataCashFlowListByProjectId(projectId),
     refetchOnWindowFocus: false,
   });
 
@@ -74,6 +76,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   };
 
   console.log("weeklyProgressdata", weeklyProgressData?.data);
+  console.log("cashFlowData", cashFlowData?.data);
 
   const totalPercentage = (weeklyProgressData?.data ?? []).reduce((sum, progress) => sum + Number(progress.percentage), 0);
   return (
@@ -130,18 +133,25 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
                   <Text fw={900} mb={12}>
                     Buku Kas Umum
                   </Text>
-                  <Group gap={24}>
+                  <Group gap={18}>
                     <AddCashFlowReportModal
                       projectName={projectDataDetail?.project_name}
                       refetchCashFlowData={refetchCashFlowData}
                       projectId={projectDataDetail?.id}
                     />
-                    <GetCashFlowReportModal
+                    <EditCashFlowReportModal
                       projectName={projectDataDetail?.project_name}
-                      cashFlowData={cashFlowData?.data || []}
-                      refetchWeeklyProgressData={refetchWeeklyProgressData}
-                      totalCost={projectDataDetail?.total_cost}
+                      refetchCashFlowData={refetchCashFlowData}
+                      projectId={projectDataDetail?.id}
                     />
+                    <Stack ml={20}>
+                      <GetCashFlowReportModal
+                        projectName={projectDataDetail?.project_name}
+                        cashFlowData={cashFlowData?.data || []}
+                        refetchWeeklyProgressData={refetchWeeklyProgressData}
+                        totalCost={projectDataDetail?.total_cost}
+                      />
+                    </Stack>
                   </Group>
                 </Card>
               </SimpleGrid>

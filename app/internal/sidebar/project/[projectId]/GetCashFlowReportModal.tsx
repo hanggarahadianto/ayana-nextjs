@@ -1,20 +1,5 @@
 import React, { useState } from "react";
-import {
-  Modal,
-  ActionIcon,
-  Paper,
-  Text,
-  ScrollArea,
-  Flex,
-  Group,
-  Badge,
-  Stack,
-  Table,
-  Grid,
-  Progress,
-  Tooltip,
-  Divider,
-} from "@mantine/core";
+import { Modal, Paper, Text, ScrollArea, Flex, Group, Badge, Stack, Table, Grid, Progress, Tooltip, Divider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconEye, IconPlus } from "@tabler/icons-react";
 import BreathingActionIcon from "@/src/components/button/buttonAction";
@@ -65,7 +50,7 @@ const GetCashFlowReportModal = ({
 
   return (
     <>
-      <BreathingActionIcon onClick={open} icon={<IconEye size="1rem" />} />
+      <BreathingActionIcon onClick={open} size={"3rem"} icon={<IconEye size="1.5rem" />} />
 
       <Modal
         opened={opened}

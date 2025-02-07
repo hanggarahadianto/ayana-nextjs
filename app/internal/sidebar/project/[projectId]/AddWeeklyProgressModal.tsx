@@ -243,12 +243,11 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData }: { proj
                                 w={140}
                                 label="Harga"
                                 placeholder="Masukan Harga"
-                                value={materialDisplayValue}
+                                value={material.price ? `Rp. ${material.price.toLocaleString("id-ID")}` : ""}
                                 onChange={(event) => {
                                   const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
                                   const numericValue = Number(rawValue) || 0;
-                                  setMaterialDisplayValue(numericValue.toLocaleString("id-ID")); // Format displayed value
-                                  handleMaterialChange(index, "price", numericValue); // Store numeric value in state
+                                  handleMaterialChange(index, "price", numericValue); // Store as number
                                 }}
                               />
 

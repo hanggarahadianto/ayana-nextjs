@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Modal, TextInput, Button, Group, Select, Textarea, Card, Text, Stack, NumberInput, SimpleGrid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
@@ -180,52 +180,57 @@ const EditWeeklyProgressModal = ({
                         <Text>Ubah Material</Text>
                         <ButtonAdd onClick={() => addMaterialField(values.material)} size={"xl"} />
                       </Group>
-                      {values.material.map((material: IMaterialCreate, index: number) => (
-                        <Card key={index} shadow="sm" padding="lg" radius="md">
-                          <Group>
-                            <TextInput
-                              label={`Nama Material ${index + 1}`}
-                              placeholder="Masukan Nama Material"
-                              value={material.material_name || ""}
-                              onChange={(event) => handleMaterialChange(index, "material_name", event.currentTarget.value)}
-                            />
-                            <NumberInput
-                              hideControls
-                              w={100}
-                              label={"Kuantitas"}
-                              placeholder="Masukan Kuantitas"
-                              value={material.quantity || ""}
-                              onChange={(value) => handleMaterialChange(index, "quantity", (value as number) || 0)}
-                            />
-                            <Select
-                              w={140}
-                              label={"Satuan"}
-                              placeholder="Satuan"
-                              value={material.unit || ""}
-                              data={satuan}
-                              onChange={(value) => handleMaterialChange(index, "unit", value || "")}
-                            />
+                      {values.material.map((material: IMaterialCreate, index: number) => {
+                        return (
+                          <Card key={index} shadow="sm" padding="lg" radius="md">
+                            <Group>
+                              <TextInput
+                                label={`Nama Material ${index + 1}`}
+                                placeholder="Masukan Nama Material"
+                                value={material.material_name || ""}
+                                onChange={(event) => handleMaterialChange(index, "material_name", event.currentTarget.value)}
+                              />
+                              <NumberInput
+                                hideControls
+                                w={100}
+                                label={"Kuantitas"}
+                                placeholder="Masukan Kuantitas"
+                                value={material.quantity || ""}
+                                onChange={(value) => handleMaterialChange(index, "quantity", (value as number) || 0)}
+                              />
+                              <Select
+                                w={140}
+                                label={"Satuan"}
+                                placeholder="Satuan"
+                                value={material.unit || ""}
+                                data={satuan}
+                                onChange={(value) => handleMaterialChange(index, "unit", value || "")}
+                              />
 
-                            <NumberInput
-                              w={140}
-                              hideControls
-                              label={"Harga"}
-                              placeholder="Masukan Harga"
-                              value={material.price || ""}
-                              onChange={(value) => handleMaterialChange(index, "price", (value as number) || 0)}
-                            />
+                              <TextInput
+                                w={140}
+                                label="Harga"
+                                placeholder="Masukan Harga"
+                                value={material.price ? `Rp. ${material.price.toLocaleString("id-ID")}` : ""}
+                                onChange={(event) => {
+                                  const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+                                  const numericValue = Number(rawValue) || 0;
+                                  handleMaterialChange(index, "price", numericValue); // Store as number
+                                }}
+                              />
 
-                            <TextInput
-                              label={"Total"}
-                              value={material.total_cost?.toLocaleString("id-ID") || "0"} // Format as currency if needed
-                              readOnly
-                              styles={{ input: { fontWeight: "bold", cursor: "not-allowed" } }} // Light background to indicate it's view-only
-                            />
+                              <TextInput
+                                label={"Total"}
+                                value={material.total_cost?.toLocaleString("id-ID") || "0"} // Format as currency if needed
+                                readOnly
+                                styles={{ input: { fontWeight: "bold", cursor: "not-allowed" } }} // Light background to indicate it's view-only
+                              />
 
-                            <ButtonDelete onClick={() => deleteMaterialField(values.material, index)} />
-                          </Group>
-                        </Card>
-                      ))}
+                              <ButtonDelete onClick={() => deleteMaterialField(values.material, index)} />
+                            </Group>
+                          </Card>
+                        );
+                      })}
                       <Group p={20}>
                         <Text size="xl" fw={800}>
                           Total Biaya Material
