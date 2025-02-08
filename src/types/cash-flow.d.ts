@@ -50,7 +50,7 @@ interface ICashFlowUpdate {
   cash_out: number;
   outstanding: number;
   project_id: string; // UUID
-  good?: IGoods[]; // Optional goods array
+  good?: IGoodCreate[]; // Optional goods array
 }
 
 interface ICashFlowResponse {

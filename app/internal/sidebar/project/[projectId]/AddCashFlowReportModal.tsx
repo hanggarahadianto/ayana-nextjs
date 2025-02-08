@@ -44,11 +44,11 @@ const AddCashFlowReportModal = ({
   const { mutate: postData, isPending: isLoadingSubmitProjectData } = useSubmitCashFlowForm(refetchCashFlowData, close);
 
   const handleSubmit = (values: ICashFlowCreate) => {
-    const formData = { ...values, project_id: projectId };
+    // const formData = { ...values, project_id: projectId };
 
-    console.log("Form values submitted:", formData);
+    console.log("Form values submitted:", values);
 
-    postData(formData);
+    postData(values);
   };
 
   return (
@@ -62,7 +62,7 @@ const AddCashFlowReportModal = ({
         yOffset="100px" // Moves modal down
       >
         <Formik
-          initialValues={initialValuesCashFlowCreate}
+          initialValues={initialValuesCashFlowCreate(projectId)}
           validationSchema={validationSchemaCashFlowCreate}
           validateOnBlur={false}
           enableReinitialize={true}
@@ -72,6 +72,7 @@ const AddCashFlowReportModal = ({
         >
           {({ values, errors, touched, setFieldValue, handleBlur }) => {
             console.log(values);
+            console.log("ERROR", errors);
 
             const addGoodField = (good: IGoodCreate[]) => {
               const newGood: IGoodCreate = {
@@ -183,14 +184,14 @@ const AddCashFlowReportModal = ({
                       />
                     </InputWrapper>
                     <InputWrapper required error={touched.cash_in && errors.cash_in ? errors.cash_in : undefined}>
-                      <NumberInput
+                      <TextInput
+                        value={values?.cash_in ? `Rp. ${values?.cash_in.toLocaleString("id-ID")}` : ""}
                         w={400}
-                        hideControls
                         label={"Uang Masuk"}
                         placeholder="Masukan Uang Masuk"
-                        value={"cash_in"}
-                        onChange={(value: any) => {
-                          setFieldValue("cash_in", value);
+                        onChange={(event) => {
+                          const numericValue = Number(event.target.value.replace(/\D/g, "")); // Hanya angka
+                          setFieldValue("cash_in", isNaN(numericValue) ? 0 : numericValue);
                         }}
                       />
                     </InputWrapper>
@@ -210,8 +211,8 @@ const AddCashFlowReportModal = ({
                           <TextInput
                             label={`Nama Pengeluaran ${index + 1}`}
                             placeholder="Masukan Pengeluaran"
-                            value={good.good_name || ""}
-                            onChange={(event) => handleGoodChange(index, "good_name", event.currentTarget.value)}
+                            value={good.good_name.toLocaleUpperCase() || ""}
+                            onChange={(event) => handleGoodChange(index, "good_name", event.currentTarget.value.toLocaleUpperCase())}
                             autoFocus={index === 0} // Focus the first input field by default
                           />
                           <Select

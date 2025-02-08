@@ -60,34 +60,7 @@ export const validationSchemaWeeklyProgressCreate = Yup.object({
     .max(100, "Percentage cannot be more than 100"),
 
   amount_worker: Yup.number().required("Amount of workers is required").min(1, "At least one worker is required"),
-
   amount_material: Yup.number().required("Amount of material is required").min(1, "At least one material is required"),
-
-  // material: Yup.array()
-  //   .of(
-  //     Yup.object({
-  //       material_name: Yup.string().required("Material name is required"),
-
-  //       quantity: Yup.number().required("Quantity is required").min(1, "Quantity must be greater than 0"),
-
-  //       unit: Yup.string().required("Unit is required"),
-
-  //       price: Yup.number().required("Price is required").min(0, "Price cannot be negative"),
-
-  //       total_cost: Yup.number().required("Total cost is required").min(0, "Total cost cannot be negative"),
-  //     })
-  //   )
-  //   .min(1, "At least one material is required"),
-
-  // worker: Yup.array()
-  //   .of(
-  //     Yup.object({
-  //       worker_name: Yup.string().required("Worker name is required"),
-
-  //       position: Yup.string().required("Position is required"),
-  //     })
-  //   )
-  //   .min(1, "At least one worker is required"),
 });
 
 export const validationSchemaWeeklyProgressUpdate = Yup.object({
@@ -102,32 +75,8 @@ export const validationSchemaWeeklyProgressUpdate = Yup.object({
     .max(100, "Percentage cannot be more than 100"),
 
   amount_worker: Yup.number().required("Amount of workers is required").min(1, "At least one worker is required"),
-
   amount_material: Yup.number().required("Amount of material is required").min(1, "At least one material is required"),
-
   project_id: Yup.string().required("Project ID is required"),
-
-  // material: Yup.array().of(
-  //   Yup.object({
-  //     material_name: Yup.string().required("Material name is required"),
-
-  //     quantity: Yup.number().required("Quantity is required").min(1, "Quantity must be greater than 0"),
-
-  //     unit: Yup.string().required("Unit is required"),
-
-  //     price: Yup.number().required("Price is required").min(0, "Price cannot be negative"),
-
-  //     total_cost: Yup.number().required("Total cost is required").min(0, "Total cost cannot be negative"),
-  //   })
-  // ),
-
-  // worker: Yup.array().of(
-  //   Yup.object({
-  //     worker_name: Yup.string().required("Worker name is required"),
-
-  //     position: Yup.string().required("Position is required"),
-  //   })
-  // ),
 });
 
 export function getInitialValuesUpdateWeeklyProgress(weeklyProgressData: IWeeklyProgressUpdate): IWeeklyProgressUpdate {

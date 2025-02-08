@@ -75,8 +75,8 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
     setSelectedProgress(null); // Optionally reset selected progress
   };
 
-  console.log("weeklyProgressdata", weeklyProgressData?.data);
-  console.log("cashFlowData", cashFlowData?.data);
+  // console.log("weeklyProgressdata", weeklyProgressData?.data);
+  // console.log("cashFlowData", cashFlowData?.data);
 
   const totalPercentage = (weeklyProgressData?.data ?? []).reduce((sum, progress) => sum + Number(progress.percentage), 0);
   return (
@@ -141,6 +141,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
                     />
                     <EditCashFlowReportModal
                       projectName={projectDataDetail?.project_name}
+                      cashFlowData={cashFlowData?.data || []}
                       refetchCashFlowData={refetchCashFlowData}
                       projectId={projectDataDetail?.id}
                     />
@@ -160,7 +161,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
         </Grid.Col>
         <Grid.Col span={6}>
           <Stack mt={40}>
-            <Text size="xl" fw={900}>
+            <Text size="xl" fw={900} c={"cyan"}>
               Progress Proyek
             </Text>
             <Progress.Root size={40} w={800}>
@@ -170,6 +171,13 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
                 </Progress.Section>
               </Tooltip>
             </Progress.Root>
+            <Group gap={40}>
+              <Text size="lg" fw={900}>
+                {projectDataDetail?.note
+                  ? projectDataDetail.note.charAt(0).toUpperCase() + projectDataDetail.note.slice(1).toLowerCase()
+                  : ""}
+              </Text>
+            </Group>
           </Stack>
         </Grid.Col>
       </Grid>
@@ -205,9 +213,9 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
 
                   <RingProgress
                     size={100}
-                    sections={[{ value: Number(weeklyProgress.percentage), color: "cyan" }]}
+                    sections={[{ value: Number(weeklyProgress.percentage), color: "green" }]}
                     label={
-                      <Text c="blue" fw={700} ta="center" size="xl">
+                      <Text c="blue" fw={700} ta="center" size="xs">
                         {weeklyProgress.percentage}%
                       </Text>
                     }

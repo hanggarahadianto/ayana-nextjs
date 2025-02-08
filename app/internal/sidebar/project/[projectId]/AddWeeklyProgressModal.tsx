@@ -173,8 +173,8 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData }: { proj
                             <TextInput
                               label={`Nama Pekerja ${index + 1}`}
                               placeholder="Masukan nama pekerja"
-                              value={worker.worker_name} // Ensure value is correctly bound
-                              onChange={(event) => handleWorkerChange(index, "worker_name", event.currentTarget.value)} // Update the worker_name
+                              value={worker.worker_name.toLocaleUpperCase()} // Ensure value is correctly bound
+                              onChange={(event) => handleWorkerChange(index, "worker_name", event.currentTarget.value.toLocaleUpperCase())} // Update the worker_name
                             />
                             <Select
                               label={`Posisi Pekerja ${index + 1}`}
@@ -210,15 +210,16 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData }: { proj
 
                     <Stack mt="md">
                       {values.material.map((material: IMaterialCreate, index: any) => {
-                        const [materialDisplayValue, setMaterialDisplayValue] = useState(material.price || "");
                         return (
                           <Card key={index} shadow="sm" padding="lg" radius="md">
                             <Group>
                               <TextInput
                                 label={`Nama Material ${index + 1}`}
                                 placeholder="Masukan Nama Material"
-                                value={material.material_name || ""}
-                                onChange={(event) => handleMaterialChange(index, "material_name", event.currentTarget.value)}
+                                value={material.material_name.toLocaleUpperCase() || ""}
+                                onChange={(event) =>
+                                  handleMaterialChange(index, "material_name", event.currentTarget.value.toLocaleUpperCase())
+                                }
                               />
 
                               <NumberInput
@@ -302,8 +303,9 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData }: { proj
                     </Stack>
                     <Textarea
                       label="Note"
+                      value={values?.note.toLocaleUpperCase()}
                       placeholder="Enter additional information"
-                      onChange={(event) => setFieldValue("note", event.currentTarget.value)}
+                      onChange={(event) => setFieldValue("note", event.currentTarget.value.toLocaleUpperCase())}
                       mt="md"
                     />
 

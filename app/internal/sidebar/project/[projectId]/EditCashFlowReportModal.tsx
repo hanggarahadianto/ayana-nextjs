@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   TextInput,
@@ -26,16 +26,23 @@ import dayjs from "dayjs";
 import { useSubmitCashFlowForm } from "@/src/api/cash-flow/postDataCashFlow";
 import ButtonAdd from "@/src/components/button/buttonAdd";
 import ButtonDelete from "@/src/components/button/butttonDelete";
-import { initialValuesCashFlowCreate, validationSchemaCashFlowCreate } from "./initialValuesCashFlow";
+import {
+  getInitialValuesCashFlow,
+  initialValuesCashFlowCreate,
+  initialValuesCashFlowUpdate,
+  validationSchemaCashFlowCreate,
+} from "./initialValuesCashFlow";
 import BreathingActionIcon from "@/src/components/button/buttonAction";
 import { satuan } from "@/src/lib/satuan";
 
 const EditCashFlowReportModal = ({
   projectName,
+  cashFlowData,
   projectId,
   refetchCashFlowData,
 }: {
   projectName: any;
+  cashFlowData: ICashFlow[];
   projectId: any;
   refetchCashFlowData: () => void;
 }) => {
@@ -46,7 +53,7 @@ const EditCashFlowReportModal = ({
   const { mutate: postData, isPending: isLoadingSubmitProjectData } = useSubmitCashFlowForm(refetchCashFlowData, close);
 
   const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null);
-  const [value, setValue] = useState<string | null>("1");
+  const [initialValues, setInitialValues] = useState(initialValuesCashFlowUpdate);
   const [controlsRefs, setControlsRefs] = useState<Record<string, HTMLButtonElement | null>>({});
   const setControlRef = (val: string) => (node: HTMLButtonElement) => {
     controlsRefs[val] = node;
@@ -61,6 +68,8 @@ const EditCashFlowReportModal = ({
     postData(formData);
   };
 
+  console.log(cashFlowData);
+
   return (
     <>
       <BreathingActionIcon onClick={open} size={"3rem"} icon={<IconEdit size="1rem" />} />
@@ -72,7 +81,7 @@ const EditCashFlowReportModal = ({
         yOffset="100px" // Moves modal down
       >
         <Formik
-          initialValues={initialValuesCashFlowCreate}
+          initialValues={getInitialValuesCashFlow(initialValues)}
           validationSchema={validationSchemaCashFlowCreate}
           validateOnBlur={false}
           enableReinitialize={true}
@@ -142,32 +151,59 @@ const EditCashFlowReportModal = ({
             const cashOut = values.cash_out || 0;
             const accountBalance = calculateAccountBalance(cashIn, cashOut);
 
+            useEffect(() => {
+              const firstWeek = cashFlowData.find((item) => item.week_number === "1");
+              if (firstWeek) setInitialValues({ ...firstWeek });
+            }, [cashFlowData]);
+
+            console.log("INITIAL VALUES", initialValues);
+
             return (
               <SimpleGrid p={20}>
                 <Form>
-                  <Tabs variant="none" value={value} onChange={setValue}>
-                    <Tabs.List ref={setRootRef}>
-                      <Tabs.Tab value="1" ref={setControlRef("1")}>
-                        First tab
-                      </Tabs.Tab>
-                      <Tabs.Tab value="2" ref={setControlRef("2")}>
-                        Second tab
-                      </Tabs.Tab>
-                      <Tabs.Tab value="3" ref={setControlRef("3")}>
-                        Third tab
-                      </Tabs.Tab>
-
-                      <FloatingIndicator target={value ? controlsRefs[value] : null} parent={rootRef} />
+                  <Tabs
+                    value={initialValues.week_number}
+                    onChange={(selectedValue) => {
+                      const selectedItem = cashFlowData.find((item) => item.week_number === selectedValue);
+                      if (selectedItem) setInitialValues({ ...selectedItem });
+                    }}
+                    variant="pills"
+                    radius="md"
+                    keepMounted={false} // Optimizes performance
+                  >
+                    <Tabs.List
+                      grow
+                      style={{
+                        background: "linear-gradient(90deg, #3B82F6, #64748B)",
+                        padding: "6px",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      {cashFlowData.map((item) => (
+                        <Tabs.Tab
+                          key={item.week_number}
+                          value={item.week_number}
+                          ref={setControlRef(item.week_number)}
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: "14px",
+                            padding: "12px 20px",
+                            color: "white",
+                            borderRadius: "8px",
+                            transition: "all 0.2s ease-in-out",
+                          }}
+                          className="tab-gradient"
+                        >
+                          📅 Minggu Ke {item.week_number}
+                        </Tabs.Tab>
+                      ))}
                     </Tabs.List>
-
-                    <Tabs.Panel value="1">First tab content</Tabs.Panel>
-                    <Tabs.Panel value="2">Second tab content</Tabs.Panel>
-                    <Tabs.Panel value="3">Third tab content</Tabs.Panel>
                   </Tabs>
+
                   <Grid>
-                    <Grid.Col span={8}>
+                    <Grid.Col span={8} mt={40}>
                       <Text size="xl" fw={900}>
-                        {`BUKU KAS UMUM - ${projectName}`}
+                        {`EDIT BUKU KAS UMUM - ${projectName}`}
                       </Text>
                     </Grid.Col>
                     <Grid.Col span={4}>
@@ -193,6 +229,7 @@ const EditCashFlowReportModal = ({
                   <Group>
                     <InputWrapper required error={touched.week_number && errors.week_number ? errors.week_number : undefined}>
                       <Select
+                        value={values.week_number}
                         label="Minggu Ke"
                         placeholder="Pilih Minggu"
                         onChange={(value: any) => {
@@ -212,26 +249,22 @@ const EditCashFlowReportModal = ({
                       />
                     </InputWrapper>
                     <InputWrapper required error={touched.cash_in && errors.cash_in ? errors.cash_in : undefined}>
-                      <NumberInput
+                      <TextInput
                         w={400}
-                        hideControls
                         label={"Uang Masuk"}
                         placeholder="Masukan Uang Masuk"
-                        value={"cash_in"}
+                        value={values.cash_in ? `Rp. ${values.cash_in.toLocaleString("id-ID")}` : ""}
                         onChange={(value: any) => {
                           setFieldValue("cash_in", value);
                         }}
                       />
                     </InputWrapper>
                   </Group>
-
                   <Divider mt={20} />
-
                   <Group justify="space-between" p={20}>
                     <Text fw={700}>Tambahkan Daftar Pengeluaran</Text>
                     <ButtonAdd onClick={() => addGoodField(values.good || [])} size="3.5rem" />
                   </Group>
-
                   <Stack mt="md">
                     {values.good?.map((good: IGoodCreate, index: any) => (
                       <Card key={index} shadow="lg" padding="lg" radius="md">
@@ -377,13 +410,12 @@ const EditCashFlowReportModal = ({
                       </Text>
                     </Group>
                   </Stack>
-
                   <Group justify="flex-end" mt="md">
                     <Button onClick={close} variant="default">
                       Cancel
                     </Button>
                     <Button type="submit" color="blue">
-                      Tambah
+                      Ubah
                     </Button>
                   </Group>
                 </Form>

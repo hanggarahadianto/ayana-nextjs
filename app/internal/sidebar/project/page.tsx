@@ -33,15 +33,17 @@ const ProjectPage = () => {
         <Text fw={900} size="2rem">
           Daftar Project
         </Text>
-        <AddProjectModal refetchProjectData={refetchProjectData} />
+        <Stack mr={40}>
+          <AddProjectModal refetchProjectData={refetchProjectData} />
+        </Stack>
       </Group>
 
-      <SimpleGrid mt={40} cols={4} spacing="lg">
+      <SimpleGrid mt={40} cols={4}>
         {projectData?.data.map((project) => (
           <Card
             key={project.id}
             w={320}
-            h={200}
+            h={160}
             style={{
               background: "linear-gradient(135deg, rgba(255, 0, 150, 0.5), rgba(0, 204, 255, 0.5))",
               backdropFilter: "blur(8px)",
@@ -77,7 +79,7 @@ const ProjectPage = () => {
                   <ButtonDeleteWithConfirmation
                     id={project.id}
                     onDelete={handleDeleteProject}
-                    description={`Apakah anda ingin menghapus proyek a${project?.project_name} ?`}
+                    description={`Apakah anda ingin menghapus proyek ${project?.project_name} ?`}
                   />
                 </Stack>
               </Group>

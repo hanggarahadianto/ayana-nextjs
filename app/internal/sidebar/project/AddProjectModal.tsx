@@ -100,7 +100,11 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
                       </InputWrapper>
 
                       <InputWrapper label="Nama Blok" withAsterisk error={touched.unit && errors.unit ? errors.unit : undefined}>
-                        <TextInput placeholder="Masukan Nama Blok" onChange={(event) => setFieldValue("unit", event.currentTarget.value)} />
+                        <TextInput
+                          value={values?.unit.toUpperCase()}
+                          placeholder="Masukan Nama Blok"
+                          onChange={(event) => setFieldValue("unit", event.currentTarget.value.toUpperCase())}
+                        />
                       </InputWrapper>
 
                       <InputWrapper required error={touched.type && errors.type ? errors.type : undefined}>
@@ -118,13 +122,14 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
                     </Group>
                     <Stack gap={20}>
                       <InputWrapper
-                        label="Penanggung Jawab" // Add label here
+                        label="Penanggung Jawab"
                         withAsterisk
                         error={touched.project_leader && errors.project_leader ? errors.project_leader : undefined}
                       >
                         <TextInput
                           placeholder="Masukan Penanggung Jawab"
-                          onChange={(event) => setFieldValue("project_leader", event.currentTarget.value)}
+                          value={values.project_leader?.toUpperCase() || ""}
+                          onChange={(event) => setFieldValue("project_leader", event.currentTarget.value.toUpperCase())}
                         />
                       </InputWrapper>
 
@@ -134,11 +139,14 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
                         required
                         error={touched.total_cost && errors.total_cost ? errors.total_cost : undefined}
                       >
-                        <NumberInput
-                          hideControls
+                        <TextInput
                           placeholder="Masukan Biaya Proyek"
-                          value={values.total_cost || ""}
-                          onChange={(value) => setFieldValue("total_cost", value)}
+                          value={values.total_cost ? `Rp. ${values.total_cost.toLocaleString("id-ID")}` : ""}
+                          onChange={(event) => {
+                            const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+                            const numericValue = Number(rawValue) || 0;
+                            setFieldValue("total_cost", numericValue); // Store as number
+                          }}
                         />
                       </InputWrapper>
                       <InputWrapper required error={touched.project_time && errors.project_time ? errors.project_time : undefined}>
@@ -210,9 +218,10 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
                         </InputWrapper>
                       </Group>
                       <Textarea
+                        value={values.note.toUpperCase()}
                         label="Keterangan"
                         placeholder="Masukan Keterangan"
-                        onChange={(event) => setFieldValue("note", event.currentTarget.value)}
+                        onChange={(event) => setFieldValue("note", event.currentTarget.value.toUpperCase())}
                         mt="md"
                       />
                     </Stack>

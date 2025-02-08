@@ -1,5 +1,26 @@
-// initialValueWeeklyProgress.ts
-export const initialValuesCashFlowCreate: ICashFlowCreate = {
+export const initialValuesCashFlowCreate = (projectId: string): ICashFlowCreate => ({
+  week_number: "",
+  cash_in: 0,
+  cash_out: 0,
+  outstanding: 0,
+  project_id: projectId, // Dynamically set project ID
+  good: [
+    {
+      good_name: "",
+      status: "",
+      quantity: 0,
+      costs_due: 0,
+      unit: "",
+      good_purchase_date: "",
+      good_settlement_date: "",
+      total_cost: 0,
+      price: 0,
+    },
+  ], // One initial empty good
+});
+
+export const initialValuesCashFlowUpdate: ICashFlowUpdate = {
+  id: "",
   week_number: "",
   cash_in: 0,
   cash_out: 0,
@@ -18,16 +39,6 @@ export const initialValuesCashFlowCreate: ICashFlowCreate = {
       price: 0,
     },
   ], // One initial empty good
-};
-
-export const initialValuesCashFlowUpdate: ICashFlowUpdate = {
-  id: "",
-  week_number: "",
-  cash_in: 0,
-  cash_out: 0,
-  outstanding: 0,
-  project_id: "",
-  good: [], // Empty array for goods
 };
 
 import * as Yup from "yup";
@@ -52,7 +63,7 @@ export const validationSchemaCashFlowCreate = Yup.object({
 
         quantity: Yup.number().required("Quantity is required").min(1, "Quantity must be greater than 0"),
 
-        good_purchase_date: Yup.date().required("Purchase date is required").max(new Date(), "Purchase date cannot be in the future"),
+        good_purchase_date: Yup.date().required("Purchase date is required"),
 
         good_settlement_date: Yup.date()
           .required("Settlement date is required")
@@ -95,3 +106,30 @@ export const validationSchemaCashFlowUpdate = Yup.object({
     })
   ),
 });
+
+export function getInitialValuesCashFlow(cashFlowData: ICashFlowUpdate): ICashFlowUpdate {
+  return {
+    id: cashFlowData?.id || "",
+    week_number: cashFlowData?.week_number || "",
+    cash_in: cashFlowData?.cash_in || 0,
+    cash_out: cashFlowData?.cash_out || 0,
+    outstanding: cashFlowData?.outstanding || 0,
+    project_id: cashFlowData?.project_id || "",
+    good: cashFlowData?.good?.length
+      ? cashFlowData.good
+      : [
+          {
+            // UUID should be empty as fallback
+            good_name: "",
+            status: "", // Ensure it's a string
+            unit: "",
+            price: 0,
+            quantity: 0,
+            costs_due: 0, // This field was missing in the fallback
+            total_cost: 0,
+            good_purchase_date: "",
+            good_settlement_date: "",
+          },
+        ],
+  };
+}
