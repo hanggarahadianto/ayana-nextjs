@@ -38,7 +38,7 @@ export const initialValuesCashFlowUpdate: ICashFlowUpdate = {
       total_cost: 0,
       price: 0,
     },
-  ], // One initial empty good
+  ],
 };
 
 import * as Yup from "yup";

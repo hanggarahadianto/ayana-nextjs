@@ -72,7 +72,7 @@ const AddCashFlowReportModal = ({
         >
           {({ values, errors, touched, setFieldValue, handleBlur }) => {
             console.log(values);
-            console.log("ERROR", errors);
+            // console.log("ERROR", errors);
 
             const addGoodField = (good: IGoodCreate[]) => {
               const newGood: IGoodCreate = {

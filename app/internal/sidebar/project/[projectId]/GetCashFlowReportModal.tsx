@@ -3,6 +3,8 @@ import { Modal, Paper, Text, ScrollArea, Flex, Group, Badge, Stack, Table, Grid,
 import { useDisclosure } from "@mantine/hooks";
 import { IconEye, IconPlus } from "@tabler/icons-react";
 import BreathingActionIcon from "@/src/components/button/buttonAction";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
 
 const GetCashFlowReportModal = ({
   projectName,
@@ -128,8 +130,14 @@ const GetCashFlowReportModal = ({
                       const tableTitle = (
                         <Table.Tr>
                           <Table.Th style={{ width: "25%" }}>PENGELUARAN</Table.Th>
-                          <Table.Th style={{ width: "25%" }}>KUANTITAS</Table.Th>
-                          <Table.Th style={{ width: "25%" }}>STATUS</Table.Th>
+                          <Table.Th style={{ width: "2%" }}>KUANTITAS</Table.Th>
+                          <Table.Th style={{ width: "8%" }}>SATUAN</Table.Th>
+
+                          <Table.Th style={{ width: "12%" }}>HARGA</Table.Th>
+                          <Table.Th style={{ width: "14%" }}>TANGGAL BELI</Table.Th>
+                          <Table.Th style={{ width: "14%" }}>TANGGAL JATUH TEMPO</Table.Th>
+
+                          <Table.Th style={{ width: "8%" }}>STATUS</Table.Th>
                           <Table.Th style={{ width: "25%" }}>TOTAL</Table.Th>
                         </Table.Tr>
                       );
@@ -142,6 +150,25 @@ const GetCashFlowReportModal = ({
                           </Table.Td>
                           <Table.Td>
                             <Text variant="outline">{good.quantity}</Text>
+                          </Table.Td>
+                          <Table.Td>
+                            <Text variant="outline">{good.unit}</Text>
+                          </Table.Td>
+                          <Table.Td>
+                            <Text variant="outline">
+                              {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(good.price)}
+                            </Text>
+                          </Table.Td>
+
+                          <Table.Td>
+                            <Text variant="outline">
+                              {good.good_purchase_date ? format(new Date(good.good_purchase_date), "d MMMM yyyy", { locale: id }) : "-"}
+                            </Text>
+                          </Table.Td>
+                          <Table.Td>
+                            <Text variant="outline">
+                              {good.good_settlement_date ? format(new Date(good.good_settlement_date), "d MMMM yyyy", { locale: id }) : "-"}
+                            </Text>
                           </Table.Td>
                           <Table.Td>
                             <Text variant="outline">{good.status.charAt(0).toUpperCase() + good.status.slice(1)}</Text>

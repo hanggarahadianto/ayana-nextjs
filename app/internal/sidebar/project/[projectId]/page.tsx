@@ -76,7 +76,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   };
 
   // console.log("weeklyProgressdata", weeklyProgressData?.data);
-  // console.log("cashFlowData", cashFlowData?.data);
+  console.log("cashFlowData", cashFlowData?.data);
 
   const totalPercentage = (weeklyProgressData?.data ?? []).reduce((sum, progress) => sum + Number(progress.percentage), 0);
   return (

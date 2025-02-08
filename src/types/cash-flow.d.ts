@@ -3,7 +3,6 @@ interface IGoods {
   good_name: string;
   status: string;
   unit: string;
-
   price: number;
   quantity: number;
   costs_due: number;

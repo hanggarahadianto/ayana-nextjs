@@ -34,6 +34,7 @@ import {
 } from "./initialValuesCashFlow";
 import BreathingActionIcon from "@/src/components/button/buttonAction";
 import { satuan } from "@/src/lib/satuan";
+import { useUpdateCashFlowForm } from "@/src/api/cash-flow/editDataCashFlow";
 
 const EditCashFlowReportModal = ({
   projectName,
@@ -50,10 +51,11 @@ const EditCashFlowReportModal = ({
 
   const today = dayjs().toISOString(); // Get today's date in ISO format
 
-  const { mutate: postData, isPending: isLoadingSubmitProjectData } = useSubmitCashFlowForm(refetchCashFlowData, close);
+  const { mutate: editData, isPending: isLoadingSubmitProjectData } = useUpdateCashFlowForm(refetchCashFlowData, close);
 
   const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null);
   const [initialValues, setInitialValues] = useState(initialValuesCashFlowUpdate);
+  console.log("INITIAL ATAS", initialValues);
   const [controlsRefs, setControlsRefs] = useState<Record<string, HTMLButtonElement | null>>({});
   const setControlRef = (val: string) => (node: HTMLButtonElement) => {
     controlsRefs[val] = node;
@@ -65,10 +67,10 @@ const EditCashFlowReportModal = ({
 
     console.log("Form values submitted:", formData);
 
-    postData(formData);
+    editData(formData);
   };
 
-  console.log(cashFlowData);
+  console.log("CashFlowData", cashFlowData);
 
   return (
     <>
@@ -91,6 +93,7 @@ const EditCashFlowReportModal = ({
         >
           {({ values, errors, touched, setFieldValue, handleBlur }) => {
             console.log(values);
+            console.log("ERROR", errors);
 
             const addGoodField = (good: IGoodCreate[]) => {
               const newGood: IGoodCreate = {
@@ -208,7 +211,7 @@ const EditCashFlowReportModal = ({
                     </Grid.Col>
                     <Grid.Col span={4}>
                       <Stack justify="end" align="end" w="100%">
-                        <Grid w={400}>
+                        <Grid w={400} mt={40}>
                           <Grid.Col span={6}>
                             <Text size="md">💰 Uang Masuk</Text>
                             <Text size="md">💸 Uang Keluar</Text>
@@ -254,8 +257,9 @@ const EditCashFlowReportModal = ({
                         label={"Uang Masuk"}
                         placeholder="Masukan Uang Masuk"
                         value={values.cash_in ? `Rp. ${values.cash_in.toLocaleString("id-ID")}` : ""}
-                        onChange={(value: any) => {
-                          setFieldValue("cash_in", value);
+                        onChange={(event) => {
+                          const numericValue = Number(event.target.value.replace(/\D/g, "")); // Hanya angka
+                          setFieldValue("cash_in", isNaN(numericValue) ? 0 : numericValue);
                         }}
                       />
                     </InputWrapper>
@@ -272,8 +276,8 @@ const EditCashFlowReportModal = ({
                           <TextInput
                             label={`Nama Pengeluaran ${index + 1}`}
                             placeholder="Masukan Pengeluaran"
-                            value={good.good_name || ""}
-                            onChange={(event) => handleGoodChange(index, "good_name", event.currentTarget.value)}
+                            value={good.good_name.toLocaleUpperCase() || ""}
+                            onChange={(event) => handleGoodChange(index, "good_name", event.currentTarget.value.toLocaleUpperCase())}
                             autoFocus={index === 0} // Focus the first input field by default
                           />
                           <Select
