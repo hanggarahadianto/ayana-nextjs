@@ -1,6 +1,7 @@
 import React from "react";
 import { AspectRatio, Container, Flex, Grid, SimpleGrid, Stack, Text, useMantineTheme } from "@mantine/core";
 import Image from "next/image";
+import FloatingWhatsApp from "../product/floating-whatsapp";
 
 const demoProps = {
   mt: 0,
@@ -12,6 +13,7 @@ const LandingPage = () => {
   return (
     <div>
       <Container {...demoProps} fluid h="160vh" bg="#25492c">
+        <FloatingWhatsApp />
         <AspectRatio ratio={1080 / 1080} maw={1800} mx="auto">
           <Image className="rounded-tl-3xl" src="/images/new-in.jpg" height={600} width={900} alt="" />
         </AspectRatio>

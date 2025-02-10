@@ -21,7 +21,7 @@ import { Box, Grid } from "@mantine/core";
 import { FaBath, FaBed, FaLandmark } from "react-icons/fa";
 import ReservationForm from "@/src/components/reservation/ReservationForm";
 import Footer from "@/src/components/landing/footer";
-import { Navbar } from "@/src/components/landing/navbar";
+import Navbar from "@/src/components/landing/navbar";
 import AdditionalInfoProduct from "@/src/components/product/additional-info-product";
 import { getDataAdditionalInfo } from "@/src/api/additional-info/getDataAdditionalInfo";
 import Link from "next/link";

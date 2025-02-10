@@ -22,7 +22,15 @@ import ButtonAdd from "@/src/components/button/buttonAdd";
 import ButtonDelete from "@/src/components/button/butttonDelete";
 import { satuan } from "@/src/lib/satuan";
 
-const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData }: { projectId: any; refetchWeeklyProgressData: () => void }) => {
+const AddWeeklyProgressModal = ({
+  projectId,
+  refetchWeeklyProgressData,
+  weeklyProgress = [],
+}: {
+  projectId: any;
+  refetchWeeklyProgressData: () => void;
+  weeklyProgress?: IWeeklyProgress[];
+}) => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const { mutate: postData, isPending: isLoadingSubmitProjectData } = useSubmitWeeklyProgressForm(refetchWeeklyProgressData, close);
@@ -34,6 +42,17 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData }: { proj
 
     postData(formData);
   };
+
+  // Extract already selected week numbers safely
+  const selectedWeeks = weeklyProgress.map((item) => item.week_number);
+
+  // All possible weeks
+  const allWeeks = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"];
+
+  // Filter available weeks (hide weeks that are already selected)
+  const availableWeeks = allWeeks
+    .filter((week) => !selectedWeeks.includes(week)) // Remove used weeks
+    .map((week) => ({ value: week, label: week })); // Convert to Select format
 
   return (
     <>
@@ -145,16 +164,7 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData }: { proj
                         onChange={(value: any) => {
                           setFieldValue("week_number", value);
                         }}
-                        data={[
-                          { value: "1", label: "1" },
-                          { value: "2", label: "2" },
-                          { value: "3", label: "3" },
-                          { value: "4", label: "4" },
-                          { value: "5", label: "5" },
-                          { value: "6", label: "6" },
-                          { value: "7", label: "7" },
-                          { value: "8", label: "8" },
-                        ]}
+                        data={availableWeeks}
                         required
                       />
                     </InputWrapper>

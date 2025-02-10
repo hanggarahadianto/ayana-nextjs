@@ -76,9 +76,16 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   };
 
   // console.log("weeklyProgressdata", weeklyProgressData?.data);
-  console.log("cashFlowData", cashFlowData?.data);
 
   const totalPercentage = (weeklyProgressData?.data ?? []).reduce((sum, progress) => sum + Number(progress.percentage), 0);
+
+  const totalCashIn = cashFlowData?.data.reduce((sum, item) => sum + item.cash_in, 0);
+  const totalCashOut = cashFlowData?.data.reduce((sum, item) => sum + item.cash_out, 0);
+  const totalOutstanding = cashFlowData?.data.reduce((sum, item) => sum + item.outstanding, 0);
+
+  console.log("cashFlowData", cashFlowData?.data);
+
+  console.log("weeklyProgress", weeklyProgressData?.data);
   return (
     <>
       <Grid>
@@ -135,6 +142,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
                   </Text>
                   <Group gap={18}>
                     <AddCashFlowReportModal
+                      cashFlowData={cashFlowData?.data}
                       projectName={projectDataDetail?.project_name}
                       refetchCashFlowData={refetchCashFlowData}
                       projectId={projectDataDetail?.id}
@@ -160,7 +168,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
           </Card>
         </Grid.Col>
         <Grid.Col span={6}>
-          <Stack mt={40}>
+          <Stack>
             <Text size="xl" fw={900} c={"cyan"}>
               Progress Proyek
             </Text>
@@ -173,12 +181,50 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
             </Progress.Root>
             <Group gap={40}>
               <Text size="lg" fw={900}>
+                Catatan :
+              </Text>
+              <Text size="lg" fw={900}>
                 {projectDataDetail?.note
                   ? projectDataDetail.note.charAt(0).toUpperCase() + projectDataDetail.note.slice(1).toLowerCase()
                   : ""}
               </Text>
             </Group>
           </Stack>
+          <Card shadow="sm" padding="lg" radius="md" withBorder mt={10}>
+            <Stack gap="sm">
+              <Text size="lg" fw={900} c={"cyan"} ta="center">
+                Ringkasan Keuangan
+              </Text>
+              <Divider />
+
+              <Group justify="space-between">
+                <Text size="md" fw={500} c="green">
+                  Uang Masuk
+                </Text>
+                <Text size="md" fw={600}>
+                  Rp {totalCashIn?.toLocaleString("id-ID")}
+                </Text>
+              </Group>
+
+              <Group justify="space-between">
+                <Text size="md" fw={500} c="red">
+                  Uang Keluar
+                </Text>
+                <Text size="md" fw={600}>
+                  Rp {totalCashOut?.toLocaleString("id-ID")}
+                </Text>
+              </Group>
+
+              <Group justify="space-between">
+                <Text size="md" fw={500} c="orange">
+                  Uang Terhutang
+                </Text>
+                <Text size="md" fw={600}>
+                  Rp {totalOutstanding?.toLocaleString("id-ID")}
+                </Text>
+              </Group>
+            </Stack>
+          </Card>
         </Grid.Col>
       </Grid>
 
@@ -188,7 +234,11 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
         <Text fw={700} size="1.5rem">
           Progress Mingguan
         </Text>
-        <AddWeeklyProgressModal refetchWeeklyProgressData={refetchWeeklyProgressData} projectId={projectDataDetail?.id} />
+        <AddWeeklyProgressModal
+          refetchWeeklyProgressData={refetchWeeklyProgressData}
+          projectId={projectDataDetail?.id}
+          weeklyProgress={weeklyProgressData?.data ?? []}
+        />
       </Group>
 
       <SimpleGrid mt={40} cols={4} spacing="lg">

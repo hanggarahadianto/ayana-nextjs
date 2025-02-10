@@ -27,6 +27,8 @@ const ProjectPage = () => {
     mutateDeleteDataProject(idToDelete); // Pass only the string, not an object
   };
 
+  console.log("Project Data", projectData?.data);
+
   return (
     <>
       <Group justify="space-between">

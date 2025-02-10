@@ -32,10 +32,12 @@ const AddCashFlowReportModal = ({
   projectName,
   projectId,
   refetchCashFlowData,
+  cashFlowData = [],
 }: {
   projectName: any;
   projectId: any;
   refetchCashFlowData: () => void;
+  cashFlowData?: ICashFlow[];
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -50,6 +52,16 @@ const AddCashFlowReportModal = ({
 
     postData(values);
   };
+
+  const selectedWeeks = cashFlowData.map((item) => item.week_number);
+
+  // All possible weeks
+  const allWeeks = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"];
+
+  // Filter available weeks (hide weeks that are already selected)
+  const availableWeeks = allWeeks
+    .filter((week) => !selectedWeeks.includes(week)) // Remove used weeks
+    .map((week) => ({ value: week, label: week })); // Convert to Select format
 
   return (
     <>
@@ -163,6 +175,18 @@ const AddCashFlowReportModal = ({
                   </Grid>
                   <Flex p={20} justify={"space-between"}></Flex>
                   <Group>
+                    <InputWrapper required error={touched.week_number && errors.week_number ? errors.week_number : undefined}>
+                      <Select
+                        label="Minggu Ke"
+                        placeholder="Pilih Minggu"
+                        onChange={(value: any) => {
+                          setFieldValue("week_number", value);
+                        }}
+                        data={availableWeeks} // Hide selected & past weeks
+                        required
+                      />
+                    </InputWrapper>
+
                     <InputWrapper required error={touched.week_number && errors.week_number ? errors.week_number : undefined}>
                       <Select
                         label="Minggu Ke"

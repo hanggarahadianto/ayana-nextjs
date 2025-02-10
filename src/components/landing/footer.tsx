@@ -1,16 +1,6 @@
 "use client";
 import React from "react";
-import {
-  Text,
-  Grid,
-  SimpleGrid,
-  Stack,
-  Divider,
-  Button,
-  Flex,
-  Box,
-  Group,
-} from "@mantine/core";
+import { Text, Grid, SimpleGrid, Stack, Divider, Button, Flex, Box, Group } from "@mantine/core";
 // import { Link } from "react-router-dom";
 import Image from "next/image";
 import {
@@ -21,8 +11,13 @@ import {
   FaExclamationCircle,
   FaEnvelope,
   FaFacebookMessenger,
+  FaWhatsapp,
 } from "react-icons/fa";
 import Link from "next/link";
+
+const message = encodeURIComponent(
+  "Halo! Saya menghubungi Anda melalui website dan tertarik dengan rumah yang ditawarkan. Bisa berikan informasi lebih lanjut? Jika ada katalog atau daftar harga, saya ingin melihatnya. Apakah ada promo saat ini? Saya tunggu responnya. Terima kasih! 😊"
+);
 
 const Footer = () => {
   return (
@@ -31,14 +26,7 @@ const Footer = () => {
       <Grid>
         <Grid.Col span={4}>
           <Stack p={20}>
-            <Image
-              className="rounded-tl-3xl"
-              src="/images/ayana.png"
-              height={280}
-              width={280}
-              alt=""
-              style={{ borderRadius: "15px" }}
-            />
+            <Image className="rounded-tl-3xl" src="/images/ayana.png" height={280} width={280} alt="" style={{ borderRadius: "15px" }} />
             <Group>
               <FaLocationArrow color="white" />
               <Text
@@ -84,11 +72,7 @@ const Footer = () => {
             >
               Testimony
             </Text>
-            <Link
-              href="/banking-partners"
-              passHref
-              style={{ textDecoration: "none" }}
-            >
+            <Link href="/banking-partners" passHref style={{ textDecoration: "none" }}>
               <Text
                 fw={500}
                 style={{ fontFamily: "GalanoGrotesque", fontSize: "1.25rem" }}
@@ -98,7 +82,7 @@ const Footer = () => {
                 Bank Partners
               </Text>
             </Link>
-            <Link href="/internal" passHref style={{ textDecoration: "none" }}>
+            <Link href="/internal/sidebar/project" passHref style={{ textDecoration: "none" }}>
               <Text
                 fw={500}
                 style={{ fontFamily: "GalanoGrotesque", fontSize: "1.25rem" }}
@@ -129,48 +113,18 @@ const Footer = () => {
               Contact Us
             </Text>
 
-            <Flex gap={20}>
-              <Group>
-                <Button
-                  w={200}
-                  h={60}
-                  component="a"
-                  href="https://wa.me/your-phone-number"
-                  target="_blank"
-                  variant="filled"
-                  color="green"
-                  leftSection={<FaFacebookMessenger />}
-                >
-                  0852847294828420
-                </Button>
-              </Group>
-              <Group>
-                <Button
-                  w={200}
-                  h={60}
-                  component="a"
-                  href="https://wa.me/your-phone-number"
-                  target="_blank"
-                  variant="filled"
-                  color="green"
-                  leftSection={<FaFacebookMessenger />}
-                >
-                  WhatsApp
-                </Button>
-              </Group>
-            </Flex>
             <Group>
               <Button
                 w={200}
                 h={60}
                 component="a"
-                href="https://wa.me/your-phone-number"
+                href={`https://wa.me/62895421711315?text=${message}`}
                 target="_blank"
                 variant="filled"
                 color="green"
-                leftSection={<FaFacebookMessenger />}
+                leftSection={<FaWhatsapp />}
               >
-                WhatsApp
+                0895-4217-11315
               </Button>
             </Group>
           </Stack>
@@ -185,12 +139,7 @@ const Footer = () => {
             </Text>
 
             <Flex gap={10}>
-              <Button
-                style={{ borderRadius: "300px", padding: 0 }}
-                color="teal"
-                w={60}
-                h={60}
-              >
+              <Button style={{ borderRadius: "300px", padding: 0 }} color="teal" w={60} h={60}>
                 <Box
                   style={{
                     borderRadius: "200px",
@@ -205,12 +154,7 @@ const Footer = () => {
                   <FaInstagram style={{ fontSize: "40px" }} />
                 </Box>
               </Button>
-              <Button
-                style={{ borderRadius: "300px", padding: 0 }}
-                color="red"
-                w={60}
-                h={60}
-              >
+              <Button style={{ borderRadius: "300px", padding: 0 }} color="red" w={60} h={60}>
                 <Box
                   style={{
                     borderRadius: "200px",
@@ -225,12 +169,7 @@ const Footer = () => {
                   <FaYoutube style={{ fontSize: "40px" }} />
                 </Box>
               </Button>
-              <Button
-                style={{ borderRadius: "300px", padding: 0 }}
-                color="dark"
-                w={60}
-                h={60}
-              >
+              <Button style={{ borderRadius: "300px", padding: 0 }} color="dark" w={60} h={60}>
                 <Box
                   style={{
                     borderRadius: "200px",

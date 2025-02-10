@@ -1,13 +1,27 @@
-export const metadata = {
-  title: "Mantine Next.js template",
-  description: "I am using Mantine with Next.js!",
-};
-import "@mantine/dates/styles.css";
+"use client";
+
+import { useEffect } from "react";
+import "./globals.css";
 
 export default function Page() {
-  return (
+useEffect(() => {
+    if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker
+        .register("/service-worker.js")
+        .then((registration) => {
+            console.log("Service Worker registered:", registration);
+        })
+        .catch((error) => {
+            console.log("Service Worker registration failed:", error);
+        });
+    });
+    }
+}, []);
+
+return (
     <main>
-      <h1>halo</h1>
+    <h1>Welcome to Ayana</h1>
     </main>
-  );
+);
 }

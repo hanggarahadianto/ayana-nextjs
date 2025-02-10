@@ -174,33 +174,35 @@ const EditCashFlowReportModal = ({
                     radius="md"
                     keepMounted={false} // Optimizes performance
                   >
-                    <Tabs.List
-                      grow
-                      style={{
-                        background: "linear-gradient(90deg, #3B82F6, #64748B)",
-                        padding: "6px",
-                        borderRadius: "8px",
-                      }}
-                    >
-                      {cashFlowData.map((item) => (
-                        <Tabs.Tab
-                          key={item.week_number}
-                          value={item.week_number}
-                          ref={setControlRef(item.week_number)}
-                          style={{
-                            fontWeight: "bold",
-                            fontSize: "14px",
-                            padding: "12px 20px",
-                            color: "white",
-                            borderRadius: "8px",
-                            transition: "all 0.2s ease-in-out",
-                          }}
-                          className="tab-gradient"
-                        >
-                          📅 Minggu Ke {item.week_number}
-                        </Tabs.Tab>
-                      ))}
-                    </Tabs.List>
+                    {cashFlowData.length > 0 && (
+                      <Tabs.List
+                        grow
+                        style={{
+                          background: "linear-gradient(90deg, #3B82F6, #64748B)",
+                          padding: "6px",
+                          borderRadius: "8px",
+                        }}
+                      >
+                        {cashFlowData.map((item) => (
+                          <Tabs.Tab
+                            key={item.week_number}
+                            value={item.week_number}
+                            ref={setControlRef(item.week_number)}
+                            style={{
+                              fontWeight: "bold",
+                              fontSize: "14px",
+                              padding: "12px 20px",
+                              color: "white",
+                              borderRadius: "8px",
+                              transition: "all 0.2s ease-in-out",
+                            }}
+                            className="tab-gradient"
+                          >
+                            📅 Minggu Ke {item.week_number}
+                          </Tabs.Tab>
+                        ))}
+                      </Tabs.List>
+                    )}
                   </Tabs>
 
                   <Grid>

@@ -1,14 +1,4 @@
-import {
-  Container,
-  Text,
-  Group,
-  Select,
-  Card,
-  Image,
-  SimpleGrid,
-  Grid,
-  GridCol,
-} from "@mantine/core";
+import { Container, Text, Group, Select, Card, Image, SimpleGrid, Grid, GridCol } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 
 const banks = [
@@ -26,40 +16,23 @@ export function BankingPartnerComponent() {
         <GridCol span={8}>
           <Group p={120}>
             <div>
-              <Text fw={900} size="xl" mb="xs">
+              <Text c={"black"} fw={900} size="xl" mb="xs">
                 Our Banking Partner
               </Text>
-              <Text
-                c="orange"
-                fw={700}
-                size="xl"
-                style={{ lineHeight: 1.2, fontSize: "3rem" }}
-              >
+              <Text c="orange" fw={700} size="xl" style={{ lineHeight: 1.2, fontSize: "3rem" }}>
                 FIND THE FINANCIAL SOLUTION THAT SUITS YOU
               </Text>
             </div>
           </Group>
         </GridCol>
         <GridCol span={4} p={80} mt={80}>
-          <Text
-            fw={600}
-            size="sm"
-            style={{ maxWidth: 900, textAlign: "right", fontSize: "1rem" }}
-          >
-            Make your dream home possible with Cendana Home’s wide selection of
-            partnership installments.
+          <Text c={"black"} fw={600} size="sm" style={{ maxWidth: 900, textAlign: "right", fontSize: "1rem" }}>
+            Make your dream home possible with Cendana Home’s wide selection of partnership installments.
           </Text>
         </GridCol>
       </Grid>
 
-      <Carousel
-        slideSize="20%"
-        slideGap="xl"
-        withIndicators
-        loop
-        mb={80}
-        p={40}
-      >
+      <Carousel slideSize="20%" slideGap="xl" withIndicators loop mb={80} p={40}>
         {banks.map((bank) => (
           <Carousel.Slide key={bank.id}>
             <Card shadow="sm" p="md" radius="md" withBorder>
