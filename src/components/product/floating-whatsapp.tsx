@@ -3,12 +3,24 @@ import { ActionIcon, Stack, Text } from "@mantine/core";
 import { IconBrandWhatsapp } from "@tabler/icons-react";
 
 const FloatingWhatsApp = () => {
-  const phoneNumber = "62895421711315"; // Use a clean number format
-  const message = encodeURIComponent(
-    "Halo! Saya menghubungi Anda melalui website dan tertarik dengan rumah yang ditawarkan. Bisa berikan informasi lebih lanjut? Jika ada katalog atau daftar harga, saya ingin melihatnya. Apakah ada promo saat ini? Saya tunggu responnya. Terima kasih! 😊"
-  );
+  const phoneNumber = "62895421711315";
+  const message =
+    "Halo! Saya menghubungi Anda melalui website dan tertarik dengan rumah yang ditawarkan. Bisa berikan informasi lebih lanjut? Jika ada katalog atau daftar harga, saya ingin melihatnya. Apakah ada promo saat ini? Saya tunggu responnya. Terima kasih! 😊";
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+  const handleClick = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "Hubungi Kami via WhatsApp",
+          text: message,
+          url: whatsappUrl,
+        })
+        .catch((error) => console.log("Error sharing:", error));
+    } else {
+      window.open(whatsappUrl, "_blank");
+    }
+  };
 
   return (
     <div
@@ -35,14 +47,13 @@ const FloatingWhatsApp = () => {
       </Text>
       <Stack align="center" mt={10}>
         <ActionIcon
-          component="a"
-          href={whatsappUrl}
-          target="_blank"
+          component="button"
+          onClick={handleClick}
           style={{
             background: "linear-gradient(135deg, #25D366, #128C7E)",
             color: "white",
-            width: "90px",
-            height: "90px",
+            width: window.innerWidth < 768 ? "70px" : "90px",
+            height: window.innerWidth < 768 ? "70px" : "90px",
             borderRadius: "50%",
             display: "flex",
             alignItems: "center",
@@ -55,7 +66,7 @@ const FloatingWhatsApp = () => {
           onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
           onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
-          <IconBrandWhatsapp size={60} />
+          <IconBrandWhatsapp size={window.innerWidth < 768 ? 40 : 60} />
         </ActionIcon>
       </Stack>
       <style>

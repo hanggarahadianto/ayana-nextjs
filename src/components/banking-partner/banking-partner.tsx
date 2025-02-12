@@ -1,5 +1,6 @@
 import { Container, Text, Group, Select, Card, Image, SimpleGrid, Grid, GridCol } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
+import { useMediaQuery } from "@mantine/hooks";
 
 const banks = [
   { id: 1, name: "BRI", logo: "/images/bri-logo.jpg" },
@@ -10,23 +11,40 @@ const banks = [
 ];
 
 export function BankingPartnerComponent() {
+  const isMobile = useMediaQuery("(max-width: 768px)");
   return (
     <SimpleGrid cols={1} py="xl" bg={"#ece6dc"}>
       <Grid>
-        <GridCol span={8}>
-          <Group p={120}>
+        <GridCol span={isMobile ? 12 : 8}>
+          <Group p={isMobile ? 40 : 120} style={{ textAlign: isMobile ? "center" : "left" }}>
             <div>
-              <Text c={"black"} fw={900} size="xl" mb="xs">
+              <Text c={"black"} fw={900} size={isMobile ? "lg" : "xl"} mb="xs">
                 Our Banking Partner
               </Text>
-              <Text c="orange" fw={700} size="xl" style={{ lineHeight: 1.2, fontSize: "3rem" }}>
+              <Text
+                c="orange"
+                fw={700}
+                style={{
+                  fontSize: isMobile ? "1.8rem" : "3rem",
+                  lineHeight: 1.2,
+                }}
+              >
                 FIND THE FINANCIAL SOLUTION THAT SUITS YOU
               </Text>
             </div>
           </Group>
         </GridCol>
-        <GridCol span={4} p={80} mt={80}>
-          <Text c={"black"} fw={600} size="sm" style={{ maxWidth: 900, textAlign: "right", fontSize: "1rem" }}>
+        <GridCol span={isMobile ? 12 : 4} p={isMobile ? 20 : 80} mt={isMobile ? 10 : 80}>
+          <Text
+            c={"black"}
+            fw={600}
+            size="sm"
+            style={{
+              maxWidth: 900,
+              textAlign: isMobile ? "center" : "right",
+              fontSize: isMobile ? "0.9rem" : "1rem",
+            }}
+          >
             Make your dream home possible with Cendana Home’s wide selection of partnership installments.
           </Text>
         </GridCol>
@@ -35,7 +53,7 @@ export function BankingPartnerComponent() {
       <Carousel slideSize="20%" slideGap="xl" withIndicators loop mb={80} p={40}>
         {banks.map((bank) => (
           <Carousel.Slide key={bank.id}>
-            <Card shadow="sm" p="md" radius="md" withBorder>
+            <Card shadow="sm" p="md" radius="md" withBorder bg={"white"}>
               <Image
                 src={bank.logo}
                 alt={bank.name}

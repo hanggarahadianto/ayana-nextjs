@@ -179,7 +179,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
                 </Progress.Section>
               </Tooltip>
             </Progress.Root>
-            <Group gap={40}>
+            <Group gap={10}>
               <Text size="lg" fw={900}>
                 Catatan :
               </Text>

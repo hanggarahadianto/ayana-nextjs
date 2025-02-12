@@ -1,84 +1,114 @@
-import { useEffect, useState } from "react";
-import { Flex, Image, Text, Group, SimpleGrid, Switch, useMantineColorScheme, Stack, Burger, Drawer } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks"; // ✅ Import from @mantine/hooks
+import { useEffect, useState, useMemo } from "react";
+import { Flex, Image, Text, Group, Stack, Switch, Drawer, Burger, useMantineColorScheme } from "@mantine/core";
 import Link from "next/link";
 import { FiSun, FiMoon } from "react-icons/fi";
+import { motion } from "framer-motion";
 
 const Navbar = () => {
-  const { colorScheme, setColorScheme } = useMantineColorScheme();
   const [mounted, setMounted] = useState(false);
   const [opened, setOpened] = useState(false);
-  const isMobile = useMediaQuery("(max-width: 768px)"); // ✅ Detect mobile view
+  const [isClient, setIsClient] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = useMemo(() => colorScheme === "dark", [colorScheme]);
 
   useEffect(() => {
     setMounted(true);
+    setIsClient(true);
+    setIsMobile(window.innerWidth <= 768);
   }, []);
 
-  if (!mounted) return null;
-
-  const isDark = colorScheme === "dark";
+  if (!mounted) return null; // Prevent hydration mismatch
 
   return (
     <>
       {/* Mobile Drawer */}
-      <Drawer opened={opened} onClose={() => setOpened(false)} title="Menu" padding="md" size="sm">
-        <Stack>
-          <Link href="/banking-partners" passHref>
-            <Text c={isDark ? "white" : "black"}>Partner Bank</Text>
-          </Link>
-          <Link href="/about" passHref>
-            <Text c={isDark ? "white" : "black"}>Tentang Kami</Text>
-          </Link>
-          <Switch
-            checked={isDark}
-            onChange={(event) => setColorScheme(event.currentTarget.checked ? "dark" : "light")}
-            size="lg"
-            onLabel={<FiSun size={16} />}
-            offLabel={<FiMoon size={16} />}
-            color="yellow"
-          />
-        </Stack>
-      </Drawer>
+      {isClient && (
+        <Drawer
+          opened={opened}
+          onClose={() => setOpened(false)}
+          title="Menu"
+          padding="md"
+          size="sm"
+          styles={{ body: { background: "linear-gradient(135deg, #1e3c72, #2a5298)", color: "white" } }}
+        >
+          <Stack gap={12} p={20}>
+            <Stack align="flex-end">
+              <ThemeSwitch />
+            </Stack>
 
-      <SimpleGrid bg={isDark ? "#1a1b1e" : "#beab96"} p="md" style={{ position: "sticky", top: 0, zIndex: 1000 }}>
-        <Flex justify="space-between" align="center">
-          <Stack>
-            <Link href={"/home"} passHref>
-              <Image ml={12} src="/images/ayana.png" height={28} width={60} alt="Logo" style={{ borderRadius: "15px" }} />
-            </Link>
+            <NavLink href="/banking-partners">Partner Bank</NavLink>
+            <NavLink href="/about">Tentang Kami</NavLink>
           </Stack>
+        </Drawer>
+      )}
 
-          {/* Desktop Menu */}
-          {!isMobile && ( // ✅ Hide on mobile
-            <Group gap={20}>
-              <Link href={"/banking-partners"} passHref>
-                <Text mr={20} c={isDark ? "white" : "black"}>
-                  Partner Bank
-                </Text>
-              </Link>
-              <Link href={"/about"} passHref>
-                <Text mr={20} c={isDark ? "white" : "black"}>
-                  Tentang Kami
-                </Text>
-              </Link>
-              <Switch
-                checked={isDark}
-                onChange={(event) => setColorScheme(event.currentTarget.checked ? "dark" : "light")}
-                size="lg"
-                onLabel={<FiSun size={16} />}
-                offLabel={<FiMoon size={16} />}
-                color="yellow"
-              />
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        style={{
+          background: isDark ? "#1a1b1e" : "#beab96",
+          padding: "1rem",
+          position: "sticky",
+          top: 0,
+          zIndex: 1000,
+          transition: "background 0.5s ease-in-out",
+        }}
+      >
+        <Flex justify="space-between" align="center">
+          <Link href="/home" passHref>
+            <motion.div whileHover={{ scale: 1.1 }}>
+              <Image src="/images/ayana.png" height={30} width={65} alt="Logo" style={{ borderRadius: "15px", cursor: "pointer" }} />
+            </motion.div>
+          </Link>
+
+          {isClient && !isMobile ? (
+            <Group gap={24} mr={20}>
+              <NavLink href="/banking-partners">Partner Bank</NavLink>
+              <NavLink href="/about">Tentang Kami</NavLink>
+              <ThemeSwitch />
             </Group>
-          )}
-
-          {/* Mobile Menu Button */}
-          {isMobile && ( // ✅ Show only on mobile
-            <Burger opened={opened} onClick={() => setOpened((o) => !o)} size="sm" />
+          ) : (
+            isClient && isMobile && <Burger opened={opened} onClick={() => setOpened((o) => !o)} size="sm" color="white" />
           )}
         </Flex>
-      </SimpleGrid>
+      </motion.div>
     </>
+  );
+};
+
+interface NavLinkProps {
+  href: string;
+  children: React.ReactNode;
+}
+
+const NavLink: React.FC<NavLinkProps> = ({ href, children }) => (
+  <Link href={href} passHref style={{ textDecoration: "none" }}>
+    <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
+      <Text c="white" fw={500} style={{ cursor: "pointer" }}>
+        {children}
+      </Text>
+    </motion.div>
+  </Link>
+);
+
+const ThemeSwitch = () => {
+  const { colorScheme, setColorScheme } = useMantineColorScheme();
+  const isDark = useMemo(() => colorScheme === "dark", [colorScheme]);
+
+  return (
+    <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
+      <Switch
+        checked={isDark}
+        onChange={(event) => setColorScheme(event.currentTarget.checked ? "dark" : "light")}
+        size="lg"
+        onLabel={<FiSun size={16} />}
+        offLabel={<FiMoon size={16} />}
+        color="yellow"
+      />
+    </motion.div>
   );
 };
 
