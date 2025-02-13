@@ -1,34 +1,20 @@
 "use client";
 import { useSubmitReservationForm } from "@/src/api/reservation/postDataReservationForm";
-import { Button, Container, Text, Group, TextInput } from "@mantine/core";
+import { Button, Container, Text, Group, TextInput, SimpleGrid, Stack, Card, Title } from "@mantine/core";
 import { Formik, Form, Field } from "formik";
 import { getInitialValuesReservationForm } from "./InitialValuesReservationForm";
+import { useMediaQuery } from "@mantine/hooks";
 
 interface ReservationFormProps {
   id: string;
   start_price: any;
 }
 
-const containerProps = {
-  ml: 120,
-  mt: 40,
-  p: 40,
-  bg: "slate",
-  style: {
-    borderRadius: "8px", // Adjust the value for desired roundness
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Adjust shadow as needed
-  },
-};
-
 // Mock function for handling form submission
 
-const ReservationForm: React.FC<ReservationFormProps> = ({
-  id,
-  start_price,
-}) => {
-  console.log("ID", id);
-  const { mutate: postData, isPending: isLoadingSubmitPropertyData } =
-    useSubmitReservationForm();
+const ReservationForm: React.FC<ReservationFormProps> = ({ id, start_price }) => {
+  const isMobile = useMediaQuery("(max-width: 600px)");
+  const { mutate: postData, isPending: isLoadingSubmitPropertyData } = useSubmitReservationForm();
 
   const handleSubmit = (values: Reservation, { setSubmitting }: any) => {
     console.log("Form values submitted:", values);
@@ -37,68 +23,103 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   };
 
   return (
-    <Container {...containerProps}>
-      <Formik
-        enableReinitialize={true}
-        initialValues={getInitialValuesReservationForm()}
-        onSubmit={handleSubmit}
-        validateOnBlur={false}
-      >
-        {({ values, setFieldValue, resetForm }) => {
-          console.log("values on page", values);
+    <Formik enableReinitialize initialValues={getInitialValuesReservationForm()} onSubmit={handleSubmit} validateOnBlur={false}>
+      {({ values, setFieldValue, resetForm }) => {
+        console.log("values on page", values);
 
-          return (
-            <Form>
-              <Text size="lg" w={900} style={{ fontFamily: "Poppins" }} mt={20}>
-                Mulai dari
-              </Text>
-              <Text fw={600} style={{ fontSize: "2rem" }} variant="A1">
-                {start_price} / bulan
-              </Text>
-              <Text size="lg" w={900} style={{ fontFamily: "Poppins" }} mt={20}>
-                Dapatkan Update Promo & Harga Terbaru
-              </Text>
-              <Field name="name">
-                {({ field }: any) => (
-                  <TextInput
-                    {...field}
-                    label="Name"
-                    placeholder="Name"
-                    mt="md"
-                  />
-                )}
-              </Field>
-              <Field name="email">
-                {({ field }: any) => (
-                  <TextInput
-                    {...field}
-                    label="Email"
-                    placeholder="Email"
-                    mt="md"
-                  />
-                )}
-              </Field>
-              <Field name="phone">
-                {({ field }: any) => (
-                  <TextInput
-                    {...field}
-                    label="No Whatsapp"
-                    placeholder="No Whatsapp"
-                    mt="md"
-                  />
-                )}
-              </Field>
+        return (
+          <Form>
+            <Card
+              shadow="xl"
+              p="xl"
+              radius="lg"
+              withBorder
+              style={{
+                maxWidth: isMobile ? 400 : 600,
+                margin: "auto",
+              }}
+            >
+              <Stack align="center" gap="md">
+                <Title order={2} ta="center">
+                  Mulai dari
+                </Title>
+                <Text fw={700} size="xl" color="blue" ta="center">
+                  {start_price} / bulan
+                </Text>
+                <Text size="md" c="dimmed" ta="center">
+                  Dapatkan Update Promo & Harga Terbaru
+                </Text>
 
-              <Group justify="center" mt="xl">
-                <Button type="submit" loading={isLoadingSubmitPropertyData}>
-                  Hubungi Kami
-                </Button>
-              </Group>
-            </Form>
-          );
-        }}
-      </Formik>
-    </Container>
+                <Field name="name">
+                  {({ field }: any) => (
+                    <TextInput
+                      w={isMobile ? 300 : 400}
+                      {...field}
+                      label="Nama"
+                      placeholder="Masukkan Nama"
+                      size="md"
+                      radius="md"
+                      withAsterisk
+                      styles={{
+                        input: { boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)" },
+                      }}
+                    />
+                  )}
+                </Field>
+
+                <Field name="email">
+                  {({ field }: any) => (
+                    <TextInput
+                      w={isMobile ? 300 : 400}
+                      {...field}
+                      label="Email"
+                      placeholder="Masukkan Email"
+                      size="md"
+                      radius="md"
+                      withAsterisk
+                      styles={{
+                        input: { boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)" },
+                      }}
+                    />
+                  )}
+                </Field>
+
+                <Field name="phone">
+                  {({ field }: any) => (
+                    <TextInput
+                      w={isMobile ? 300 : 400}
+                      {...field}
+                      label="No Whatsapp"
+                      placeholder="Masukkan No Whatsapp"
+                      size="md"
+                      radius="md"
+                      withAsterisk
+                      styles={{
+                        input: { boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)" },
+                      }}
+                    />
+                  )}
+                </Field>
+
+                <Group justify="center" mt="xl">
+                  <Button
+                    type="submit"
+                    loading={isLoadingSubmitPropertyData}
+                    variant="gradient"
+                    gradient={{ from: "blue", to: "cyan" }}
+                    size="md"
+                    radius="md"
+                    style={{ boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)" }}
+                  >
+                    Hubungi Kami
+                  </Button>
+                </Group>
+              </Stack>
+            </Card>
+          </Form>
+        );
+      }}
+    </Formik>
   );
 };
 

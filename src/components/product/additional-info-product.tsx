@@ -8,23 +8,17 @@ interface AdditionalInfoProps {
   nearBy: any[];
 }
 
-const AdditionalInfoProduct: React.FC<AdditionalInfoProps> = ({
-  maps,
-  nearBy,
-}) => {
+const AdditionalInfoProduct: React.FC<AdditionalInfoProps> = ({ maps, nearBy }) => {
+  console.log("NEAR", nearBy);
   return (
     <Stack>
-      <Text mt={40} size="xl" fw={800} style={{ fontFamily: "Lora" }}>
-        Lokasi
-      </Text>
-      <AdditionalInfoMaps maps={maps} />
       <Text mt={40} size="xl" fw={800} style={{ fontFamily: "Lora" }}>
         Disekitar Unit
       </Text>
       {nearBy && (
         <Stack>
           {nearBy.map((place: any) => (
-            <Group key={place.id}>
+            <Group key={place.id} mt={20}>
               <FaLocationArrow size={14} />
               <Text>
                 {place.distance} Ke {place.name}
@@ -33,6 +27,9 @@ const AdditionalInfoProduct: React.FC<AdditionalInfoProps> = ({
           ))}
         </Stack>
       )}
+      <Text mt={40} size="xl" fw={800} style={{ fontFamily: "Lora" }}>
+        Lokasi
+      </Text>
     </Stack>
   );
 };

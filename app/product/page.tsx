@@ -26,83 +26,83 @@ const ProductsPage = () => {
   const products = productData;
 
   const cards = products?.data.map((home: IProduct) => {
+    console.log("ID", home?.id);
+    const formattedPrice = isMobile
+      ? `${(home?.price / 1_000_000).toFixed(0)} Juta`
+      : new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+        }).format(home?.price);
     return (
       <Carousel.Slide key={home.id}>
-        <Card
-          shadow="sm"
-          padding={isMobile ? "md" : "lg"}
-          radius="md"
-          withBorder
-          style={{ height: isMobile ? 400 : 500 }} // Ensure consistent card height
-        >
-          <Link href={`/product/${home.id}`} passHref>
+        <Link href={{ pathname: `/product/${home.id}` }} passHref style={{ textDecoration: "none" }}>
+          <Card
+            shadow="sm"
+            padding={isMobile ? "md" : "lg"}
+            radius="md"
+            withBorder
+            style={{ height: isMobile ? 400 : 540, cursor: "pointer" }}
+          >
             <Card.Section>
               <Image src={home.image} alt={home.title} height={isMobile ? 180 : 280} fit="cover" />
             </Card.Section>
-          </Link>
 
-          {/* Address & Price */}
-          <Flex justify="space-between" mt={30}>
-            <Group gap={4} align="start">
-              <Text size={isMobile ? "sm" : "md"}>{home.address}</Text>
+            <Group justify="space-between" mt={30}>
+              <Group gap={4} align="start">
+                <Text size={isMobile ? "sm" : "md"}>{home.address}</Text>
+              </Group>
+              <Flex>
+                {!isMobile && (
+                  <Stack align="end" gap={0}>
+                    <Text fw={900} size="">
+                      Start from
+                    </Text>
+                    <Text size="xl" fw={900} c="green">
+                      {formattedPrice}
+                    </Text>
+                  </Stack>
+                )}
+              </Flex>
             </Group>
 
-            {home.status !== "sold" &&
-              (isMobile ? (
-                <Stack align="end" gap={0}>
-                  <Text fw={600} size="sm">
+            {!isMobile && (
+              <Flex justify="space-between" align="center" mt={12}>
+                <Text w="100%" size="md" fw={700}>
+                  {home.title}
+                </Text>
+                <Badge mr={12} w={60} color={home.status === "sale" ? "green" : "pink"}>
+                  {home.status === "sale" ? "On Sale" : "Sold"}
+                </Badge>
+              </Flex>
+            )}
+
+            <Text size={isMobile ? "xs" : "sm"} c="dimmed" mt={8}>
+              {home.content}
+            </Text>
+
+            {isMobile && (
+              <Stack align="flex-end" mt={12}>
+                <Flex gap={8}>
+                  <Text fw={600} size={isMobile ? "xs" : "lg"} mt={2}>
                     Start from
                   </Text>
-                  <Text size="sm" c="green">
-                    {new Intl.NumberFormat("id-ID", {
-                      style: "currency",
-                      currency: "IDR",
-                    }).format(home.price)}
-                  </Text>
-                </Stack>
-              ) : (
-                <Flex>
-                  <Text mr={8} fw={600} size="md">
-                    Start from
-                  </Text>
-                  <Text size="lg" c="green">
-                    {new Intl.NumberFormat("id-ID", {
-                      style: "currency",
-                      currency: "IDR",
-                    }).format(home.price)}
+                  <Text fw={800} size="sm" c="green">
+                    {formattedPrice}
                   </Text>
                 </Flex>
-              ))}
-          </Flex>
+              </Stack>
+            )}
 
-          {/* Title & Status Badge */}
-
-          {!isMobile && (
-            <Flex justify="space-between" align="center" mt={12}>
-              <Text w="100%" size="md" fw={700}>
-                {home.title}
-              </Text>
-              <Badge mr={12} w={60} color={home.status === "sale" ? "green" : "pink"}>
+            <Flex justify="space-between" align="center" mt={16} w="100%">
+              <Badge w={isMobile ? 70 : 80} color={home.status === "sale" ? "green" : "pink"}>
                 {home.status === "sale" ? "On Sale" : "Sold"}
               </Badge>
+              <Text fw={900} size={isMobile ? "xs" : "lg"} c="dimmed">
+                {home.quantity > 0 ? `Tersedia ${home.quantity} unit` : "Terjual Habis"}
+              </Text>
             </Flex>
-          )}
-
-          {/* Content */}
-          <Text size={isMobile ? "xs" : "sm"} c="dimmed" mt={8}>
-            {home.content}
-          </Text>
-
-          {/* Availability and Status (Mobile Alignment Fix) */}
-          <Flex justify="space-between" align="center" mt={16} w="100%">
-            <Badge w={isMobile ? 60 : 80} color={home.status === "sale" ? "green" : "pink"}>
-              {home.status === "sale" ? "On Sale" : "Sold"}
-            </Badge>
-            <Text fw={900} size={isMobile ? "md" : "lg"} c="dimmed">
-              {home.quantity > 0 ? `Tersedia ${home.quantity} unit` : "Terjual Habis"}
-            </Text>
-          </Flex>
-        </Card>
+          </Card>
+        </Link>
       </Carousel.Slide>
     );
   });
@@ -112,7 +112,7 @@ const ProductsPage = () => {
       {/* Header */}
       <Stack align="center" justify="center">
         <Text
-          size={isMobile ? "xl" : "5xl"}
+          size={isMobile ? "xl" : "3.5rem"}
           fw={900}
           c={"white"}
           style={{
@@ -126,12 +126,13 @@ const ProductsPage = () => {
 
       <Stack align="center" justify="center">
         <Text
+          size={isMobile ? "xl" : "3.5rem"}
           mt={-40}
           fw={900}
           style={{
             fontFamily: "Lora",
             color: "#e7a17a",
-            fontSize: isMobile ? "2rem" : "3rem",
+
             textAlign: "center",
           }}
         >

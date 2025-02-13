@@ -8,5 +8,5 @@ interface AdditionalInfo {
   id: string;
   maps: string;
   start_price: string;
-  nearBy: INearby[];
+  near_by: INearby[];
 }
