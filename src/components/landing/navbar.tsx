@@ -60,7 +60,14 @@ const Navbar = () => {
         <Flex justify="space-between" align="center">
           <Link href="/home" passHref>
             <motion.div whileHover={{ scale: 1.1 }}>
-              <Image src="/images/ayana.png" height={30} width={65} alt="Logo" style={{ borderRadius: "15px", cursor: "pointer" }} />
+              <Image
+                src="/images/ayana.png"
+                height={30}
+                width={65}
+                alt="Logo"
+                style={{ borderRadius: "15px", cursor: "pointer" }}
+                ml={20}
+              />
             </motion.div>
           </Link>
 

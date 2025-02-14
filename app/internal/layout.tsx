@@ -1,24 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/src/components/landing/navbar";
-import { AppShell, Burger, NavLink, rem, SimpleGrid, Stack, Title, useMantineTheme } from "@mantine/core";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { AppShell, Burger, NavLink, SimpleGrid, Stack, Title, useMantineTheme, rem, useMantineColorScheme } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
-import { FaTasks, FaProjectDiagram, FaUser, FaCog } from "react-icons/fa";
+import { FaTasks, FaProjectDiagram, FaUser, FaCog, FaHome } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function InternalLayout({ children }: { children: React.ReactNode }) {
   const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme(); // Handles Dark Mode automatically
   const [opened, { toggle }] = useDisclosure();
-  const [isClient, setIsClient] = useState(false);
-  const [tabletMatch, setTabletMatch] = useState(false);
+  const [isMounted, setIsMounted] = useState(false); // Fix hydration mismatch
 
   useEffect(() => {
-    setIsClient(true);
-    setTabletMatch(window.matchMedia("(max-width: 768px)").matches);
+    setIsMounted(true);
   }, []);
 
-  if (!isClient) return null; // Prevents hydration mismatch
+  if (!isMounted) return null; // Avoid rendering on server to prevent mismatch
+
+  const isDark = colorScheme === "dark";
+
+  const menuItems = [
+    { label: "Task", icon: <FaTasks />, href: "/internal/sidebar/task" },
+    { label: "Product", icon: <FaHome />, href: "/internal/sidebar/product" },
+    { label: "Project", icon: <FaProjectDiagram />, href: "/internal/sidebar/project" },
+    { label: "Profile", icon: <FaUser />, href: "/internal/sidebar/profile" },
+    { label: "Setting", icon: <FaCog />, href: "/internal/sidebar/setting" },
+  ];
 
   return (
     <>
@@ -30,43 +40,61 @@ export default function InternalLayout({ children }: { children: React.ReactNode
           layout="alt"
           header={{ height: 60 }}
           navbar={{
-            width: 220,
+            width: 240,
             breakpoint: "sm",
             collapsed: { mobile: !opened },
           }}
-        >
-          <AppShell.Header
-          // style={{
-          //   height: rem(60),
-          //   boxShadow: tabletMatch ? theme.shadows.md : theme.shadows.sm,
-          //   backgroundColor: theme.colors.gray[0],
-          // }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                height: "100%",
-                justifyContent: "space-between",
-                padding: "0 20px",
-              }}
-            >
-              <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-              <Title order={3} style={{ marginLeft: "20px", color: theme.colors.dark[9] }}>
-                Search
-              </Title>
-            </div>
-          </AppShell.Header>
+          style={{
+            background: isDark ? "linear-gradient(135deg, #121212, #1e1e1e)" : "linear-gradient(135deg, #2e7d32, #2a5298)", // blue
 
-          <AppShell.Navbar p="xl" mt={40}>
-            <Stack mt={40}>
-              <NavLink component={Link} href="/internal/sidebar/task" label="Task" leftSection={<FaTasks />} />
-              <NavLink component={Link} href="/internal/sidebar/project" label="Project" leftSection={<FaProjectDiagram />} />
-              <NavLink component={Link} href="/internal/sidebar/profile" label="Profile" leftSection={<FaUser />} />
-              <NavLink component={Link} href="/internal/sidebar/setting" label="Setting" leftSection={<FaCog />} />
+            minHeight: "100vh",
+            color: isDark ? theme.colors.gray[3] : "white",
+          }}
+        >
+          {/* Sidebar */}
+          <AppShell.Navbar
+            // mt={40}
+            pt="xl"
+            p={"xl"}
+            style={{
+              background: isDark ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.1)",
+              backdropFilter: "blur(10px)",
+            }}
+          >
+            <Stack mt={40} gap="md">
+              <AnimatePresence>
+                {menuItems.map((item, index) => (
+                  <motion.div
+                    key={item.href}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                  >
+                    <NavLink
+                      component={Link}
+                      href={item.href}
+                      label={item.label}
+                      leftSection={item.icon}
+                      style={{
+                        color: "white",
+                        fontWeight: "bold",
+                        borderRadius: rem(8),
+                        padding: rem(12),
+                        transition: "all 0.3s",
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.background = isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.2)")
+                      }
+                      onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </Stack>
           </AppShell.Navbar>
 
+          {/* Main Content */}
           <AppShell.Main>{children}</AppShell.Main>
         </AppShell>
       </SimpleGrid>

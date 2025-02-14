@@ -44,14 +44,8 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
 
   return (
     <>
-      <ActionIcon
-        onClick={open}
-        size="3.5rem" // Bigger size
-        radius="xl"
-        variant="gradient"
-        gradient={{ from: "green", to: "lime", deg: 90 }}
-      >
-        <IconPlus size="1.5rem" /> {/* Adjust icon size */}
+      <ActionIcon onClick={open} size="3.5rem" radius="xl" variant="gradient" gradient={{ from: "green", to: "lime", deg: 90 }}>
+        <IconPlus size="1.5rem" />
       </ActionIcon>
       <Modal
         opened={opened}

@@ -2,48 +2,49 @@
 
 import { Button, Card, Group, SimpleGrid, Text, Stack, ActionIcon } from "@mantine/core";
 
-import AddProjectModal from "./AddProjectModal";
 import { useQuery } from "@tanstack/react-query";
 import { getDataProject } from "@/src/api/project/getDataProject";
 
 import Link from "next/link";
 import { useDeleteDataProject } from "@/src/api/project/deleteDataProject";
 import ButtonDeleteWithConfirmation from "@/src/components/button/buttonDeleteConfirmation";
+import AddProductModal from "./AddProductModal";
+import { getDataProduct } from "@/src/api/products/getDataProduct";
 
 const ProjectPage = () => {
   const {
-    data: projectData,
-    isLoading: isLoadingGetProjectData,
-    refetch: refetchProjectData,
+    data: productData,
+    isLoading: isLoadingGetProductData,
+    refetch: refetchProductData,
   } = useQuery({
-    queryKey: ["getProjectData"],
-    queryFn: () => getDataProject(),
+    queryKey: ["getProductData"],
+    queryFn: () => getDataProduct(),
     refetchOnWindowFocus: false,
   });
 
-  const { mutate: mutateDeleteDataProject, isPending: isLoadingDeleteDataProject } = useDeleteDataProject(refetchProjectData);
+  const { mutate: mutateDeleteDataProject, isPending: isLoadingDeleteDataProject } = useDeleteDataProject(refetchProductData);
 
   const handleDeleteProject = (idToDelete: string) => {
     mutateDeleteDataProject(idToDelete); // Pass only the string, not an object
   };
 
-  console.log("Project Data", projectData?.data);
+  console.log("Project Data", productData?.data);
 
   return (
     <>
       <Group justify="space-between">
         <Text fw={900} size="2rem">
-          Daftar Project
+          Daftar Produk
         </Text>
         <Stack mr={40}>
-          <AddProjectModal refetchProjectData={refetchProjectData} />
+          <AddProductModal refetchProductData={refetchProductData} />
         </Stack>
       </Group>
 
       <SimpleGrid mt={40} cols={4} p={40}>
-        {projectData?.data.map((project) => (
+        {productData?.data.map((product) => (
           <Card
-            key={project.id}
+            key={product.id}
             w={320}
             h={160}
             style={{
@@ -56,33 +57,18 @@ const ProjectPage = () => {
               cursor: "pointer",
             }}
           >
-            <Link href={`/internal/sidebar/project/${project.id}`} passHref legacyBehavior>
+            <Link href={`/internal/sidebar/project/${product.id}`} passHref legacyBehavior>
               <Group justify="space-between">
                 <Stack gap={4} align="start">
                   <Group justify="space-between" w="100%">
                     <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
-                      {project.project_name}
+                      {product.title}
                     </Text>
                   </Group>
 
                   <Text fw={500} mt={16} size="lg" style={{ color: "#ffffff" }}>
-                    {project.project_leader}
+                    {product.address}
                   </Text>
-
-                  <Text fw={500} style={{ color: "#ffffff" }}>
-                    {new Intl.NumberFormat("id-ID", {
-                      style: "currency",
-                      currency: "IDR",
-                    }).format(project.total_cost || 0)}
-                  </Text>
-                </Stack>
-
-                <Stack mt={-100}>
-                  <ButtonDeleteWithConfirmation
-                    id={project.id}
-                    onDelete={handleDeleteProject}
-                    description={`Apakah anda ingin menghapus proyek ${project?.project_name} ?`}
-                  />
                 </Stack>
               </Group>
             </Link>

@@ -35,7 +35,7 @@ const ProductsPage = () => {
         }).format(home?.price);
     return (
       <Carousel.Slide key={home.id}>
-        <Link href={{ pathname: `/product/${home.id}` }} passHref style={{ textDecoration: "none" }}>
+        <Link href={{ pathname: `/product/${home.id}` }} passHref style={{ textDecoration: "none", cursor: "pointer" }}>
           <Card
             shadow="sm"
             padding={isMobile ? "md" : "lg"}
@@ -109,7 +109,6 @@ const ProductsPage = () => {
 
   return (
     <SimpleGrid cols={1} bg={"#a48060"} h={"100vh"}>
-      {/* Header */}
       <Stack align="center" justify="center">
         <Text
           size={isMobile ? "xl" : "3.5rem"}
