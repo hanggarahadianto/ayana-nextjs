@@ -23,8 +23,8 @@ export default function InternalLayout({ children }: { children: React.ReactNode
   const isDark = colorScheme === "dark";
 
   const menuItems = [
-    { label: "Task", icon: <FaTasks />, href: "/internal/sidebar/task" },
     { label: "Product", icon: <FaHome />, href: "/internal/sidebar/product" },
+    { label: "Task", icon: <FaTasks />, href: "/internal/sidebar/task" },
     { label: "Project", icon: <FaProjectDiagram />, href: "/internal/sidebar/project" },
     { label: "Profile", icon: <FaUser />, href: "/internal/sidebar/profile" },
     { label: "Setting", icon: <FaCog />, href: "/internal/sidebar/setting" },

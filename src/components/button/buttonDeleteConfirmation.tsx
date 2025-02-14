@@ -23,7 +23,6 @@ const ButtonDeleteWithConfirmation: React.FC<ButtonDeleteProps> = ({ id, onDelet
   return (
     <div onClick={(e) => e.stopPropagation()}>
       <ActionIcon
-        mt={22}
         onClick={openDeleteModal}
         size="2.5rem"
         radius="xl"

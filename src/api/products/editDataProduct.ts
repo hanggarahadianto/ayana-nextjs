@@ -2,16 +2,16 @@ import { useMutation } from "@tanstack/react-query"; // Correct import from '@ta
 import { showNotification } from "@mantine/notifications";
 import { APIAxiosInstance } from "@/src/api";
 
-const handleSubmitProductForm = async (values: IProjectCreate) => {
+const handleEditProductForm = async (values: IProjectCreate) => {
   console.log("values on fetching", values);
-  const response = await APIAxiosInstance.post(`home/post`, values);
+  const response = await APIAxiosInstance.post(`home/edit`, values);
   return response.data; // Return the response data
 };
 
 // Custom hook for the mutation
-export const useSubmitProductForm = (refetchProductData: () => void, closeModal: () => void) => {
+export const useEditProductForm = (refetchProductData: () => void, closeModal: () => void) => {
   return useMutation({
-    mutationFn: (values: any) => handleSubmitProductForm(values),
+    mutationFn: (values: any) => handleEditProductForm(values),
     onSuccess: (data: any) => {
       console.log("pesan sukses terkirim");
       refetchProductData();

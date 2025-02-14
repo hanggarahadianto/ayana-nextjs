@@ -1,15 +1,16 @@
 "use client";
 
-import { Button, Card, Group, SimpleGrid, Text, Stack, ActionIcon } from "@mantine/core";
+import { Card, Group, SimpleGrid, Text, Stack, ActionIcon } from "@mantine/core";
 
 import { useQuery } from "@tanstack/react-query";
-import { getDataProject } from "@/src/api/project/getDataProject";
-
-import Link from "next/link";
 import { useDeleteDataProject } from "@/src/api/project/deleteDataProject";
 import ButtonDeleteWithConfirmation from "@/src/components/button/buttonDeleteConfirmation";
 import AddProductModal from "./AddProductModal";
 import { getDataProduct } from "@/src/api/products/getDataProduct";
+import BreathingActionIcon from "@/src/components/button/buttonAction";
+import { IconEye, IconPencil, IconPlus } from "@tabler/icons-react";
+import EditProductModal from "./EditProductModa";
+import { useState } from "react";
 
 const ProjectPage = () => {
   const {
@@ -30,6 +31,12 @@ const ProjectPage = () => {
 
   console.log("Project Data", productData?.data);
 
+  const [selectedProduct, setSelectedProduct] = useState<IProductUpdate | undefined>(undefined);
+
+  const handleSelectProduct = (product: IProductUpdate) => {
+    setSelectedProduct(product);
+  };
+
   return (
     <>
       <Group justify="space-between">
@@ -41,12 +48,13 @@ const ProjectPage = () => {
         </Stack>
       </Group>
 
-      <SimpleGrid mt={40} cols={4} p={40}>
+      <SimpleGrid mt={40} cols={3} p={40}>
         {productData?.data.map((product) => (
           <Card
+            mt={20}
             key={product.id}
-            w={320}
-            h={160}
+            w={420}
+            h={180}
             style={{
               background: "linear-gradient(135deg, rgba(255, 0, 150, 0.5), rgba(0, 204, 255, 0.5))",
               backdropFilter: "blur(8px)",
@@ -56,22 +64,43 @@ const ProjectPage = () => {
               position: "relative", // Ensures delete button positioning works
               cursor: "pointer",
             }}
+            onClick={() => handleSelectProduct(product)}
           >
-            <Link href={`/internal/sidebar/project/${product.id}`} passHref legacyBehavior>
-              <Group justify="space-between">
-                <Stack gap={4} align="start">
-                  <Group justify="space-between" w="100%">
-                    <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
-                      {product.title}
-                    </Text>
-                  </Group>
-
-                  <Text fw={500} mt={16} size="lg" style={{ color: "#ffffff" }}>
-                    {product.address}
+            <Group justify="space-between">
+              <Stack gap={4} align="start">
+                <Group justify="space-between" w="100%">
+                  <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
+                    {product.title}
                   </Text>
-                </Stack>
-              </Group>
-            </Link>
+                </Group>
+
+                <Text fw={500} mt={16} size="lg" style={{ color: "#ffffff" }}>
+                  {product.address}
+                </Text>
+              </Stack>
+            </Group>
+
+            <Group justify="space-between" mt={20}>
+              <Stack>
+                <BreathingActionIcon
+                  onClick={open}
+                  size="2.5rem"
+                  icon={<IconEye size="1rem" />}
+                  color="linear-gradient(45deg, #007bff, #00c6ff)"
+                />
+              </Stack>
+              <Stack>
+                <EditProductModal initialData={selectedProduct} refetchProductData={refetchProductData} />
+              </Stack>
+
+              <Stack>
+                <ButtonDeleteWithConfirmation
+                  id={product.id}
+                  onDelete={handleDeleteProject}
+                  description={`Apakah anda ingin menghapus proyek ${product?.title} ?`}
+                />
+              </Stack>
+            </Group>
           </Card>
         ))}
       </SimpleGrid>

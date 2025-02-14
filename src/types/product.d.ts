@@ -1,6 +1,7 @@
 interface IProduct {
   id: string;
   title: string;
+  location: string;
   content: string;
   image: string;
   address: string;
@@ -10,15 +11,16 @@ interface IProduct {
   status: string;
   price: number;
   quantity: number;
-  reservation: any;
+  file: string;
   created_at: string;
   updated_at: string;
 }
 
 interface IProductCreate {
   title: string;
+  location: string;
+  type: string;
   content: string;
-  image: string;
   address: string;
   bathroom: string;
   bedroom: string;
@@ -26,24 +28,22 @@ interface IProductCreate {
   status: string;
   price: number;
   quantity: number;
-  reservation: any;
+  file: string;
 }
 
 interface IProductUpdate {
   id: string;
-  title?: string;
-  content?: string;
-  image?: string;
-  address?: string;
-  bathroom?: string;
-  bedroom?: string;
-  square?: string;
-  status?: string;
-  price?: number;
-  quantity?: number;
-  reservation?: any;
-  created_at?: string;
-  updated_at?: string;
+  title: string;
+  location: string;
+  content: string;
+  address: string;
+  bathroom: string;
+  bedroom: string;
+  square: string;
+  status: string;
+  price: number;
+  quantity: number;
+  file: string;
 }
 
 interface IProductResponse {
