@@ -77,7 +77,7 @@ const ProjectPage = () => {
                   </Text>
                 </Stack>
 
-                <Stack mt={-100}>
+                <Stack mt={-80}>
                   <ButtonDeleteWithConfirmation
                     id={project.id}
                     onDelete={handleDeleteProject}

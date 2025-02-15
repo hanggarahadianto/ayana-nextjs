@@ -145,7 +145,7 @@ const LandingPage = () => {
 
       {!isMobile && (
         <SimpleGrid cols={1} style={{ backgroundColor: "#ece6dc", height: "28vh" }} spacing="lg">
-          <Group align="center" mt={-400}>
+          <Group justify="center" align="center" mt={-400}>
             {cards.map((card, index) => (
               <Grid key={index} p="md">
                 <Grid.Col span={12}>

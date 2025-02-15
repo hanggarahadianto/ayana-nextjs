@@ -1,44 +1,36 @@
-import { ActionIcon } from "@mantine/core";
-import { useState, ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface BreathingActionIconProps {
   onClick: () => void;
   size: string | number;
   icon: ReactNode;
   color?: string;
+  gradient?: string;
 }
 
-const BreathingActionIcon = ({ onClick, size, icon, color = "linear-gradient(45deg, #007bff, #00c6ff)" }: BreathingActionIconProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-
+const BreathingActionIcon = ({ onClick, size, icon, color = "white", gradient }: BreathingActionIconProps) => {
   return (
-    <div>
-      <style>
-        {`
-          @keyframes breathing {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 1; }
-          }
-        `}
-      </style>
-
-      <ActionIcon
-        onClick={onClick}
-        size={size}
-        radius="lg"
-        style={{
-          transition: "transform 0.3s ease-in-out",
-          animation: isHovered ? "breathing 1.5s infinite ease-in-out" : "none",
-          background: color, // Apply gradient as background
-          color: "white", // Ensure icon remains visible
-        }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {icon}
-      </ActionIcon>
-    </div>
+    <button
+      onClick={onClick}
+      style={{
+        width: size,
+        height: size,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: "50%",
+        background: gradient || "linear-gradient(135deg, #38a169, #2f855a)", // Default green gradient
+        color: color,
+        border: "none",
+        cursor: "pointer",
+        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+        transition: "transform 0.3s ease-in-out",
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+      onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+    >
+      {icon}
+    </button>
   );
 };
 

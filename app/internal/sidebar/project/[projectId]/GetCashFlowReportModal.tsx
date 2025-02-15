@@ -52,7 +52,12 @@ const GetCashFlowReportModal = ({
 
   return (
     <>
-      <BreathingActionIcon onClick={open} size={"3rem"} icon={<IconEye size="1.5rem" />} />
+      <BreathingActionIcon
+        onClick={open}
+        size="3rem"
+        icon={<IconEye size="1.5rem" />}
+        gradient="linear-gradient(135deg, #D8B4FE, #E9D5FF)"
+      />
 
       <Modal
         opened={opened}

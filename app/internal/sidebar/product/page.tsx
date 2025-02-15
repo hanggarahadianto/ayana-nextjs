@@ -7,10 +7,10 @@ import { useDeleteDataProject } from "@/src/api/project/deleteDataProject";
 import ButtonDeleteWithConfirmation from "@/src/components/button/buttonDeleteConfirmation";
 import AddProductModal from "./AddProductModal";
 import { getDataProduct } from "@/src/api/products/getDataProduct";
-import BreathingActionIcon from "@/src/components/button/buttonAction";
-import { IconEye, IconPencil, IconPlus } from "@tabler/icons-react";
 import EditProductModal from "./EditProductModa";
 import { useState } from "react";
+import GetProductModal from "./GetProductModal";
+import { useDeleteDataProduct } from "@/src/api/products/deleteDataProduct";
 
 const ProjectPage = () => {
   const {
@@ -23,18 +23,18 @@ const ProjectPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  const { mutate: mutateDeleteDataProject, isPending: isLoadingDeleteDataProject } = useDeleteDataProject(refetchProductData);
-
-  const handleDeleteProject = (idToDelete: string) => {
-    mutateDeleteDataProject(idToDelete); // Pass only the string, not an object
-  };
+  const { mutate: mutateDeleteDataProduct, isPending: isLoadingDeleteDataProject } = useDeleteDataProduct(refetchProductData);
 
   console.log("Project Data", productData?.data);
 
-  const [selectedProduct, setSelectedProduct] = useState<IProductUpdate | undefined>(undefined);
+  const [selectedProduct, setSelectedProduct] = useState<IProduct | undefined>(undefined);
 
-  const handleSelectProduct = (product: IProductUpdate) => {
+  const handleSelectProduct = (product: IProduct) => {
     setSelectedProduct(product);
+  };
+
+  const handleDeleteProduct = (idToDelete: string) => {
+    mutateDeleteDataProduct(idToDelete); // Pass only the string, not an object
   };
 
   return (
@@ -80,23 +80,19 @@ const ProjectPage = () => {
               </Stack>
             </Group>
 
-            <Group justify="space-between" mt={20}>
+            <Group justify="flex-end" mt={20}>
               <Stack>
-                <BreathingActionIcon
-                  onClick={open}
-                  size="2.5rem"
-                  icon={<IconEye size="1rem" />}
-                  color="linear-gradient(45deg, #007bff, #00c6ff)"
-                />
+                {" "}
+                <GetProductModal productData={selectedProduct} />
               </Stack>
-              <Stack>
+              <Stack mr={20}>
                 <EditProductModal initialData={selectedProduct} refetchProductData={refetchProductData} />
               </Stack>
 
               <Stack>
                 <ButtonDeleteWithConfirmation
                   id={product.id}
-                  onDelete={handleDeleteProject}
+                  onDelete={handleDeleteProduct}
                   description={`Apakah anda ingin menghapus proyek ${product?.title} ?`}
                 />
               </Stack>

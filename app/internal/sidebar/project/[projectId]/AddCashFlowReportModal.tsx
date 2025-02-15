@@ -65,7 +65,12 @@ const AddCashFlowReportModal = ({
 
   return (
     <>
-      <BreathingActionIcon onClick={open} size={"3rem"} icon={<IconPlus size="1rem" />} />
+      <BreathingActionIcon
+        onClick={open}
+        size="3rem"
+        icon={<IconPlus size="1.5rem" />}
+        gradient="linear-gradient(135deg, #A3E635, #86EFAC)"
+      />
 
       <Modal
         opened={opened}
@@ -187,26 +192,10 @@ const AddCashFlowReportModal = ({
                       />
                     </InputWrapper>
 
-                    <InputWrapper required error={touched.week_number && errors.week_number ? errors.week_number : undefined}>
-                      <Select
-                        label="Minggu Ke"
-                        placeholder="Pilih Minggu"
-                        onChange={(value: any) => {
-                          setFieldValue("week_number", value);
-                        }}
-                        data={[
-                          { value: "1", label: "1" },
-                          { value: "2", label: "2" },
-                          { value: "3", label: "3" },
-                          { value: "4", label: "4" },
-                          { value: "5", label: "5" },
-                          { value: "6", label: "6" },
-                          { value: "7", label: "7" },
-                          { value: "8", label: "8" },
-                        ]}
-                        required
-                      />
-                    </InputWrapper>
+                    <InputWrapper
+                      required
+                      error={touched.week_number && errors.week_number ? errors.week_number : undefined}
+                    ></InputWrapper>
                     <InputWrapper required error={touched.cash_in && errors.cash_in ? errors.cash_in : undefined}>
                       <TextInput
                         value={values?.cash_in ? `Rp. ${values?.cash_in.toLocaleString("id-ID")}` : ""}

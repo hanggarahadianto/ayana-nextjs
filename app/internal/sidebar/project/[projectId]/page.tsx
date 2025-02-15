@@ -7,7 +7,6 @@ import React, { FC, use, useState } from "react";
 import { getDataWeeklyProgress } from "@/src/api/weekly-progress/getDataWeeklyProgress";
 import AddWeeklyProgressModal from "./AddWeeklyProgressModal";
 import AddCashFlowReportModal from "./AddCashFlowReportModal";
-import { getDataCashFlowById } from "@/src/api/cash-flow/getDataCashFlowById";
 import GetCashFlowReportModal from "./GetCashFlowReportModal";
 import EditWeeklyProgressModal from "./EditWeeklyProgressModal";
 import EditProjectModal from "../EditProjectModal";
@@ -137,31 +136,45 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
                     width: "450px",
                   }}
                 >
-                  <Text fw={900} mb={12}>
-                    Buku Kas Umum
-                  </Text>
-                  <Group gap={18}>
-                    <AddCashFlowReportModal
-                      cashFlowData={cashFlowData?.data}
-                      projectName={projectDataDetail?.project_name}
-                      refetchCashFlowData={refetchCashFlowData}
-                      projectId={projectDataDetail?.id}
-                    />
-                    <EditCashFlowReportModal
-                      projectName={projectDataDetail?.project_name}
-                      cashFlowData={cashFlowData?.data || []}
-                      refetchCashFlowData={refetchCashFlowData}
-                      projectId={projectDataDetail?.id}
-                    />
-                    <Stack ml={20}>
-                      <GetCashFlowReportModal
-                        projectName={projectDataDetail?.project_name}
-                        cashFlowData={cashFlowData?.data || []}
-                        refetchWeeklyProgressData={refetchWeeklyProgressData}
-                        totalCost={projectDataDetail?.total_cost}
-                      />
-                    </Stack>
-                  </Group>
+                  <Grid>
+                    <Grid.Col span={4}>
+                      <Stack>
+                        <Text fw={900} mb={12}>
+                          Buku Kas Umum
+                        </Text>
+                        <Group gap={18}>
+                          <AddCashFlowReportModal
+                            cashFlowData={cashFlowData?.data}
+                            projectName={projectDataDetail?.project_name}
+                            refetchCashFlowData={refetchCashFlowData}
+                            projectId={projectDataDetail?.id}
+                          />
+                          <EditCashFlowReportModal
+                            projectName={projectDataDetail?.project_name}
+                            cashFlowData={cashFlowData?.data || []}
+                            refetchCashFlowData={refetchCashFlowData}
+                            projectId={projectDataDetail?.id}
+                          />
+                          <Stack ml={20}>
+                            <GetCashFlowReportModal
+                              projectName={projectDataDetail?.project_name}
+                              cashFlowData={cashFlowData?.data || []}
+                              refetchWeeklyProgressData={refetchWeeklyProgressData}
+                              totalCost={projectDataDetail?.total_cost}
+                            />
+                          </Stack>
+                        </Group>
+                      </Stack>
+                    </Grid.Col>
+                    <Grid.Col span={3}>
+                      <Stack justify="center" align="center">
+                        <Text fw={900}>Realisasi Investor</Text>
+                        <Text fw={900} size="xl">
+                          Rp {totalCashIn?.toLocaleString("id-ID")}
+                        </Text>
+                      </Stack>
+                    </Grid.Col>
+                  </Grid>
                 </Card>
               </SimpleGrid>
             </Box>

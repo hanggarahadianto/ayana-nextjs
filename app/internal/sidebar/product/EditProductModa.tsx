@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, TextInput, Button, Group, Select, Textarea, InputWrapper, NumberInput, Stack, Text } from "@mantine/core";
+import { Modal, TextInput, Button, Group, Select, Textarea, InputWrapper, NumberInput, Stack, Text, FileInput, Flex } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import BreathingActionIcon from "@/src/components/button/buttonAction";
@@ -43,6 +43,8 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ initialData, refetc
     }
   }, [initialData]);
 
+  console.log("INITIAL DATA", initialData);
+
   return (
     <>
       <Stack>
@@ -53,7 +55,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ initialData, refetc
           color="linear-gradient(45deg, #90ee90, #00c6ff)"
         />
       </Stack>
-      <Modal opened={opened} onClose={close} size="xl" yOffset="100px">
+      <Modal opened={opened} onClose={close} size="60rem" yOffset="100px">
         <Formik
           initialValues={getInitialValuesUpdateProduct(initialData)}
           enableReinitialize
@@ -62,56 +64,140 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ initialData, refetc
           validateOnMount={false}
           onSubmit={handleSubmit}
         >
-          {({ values, setFieldValue }) => (
-            <Form>
-              <Stack p={20}>
-                <Text>EDIT PRODUK</Text>
-                <Text>{values?.title}</Text>
-                <TextInput label="Title" value={values.title} onChange={(e) => setFieldValue("title", e.target.value)} />
-                <InputWrapper
-                  label="Nama Lokasi"
-                  withAsterisk
-                  //  error={touched.location && errors.location ? errors.location : undefined}
-                >
-                  <Select
-                    placeholder="Pilih Lokasi"
-                    onChange={(value: any) => setFieldValue("location", value)}
-                    data={[
-                      { value: "GAW", label: "GAW" },
-                      { value: "ABW", label: "ABW" },
-                    ]}
-                  />
-                </InputWrapper>
-                <Textarea label="Content" value={values.content} onChange={(e) => setFieldValue("content", e.target.value)} />
-                <TextInput label="Address" value={values.address} onChange={(e) => setFieldValue("address", e.target.value)} />
-                <NumberInput label="Bathroom" value={values.bathroom} onChange={(value) => setFieldValue("bathroom", value)} />
-                <NumberInput label="Bedroom" value={values.bedroom} onChange={(value) => setFieldValue("bedroom", value)} />
-                <NumberInput label="Square" value={values.square} onChange={(value) => setFieldValue("square", value)} />
-                <Select
-                  label="Status"
-                  value={values.status}
-                  onChange={(value) => setFieldValue("status", value)}
-                  data={[
-                    { value: "available", label: "Available" },
-                    { value: "sold", label: "Sold" },
-                  ]}
-                />
-                <NumberInput label="Price" value={values.price} onChange={(value) => setFieldValue("price", value)} />
-                <NumberInput label="Quantity" value={values.quantity} onChange={(value) => setFieldValue("quantity", value)} />
-                {/* <InputWrapper label="Upload File">
-                  <input type="file" onChange={(e) => setFieldValue("file", e.target.files[0])} />
-                </InputWrapper> */}
-                <Group justify="flex-end" mt="md">
-                  <Button onClick={close} variant="default">
-                    Cancel
-                  </Button>
-                  <Button type="submit" loading={isLoadingUpdateProductData}>
-                    Update Product
-                  </Button>
-                </Group>
-              </Stack>
-            </Form>
-          )}
+          {({ values, setFieldValue }) => {
+            console.log("EDIT", values);
+            return (
+              <Form>
+                <Stack p={20}>
+                  <Flex>
+                    <Text>EDIT PRODUK</Text>
+                    <Text>{values?.title}</Text>
+                  </Flex>
+
+                  <InputWrapper
+                    label="Nama Produk"
+                    withAsterisk
+                    // error={touched.unit && errors.unit ? errors.unit : undefined}
+                  >
+                    <TextInput
+                      value={values?.title}
+                      placeholder="Masukan Nama Produk"
+                      onChange={(event) => setFieldValue("title", event.currentTarget.value)}
+                    />
+                  </InputWrapper>
+                  <InputWrapper
+                    label="Nama Lokasi"
+                    withAsterisk
+                    //  error={touched.location && errors.location ? errors.location : undefined}
+                  >
+                    <Select
+                      value={values?.location}
+                      placeholder="Pilih Lokasi"
+                      onChange={(value: any) => setFieldValue("location", value)}
+                      data={[
+                        { value: "GAW", label: "GAW" },
+                        { value: "ABW", label: "ABW" },
+                      ]}
+                    />
+                  </InputWrapper>
+
+                  <InputWrapper label="Address" required>
+                    <TextInput
+                      placeholder="Enter address"
+                      value={values.address}
+                      onChange={(e) => setFieldValue("address", e.target.value)}
+                    />
+                  </InputWrapper>
+                  <InputWrapper label="Description" required>
+                    <Textarea
+                      placeholder="Enter description"
+                      value={values.content}
+                      onChange={(e) => setFieldValue("content", e.target.value)}
+                    />
+                  </InputWrapper>
+                  <Group>
+                    <InputWrapper label="Bathroom" required>
+                      <NumberInput
+                        hideControls
+                        placeholder="Enter number of bathrooms"
+                        value={values.bathroom}
+                        onChange={(value) => setFieldValue("bathroom", value)}
+                      />
+                    </InputWrapper>
+
+                    <InputWrapper label="Bedroom" required>
+                      <NumberInput
+                        hideControls
+                        placeholder="Enter number of bedrooms"
+                        value={values.bedroom}
+                        onChange={(value) => setFieldValue("bedroom", value)}
+                      />
+                    </InputWrapper>
+                    <InputWrapper label="Square Meters" required>
+                      <NumberInput
+                        hideControls
+                        placeholder="Enter square meters"
+                        value={values.square}
+                        onChange={(value) => setFieldValue("square", value)}
+                      />
+                    </InputWrapper>
+                  </Group>
+                  <Group>
+                    <InputWrapper label="Status" required>
+                      <Select
+                        // w={200}
+                        placeholder="Select status"
+                        data={[
+                          { value: "available", label: "Available" },
+                          { value: "sold", label: "Sold" },
+                        ]}
+                        value={values.status}
+                        onChange={(value) => setFieldValue("status", value)}
+                      />
+                    </InputWrapper>
+                    <InputWrapper label="Price" required>
+                      <TextInput
+                        placeholder="Enter price"
+                        value={values.price ? `Rp. ${values.price.toLocaleString("id-ID")}` : ""}
+                        onChange={(event) => {
+                          const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+                          const numericValue = Number(rawValue) || 0;
+                          setFieldValue("price", numericValue); // Store as number
+                        }}
+                      />
+                    </InputWrapper>
+
+                    <InputWrapper label="Quantity" required>
+                      <NumberInput
+                        hideControls
+                        placeholder="Enter quantity"
+                        value={values.quantity}
+                        onChange={(value) => setFieldValue("quantity", value)}
+                      />
+                    </InputWrapper>
+                  </Group>
+                  <InputWrapper label="Upload files" required>
+                    <FileInput
+                      //   value={values?.file}
+                      accept="image/png,image/jpeg"
+                      w={200}
+                      clearable
+                      placeholder="Upload files"
+                      onChange={(file) => setFieldValue("file", file)}
+                    />
+                  </InputWrapper>
+                  <Group justify="flex-end" mt="md">
+                    <Button onClick={close} variant="default">
+                      Cancel
+                    </Button>
+                    <Button type="submit" loading={isLoadingUpdateProductData}>
+                      Update Product
+                    </Button>
+                  </Group>
+                </Stack>
+              </Form>
+            );
+          }}
         </Formik>
       </Modal>
     </>

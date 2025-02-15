@@ -116,6 +116,17 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
                     </Group>
                     <Stack gap={20}>
                       <InputWrapper
+                        label="Investor"
+                        withAsterisk
+                        error={touched.project_leader && errors.project_leader ? errors.project_leader : undefined}
+                      >
+                        <TextInput
+                          placeholder="Masukan Investor"
+                          value={values.project_leader?.toUpperCase() || ""}
+                          onChange={(event) => setFieldValue("investor", event.currentTarget.value.toUpperCase())}
+                        />
+                      </InputWrapper>
+                      <InputWrapper
                         label="Penanggung Jawab"
                         withAsterisk
                         error={touched.project_leader && errors.project_leader ? errors.project_leader : undefined}
@@ -151,11 +162,11 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
                             setFieldValue("project_time", value);
                           }}
                           data={[
-                            { value: "30", label: "30 Hari" },
-                            { value: "40", label: "40 Hari" },
-                            { value: "60", label: "60 Hari" },
-                            { value: "90", label: "90 Hari" },
-                            { value: "120", label: "120 Hari" },
+                            { value: "35", label: "35 Hari" },
+                            { value: "45", label: "45 Hari" },
+                            { value: "65", label: "65 Hari" },
+                            { value: "95", label: "95 Hari" },
+                            { value: "125", label: "125 Hari" },
                           ]}
                           required
                         />

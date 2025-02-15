@@ -32,7 +32,12 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData: IP
 
   return (
     <>
-      <BreathingActionIcon onClick={open} size={"3.5rem"} icon={<FiSettings size="1.6rem" />} />
+      <BreathingActionIcon
+        onClick={open}
+        size="3.5rem"
+        icon={<FiSettings size="1.6rem" color="#4B5563" />} // Darker icon color for better contrast
+        gradient="linear-gradient(135deg, #F3F4F6, #FFFFFF)"
+      />
 
       <Modal opened={opened} onClose={close} size="xl" yOffset="100px">
         <Formik

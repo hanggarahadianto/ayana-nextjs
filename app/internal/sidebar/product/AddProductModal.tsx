@@ -182,7 +182,13 @@ const AddProductModal = ({ refetchProductData }: { refetchProductData: () => voi
                   </Group>
 
                   <InputWrapper label="Upload files" required>
-                    <FileInput w={200} clearable placeholder="Upload files" onChange={(file) => setFieldValue("file", file)} />
+                    <FileInput
+                      accept="image/png,image/jpeg"
+                      w={200}
+                      clearable
+                      placeholder="Upload files"
+                      onChange={(file) => setFieldValue("file", file)}
+                    />
                   </InputWrapper>
                 </SimpleGrid>
 

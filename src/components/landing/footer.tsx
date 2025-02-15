@@ -15,7 +15,7 @@ const Footer = () => {
 
   return (
     <SimpleGrid p="md" bg={"#363a3d"}>
-      <Grid gutter={isMobile ? "md" : "xl"}>
+      <Grid gutter={isMobile ? "md" : "xl"} ml={40}>
         {/* Logo & Address Section */}
         <Grid.Col span={isMobile ? 12 : 4}>
           <Stack align={isMobile ? "center" : "flex-start"} gap="md">
@@ -49,7 +49,7 @@ const Footer = () => {
                 Bank Partners
               </Text>
             </Link>
-            <Link href="/internal/sidebar/project" passHref style={{ textDecoration: "none" }}>
+            <Link href="/internal/sidebar/product" passHref style={{ textDecoration: "none" }}>
               <Text c="white" size={isMobile ? "sm" : "md"}>
                 Internal
               </Text>
