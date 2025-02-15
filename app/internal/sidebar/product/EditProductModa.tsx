@@ -4,7 +4,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import BreathingActionIcon from "@/src/components/button/buttonAction";
 import { getInitialValuesUpdateProduct } from "./initialValuesProduct";
-import { IconPencil } from "@tabler/icons-react";
+import { IconEdit, IconPencil } from "@tabler/icons-react";
 import { useEditProductForm } from "@/src/api/products/editDataProduct";
 
 interface EditProductModalProps {
@@ -51,8 +51,8 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ initialData, refetc
         <BreathingActionIcon
           onClick={open}
           size="2.5rem"
-          icon={<IconPencil size="1rem" />}
-          color="linear-gradient(45deg, #90ee90, #00c6ff)"
+          icon={<IconEdit size="1rem" />}
+          gradient="linear-gradient(135deg, #93C5FD, #BFDBFE)"
         />
       </Stack>
       <Modal opened={opened} onClose={close} size="60rem" yOffset="100px">

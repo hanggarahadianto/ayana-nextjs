@@ -9,7 +9,12 @@ const GetProductModal = ({ productData }: { productData?: IProduct }) => {
 
   return (
     <>
-      <BreathingActionIcon onClick={open} size={"2.5rem"} icon={<IconEye size="1rem" />} />
+      <BreathingActionIcon
+        onClick={open}
+        size="2.5rem"
+        icon={<IconEye size="1rem" />}
+        gradient="linear-gradient(135deg, #D8B4FE, #E9D5FF)"
+      />
       <Modal opened={opened} onClose={close} size={"60rem"} title="Product Details" yOffset="100px">
         <ScrollArea>
           <Paper p="md" shadow="sm">
