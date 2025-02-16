@@ -15,9 +15,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
 
+  // Load session data when the component mounts
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
+    const storedToken = sessionStorage.getItem("token");
+    const storedUser = sessionStorage.getItem("user");
 
     if (storedToken && storedUser) {
       setToken(storedToken);
@@ -29,15 +30,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const { token, user } = await handleLogin(username, password);
 
+      console.log("handleLogin response:", { token, user });
       if (token) {
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
+        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("user", JSON.stringify(user));
+
+        sessionStorage.setItem("test", "hello");
+        console.log(sessionStorage.getItem("test"));
 
         setUser(user);
         setToken(token);
 
-        // Redirect immediately after successful login
         router.replace("/internal/sidebar/product");
+      } else {
+        router.replace("/auth/login");
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -45,8 +51,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
     setUser(null);
     setToken(null);
     router.push("/login");

@@ -8,11 +8,16 @@ import { FaTasks, FaProjectDiagram, FaUser, FaCog, FaHome } from "react-icons/fa
 import { motion, AnimatePresence } from "framer-motion";
 import { AuthProvider } from "@/src/utils/authProvider"; // Import AuthProvider
 import Navbar from "@/src/components/landing/navbar";
+import useUserWhoLogin from "@/src/utils/userWhoLogin";
+import { useSession } from "next-auth/react";
 export default function InternalLayout({ children }: { children: React.ReactNode }) {
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
   const [opened, { toggle }] = useDisclosure();
   const [isMounted, setIsMounted] = useState(false);
+
+  const { data: session } = useSession();
+  console.log(session ? "Logged-in User by Session Storage:" : "No user found in localStorage.", session);
 
   useEffect(() => {
     setIsMounted(true);

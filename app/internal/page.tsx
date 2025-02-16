@@ -3,17 +3,19 @@
 import { redirect } from "next/navigation";
 import { useAuth } from "@/src/utils/authProvider";
 import InternalLayout from "./layout";
+import { signOut, useSession } from "next-auth/react";
 
 const InternalPage = () => {
-  const { user } = useAuth(); // Get auth state
+  const { data: session } = useSession();
 
-  if (!user) {
-    redirect("/auth/login"); // Redirect before rendering
+  if (!session) {
+    return <p>Loading...</p>;
   }
 
   return (
     <InternalLayout>
-      <div>Welcome to the Internal Page</div>
+      <h1>Welcome, {session.user?.username}!</h1>
+      <button onClick={() => signOut()}>Logout</button>
     </InternalLayout>
   );
 };

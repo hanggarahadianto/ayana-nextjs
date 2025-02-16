@@ -8,6 +8,9 @@ interface IUser {
   ID: string;
   username: string;
   role: string;
-  created_at: string;
-  updated_at: string;
+}
+
+interface LoginResponse {
+  token: string | null;
+  user: IUser | null;
 }
