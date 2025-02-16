@@ -49,7 +49,7 @@ const Footer = () => {
                 Bank Partners
               </Text>
             </Link>
-            <Link href="/internal/sidebar/product" passHref style={{ textDecoration: "none" }}>
+            <Link href="/auth/login" passHref style={{ textDecoration: "none" }}>
               <Text c="white" size={isMobile ? "sm" : "md"}>
                 Internal
               </Text>

@@ -1,24 +1,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Navbar from "@/src/components/landing/navbar";
-import { AppShell, Burger, NavLink, SimpleGrid, Stack, Title, useMantineTheme, rem, useMantineColorScheme } from "@mantine/core";
+import { AppShell, NavLink, SimpleGrid, Stack, useMantineTheme, rem, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
 import { FaTasks, FaProjectDiagram, FaUser, FaCog, FaHome } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-
+import { AuthProvider } from "@/src/utils/authProvider"; // Import AuthProvider
+import Navbar from "@/src/components/landing/navbar";
 export default function InternalLayout({ children }: { children: React.ReactNode }) {
   const theme = useMantineTheme();
-  const { colorScheme } = useMantineColorScheme(); // Handles Dark Mode automatically
+  const { colorScheme } = useMantineColorScheme();
   const [opened, { toggle }] = useDisclosure();
-  const [isMounted, setIsMounted] = useState(false); // Fix hydration mismatch
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  if (!isMounted) return null; // Avoid rendering on server to prevent mismatch
+  if (!isMounted) return null; // Prevent hydration error
 
   const isDark = colorScheme === "dark";
 
@@ -31,9 +31,10 @@ export default function InternalLayout({ children }: { children: React.ReactNode
   ];
 
   return (
-    <>
+    <AuthProvider>
+      {" "}
+      {/* ✅ Wrap InternalLayout with AuthProvider */}
       <Navbar />
-
       <SimpleGrid>
         <AppShell
           padding="md"
@@ -45,23 +46,18 @@ export default function InternalLayout({ children }: { children: React.ReactNode
             collapsed: { mobile: !opened },
           }}
           style={{
-            background: isDark ? "linear-gradient(135deg, #121212, #1e1e1e)" : "linear-gradient(135deg, #2e7d32, #2a5298)", // blue
-
+            background: isDark ? "linear-gradient(135deg, #121212, #1e1e1e)" : "linear-gradient(135deg, #2e7d32, #2a5298)",
             minHeight: "100vh",
             color: isDark ? theme.colors.gray[3] : "white",
           }}
         >
           {/* Sidebar */}
           <AppShell.Navbar
-            // mt={40}
             pt="xl"
-            p={"xl"}
-            style={{
-              background: isDark ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.1)",
-              backdropFilter: "blur(10px)",
-            }}
+            p="xl"
+            style={{ background: isDark ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.1)", backdropFilter: "blur(10px)" }}
           >
-            <Stack mt={40} gap="md">
+            <Stack mt={40} gap="md" pt={40}>
               <AnimatePresence>
                 {menuItems.map((item, index) => (
                   <motion.div
@@ -76,13 +72,7 @@ export default function InternalLayout({ children }: { children: React.ReactNode
                       href={item.href}
                       label={item.label}
                       leftSection={item.icon}
-                      style={{
-                        color: "white",
-                        fontWeight: "bold",
-                        borderRadius: rem(8),
-                        padding: rem(12),
-                        transition: "all 0.3s",
-                      }}
+                      style={{ color: "white", fontWeight: "bold", borderRadius: rem(8), padding: rem(12), transition: "all 0.3s" }}
                       onMouseEnter={(e) =>
                         (e.currentTarget.style.background = isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.2)")
                       }
@@ -98,6 +88,6 @@ export default function InternalLayout({ children }: { children: React.ReactNode
           <AppShell.Main>{children}</AppShell.Main>
         </AppShell>
       </SimpleGrid>
-    </>
+    </AuthProvider>
   );
 }

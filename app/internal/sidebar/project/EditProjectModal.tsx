@@ -73,76 +73,83 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData: IP
                   </InputWrapper>
 
                   <InputWrapper required error={touched.total_cost && errors.total_cost ? errors.total_cost : undefined}>
-                    <NumberInput
-                      hideControls
-                      label="Biaya Proyek"
-                      value={values.total_cost || ""}
-                      onChange={(value) => setFieldValue("total_cost", value)}
+                    <TextInput
+                      w={240}
+                      label="Harga"
+                      placeholder="Masukan Harga"
+                      value={values.total_cost ? `Rp. ${values.total_cost.toLocaleString("id-ID")}` : ""}
+                      onChange={(event) => {
+                        const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+                        const numericValue = Number(rawValue) || 0;
+                        setFieldValue("total_cost", numericValue); // Store as number
+                      }}
                     />
                   </InputWrapper>
-
-                  <InputWrapper required error={touched.project_time && errors.project_time ? errors.project_time : undefined}>
-                    <Select
-                      label="Durasi Project"
-                      placeholder="Pilih Durasi Waktu"
-                      value={values.project_time}
-                      onChange={(value) => setFieldValue("project_time", value)}
-                      data={[
-                        { value: "30", label: "30 Hari" },
-                        { value: "40", label: "40 Hari" },
-                        { value: "60", label: "60 Hari" },
-                        { value: "90", label: "90 Hari" },
-                        { value: "120", label: "120 Hari" },
-                      ]}
-                    />
-                  </InputWrapper>
-
                   <Group>
-                    <InputWrapper
-                      label="Tanggal Mulai"
-                      required
-                      error={touched.project_start && errors.project_start ? errors.project_start : undefined}
-                    >
-                      <DatePickerInput
-                        w={200}
-                        type="default"
-                        firstDayOfWeek={0}
-                        placeholder="Tanggal Mulai"
-                        clearable
-                        locale="id"
-                        radius="sm"
-                        valueFormat="DD MMMM YYYY"
-                        rightSection={<IconCalendar size={18} />}
-                        value={values.project_start ? new Date(values.project_start) : null} // ✅ Ensure it's always a Date
-                        onChange={(value: Date | null) => {
-                          handleInputChange(setFieldValue, "project_start", value ? value.toISOString() : null);
-                        }}
-                        onBlur={handleBlur}
+                    <InputWrapper required error={touched.project_time && errors.project_time ? errors.project_time : undefined}>
+                      <Select
+                        w={140}
+                        label="Durasi Project"
+                        placeholder="Pilih Durasi Waktu"
+                        value={values.project_time}
+                        onChange={(value) => setFieldValue("project_time", value)}
+                        data={[
+                          { value: "35", label: "35 Hari" },
+                          { value: "45", label: "45 Hari" },
+                          { value: "65", label: "65 Hari" },
+                          { value: "95", label: "95 Hari" },
+                          { value: "125", label: "125 Hari" },
+                        ]}
                       />
                     </InputWrapper>
 
-                    <InputWrapper
-                      label="Tanggal Selesai"
-                      required
-                      error={touched.project_end && errors.project_end ? errors.project_end : undefined}
-                    >
-                      <DatePickerInput
-                        w={200}
-                        type="default"
-                        firstDayOfWeek={0}
-                        placeholder="Tanggal Selesai"
-                        clearable
-                        locale="id"
-                        radius="sm"
-                        valueFormat="DD MMMM YYYY"
-                        rightSection={<IconCalendar size={18} />}
-                        value={values.project_end ? new Date(values.project_end) : null} // ✅ Ensure it's always a Date
-                        onChange={(value: Date | null) => {
-                          handleInputChange(setFieldValue, "project_end", value ? value.toISOString() : null);
-                        }}
-                        onBlur={handleBlur}
-                      />
-                    </InputWrapper>
+                    <Group>
+                      <InputWrapper
+                        label="Tanggal Mulai"
+                        required
+                        error={touched.project_start && errors.project_start ? errors.project_start : undefined}
+                      >
+                        <DatePickerInput
+                          w={200}
+                          type="default"
+                          firstDayOfWeek={0}
+                          placeholder="Tanggal Mulai"
+                          clearable
+                          locale="id"
+                          radius="sm"
+                          valueFormat="DD MMMM YYYY"
+                          rightSection={<IconCalendar size={18} />}
+                          value={values.project_start ? new Date(values.project_start) : null} // ✅ Ensure it's always a Date
+                          onChange={(value: Date | null) => {
+                            handleInputChange(setFieldValue, "project_start", value ? value.toISOString() : null);
+                          }}
+                          onBlur={handleBlur}
+                        />
+                      </InputWrapper>
+
+                      <InputWrapper
+                        label="Tanggal Selesai"
+                        required
+                        error={touched.project_end && errors.project_end ? errors.project_end : undefined}
+                      >
+                        <DatePickerInput
+                          w={200}
+                          type="default"
+                          firstDayOfWeek={0}
+                          placeholder="Tanggal Selesai"
+                          clearable
+                          locale="id"
+                          radius="sm"
+                          valueFormat="DD MMMM YYYY"
+                          rightSection={<IconCalendar size={18} />}
+                          value={values.project_end ? new Date(values.project_end) : null} // ✅ Ensure it's always a Date
+                          onChange={(value: Date | null) => {
+                            handleInputChange(setFieldValue, "project_end", value ? value.toISOString() : null);
+                          }}
+                          onBlur={handleBlur}
+                        />
+                      </InputWrapper>
+                    </Group>
                   </Group>
 
                   <Textarea label="Note" value={values.note} onChange={(event) => setFieldValue("note", event.target.value)} />
