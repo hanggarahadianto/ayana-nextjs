@@ -12,7 +12,7 @@ RUN npm install --production
 COPY . .
 
 # Build Next.js
-RUN npm run build
+RUN yarn install --frozen-lockfile --production
 
 # Expose port and start app
 EXPOSE 3000
