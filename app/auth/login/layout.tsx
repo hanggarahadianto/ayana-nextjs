@@ -1,9 +1,12 @@
-import { AuthProvider } from "@/src/utils/authProvider";
+"use client";
 
-export default function LoginLayout({ children }: { children: React.ReactNode }) {
+import Navbar from "@/src/components/landing/navbar";
+
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <AuthProvider>{children}</AuthProvider>
+      <Navbar />
+      {children}
     </>
   );
 }

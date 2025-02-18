@@ -1,20 +1,18 @@
 "use client";
 
-import { redirect } from "next/navigation";
-import { useAuth } from "@/src/utils/authProvider";
 import InternalLayout from "./layout";
 import { signOut, useSession } from "next-auth/react";
 
 const InternalPage = () => {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
 
-  if (!session) {
-    return <p>Loading...</p>;
-  }
+  // if (!session) {
+  //   return <p>Loading...</p>;
+  // }
 
   return (
     <InternalLayout>
-      <h1>Welcome, {session.user?.username}!</h1>
+      {/* <h1>Welcome, {session.user?.username}!</h1> */}
       <button onClick={() => signOut()}>Logout</button>
     </InternalLayout>
   );

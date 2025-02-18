@@ -1,18 +1,25 @@
-import NextAuth, { DefaultSession, DefaultUser } from "next-auth";
+interface IUser {
+  ID: string;
+  username: string;
+  role: string;
+}
+interface IUserPayload {
+  username: string;
+  password: string;
+}
 
-declare module "next-auth" {
-  interface Session {
+interface IAuthResponse {
+  data: {
     user: {
-      id: string;
-      username: string;
+      ID: string;
+      created_at: string;
+      password: string;
       role: string;
-    } & DefaultSession["user"];
+      updated_at: string;
+      username: string;
+    };
     token: string;
-  }
-
-  interface User extends DefaultUser {
-    id: string;
-    role: string;
-    token: string;
-  }
+  };
+  message: string;
+  status: boolean;
 }

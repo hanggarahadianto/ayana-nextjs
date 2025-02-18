@@ -4,41 +4,47 @@ import { useState, useEffect } from "react";
 import { AppShell, NavLink, SimpleGrid, Stack, useMantineTheme, rem, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
-import { FaTasks, FaProjectDiagram, FaUser, FaCog, FaHome } from "react-icons/fa";
+import { FaTasks, FaProjectDiagram, FaUser, FaCog, FaHome, FaNewspaper, FaShoppingBag, FaIdeal } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import { AuthProvider } from "@/src/utils/authProvider"; // Import AuthProvider
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+
 import Navbar from "@/src/components/landing/navbar";
-import useUserWhoLogin from "@/src/utils/userWhoLogin";
 import { useSession } from "next-auth/react";
+import router from "next/router";
 export default function InternalLayout({ children }: { children: React.ReactNode }) {
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
   const [opened, { toggle }] = useDisclosure();
   const [isMounted, setIsMounted] = useState(false);
 
-  const { data: session } = useSession();
-  console.log(session ? "Logged-in User by Session Storage:" : "No user found in localStorage.", session);
-
   useEffect(() => {
     setIsMounted(true);
-  }, []);
 
-  if (!isMounted) return null; // Prevent hydration error
+    // Check authentication token from cookies
+    const token = Cookies.get("token"); // Replace "auth_token" with your actual cookie name
+
+    if (!token) {
+      router.push("/auth/login"); // Redirect to login page if token is missing
+    }
+  }, [router]);
+
+  if (!isMounted) return null;
 
   const isDark = colorScheme === "dark";
 
   const menuItems = [
-    { label: "Product", icon: <FaHome />, href: "/internal/sidebar/product" },
+    { label: "News", icon: <FaNewspaper />, href: "/internal/sidebar/news" },
     { label: "Task", icon: <FaTasks />, href: "/internal/sidebar/task" },
+    { label: "Marketing", icon: <FaIdeal />, href: "/internal/sidebar/marketing" },
+    { label: "Product", icon: <FaShoppingBag />, href: "/internal/sidebar/product" },
     { label: "Project", icon: <FaProjectDiagram />, href: "/internal/sidebar/project" },
     { label: "Profile", icon: <FaUser />, href: "/internal/sidebar/profile" },
     { label: "Setting", icon: <FaCog />, href: "/internal/sidebar/setting" },
   ];
 
   return (
-    <AuthProvider>
-      {" "}
-      {/* ✅ Wrap InternalLayout with AuthProvider */}
+    <>
       <Navbar />
       <SimpleGrid>
         <AppShell
@@ -93,6 +99,6 @@ export default function InternalLayout({ children }: { children: React.ReactNode
           <AppShell.Main>{children}</AppShell.Main>
         </AppShell>
       </SimpleGrid>
-    </AuthProvider>
+    </>
   );
 }

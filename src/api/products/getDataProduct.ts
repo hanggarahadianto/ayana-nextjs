@@ -1,4 +1,4 @@
-import { APIAxiosInstance } from "@/src/api";
+import { APIAxiosInstance } from "..";
 
 export const getDataProduct = async () => {
   try {

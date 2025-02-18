@@ -3,6 +3,11 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { handleLogin } from "../api/auth/login";
 
+interface IAuth {
+  user: IUser | null;
+  token: string | null;
+}
+
 interface AuthContextType extends IAuth {
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
