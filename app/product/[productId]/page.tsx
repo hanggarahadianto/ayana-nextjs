@@ -17,11 +17,7 @@ import AdditionalInfoProduct from "@/src/components/product/additional-info-prod
 import AdditionalInfoMaps from "@/src/components/product/maps";
 import MyGallery from "@/src/components/product/image-galery";
 
-interface ProductProps {
-  params: { productId: string };
-}
-
-const ProductDetailPage: FC<ProductProps> = ({ params }) => {
+const ProductDetailPage = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const { productId } = useParams() as { productId: string };

@@ -1,26 +1,30 @@
+"use client";
+
 import React from "react";
 import { ActionIcon, Stack, Text } from "@mantine/core";
 import { IconBrandWhatsapp } from "@tabler/icons-react";
-
+import { useMediaQuery } from '@mantine/hooks';
 const FloatingWhatsApp = () => {
-  const phoneNumber = "62895421711315";
-  const message =
+const isMobile = useMediaQuery('(max-width: 768px)');
+const phoneNumber = "62895421711315";
+const message =
     "Halo! Saya menghubungi Anda melalui website dan tertarik dengan rumah yang ditawarkan. Bisa berikan informasi lebih lanjut? Jika ada katalog atau daftar harga, saya ingin melihatnya. Apakah ada promo saat ini? Saya tunggu responnya. Terima kasih! 😊";
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-
-  const handleClick = () => {
+const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+const handleClick = () => {
+if (typeof window !== 'undefined') {
     if (navigator.share) {
-      navigator
+    navigator
         .share({
-          title: "Hubungi Kami via WhatsApp",
-          text: message,
-          url: whatsappUrl,
+        title: "Hubungi Kami via WhatsApp",
+        text: message,
+        url: whatsappUrl,
         })
         .catch((error) => console.log("Error sharing:", error));
     } else {
-      window.open(whatsappUrl, "_blank");
+    window.open(whatsappUrl, "_blank");
     }
-  };
+}
+};
 
   return (
     <div
@@ -52,8 +56,8 @@ const FloatingWhatsApp = () => {
           style={{
             background: "linear-gradient(135deg, #25D366, #128C7E)",
             color: "white",
-            width: window.innerWidth < 768 ? "70px" : "90px",
-            height: window.innerWidth < 768 ? "70px" : "90px",
+            width: isMobile ? "70px" : "90px",
+            height: isMobile ? "70px" : "90px",
             borderRadius: "50%",
             display: "flex",
             alignItems: "center",
@@ -66,7 +70,7 @@ const FloatingWhatsApp = () => {
           onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
           onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
-          <IconBrandWhatsapp size={window.innerWidth < 768 ? 40 : 60} />
+        <IconBrandWhatsapp size={isMobile ? 40 : 60} />
         </ActionIcon>
       </Stack>
       <style>

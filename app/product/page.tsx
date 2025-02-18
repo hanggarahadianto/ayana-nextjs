@@ -7,7 +7,7 @@ import { getDataProduct } from "@/src/api/products/getDataProduct";
 import { Carousel } from "@mantine/carousel";
 import Link from "next/link";
 
-const ProductsPage = () => {
+const ProductPage = () => {
   // Media Queries for responsive adjustments
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(max-width: 1024px)");
@@ -155,4 +155,4 @@ const ProductsPage = () => {
   );
 };
 
-export default ProductsPage;
+export default ProductPage;
