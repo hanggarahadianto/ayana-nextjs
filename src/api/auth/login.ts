@@ -15,7 +15,7 @@ export const useLoginMutation = () => {
     onSuccess: (data: IAuthResponse) => {
       console.log(data);
       console.log("login terkirim");
-      // if (data.token) {
+
       console.log("set kokis");
       if (data.data.token) {
         Cookies.set("token", data.data.token, { expires: 1 });

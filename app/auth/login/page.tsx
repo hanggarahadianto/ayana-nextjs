@@ -31,7 +31,7 @@ export default function LoginPage() {
       <Center style={{ height: "100vh", background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}>
         <Loader size="xl" color="white" />
       </Center>
-    ); // Show loading state with a centered spinner while checking token
+    );
   }
 
   const handleSubmit = (values: { username: string; password: string }) => {

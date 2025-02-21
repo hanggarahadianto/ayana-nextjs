@@ -2,9 +2,6 @@ import { APIAxiosInstance } from "..";
 
 export const getDataProduct = async () => {
   try {
-    // const url = `property-personnel/get?vendor_id=${encodeURIComponent(
-    //   // vendor_id
-    // )}`;
     const url = `home/get`;
 
     const response = await APIAxiosInstance.get(url);
