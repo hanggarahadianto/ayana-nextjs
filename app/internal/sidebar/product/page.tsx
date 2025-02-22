@@ -49,7 +49,7 @@ const ProjectPage = () => {
       </Group>
 
       <SimpleGrid mt={40} cols={3} p={40}>
-        {productData?.data.map((product) => (
+        {productData?.data.map((product: IProduct) => (
           <Card
             mt={20}
             key={product.id}
