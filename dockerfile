@@ -1,8 +1,11 @@
+# Use official Ubuntu image
+FROM ubuntu:24.04
 
-
-
-# Use official Node.js image
-FROM node:22-alpine
+# Install Node.js, Yarn, and required dependencies
+RUN apt update && apt install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt install -y nodejs yarn && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
