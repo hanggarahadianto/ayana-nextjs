@@ -4,7 +4,11 @@ FROM ubuntu:24.04
 # Install Node.js, Yarn, and required dependencies
 RUN apt update && apt install -y curl && \
     curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt install -y nodejs yarn && \
+    apt install -y nodejs && \
+    curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | tee /etc/apt/trusted.gpg.d/yarn.asc && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt update && \
+    apt install -y yarn && \
     rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -14,7 +18,7 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 
 # Install dependencies using Yarn
-RUN yarn install --frozen-lockfile --production
+RUN yarn install --production
 
 # Copy the rest of the app files
 COPY . .
