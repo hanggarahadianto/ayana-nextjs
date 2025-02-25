@@ -1,31 +1,40 @@
-# Use Node.js official image (includes Yarn)
+# 🏗️ STAGE 1: Build Next.js
 FROM node:22 AS builder
 
 WORKDIR /app
 
-# Only copy necessary files for dependency installation
+# 1️⃣ Copy hanya file penting untuk caching dependensi
 COPY package.json yarn.lock ./
 
-# Install only production dependencies
-RUN yarn install --frozen-lockfile --production=true
+# 2️⃣ Install semua dependencies (termasuk devDependencies)
+RUN yarn install --frozen-lockfile
 
-# Copy the rest of the app files (excluding unnecessary files)
+# 3️⃣ Copy seluruh kode proyek
 COPY . .
 
-# Build Next.js with limited resources
-RUN NODE_OPTIONS="--max-old-space-size=1024" yarn build
+# 4️⃣ Build Next.js (output akan ada di `.next`)
+RUN yarn build
 
-# Production-ready image
+---
+
+# 🏃‍♂️ STAGE 2: Production Runtime
 FROM node:22 AS runner
 
 WORKDIR /app
 
-# Copy built files from builder stage
-COPY --from=builder /app ./
+# 5️⃣ Install hanya production dependencies (biar lebih kecil)
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/yarn.lock ./
+RUN yarn install --frozen-lockfile --production=true
 
-# Set environment variable
+# 6️⃣ Copy hasil build & file penting saja
+COPY --from=builder /app/.next .next
+COPY --from=builder /app/public public
+COPY --from=builder /app/node_modules/.prisma node_modules/.prisma  # Jika pakai Prisma
+
+# 7️⃣ Set Environment
 ENV NODE_ENV=production
-
-# Expose port and start app with limited memory
 EXPOSE 3000
-CMD ["node", "--max-old-space-size=512", "node_modules/.bin/next", "start"]
+
+# 8️⃣ Jalankan Next.js dengan `next start` (lebih cepat dan ringan)
+CMD ["yarn", "start"]
