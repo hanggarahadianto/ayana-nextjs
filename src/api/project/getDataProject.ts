@@ -2,9 +2,6 @@ import { APIAxiosInstance } from "@/src/api";
 
 export const getDataProject = async () => {
   try {
-    // const url = `property-personnel/get?vendor_id=${encodeURIComponent(
-    //   // vendor_id
-    // )}`;
     const url = `project/get`;
 
     const response = await APIAxiosInstance.get(url);

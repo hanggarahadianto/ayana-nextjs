@@ -1,5 +1,4 @@
 "use client";
-
 import { Box, Button, Center, Container, Divider, Flex, Grid, Group, Image, SimpleGrid, Stack, Text, Title } from "@mantine/core";
 import React, { FC, use } from "react";
 import { getDataProductDetail } from "@/src/api/products/getDataProductDetail";
@@ -43,7 +42,7 @@ const ProductDetailPage = () => {
     <>
       <Navbar />
       <SimpleGrid pt={80} pr={80} pl={80} pb={40}>
-        <FloatingWhatsApp />
+        {/* <FloatingWhatsApp /> */}
         <Stack>
           <MyGallery />
         </Stack>
