@@ -1,20 +1,19 @@
 # Use Node.js official image (includes Yarn)
 FROM node:22 AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and yarn.lock files first (to cache dependencies)
+# Only copy necessary files for dependency installation
 COPY package.json yarn.lock ./
 
-# Install dependencies (including devDependencies for Next.js build)
-RUN yarn install
+# Install only production dependencies
+RUN yarn install --frozen-lockfile --production=true
 
-# Copy the rest of the app files
+# Copy the rest of the app files (excluding unnecessary files)
 COPY . .
 
-# Build Next.js
-RUN yarn build
+# Build Next.js with limited resources
+RUN NODE_OPTIONS="--max-old-space-size=1024" yarn build
 
 # Production-ready image
 FROM node:22 AS runner
@@ -24,6 +23,9 @@ WORKDIR /app
 # Copy built files from builder stage
 COPY --from=builder /app ./
 
-# Expose port and start app
+# Set environment variable
+ENV NODE_ENV=production
+
+# Expose port and start app with limited memory
 EXPOSE 3000
-CMD ["yarn", "start"]
+CMD ["node", "--max-old-space-size=512", "node_modules/.bin/next", "start"]
