@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, useMemo } from "react";
 import { Flex, Image, Text, Group, Stack, Switch, Drawer, Burger, useMantineColorScheme } from "@mantine/core";
 import Link from "next/link";
