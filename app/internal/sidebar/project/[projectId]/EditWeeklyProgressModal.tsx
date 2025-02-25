@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import { Modal, TextInput, Button, Group, Select, Textarea, Card, Text, Stack, NumberInput, SimpleGrid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
-import { useUpdateWeeklyProgressForm } from "@/src/api/weekly-progress/editDataWeeklyProgress";
-import ButtonAdd from "@/src/components/button/buttonAdd";
-import ButtonDelete from "@/src/components/button/butttonDelete";
 import { getInitialValuesUpdateWeeklyProgress } from "./initialValuesWeeklyProgress";
-import { satuan } from "@/src/lib/satuan";
+import { useUpdateWeeklyProgressForm } from "@/api/weekly-progress/editDataWeeklyProgress";
+import ButtonAdd from "@/components/button/buttonAdd";
+import ButtonDelete from "@/components/button/butttonDelete";
+import { satuan } from "@/lib/satuan";
 
 const EditWeeklyProgressModal = ({
   projectId,

@@ -8,10 +8,9 @@ import { FaTasks, FaProjectDiagram, FaUser, FaCog, FaHome, FaNewspaper, FaShoppi
 import { motion, AnimatePresence } from "framer-motion";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-
-import Navbar from "@/src/components/landing/navbar";
 import { useSession } from "next-auth/react";
 import router from "next/router";
+import Navbar from "@/components/landing/navbar";
 export default function InternalLayout({ children }: { children: React.ReactNode }) {
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();

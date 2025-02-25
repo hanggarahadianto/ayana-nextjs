@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query"; // Correct import from '@tanstack/react-query'
 import { showNotification } from "@mantine/notifications";
-import { APIAxiosInstance } from "@/src/api";
+import { APIAxiosInstance } from "..";
 
 const handleSubmitCashFlowForm = async (values: IWeeklyProgressCreate) => {
   console.log("values on fetching", values);

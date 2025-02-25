@@ -21,12 +21,12 @@ import { Form, Formik } from "formik";
 import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar, IconEdit, IconPlus } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { useSubmitCashFlowForm } from "@/src/api/cash-flow/postDataCashFlow";
-import ButtonAdd from "@/src/components/button/buttonAdd";
-import ButtonDelete from "@/src/components/button/butttonDelete";
 import { initialValuesCashFlowCreate, validationSchemaCashFlowCreate } from "./initialValuesCashFlow";
-import BreathingActionIcon from "@/src/components/button/buttonAction";
-import { satuan } from "@/src/lib/satuan";
+import { useSubmitCashFlowForm } from "@/api/cash-flow/postDataCashFlow";
+import BreathingActionIcon from "@/components/button/buttonAction";
+import ButtonAdd from "@/components/button/buttonAdd";
+import ButtonDelete from "@/components/button/butttonDelete";
+import { satuan } from "@/lib/satuan";
 
 const AddCashFlowReportModal = ({
   projectName,

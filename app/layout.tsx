@@ -17,7 +17,7 @@ import "dayjs/locale/id";
 dayjs.locale("id");
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import theme from "@/theme";
+import theme from "theme";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());

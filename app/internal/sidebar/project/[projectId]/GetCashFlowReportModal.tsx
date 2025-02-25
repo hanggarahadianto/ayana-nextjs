@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Modal, Paper, Text, ScrollArea, Flex, Group, Badge, Stack, Table, Grid, Progress, Tooltip, Divider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconEye, IconPlus } from "@tabler/icons-react";
-import BreathingActionIcon from "@/src/components/button/buttonAction";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
+import BreathingActionIcon from "@/components/button/buttonAction";
 
 const GetCashFlowReportModal = ({
   projectName,

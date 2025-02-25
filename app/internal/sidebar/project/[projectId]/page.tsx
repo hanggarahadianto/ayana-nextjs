@@ -1,19 +1,18 @@
 "use client";
-
-import { getDataProjectDetail } from "@/src/api/project/getDataProjectDetail";
 import { Box, Card, Divider, Grid, Group, Progress, RingProgress, SimpleGrid, Stack, Text, Tooltip } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import React, { FC, use, useState } from "react";
-import { getDataWeeklyProgress } from "@/src/api/weekly-progress/getDataWeeklyProgress";
 import AddWeeklyProgressModal from "./AddWeeklyProgressModal";
 import AddCashFlowReportModal from "./AddCashFlowReportModal";
 import GetCashFlowReportModal from "./GetCashFlowReportModal";
 import EditWeeklyProgressModal from "./EditWeeklyProgressModal";
 import EditProjectModal from "../EditProjectModal";
-import { useDeleteDataWeeklyProgress } from "@/src/api/weekly-progress/deleteDataWeeklyProgress";
-import ButtonDeleteWithConfirmation from "@/src/components/button/buttonDeleteConfirmation";
 import EditCashFlowReportModal from "./EditCashFlowReportModal";
-import { getDataCashFlowListByProjectId } from "@/src/api/cash-flow/getCashFlowListyProject";
+import { getDataProjectDetail } from "@/api/project/getDataProjectDetail";
+import { getDataWeeklyProgress } from "@/api/weekly-progress/getDataWeeklyProgress";
+import { getDataCashFlowListByProjectId } from "@/api/cash-flow/getCashFlowListyProject";
+import { useDeleteDataWeeklyProgress } from "@/api/weekly-progress/deleteDataWeeklyProgress";
+import ButtonDeleteWithConfirmation from "@/components/button/buttonDeleteConfirmation";
 
 interface ProjectProps {
   params: Promise<{

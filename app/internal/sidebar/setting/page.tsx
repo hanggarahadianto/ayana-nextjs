@@ -2,25 +2,10 @@
 
 import { useState } from "react";
 
-import {
-  Anchor,
-  Box,
-  Button,
-  Container,
-  FileButton,
-  Grid,
-  Group,
-  Image,
-  Paper,
-  PaperProps,
-  Stack,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import { Anchor, Box, Button, Container, FileButton, Grid, Group, Image, Paper, PaperProps, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCloudUpload, IconDeviceFloppy } from "@tabler/icons-react";
-
-import { PATH_DASHBOARD } from "@/routes";
+import { PATH_DASHBOARD } from "routes";
 
 const items = [
   { title: "Dashboard", href: PATH_DASHBOARD.default },

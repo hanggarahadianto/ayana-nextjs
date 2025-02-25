@@ -1,17 +1,17 @@
 "use client";
 
-import Footer from "@/src/components/landing/footer";
-import LandingPage from "@/src/components/landing/landingpage";
-import Testimony from "@/src/components/landing/testimony";
-import ProductsPage from "../product/page";
-import Navbar from "@/src/components/landing/navbar";
+import Footer from "@/components/landing/footer";
+import LandingPage from "@/components/landing/landingpage";
+import Navbar from "@/components/landing/navbar";
+import Testimony from "@/components/landing/testimony";
+import ProductPage from "app/product/page";
 
 const HomePage = () => {
   return (
     <>
       <Navbar />
       <LandingPage />
-      <ProductsPage />
+      <ProductPage />
       <Testimony />
       <Footer />
     </>

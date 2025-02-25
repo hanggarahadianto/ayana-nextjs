@@ -1,7 +1,7 @@
+import Footer from "@/components/landing/footer";
+import Navbar from "@/components/landing/navbar";
+import ProductDetailComponent from "@/components/product/product-detail";
 import React from "react";
-import Navbar from "@/src/components/landing/navbar";
-import Footer from "@/src/components/landing/footer";
-import ProductDetailComponent from "@/src/components/product/product-detail";
 
 const ProductDetailPage = () => {
   return (

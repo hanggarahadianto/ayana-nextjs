@@ -15,8 +15,8 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import { initialValueProductCreate, validationSchemaProduct } from "./initialValuesProduct";
-import { useSubmitProductForm } from "@/src/api/products/postDataProduct";
-import ButtonAdd from "@/src/components/button/buttonAdd";
+import { useSubmitProductForm } from "@/api/products/postDataProduct";
+import ButtonAdd from "@/components/button/buttonAdd";
 
 const AddProductModal = ({ refetchProductData }: { refetchProductData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);

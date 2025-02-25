@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Modal, TextInput, Button, Group, Select, Textarea, InputWrapper, NumberInput, Stack, Text, FileInput, Flex } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
-import BreathingActionIcon from "@/src/components/button/buttonAction";
 import { getInitialValuesUpdateProduct } from "./initialValuesProduct";
-import { IconEdit, IconPencil } from "@tabler/icons-react";
-import { useEditProductForm } from "@/src/api/products/editDataProduct";
+import { IconEdit } from "@tabler/icons-react";
+import { useEditProductForm } from "@/api/products/editDataProduct";
+import BreathingActionIcon from "@/components/button/buttonAction";
 
 interface EditProductModalProps {
   initialData: IProductUpdate | undefined; // Adjust the type based on your actual data structure

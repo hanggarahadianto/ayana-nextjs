@@ -3,9 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useMediaQuery } from "@mantine/hooks";
 import { Card, SimpleGrid, Stack, Text, Image, Flex, Group, Badge } from "@mantine/core";
 
-import { getDataProduct } from "@/src/api/products/getDataProduct";
 import { Carousel } from "@mantine/carousel";
 import Link from "next/link";
+import { getDataProduct } from "@/api/products/getDataProduct";
 
 const ProductPage = () => {
   // Media Queries for responsive adjustments

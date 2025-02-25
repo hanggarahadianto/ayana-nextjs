@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { TextInput, Button, Card, Container, Title, Group, SimpleGrid, Loader, Center, InputWrapper } from "@mantine/core";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import { Formik, Field, Form } from "formik";
-import { useLoginMutation } from "@/src/api/auth/login";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { initialValuesUser, validationSchemaUser } from "./initialValuesUser";
+import { useLoginMutation } from "@/api/auth/login";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -39,12 +39,12 @@ export default function LoginPage() {
     mutate(
       { username, password },
       {
-        onSuccess: (response) => {
+        onSuccess: (response: any) => {
           if (response) {
             router.push("/internal/sidebar/product"); // Redirect after login
           }
         },
-        onError: (response) => {
+        onError: (response: any) => {
           console.log("response error", response);
         },
       }

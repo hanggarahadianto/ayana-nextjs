@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import { APIAxiosInstance } from "@/src/api";
 import { showNotification } from "@mantine/notifications";
 import Cookies from "js-cookie";
+import { APIAxiosInstance } from "..";
 
 const handleLogin = async (values: IUserPayload) => {
   const response = await APIAxiosInstance.post(`auth/login`, values);

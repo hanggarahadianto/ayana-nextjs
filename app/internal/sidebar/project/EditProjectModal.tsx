@@ -4,10 +4,10 @@ import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import { IconCalendar, IconEdit } from "@tabler/icons-react";
-import { useUpdateProjectForm } from "@/src/api/project/editDataProject";
 import { getInitialValuesUpdateProject } from "./initialValuesProject";
 import { FiSettings } from "react-icons/fi";
-import BreathingActionIcon from "@/src/components/button/buttonAction";
+import { useUpdateProjectForm } from "@/api/project/editDataProject";
+import BreathingActionIcon from "@/components/button/buttonAction";
 
 const EditProjectModal = ({ initialData, refetchProjectData }: { initialData: IProjectUpdate; refetchProjectData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);

@@ -6,14 +6,12 @@ import { FaBath, FaBed, FaLandmark } from "react-icons/fa";
 import { useMediaQuery } from "@mantine/hooks";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-
-import { getDataProductDetail } from "@/src/api/products/getDataProductDetail";
-import { getDataAdditionalInfo } from "@/src/api/additional-info/getDataAdditionalInfo";
-
-import MyGallery from "@/src/components/product/image-galery";
-import ReservationForm from "@/src/components/reservation/ReservationForm";
-import AdditionalInfoProduct from "@/src/components/product/additional-info-product";
-import AdditionalInfoMaps from "@/src/components/product/maps";
+import { getDataProductDetail } from "@/api/products/getDataProductDetail";
+import { getDataAdditionalInfo } from "@/api/additional-info/getDataAdditionalInfo";
+import MyGallery from "./image-galery";
+import AdditionalInfoProduct from "./additional-info-product";
+import ReservationForm from "../reservation/ReservationForm";
+import AdditionalInfoMaps from "./maps";
 
 const ProductDetailComponent = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");

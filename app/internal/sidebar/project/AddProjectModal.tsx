@@ -20,8 +20,8 @@ import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import { IconCalendar, IconPlus } from "@tabler/icons-react";
-import { useSubmitProjectForm } from "@/src/api/project/postDataProject";
 import { initialValueProjectCreate, validationSchemaProject } from "./initialValuesProject";
+import { useSubmitProjectForm } from "@/api/project/postDataProject";
 
 const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);

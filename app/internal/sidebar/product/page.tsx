@@ -3,14 +3,13 @@
 import { Card, Group, SimpleGrid, Text, Stack, ActionIcon } from "@mantine/core";
 
 import { useQuery } from "@tanstack/react-query";
-import { useDeleteDataProject } from "@/src/api/project/deleteDataProject";
-import ButtonDeleteWithConfirmation from "@/src/components/button/buttonDeleteConfirmation";
 import AddProductModal from "./AddProductModal";
-import { getDataProduct } from "@/src/api/products/getDataProduct";
 import EditProductModal from "./EditProductModa";
 import { useState } from "react";
 import GetProductModal from "./GetProductModal";
-import { useDeleteDataProduct } from "@/src/api/products/deleteDataProduct";
+import { getDataProduct } from "@/api/products/getDataProduct";
+import { useDeleteDataProduct } from "@/api/products/deleteDataProduct";
+import ButtonDeleteWithConfirmation from "@/components/button/buttonDeleteConfirmation";
 
 const ProjectPage = () => {
   const {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal, Paper, Text, ScrollArea, Flex, Group, Badge, Stack, Grid, Image, TextInput, Divider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconEye } from "@tabler/icons-react";
-import BreathingActionIcon from "@/src/components/button/buttonAction";
+import BreathingActionIcon from "@/components/button/buttonAction";
 
 const GetProductModal = ({ productData }: { productData?: IProduct }) => {
   const [opened, { open, close }] = useDisclosure(false);

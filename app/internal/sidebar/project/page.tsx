@@ -4,11 +4,11 @@ import { Button, Card, Group, SimpleGrid, Text, Stack, ActionIcon } from "@manti
 
 import AddProjectModal from "./AddProjectModal";
 import { useQuery } from "@tanstack/react-query";
-import { getDataProject } from "@/src/api/project/getDataProject";
 
 import Link from "next/link";
-import { useDeleteDataProject } from "@/src/api/project/deleteDataProject";
-import ButtonDeleteWithConfirmation from "@/src/components/button/buttonDeleteConfirmation";
+import { getDataProject } from "@/api/project/getDataProject";
+import { useDeleteDataProject } from "@/api/project/deleteDataProject";
+import ButtonDeleteWithConfirmation from "@/components/button/buttonDeleteConfirmation";
 
 const ProjectPage = () => {
   const {
