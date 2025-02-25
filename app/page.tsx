@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
-import "./globals.css";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const router = useRouter();
+
   useEffect(() => {
-    window.location.href = "/home";
-  }, []);
+    router.replace("/home");
+  }, [router]);
 
   return null;
 }
