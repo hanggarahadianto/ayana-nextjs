@@ -12,7 +12,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "http://134.209.107.103:8080/:path*", // Your Golang backend URL
+        destination: "http://api.ayanagroup99.com:8080/:path*", // Your Golang backend URL
       },
     ];
   },
