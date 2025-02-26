@@ -2,7 +2,6 @@
 
 # Node modules dan dependensi
 node_modules
-.yarn
 .pnpm-store
 .npm
 
