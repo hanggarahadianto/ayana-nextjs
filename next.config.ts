@@ -1,3 +1,5 @@
+const path = require("path");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -7,12 +9,18 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_API_URL: process.env.URL,
   },
-
+  webpack: (config: any) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@": path.resolve(__dirname, "src"),
+    };
+    return config;
+  },
   async rewrites() {
     return [
       {
         source: "/api/:path*",
-        destination: "http://134.209.107.103:8080/:path*", // Your Golang backend URL
+        destination: "http://api.ayanagroup99.com:8080/:path*", // Your Golang backend URL
       },
     ];
   },
