@@ -39,7 +39,7 @@ COPY --from=builder /app/yarn.lock ./
 COPY --from=builder /app/.pnp.cjs ./
 COPY --from=builder /app/.pnp.loader.mjs ./
 COPY --from=builder /app/.yarn ./.yarn
-COPY --from
+COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
 
 # Ekspos port aplikasi
 EXPOSE 3000
