@@ -1,51 +1,51 @@
-# Gunakan image Node.js berbasis Alpine untuk efisiensi
+# ========================================
+# Stage 1: Builder (Untuk Install & Build)
+# ========================================
 FROM node:20-alpine AS builder
 
-# Set environment variables untuk produksi
+# Set environment production
 ENV NODE_ENV=production
 
-# Set direktori kerja dalam container
+# Set working directory
 WORKDIR /app
 
-# Aktifkan Corepack sebelum menginstal dependencies
+# Aktifkan Corepack dan pastikan Yarn tersedia
 RUN corepack enable && corepack prepare yarn@stable --activate
 
-# Salin file yang dibutuhkan sebelum install dependencies
-COPY package.json yarn.lock .yarnrc.yml .yarn .
+# Salin file yang diperlukan sebelum install dependencies
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn .yarn
 
-# Debugging: Periksa isi .yarn/releases/ untuk memastikan file tersedia
-RUN mkdir -p .yarn/releases && ls -la .yarn/releases/
+# Debugging: Pastikan yarn ada sebelum install
+RUN ls -la .yarn/releases/
 
-# Pastikan file Yarn ada sebelum install dependencies
-RUN if [ ! -f "/app/.yarn/releases/yarn-4.6.0.cjs" ]; then echo "File Yarn hilang!"; exit 1; fi
-
-# Install dependencies dengan Yarn tanpa menyimpan cache
+# Install dependencies tanpa cache
 RUN yarn install --immutable --inline-builds --check-files
 
-# Debugging: Pastikan .pnp.cjs dan .pnp.loader.mjs ada setelah install
+# Debugging: Cek apakah .pnp.cjs dan .pnp.loader.mjs ada
 RUN ls -la /app
 
-# Salin seluruh kode proyek setelah install dependencies
+# Salin semua kode proyek
 COPY . .
 
-# Build aplikasi Next.js
+# Build Next.js
 RUN yarn build
 
 # ========================================
-# Stage: Runner (untuk runtime container)
+# Stage 2: Runner (Untuk Runtime Container)
 # ========================================
 FROM node:20-alpine AS runner
 
-# Set direktori kerja dalam container
-WORKDIR /app
-
-# Set environment untuk produksi
+# Set environment production
 ENV NODE_ENV=production
+
+# Set working directory
+WORKDIR /app
 
 # Aktifkan Corepack & Yarn PnP di runtime
 RUN corepack enable && corepack prepare yarn@stable --activate
 
-# Salin hanya file yang diperlukan untuk runtime
+# Salin file hasil build & yang diperlukan untuk runtime
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./
@@ -55,7 +55,7 @@ COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
 COPY --from=builder /app/.pnp.cjs ./
 COPY --from=builder /app/.pnp.loader.mjs ./
 
-# Debugging: Periksa apakah .pnp.cjs dan .pnp.loader.mjs benar-benar ada
+# Debugging: Cek apakah .pnp.cjs ada
 RUN ls -la /app
 
 # Jika .pnp.cjs tidak ada, jalankan yarn install ulang
