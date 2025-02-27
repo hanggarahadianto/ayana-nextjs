@@ -1,33 +1,46 @@
 # Gunakan image Node.js berbasis Alpine untuk efisiensi
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Set environment variables untuk mengoptimalkan produksi
 ENV NODE_ENV=production
 
 # Set direktori kerja di dalam container
-RUN mkdir -p /app
+
 WORKDIR /app
 
 # Aktifkan Corepack sebelum menginstal dependencies
-RUN corepack enable && corepack prepare yarn@4.6.0 --activate
+RUN corepack enable && corepack prepare yarn@stable --activate
 
-
+COPY package.json yarn.lock .yarnrc.yml ./
 # Salin file package.json dan yarn.lock sebelum install dependencies
-COPY package.json yarn.lock ./
+RUN yarn install --immutable --inline-builds
 
 
 # Install dependencies dengan yarn tanpa menyimpan cache
-RUN yarn install --refresh-lockfile --network-timeout 600000
-
-# Salin semua kode aplikasi ke dalam container
 COPY . .
 
 # Build aplikasi Next.js
-RUN yarn build
+FROM node:20-alpine AS runner
+
+# Set direktori kerja dalam container
+WORKDIR /app
+
+# Set environment untuk produksi
+ENV NODE_ENV=production
+# Aktifkan Corepack & Yarn PnP di runtime
+RUN corepack enable && corepack prepare yarn@stable --activate
+
+# Salin hanya file yang diperlukan untuk runtime
+COPY --from=builder /app/.next .next
+COPY --from=builder /app/public public
+COPY --from=builder /app/package.json .
+COPY --from=builder /app/yarn.lock .
+COPY --from=builder /app/.pnp.cjs .pnp.cjs
+COPY --from=builder /app/.pnp.loader.mjs .pnp.loader.mjs
+COPY --from=builder /app/.yarn .yarn
 
 # Ekspos port aplikasi
 EXPOSE 3000
 
 # Jalankan aplikasi Next.js
 CMD ["yarn", "start"]
-d
