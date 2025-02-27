@@ -54,8 +54,11 @@ COPY --from=builder /app/.yarn ./.yarn
 COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
 
 # Pastikan `.pnp.cjs` dan `.pnp.loader.mjs` tetap berada di root (`/`)
-COPY --from=builder /.pnp.cjs /
-COPY --from=builder /.pnp.loader.mjs /
+
+
+COPY --from=builder /app/.pnp.cjs ./
+COPY --from=builder /app/.pnp.loader.mjs ./
+
 
 # Debugging: Periksa apakah file Yarn dan PnP sudah benar
 RUN ls -la /
