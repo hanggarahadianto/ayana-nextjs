@@ -11,14 +11,16 @@ WORKDIR /app
 RUN corepack enable && corepack prepare yarn@stable --activate
 
 # Salin file yang dibutuhkan sebelum install dependencies
-COPY package.json yarn.lock .yarnrc.yml .yarn/ ./
+COPY package.json yarn.lock .yarnrc.yml .yarn ./
 
-# Debugging: Pastikan .yarn/releases/ tersedia sebelum build
-RUN mkdir -p .yarn/releases/
-RUN ls -la .yarn/releases/
+# Debugging: Periksa isi .yarn/releases/ untuk memastikan file tersedia
+RUN ls -la .yarn/releases/ && cat .yarn/releases/yarn-4.6.0.cjs | head -n 10
+
+# Pastikan file Yarn ada sebelum install dependencies
+RUN if [ ! -f "/app/.yarn/releases/yarn-4.6.0.cjs" ]; then echo "File Yarn hilang!"; exit 1; fi
 
 # Install dependencies dengan Yarn tanpa menyimpan cache
-RUN yarn install --immutable --inline-builds
+RUN yarn install --immutable --inline-builds --check-files
 
 # Debugging: Pastikan .pnp.cjs dan .pnp.loader.mjs ada setelah install
 RUN ls -la /app
@@ -55,7 +57,7 @@ COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
 RUN ls -la /app
 
 # Jika .pnp.cjs tidak ada, jalankan yarn install ulang
-RUN if [ ! -f "/app/.pnp.cjs" ]; then yarn install --immutable --inline-builds; fi
+RUN if [ ! -f "/app/.pnp.cjs" ]; then yarn install --immutable --inline-builds --check-files; fi
 
 # Ekspos port aplikasi
 EXPOSE 3000
