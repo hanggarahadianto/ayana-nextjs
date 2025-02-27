@@ -20,7 +20,7 @@ COPY .yarn .yarn
 RUN ls -la .yarn/releases/
 
 # Install dependencies tanpa cache
-RUN yarn install --immutable --inline-builds --check-files
+RUN yarn install --immutable --inline-builds  # ✅ Perbaikan di sini
 
 # Debugging: Cek apakah `.pnp.cjs` dan `.pnp.loader.mjs` ada di root (`/`)
 RUN ls -la /
@@ -61,7 +61,7 @@ COPY --from=builder /.pnp.loader.mjs /
 RUN ls -la /
 
 # Jika `.pnp.cjs` tidak ada di root (`/`), jalankan `yarn install` ulang
-RUN if [ ! -f "/.pnp.cjs" ]; then yarn install --immutable --inline-builds --check-files; fi
+RUN if [ ! -f "/.pnp.cjs" ]; then yarn install --immutable --inline-builds; fi  # ✅ Perbaikan di sini
 
 # Ekspos port aplikasi
 EXPOSE 3000
