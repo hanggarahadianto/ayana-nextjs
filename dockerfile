@@ -11,7 +11,7 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 
 # Install dependencies dengan yarn tanpa menyimpan cache
-RUN yarn install --frozen-lockfile
+RUN yarn install --refresh-lockfile --network-timeout 600000
 
 # Salin semua kode aplikasi ke dalam container
 COPY . .
