@@ -13,7 +13,8 @@ RUN corepack enable && corepack prepare yarn@stable --activate
 # Salin file yang dibutuhkan sebelum install dependencies
 COPY package.json yarn.lock .yarnrc.yml .yarn/ ./
 
-# Debugging: Periksa isi .yarn/releases/ untuk memastikan file tersedia
+# Debugging: Pastikan .yarn/releases/ tersedia sebelum build
+RUN mkdir -p .yarn/releases/
 RUN ls -la .yarn/releases/
 
 # Install dependencies dengan Yarn tanpa menyimpan cache
