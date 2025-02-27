@@ -11,10 +11,10 @@ WORKDIR /app
 RUN corepack enable && corepack prepare yarn@stable --activate
 
 # Salin file yang dibutuhkan sebelum install dependencies
-COPY package.json yarn.lock .yarnrc.yml .yarn .yarn/releases ./
+COPY package.json yarn.lock .yarnrc.yml .yarn .
 
 # Debugging: Periksa isi .yarn/releases/ untuk memastikan file tersedia
-RUN ls -la .yarn/releases/ && cat .yarn/releases/yarn-4.6.0.cjs | head -n 10
+RUN mkdir -p .yarn/releases && ls -la .yarn/releases/
 
 # Pastikan file Yarn ada sebelum install dependencies
 RUN if [ ! -f "/app/.yarn/releases/yarn-4.6.0.cjs" ]; then echo "File Yarn hilang!"; exit 1; fi
