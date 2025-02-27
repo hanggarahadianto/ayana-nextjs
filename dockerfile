@@ -1,5 +1,5 @@
 # ========================================
-# Stage 1: Builder (Untuk Install & Build)
+# Stage 1: Builder (Install & Build)
 # ========================================
 FROM node:20-alpine AS builder
 
@@ -16,23 +16,23 @@ RUN corepack enable && corepack prepare yarn@stable --activate
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn .yarn
 
-# Debugging: Pastikan yarn ada sebelum install
+# Debugging: Pastikan Yarn ada sebelum install
 RUN ls -la .yarn/releases/
 
 # Install dependencies tanpa cache
 RUN yarn install --immutable --inline-builds --check-files
 
-# Debugging: Cek apakah .pnp.cjs dan .pnp.loader.mjs ada
-RUN ls -la /app
+# Debugging: Cek apakah `.pnp.cjs` dan `.pnp.loader.mjs` ada di root (`/`)
+RUN ls -la /
 
-# Salin semua kode proyek
+# Salin semua kode proyek setelah install dependencies
 COPY . .
 
 # Build Next.js
 RUN yarn build
 
 # ========================================
-# Stage 2: Runner (Untuk Runtime Container)
+# Stage 2: Runner (Runtime)
 # ========================================
 FROM node:20-alpine AS runner
 
@@ -52,14 +52,16 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/yarn.lock ./
 COPY --from=builder /app/.yarn ./.yarn
 COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
-COPY --from=builder /app/.pnp.cjs ./
-COPY --from=builder /app/.pnp.loader.mjs ./
 
-# Debugging: Cek apakah .pnp.cjs ada
-RUN ls -la /app
+# Pastikan `.pnp.cjs` dan `.pnp.loader.mjs` tetap berada di root (`/`)
+COPY --from=builder /.pnp.cjs /
+COPY --from=builder /.pnp.loader.mjs /
 
-# Jika .pnp.cjs tidak ada, jalankan yarn install ulang
-RUN if [ ! -f "/app/.pnp.cjs" ]; then yarn install --immutable --inline-builds --check-files; fi
+# Debugging: Periksa apakah file Yarn dan PnP sudah benar
+RUN ls -la /
+
+# Jika `.pnp.cjs` tidak ada di root (`/`), jalankan `yarn install` ulang
+RUN if [ ! -f "/.pnp.cjs" ]; then yarn install --immutable --inline-builds --check-files; fi
 
 # Ekspos port aplikasi
 EXPOSE 3000
