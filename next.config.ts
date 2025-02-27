@@ -1,4 +1,4 @@
-const path = require("path");
+import path from "path";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -9,10 +9,10 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_API_URL: process.env.URL,
   },
-  webpack: (config: any) => {
+  webpack: (config: { resolve: { alias: any } }) => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@": path.resolve(__dirname, "src"),
+      "@": path.resolve(process.cwd(), "src"), // __dirname tidak tersedia di ESM, gunakan process.cwd()
     };
     return config;
   },
@@ -26,4 +26,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
