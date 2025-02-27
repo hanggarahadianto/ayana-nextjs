@@ -1,5 +1,5 @@
 # Gunakan image Node.js berbasis Alpine untuk efisiensi
-FROM node:20-alpine
+FROM node:20-alpine As builder
 
 # Set environment variables untuk mengoptimalkan produksi
 ENV NODE_ENV=production
