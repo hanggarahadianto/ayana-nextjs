@@ -1,7 +1,7 @@
 # Gunakan image Node.js berbasis Alpine untuk efisiensi
 FROM node:20-alpine AS builder
 
-# Set environment variables untuk mengoptimalkan produksi
+# Set environment variables untuk produksi
 ENV NODE_ENV=production
 
 # Set direktori kerja di dalam container
@@ -10,10 +10,13 @@ WORKDIR /app
 # Aktifkan Corepack sebelum menginstal dependencies
 RUN corepack enable && corepack prepare yarn@stable --activate
 
-# Salin file yang dibutuhkan sebelum install dependencies
-COPY package.json yarn.lock .yarnrc.yml .yarn/ ./
+# Salin file package manager sebelum install dependencies
+COPY package.json yarn.lock .yarnrc.yml ./
 
-# Debugging: Periksa isi .yarn/releases/ untuk memastikan file tersedia
+# Salin Yarn releases agar tidak hilang
+COPY .yarn/releases .yarn/releases
+
+# Debugging: Periksa apakah file Yarn tersedia
 RUN ls -la .yarn/releases/
 
 # Install dependencies dengan Yarn tanpa menyimpan cache
@@ -48,6 +51,9 @@ COPY --from=builder /app/.pnp.cjs ./
 COPY --from=builder /app/.pnp.loader.mjs ./
 COPY --from=builder /app/.yarn ./.yarn
 COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
+
+# Debugging: Pastikan file Yarn ada di runtime
+RUN ls -la .yarn/releases/
 
 # Ekspos port aplikasi
 EXPOSE 3000
