@@ -31,13 +31,15 @@ ENV NODE_ENV=production
 RUN corepack enable && corepack prepare yarn@stable --activate
 
 # Salin hanya file yang diperlukan untuk runtime
-COPY --from=builder /app/.next .next
-COPY --from=builder /app/public public
-COPY --from=builder /app/package.json .
-COPY --from=builder /app/yarn.lock .
-COPY --from=builder /app/.pnp.cjs .pnp.cjs
-COPY --from=builder /app/.pnp.loader.mjs .pnp.loader.mjs
-COPY --from=builder /app/.yarn .yarn
+# Salin hasil build dari builder
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/yarn.lock ./
+COPY --from=builder /app/.pnp.cjs ./
+COPY --from=builder /app/.pnp.loader.mjs ./
+COPY --from=builder /app/.yarn ./.yarn
+COPY --from
 
 # Ekspos port aplikasi
 EXPOSE 3000
