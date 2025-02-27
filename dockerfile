@@ -1,28 +1,42 @@
-FROM node:20.11.1-alpine3.18 AS base
+# Gunakan base image yang kecil dan cepat
+FROM node:20.11.1-alpine3.18 AS builder
+
+# Set working directory
 WORKDIR /app
 
-FROM base AS deps
-COPY .yarn/ ./.yarn/
-COPY .yarnrc* package*.json ./
-RUN yarn install --refresh-lockfile --network-timeout 600000
+# Copy package manager files lebih dulu untuk cache lebih optimal
+COPY package.json yarn.lock ./
 
-FROM base AS builder
+# Install dependencies (gunakan --immutable untuk pastikan konsistensi)
+RUN yarn install --immutable --network-timeout 600000
+
+# Copy seluruh project setelah dependencies diinstall
 COPY . .
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/yarn.lock ./yarn.lock
-RUN yarn dlx turbo build
 
-FROM base AS production
+# Build aplikasi
+RUN yarn build
+
+# ====== Production Stage ======
+FROM node:20.11.1-alpine3.18 AS production
+
+# Set working directory
 WORKDIR /app
 
+# Tambahkan user untuk keamanan
 RUN addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 nextjs
 
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+# Copy hasil build dari stage sebelumnya
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 
+# Set user non-root untuk keamanan
 USER nextjs
+
+# Expose port 3000
 EXPOSE 3000
-CMD ["node", "server.js"]
+
+# Gunakan entrypoint agar bisa fleksibel di runtime
+ENTRYPOINT ["node", "server.js"]
