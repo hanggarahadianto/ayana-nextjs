@@ -4,23 +4,23 @@ FROM node:20-alpine AS builder
 # Set environment variables untuk produksi
 ENV NODE_ENV=production
 
-# Set direktori kerja di dalam container
+# Set direktori kerja dalam container
 WORKDIR /app
 
 # Aktifkan Corepack sebelum menginstal dependencies
 RUN corepack enable && corepack prepare yarn@stable --activate
 
-# Salin file package manager sebelum install dependencies
-COPY package.json yarn.lock .yarnrc.yml ./
+# Salin file yang dibutuhkan sebelum install dependencies
+COPY package.json yarn.lock .yarnrc.yml .yarn/ ./
 
-# Salin Yarn releases agar tidak hilang
-COPY .yarn/releases .yarn/releases
-
-# Debugging: Periksa apakah file Yarn tersedia
+# Debugging: Periksa isi .yarn/releases/ untuk memastikan file tersedia
 RUN ls -la .yarn/releases/
 
 # Install dependencies dengan Yarn tanpa menyimpan cache
 RUN yarn install --immutable --inline-builds
+
+# Debugging: Pastikan .pnp.cjs dan .pnp.loader.mjs ada setelah install
+RUN ls -la /app
 
 # Salin seluruh kode proyek setelah install dependencies
 COPY . .
@@ -47,13 +47,14 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/yarn.lock ./
-COPY --from=builder /app/.pnp.cjs ./
-COPY --from=builder /app/.pnp.loader.mjs ./
 COPY --from=builder /app/.yarn ./.yarn
 COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
 
-# Debugging: Pastikan file Yarn ada di runtime
-RUN ls -la .yarn/releases/
+# Debugging: Periksa apakah .pnp.cjs dan .pnp.loader.mjs benar-benar ada
+RUN ls -la /app
+
+# Jika .pnp.cjs tidak ada, jalankan yarn install ulang
+RUN if [ ! -f "/app/.pnp.cjs" ]; then yarn install --immutable --inline-builds; fi
 
 # Ekspos port aplikasi
 EXPOSE 3000
