@@ -24,3 +24,4 @@ EXPOSE 3000
 
 # Jalankan aplikasi Next.js
 CMD ["yarn", "start"]
+d
