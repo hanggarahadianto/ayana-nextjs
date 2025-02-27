@@ -1,44 +1,6 @@
-# Folder dan file yang tidak perlu disalin ke dalam image Docker
-
-# Node modules dan dependensi
 node_modules
-.pnpm-store
-.npm
-
-# Hasil build Next.js
 .next
-.out
-
-# Log dan file debugging
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# File environment (jangan disertakan di dalam image untuk keamanan)
-.env
 .env.local
 .env.development
 .env.production
-.env.test
-
-# File sistem yang tidak diperlukan
 .DS_Store
-Thumbs.db
-
-# File Git
-.git
-.gitignore
-
-# File konfigurasi editor dan sistem operasi
-.vscode
-.idea
-*.swp
-*.swo
-
-# File sementara dan cache Docker
-docker-compose.override.yml
-docker-compose.yml
-Dockerfile
-.dockerignore
