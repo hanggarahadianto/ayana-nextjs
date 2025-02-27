@@ -11,7 +11,7 @@ WORKDIR /app
 RUN corepack enable && corepack prepare yarn@stable --activate
 
 # Salin file yang dibutuhkan sebelum install dependencies
-COPY package.json yarn.lock .yarnrc.yml .yarn ./
+COPY package.json yarn.lock .yarnrc.yml .yarn .yarn/releases ./
 
 # Debugging: Periksa isi .yarn/releases/ untuk memastikan file tersedia
 RUN ls -la .yarn/releases/ && cat .yarn/releases/yarn-4.6.0.cjs | head -n 10
@@ -52,6 +52,8 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/yarn.lock ./
 COPY --from=builder /app/.yarn ./.yarn
 COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
+COPY --from=builder /app/.pnp.cjs ./
+COPY --from=builder /app/.pnp.loader.mjs ./
 
 # Debugging: Periksa apakah .pnp.cjs dan .pnp.loader.mjs benar-benar ada
 RUN ls -la /app
