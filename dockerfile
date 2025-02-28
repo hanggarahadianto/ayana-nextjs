@@ -55,7 +55,7 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/yarn.lock ./
 COPY --from=builder /app/.yarn ./.yarn
 COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
-CCOPY --from=builder /app/.pnp.cjs ./.pnp.cjs
+COPY --from=builder /app/.pnp.cjs ./.pnp.cjs
 COPY --from=builder /app/.pnp.loader.mjs ./.pnp.loader.mjs
 
 # RUN ls -la .next  # ✅ Tambahan Debugging di Runner | tadi pakai ini
