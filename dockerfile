@@ -53,8 +53,6 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/yarn.lock ./
 COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
-COPY --from=builder /app/.pnp.cjs ./.pnp.cjs
-COPY --from=builder /app/.pnp.loader.mjs ./.pnp.loader.mjs
 COPY --from=builder /app/.yarn ./.yarn
 
 # Debugging: Pastikan semua file yang diperlukan ada di runtime
