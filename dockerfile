@@ -12,10 +12,15 @@ WORKDIR /app
 # Aktifkan Corepack agar Yarn tersedia
 RUN corepack enable && corepack prepare yarn@stable --activate
 
+# Salin file yang diperlukan terlebih dahulu
+COPY package.json yarn.lock .yarnrc.yml ./
+
 
 # Salin Yarn jika ada di proyek
-COPY .yarnrc* package*.json ./
+COPY .yarn/releases .yarn/releases/
 
+# Debugging: Pastikan Yarn tersedia sebelum install dependencies
+RUN ls -la .yarn/releases/
 
 # Install dependencies menggunakan PnP
 RUN yarn install --refresh-lockfile --network-timeout 600000
