@@ -1,7 +1,7 @@
 # ========================================
 # Stage 1: Builder (Install & Build)
 # ========================================
-FROM node:20-alpine AS builder
+FROM node:20 AS builder
 
 # Set environment ke production
 ENV NODE_OPTIONS="--openssl-legacy-provider"
@@ -18,6 +18,7 @@ COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn ./.yarn/
 
 # Debugging: Pastikan Yarn tersedia sebelum install dependencies
+ls -la .yarn/releases/
 RUN ls -la .yarn/releases/
 
 # Install dependencies menggunakan Yarn PnP (tanpa cache)
@@ -40,7 +41,7 @@ RUN ls -la .next
 # ========================================
 # Stage 2: Runner (Runtime)
 # ========================================
-FROM node:20-alpine AS runner
+FROM node:20 AS runner
 
 # Set environment ke production
 ENV NODE_OPTIONS="--openssl-legacy-provider"
