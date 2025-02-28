@@ -18,7 +18,7 @@ COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn ./.yarn/
 
 # Debugging: Pastikan Yarn tersedia sebelum install dependencies
-ls -la .yarn/releases/
+
 RUN ls -la .yarn/releases/
 
 # Install dependencies menggunakan Yarn PnP (tanpa cache)
