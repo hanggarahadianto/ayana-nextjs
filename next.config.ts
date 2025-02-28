@@ -9,9 +9,7 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_API_URL: process.env.URL,
   },
-  experimental: {
-    logging: "verbose", // Menampilkan log detail
-  },
+
   webpack: (config: { resolve: { alias: any } }, { isServer }: any) => {
     config.resolve.alias = {
       ...config.resolve.alias,
