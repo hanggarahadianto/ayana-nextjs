@@ -11,3 +11,5 @@
 .yarn/unplugged
 .yarn/install-state.gz
 node_modules
+!/.yarn
+!/.yarn/**
