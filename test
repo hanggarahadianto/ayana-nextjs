@@ -1,3 +1,5 @@
+# tanggal 28 jam 2
+
 # ========================================
 # Stage 1: Builder (Install & Build)
 # ========================================
@@ -9,30 +11,30 @@ ENV NODE_ENV=production
 # Set working directory
 WORKDIR /app
 
-# Aktifkan Corepack untuk memastikan Yarn tersedia
+# Aktifkan Corepack dan pastikan Yarn tersedia
 RUN corepack enable && corepack prepare yarn@stable --activate
 
-# Salin file penting untuk dependency management
+# Salin file yang diperlukan sebelum install dependencies
 COPY package.json yarn.lock .yarnrc.yml ./
-COPY .yarn ./.yarn/
+COPY .yarn .yarn
 
-# Debugging: Cek apakah Yarn tersedia sebelum install
+# Debugging: Pastikan Yarn ada sebelum install
 RUN ls -la .yarn/releases/
 
-# Install dependencies menggunakan Yarn PnP (tanpa cache)
-RUN yarn install --immutable --inline-builds
+# Install dependencies tanpa cache
 
-# Debugging: Pastikan `.pnp.cjs` dan `.pnp.loader.mjs` ada
-RUN ls -la /app
+RUN yarn install --immutable --inline-builds || yarn install --check-cache # ✅ Perbaikan di sini
 
-# Salin seluruh kode proyek setelah install dependencies
+
+# Debugging: Cek apakah `.pnp.cjs` dan `.pnp.loader.mjs` ada di root (`/`)
+RUN ls -la /
+
+# Salin semua kode proyek setelah install dependencies
 COPY . .
 
-# Build aplikasi Next.js
-RUN yarn build
+# Build Next.js
 
-# Debugging: Cek apakah folder .next berhasil dibuat
-RUN ls -la .next
+RUN yarn build && ls -la .next 
 
 # ========================================
 # Stage 2: Runner (Runtime)
@@ -48,19 +50,28 @@ WORKDIR /app
 # Aktifkan Corepack & Yarn PnP di runtime
 RUN corepack enable && corepack prepare yarn@stable --activate
 
-# Salin hasil build & file yang diperlukan ke runtime container
+# Salin file hasil build & yang diperlukan untuk runtime
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/yarn.lock ./
-COPY --from=builder /app/.yarn ./.yarn/
+COPY --from=builder /app/.yarn ./.yarn
 COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
 COPY --from=builder /app/.pnp.cjs ./.pnp.cjs
 COPY --from=builder /app/.pnp.loader.mjs ./.pnp.loader.mjs
 
-# Debugging: Pastikan file Yarn & PnP tersedia
+RUN ls -la .next  # ✅ Tambahan Debugging di Runner 
 RUN ls -la /app
-RUN test -f "/app/.pnp.cjs" || yarn install --immutable --inline-builds
+
+# Pastikan `.pnp.cjs` dan `.pnp.loader.mjs` tetap berada di root (`/`)
+
+
+# Debugging: Periksa apakah file Yarn dan PnP sudah benar
+
+# Jika `.pnp.cjs` tidak ada di root (`/`), jalankan `yarn install` ulang
+# RUN if [ ! -f "/app/.pnp.cjs" ]; then yarn install --immutable --inline-builds; fi  # ✅ Perbaikan di sini
+RUN test -f "/app/.pnp.cjs" || yarn install --immutable --inline-builds  # ✅ Perbaikan di sini
+
 
 # Ekspos port aplikasi
 EXPOSE 3000
