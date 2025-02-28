@@ -29,7 +29,8 @@ RUN ls -la /
 COPY . .
 
 # Build Next.js
-RUN yarn build
+
+RUN yarn build && ls -la .next 
 
 # ========================================
 # Stage 2: Runner (Runtime)
@@ -52,16 +53,15 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/yarn.lock ./
 COPY --from=builder /app/.yarn ./.yarn
 COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
+COPY --from=builder /app/.pnp.cjs ./
+COPY --from=builder /app/.pnp.loader.mjs ./
+
+RUN ls -la .next  # ✅ Tambahan Debugging di Runner
 
 # Pastikan `.pnp.cjs` dan `.pnp.loader.mjs` tetap berada di root (`/`)
 
 
-COPY --from=builder /app/.pnp.cjs ./
-COPY --from=builder /app/.pnp.loader.mjs ./
-
-
 # Debugging: Periksa apakah file Yarn dan PnP sudah benar
-RUN ls -la /
 
 # Jika `.pnp.cjs` tidak ada di root (`/`), jalankan `yarn install` ulang
 RUN if [ ! -f "/.pnp.cjs" ]; then yarn install --immutable --inline-builds; fi  # ✅ Perbaikan di sini
