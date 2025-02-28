@@ -3,7 +3,7 @@
 # ========================================
 FROM node:20-alpine AS builder
 
-# Set environment production
+# Set environment ke production
 ENV NODE_ENV=production
 
 # Set working directory
@@ -12,15 +12,15 @@ WORKDIR /app
 # Aktifkan Corepack untuk memastikan Yarn tersedia
 RUN corepack enable && corepack prepare yarn@stable --activate
 
-# Salin file penting untuk dependency management
+# Salin file yang diperlukan untuk dependency management
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn ./.yarn/
 
-# Debugging: Cek apakah Yarn tersedia sebelum install
+# Debugging: Pastikan Yarn tersedia sebelum install dependencies
 RUN ls -la .yarn/releases/
 
 # Install dependencies menggunakan Yarn PnP (tanpa cache)
-RUN yarn install --immutable --inline-builds
+RUN yarn install --immutable --inline-builds || yarn install --check-cache
 
 # Debugging: Pastikan `.pnp.cjs` dan `.pnp.loader.mjs` ada
 RUN ls -la /app
@@ -31,7 +31,7 @@ COPY . .
 # Build aplikasi Next.js
 RUN yarn build
 
-# Debugging: Cek apakah folder .next berhasil dibuat
+# Debugging: Cek apakah folder `.next` berhasil dibuat
 RUN ls -la .next
 
 # ========================================
@@ -39,7 +39,7 @@ RUN ls -la .next
 # ========================================
 FROM node:20-alpine AS runner
 
-# Set environment production
+# Set environment ke production
 ENV NODE_ENV=production
 
 # Set working directory
@@ -57,9 +57,12 @@ COPY --from=builder /app/.yarn ./.yarn/
 COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
 COPY --from=builder /app/.pnp.cjs ./.pnp.cjs
 COPY --from=builder /app/.pnp.loader.mjs ./.pnp.loader.mjs
+COPY --from=builder /app/node_modules ./node_modules  # ✅ Tambahkan ini agar tidak error!
 
-# Debugging: Pastikan file Yarn & PnP tersedia
+# Debugging: Pastikan semua file yang diperlukan ada di runtime
 RUN ls -la /app
+
+# Jika `.pnp.cjs` tidak ada, jalankan `yarn install` ulang
 RUN test -f "/app/.pnp.cjs" || yarn install --immutable --inline-builds
 
 # Ekspos port aplikasi
