@@ -20,7 +20,9 @@ COPY .yarn .yarn
 RUN ls -la .yarn/releases/
 
 # Install dependencies tanpa cache
-RUN yarn install --immutable --inline-builds  # ✅ Perbaikan di sini
+
+RUN yarn install --immutable --inline-builds || yarn install --check-cache # ✅ Perbaikan di sini
+
 
 # Debugging: Cek apakah `.pnp.cjs` dan `.pnp.loader.mjs` ada di root (`/`)
 RUN ls -la /
