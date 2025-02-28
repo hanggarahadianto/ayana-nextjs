@@ -4,7 +4,8 @@
 FROM node:20-alpine AS builder
 
 # Set environment ke production
-ENV NODE_ENV=production
+ENV NODE_OPTIONS="--openssl-legacy-provider"
+
 
 # Set working directory
 WORKDIR /app
@@ -20,7 +21,9 @@ COPY .yarn ./.yarn/
 RUN ls -la .yarn/releases/
 
 # Install dependencies menggunakan Yarn PnP (tanpa cache)
-RUN yarn install --immutable --inline-builds || yarn install --check-cache
+RUN yarn install --immutable
+
+
 
 # Debugging: Pastikan `.pnp.cjs` dan `.pnp.loader.mjs` ada
 RUN ls -la /app
@@ -40,7 +43,8 @@ RUN ls -la .next
 FROM node:20-alpine AS runner
 
 # Set environment ke production
-ENV NODE_ENV=production
+ENV NODE_OPTIONS="--openssl-legacy-provider"
+
 
 # Set working directory
 WORKDIR /app
