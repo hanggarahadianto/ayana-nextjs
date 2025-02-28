@@ -1,68 +1,33 @@
-# ========================================
-# Stage 1: Builder (Install & Build)
-# ========================================
-FROM node:20 AS builder
+# Base Image untuk Build
+FROM node:20-bullseye AS base
 
-# Set environment ke production
-ENV NODE_ENV=production
-
-# Set working directory
+# Set direktori kerja dalam container
 WORKDIR /app
 
-# Aktifkan Corepack agar Yarn tersedia
-RUN corepack enable && corepack prepare yarn@stable --activate
+# Copy package.json dan package-lock.json terlebih dahulu untuk caching dependensi
+COPY package.json package-lock.json ./
 
-# Salin file yang diperlukan terlebih dahulu untuk caching lebih optimal
-COPY package.json yarn.lock .yarnrc.yml ./
+# Pastikan versi library tidak otomatis berubah
+RUN npm ci --ignore-scripts && npm cache clean --force
 
-# Salin Yarn jika ada di proyek
-COPY .yarn/releases .yarn/releases/
-
-# Debugging: Pastikan Yarn tersedia sebelum install dependencies
-RUN ls -la .yarn/releases/
-
-# Install dependencies menggunakan PnP (Plug'n'Play)
-RUN yarn install --immutable --network-timeout 600000
-
-# Salin seluruh kode proyek setelah dependencies diinstall
+# Copy seluruh kode aplikasi
 COPY . .
 
-# Pastikan `.pnp.cjs` dan `.pnp.loader.mjs` tersedia setelah install
-RUN ls -la .pnp.cjs .pnp.loader.mjs || (echo "Missing PnP files!" && exit 1)
-
 # Build aplikasi Next.js
-RUN yarn build
+RUN npm run build
 
-# ========================================
-# Stage 2: Runner (Runtime)
-# ========================================
-FROM node:20 AS runner
-
-# Set environment ke production
-ENV NODE_ENV=production
-
-# Set working directory
+# Production Image
+FROM node:20-slim AS production
 WORKDIR /app
 
-# Aktifkan Corepack agar Yarn tersedia
-RUN corepack enable && corepack prepare yarn@stable --activate
+# Copy hasil build dari stage base
+COPY --from=base /app .
 
-# Salin hanya file yang diperlukan untuk runtime
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/yarn.lock ./
-COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
-COPY --from=builder /app/.yarn ./.yarn
+# Atur variabel lingkungan
+ENV NODE_ENV=production
 
-# Debugging: Pastikan semua file yang diperlukan ada di runtime
-RUN ls -la /app || (echo "Runtime files missing!" && exit 1)
-
-# Set permission untuk memastikan akses yang benar
-RUN chmod -R 755 /app
-
-# Ekspos port aplikasi
+# Expose port default Next.js
 EXPOSE 3000
 
-# Jalankan aplikasi Next.js dengan PnP
-CMD ["yarn", "start"]
+# Jalankan aplikasi Next.js
+CMD ["npm", "run", "start"]
