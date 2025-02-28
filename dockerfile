@@ -58,8 +58,8 @@ COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
 COPY --from=builder /app/.pnp.cjs ./.pnp.cjs
 COPY --from=builder /app/.pnp.loader.mjs ./.pnp.loader.mjs
 
-# RUN ls -la .next  # ✅ Tambahan Debugging di Runner | tadi pakai ini
-RUN ls -la /app
+RUN ls -la .next  # ✅ Tambahan Debugging di Runner | tadi pakai ini
+# RUN ls -la /app
 
 # Pastikan `.pnp.cjs` dan `.pnp.loader.mjs` tetap berada di root (`/`)
 
