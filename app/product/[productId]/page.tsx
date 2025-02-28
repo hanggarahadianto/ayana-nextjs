@@ -16,7 +16,7 @@ export default function ProductDetailPage() {
   return (
     <>
       <Navbar />
-      <ProductDetailComponent productId={productId} />
+      {/* <ProductDetailComponent productId={productId} /> */}
       <Footer />
     </>
   );
