@@ -13,16 +13,12 @@ import AdditionalInfoProduct from "./additional-info-product";
 import ReservationForm from "../reservation/ReservationForm";
 import AdditionalInfoMaps from "./maps";
 
-const ProductDetailComponent = () => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  const [productId, setProductId] = useState<string | null>(null);
+interface ProductDetailProps {
+  productId: string;
+}
 
-  useEffect(() => {
-    const params = useParams() as { productId?: string };
-    if (params?.productId) {
-      setProductId(params.productId);
-    }
-  }, []);
+const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   // Jika productId belum tersedia, tampilkan loading
   if (!productId) return <p>Loading...</p>;
@@ -172,4 +168,4 @@ const ProductDetailComponent = () => {
   );
 };
 
-export default ProductDetailComponent;
+export default ProductDetail;

@@ -12,11 +12,12 @@ const nextConfig = {
   experimental: {
     logging: "verbose", // Menampilkan log detail
   },
-  webpack: (config: { resolve: { alias: any } }) => {
+  webpack: (config: { resolve: { alias: any } }, { isServer }: any) => {
     config.resolve.alias = {
       ...config.resolve.alias,
       "@": path.resolve(process.cwd(), "src"), // __dirname tidak tersedia di ESM, gunakan process.cwd()
     };
+    console.log(`🔧 Webpack is running on ${isServer ? "server" : "client"}`);
     return config;
   },
   async rewrites() {

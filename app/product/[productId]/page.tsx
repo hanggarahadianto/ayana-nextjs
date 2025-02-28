@@ -1,17 +1,20 @@
-"use client";
-
 import Footer from "@/components/landing/footer";
 import Navbar from "@/components/landing/navbar";
 import ProductDetailComponent from "@/components/product/product-detail";
 
-const ProductDetailPage = () => {
+interface ProductPageProps {
+  params: { productId: string };
+}
+
+const ProductPage = async ({ params }: ProductPageProps) => {
+  const { productId } = params;
   return (
     <>
       <Navbar />
-      <ProductDetailComponent />
+      <ProductDetailComponent productId={productId} />
       <Footer />
     </>
   );
 };
 
-export default ProductDetailPage;
+export default ProductPage;
