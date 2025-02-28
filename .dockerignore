@@ -4,7 +4,3 @@
 .env.development
 .env.production
 .DS_Store
-.yarn/cache/
-.yarn/unplugged/
-.yarn/install-state.gz
-node_modules
