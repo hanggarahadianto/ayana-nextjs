@@ -57,7 +57,7 @@ COPY --from=builder /app/.yarn ./.yarn/
 COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
 COPY --from=builder /app/.pnp.cjs ./.pnp.cjs
 COPY --from=builder /app/.pnp.loader.mjs ./.pnp.loader.mjs
-COPY --from=builder /app/node_modules ./node_modules  # ✅ Tambahkan ini agar tidak error!
+
 
 # Debugging: Pastikan semua file yang diperlukan ada di runtime
 RUN ls -la /app
