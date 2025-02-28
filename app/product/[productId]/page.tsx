@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import Footer from "@/components/landing/footer";
 import Navbar from "@/components/landing/navbar";
-import ProductDetailComponent from "@/components/product/product-detail";
+import ProductDetail from "@/components/product/product-detail";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -16,7 +16,7 @@ export default function ProductDetailPage() {
   return (
     <>
       <Navbar />
-      {/* <ProductDetailComponent productId={productId} /> */}
+      <ProductDetail productId={productId} />
       <Footer />
     </>
   );
