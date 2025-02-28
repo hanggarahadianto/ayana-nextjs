@@ -12,9 +12,8 @@ WORKDIR /app
 # Aktifkan Corepack agar Yarn tersedia
 RUN corepack enable && corepack prepare yarn@stable --activate
 
-# Salin file yang diperlukan terlebih dahulu
+# Salin file yang diperlukan terlebih dahulu untuk caching lebih optimal
 COPY package.json yarn.lock .yarnrc.yml ./
-
 
 # Salin Yarn jika ada di proyek
 COPY .yarn/releases .yarn/releases/
@@ -22,14 +21,14 @@ COPY .yarn/releases .yarn/releases/
 # Debugging: Pastikan Yarn tersedia sebelum install dependencies
 RUN ls -la .yarn/releases/
 
-# Install dependencies menggunakan PnP
-RUN yarn install --refresh-lockfile --network-timeout 600000
+# Install dependencies menggunakan PnP (Plug'n'Play)
+RUN yarn install --immutable --network-timeout 600000
 
 # Salin seluruh kode proyek setelah dependencies diinstall
 COPY . .
 
-# **Pastikan `.pnp.cjs` dan `.pnp.loader.mjs` ada**
-RUN ls -la .pnp.cjs .pnp.loader.mjs
+# Pastikan `.pnp.cjs` dan `.pnp.loader.mjs` tersedia setelah install
+RUN ls -la .pnp.cjs .pnp.loader.mjs || (echo "Missing PnP files!" && exit 1)
 
 # Build aplikasi Next.js
 RUN yarn build
@@ -48,7 +47,7 @@ WORKDIR /app
 # Aktifkan Corepack agar Yarn tersedia
 RUN corepack enable && corepack prepare yarn@stable --activate
 
-# Salin hasil build & file yang diperlukan ke runtime container
+# Salin hanya file yang diperlukan untuk runtime
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./
@@ -59,7 +58,10 @@ COPY --from=builder /app/.pnp.loader.mjs ./.pnp.loader.mjs
 COPY --from=builder /app/.yarn ./.yarn
 
 # Debugging: Pastikan semua file yang diperlukan ada di runtime
-RUN ls -la /app
+RUN ls -la /app || (echo "Runtime files missing!" && exit 1)
+
+# Set permission untuk memastikan akses yang benar
+RUN chmod -R 755 /app
 
 # Ekspos port aplikasi
 EXPOSE 3000
