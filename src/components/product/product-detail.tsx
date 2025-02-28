@@ -1,6 +1,6 @@
 "use client";
 import { Box, Button, Center, Container, Divider, Flex, Grid, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FaBath, FaBed, FaLandmark } from "react-icons/fa";
 import { useMediaQuery } from "@mantine/hooks";
@@ -15,18 +15,29 @@ import AdditionalInfoMaps from "./maps";
 
 const ProductDetailComponent = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const { productId } = useParams() as { productId: string };
+  const [productId, setProductId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const params = useParams() as { productId?: string };
+    if (params?.productId) {
+      setProductId(params.productId);
+    }
+  }, []);
+
+  // Jika productId belum tersedia, tampilkan loading
+  if (!productId) return <p>Loading...</p>;
 
   const { data: productDataDetail } = useQuery({
     queryKey: ["getProductDetailData", productId],
-    queryFn: () => (productId ? getDataProductDetail(productId) : Promise.reject("No product ID")),
+    queryFn: () => getDataProductDetail(productId),
     enabled: !!productId,
     refetchOnWindowFocus: false,
   });
 
   const { data: additionalInfo } = useQuery({
-    queryKey: ["getAdditionalInfoData"],
+    queryKey: ["getAdditionalInfoData", productId],
     queryFn: () => getDataAdditionalInfo(productId),
+    enabled: !!productId,
     refetchOnWindowFocus: false,
   });
 
