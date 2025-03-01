@@ -1,3 +1,5 @@
+"use client";
+
 import { Container, Text, Group, Select, Card, Image, SimpleGrid, Grid, GridCol } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import { useMediaQuery } from "@mantine/hooks";
