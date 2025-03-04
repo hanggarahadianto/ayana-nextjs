@@ -17,3 +17,7 @@ export const httpHeader = (token?: string, isMultipart = false) => {
 
   return { headers };
 };
+
+export const httpWithOutHeader = (token: string) => {
+  return { headers: { Authorization: token } };
+};

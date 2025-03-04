@@ -5,9 +5,7 @@ export const getDataProduct = async () => {
     const url = "home/get";
 
     // ✅ Pastikan Axios mengirim cookies
-    const response = await APIAxiosInstance.get(url, {
-      withCredentials: true,
-    });
+    const response = await APIAxiosInstance.get(url);
 
     console.log("Response:", response.data.data);
     return response.data;
