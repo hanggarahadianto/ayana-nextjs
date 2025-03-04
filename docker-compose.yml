@@ -1,0 +1,15 @@
+services:
+  frontend:
+    container_name: Ayana-NextJs-Local
+    image: ayana-nextjs-local:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    restart: always
+    volumes:
+      - .:/app
+      - /app/node_modules
