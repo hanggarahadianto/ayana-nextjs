@@ -18,6 +18,6 @@ export const httpHeader = (token?: string, isMultipart = false) => {
   return { headers };
 };
 
-export const httpWithOutHeader = (token: string) => {
-  return { headers: { Authorization: token } };
+export const httpWithoutHeader = () => {
+  return { headers: { Authorization: undefined } }; // Pastikan header Authorization tidak dikirim
 };

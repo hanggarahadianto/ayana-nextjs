@@ -1,11 +1,11 @@
-import { APIAxiosInstance } from "..";
+import { APIAxiosInstance, httpWithoutHeader } from "..";
 
 export const getDataProduct = async () => {
   try {
     const url = "home/get";
 
-    // ✅ Pastikan Axios mengirim cookies
-    const response = await APIAxiosInstance.get(url);
+    // ✅ Panggil fungsi dengan ()
+    const response = await APIAxiosInstance.get(url, httpWithoutHeader());
 
     console.log("Response:", response.data.data);
     return response.data;
