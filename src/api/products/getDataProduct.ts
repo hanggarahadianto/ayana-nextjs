@@ -5,7 +5,7 @@ export const getDataProduct = async () => {
     const url = "home/get";
 
     // ✅ Panggil fungsi dengan ()
-    const response = await APIAxiosInstance.get(url, httpWithoutHeader());
+    const response = await APIAxiosInstance.get(url); // ⬅️ Tanpa header
 
     console.log("Response:", response.data.data);
     return response.data;

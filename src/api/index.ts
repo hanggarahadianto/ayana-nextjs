@@ -5,7 +5,7 @@ const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://api.ayanagroup99
 export const APIAxiosInstance = axios.create({
   baseURL,
   timeout: 1000 * 60,
-  // withCredentials: true, // ⬅️ Wajib untuk mengirim cookies!
+  withCredentials: true, // ⬅️ AKTIFKAN INI!
 });
 
 // ✅ Fungsi header fleksibel
@@ -19,5 +19,5 @@ export const httpHeader = (token?: string, isMultipart = false) => {
 };
 
 export const httpWithoutHeader = () => {
-  return { headers: { Authorization: undefined } }; // Pastikan header Authorization tidak dikirim
+  return {}; // ⬅️ Jangan kirim header kosong
 };
