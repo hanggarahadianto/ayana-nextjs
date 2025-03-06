@@ -1,6 +1,3 @@
-
-
-
 ### Frontend Dockerfile (SUDAH EFISIEN) ###
 
 # Base image menggunakan Node.js slim agar lebih kecil
@@ -28,6 +25,8 @@ WORKDIR /app
 COPY --from=base /app/.next .next
 COPY --from=base /app/package.json .
 COPY --from=base /app/node_modules node_modules
+
+COPY --from=base /app/public ./public
 
 ENV NODE_ENV=production
 

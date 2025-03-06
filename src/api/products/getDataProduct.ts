@@ -1,11 +1,12 @@
-import { APIAxiosInstance, httpWithoutHeader } from "..";
+import { APIAxiosInstance, APIAxiosInstanceWithoutCredential, httpWithoutHeader } from "..";
 
 export const getDataProduct = async () => {
   try {
     const url = "home/get";
 
     // ✅ Panggil fungsi dengan ()
-    const response = await APIAxiosInstance.get(url); // ⬅️ Tanpa header
+    const response = await APIAxiosInstanceWithoutCredential.get(url); // ⬅️ Tanpa header
+    // const response = await APIAxiosInstance.get(url); // ⬅️ Tanpa header
 
     console.log("Response:", response.data.data);
     return response.data;

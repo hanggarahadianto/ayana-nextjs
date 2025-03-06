@@ -1,11 +1,22 @@
 import axios from "axios";
 
-const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://api.ayanagroup99.com";
+if (!process.env.NEXT_PUBLIC_BACKEND_URL) {
+  throw new Error("❌ NEXT_PUBLIC_BACKEND_URL is not defined in .env file");
+}
+
+// Dapatkan baseURL dari environment variable
+const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const APIAxiosInstance = axios.create({
   baseURL,
   timeout: 1000 * 60,
   withCredentials: true, // ⬅️ AKTIFKAN INI!
+});
+
+export const APIAxiosInstanceWithoutCredential = axios.create({
+  baseURL,
+  timeout: 1000 * 60, // Timeout 60 detik
+  withCredentials: false, // Tidak mengirim kredensial (cookies, token)
 });
 
 // ✅ Fungsi header fleksibel
