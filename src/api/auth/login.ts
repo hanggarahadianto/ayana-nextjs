@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { showNotification } from "@mantine/notifications";
 import Cookies from "js-cookie";
-import { APIAxiosInstance } from "..";
+import { APIAxiosInstanceWithoutCredential } from "..";
 
 const handleLogin = async (values: IUserPayload) => {
-  const response = await APIAxiosInstance.post(`auth/login`, values);
+  const response = await APIAxiosInstanceWithoutCredential.post(`auth/login`, values);
   return response.data; // Return the response data
 };
 
