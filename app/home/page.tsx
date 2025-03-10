@@ -10,8 +10,8 @@ const HomePage = () => {
   return (
     <>
       <Navbar />
-      <LandingPage />
-      <ProductPage />
+      {/* <LandingPage /> */}
+      {/* <ProductPage /> */}
       <Testimony />
       <Footer />
     </>

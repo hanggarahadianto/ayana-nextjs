@@ -1,18 +1,26 @@
-"use client";
-import React from "react";
+"use client"; // Add this at the top of your component
+
+import React, { useEffect, useState } from "react";
 import { Paper, Text, Group, Button, Flex, Image, Grid, Card, Box, Stack } from "@mantine/core";
 import { FaQuoteLeft } from "react-icons/fa";
 import Marquee from "react-fast-marquee";
 import { useMediaQuery } from "@mantine/hooks";
 
 const Testimony = () => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  // const [isMobile, setIsMobile] = useState(false);
+
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  const isMid = useMediaQuery("(min-width: 768px) and (max-width: 1279px)");
+  const isWide = useMediaQuery("(min-width: 1280px)");
+
+  // useEffect(() => {
+  //   setIsMobile(window.innerWidth <= 768);
+  // }, []);
 
   return (
     <Paper h={isMobile ? "auto" : "60vh"} mb={isMobile ? 200 : 400}>
       <Grid style={{ height: "100%" }}>
         {/* Left Side */}
-
         <Grid.Col span={isMobile ? 12 : 6} bg={"#486245"} h={isMobile ? "auto" : "85vh"}>
           <Stack ml={isMobile ? 20 : 80} align="start" justify="start" mt={isMobile ? 60 : 120} gap={1}>
             <Text c="white" style={{ fontFamily: "Lora", fontSize: isMobile ? "3rem" : "5rem" }}>
@@ -26,14 +34,16 @@ const Testimony = () => {
             </Text>
           </Stack>
         </Grid.Col>
-        <Grid.Col span={isMobile ? 12 : 6} style={{ backgroundColor: "#22492a" }} h={isMobile ? "auto" : "85vh"}>
+
+        {/* Right Side */}
+        <Grid.Col span={isMobile ? 12 : 6} style={{ backgroundColor: "#22492a" }} h={isMobile ? "auto" : "auto"}>
           <Card
             shadow="sm"
             radius="md"
             withBorder
             mt={isMobile ? 30 : 90}
-            w={isMobile ? "90%" : 600}
-            ml={isMobile ? "auto" : 200}
+            w={isMobile ? "90%" : isWide ? 700 : 400}
+            ml={isMobile ? "auto" : 80}
             mr={isMobile ? "auto" : 0}
             style={{ backgroundColor: "#e1d9c9" }}
             mb={120}
@@ -57,7 +67,7 @@ const Testimony = () => {
                   justifyContent: "center",
                 }}
               >
-                <Image src="/images/people.png" height={70} width={70} alt="" style={{ borderRadius: "50%" }} />
+                <Image src="/images/people.png" height={70} width={70} alt="User" style={{ borderRadius: "50%" }} />
               </Box>
               <Stack>
                 <Text fw={800} c="#f05a36" style={{ fontFamily: "Montserrat", fontSize: "1.5rem" }}>
@@ -70,13 +80,11 @@ const Testimony = () => {
             </Flex>
           </Card>
         </Grid.Col>
-
-        {/* Right Side */}
       </Grid>
 
       {/* Marquee & Footer */}
       <div style={{ position: "relative", width: "100%", height: isMobile ? "80px" : "400px" }}>
-        <Image src="/images/footer.jpg" height={isMobile ? 300 : 400} width={"100%"} alt="" />
+        <Image src="/images/footer.jpg" height={isMobile ? 300 : 400} width={"100%"} alt="Footer" />
         <div
           style={{
             position: "absolute",
