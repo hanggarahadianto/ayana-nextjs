@@ -4,6 +4,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import Footer from "@/components/landing/footer";
 import Navbar from "@/components/landing/navbar";
 import ProductDetail from "@/components/product/product-detail";
+import FloatingWhatsApp from "@/components/product/floating-whatsapp";
 
 export default function ProductDetailPage() {
   const searchParams = useSearchParams();
@@ -19,6 +20,7 @@ export default function ProductDetailPage() {
   return (
     <>
       <Navbar />
+      <FloatingWhatsApp />
       <ProductDetail productId={homeId} />
 
       <Footer />

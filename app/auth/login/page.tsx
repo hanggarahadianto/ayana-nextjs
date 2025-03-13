@@ -54,6 +54,7 @@ export default function LoginPage() {
   return (
     <SimpleGrid
       // bg={"linear-gradient(135deg, #667eea 0%, #764ba2 100%)"}
+
       style={{
         height: "100vh", // Ensure the container takes full screen height
         width: "100%", // Ensure the container takes full screen width
@@ -66,7 +67,7 @@ export default function LoginPage() {
     >
       <Card
         shadow="xl"
-        p="250px"
+        px="250px"
         radius="md"
         style={{
           width: "100%",
