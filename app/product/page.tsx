@@ -38,7 +38,7 @@ const ProductPage = () => {
         <Link href={{ pathname: `/product/${home.id}` }} passHref style={{ textDecoration: "none", cursor: "pointer" }}>
           <Card
             shadow="sm"
-            padding={isMobile ? "md" : "lg"}
+            padding={isMobile ? "40px" : "40px"}
             radius="md"
             withBorder
             style={{ height: isMobile ? 400 : 540, cursor: "pointer" }}
@@ -70,9 +70,6 @@ const ProductPage = () => {
                 <Text w="100%" size="md" fw={700}>
                   {home.title}
                 </Text>
-                <Badge mr={12} w={60} color={home.status === "sale" ? "green" : "pink"}>
-                  {home.status === "sale" ? "On Sale" : "Sold"}
-                </Badge>
               </Flex>
             )}
 
@@ -106,47 +103,31 @@ const ProductPage = () => {
       </Carousel.Slide>
     );
   });
-
+  const getFontSize = (mobileSize: string, tabletSize: string, desktopSize: string) => {
+    return isMobile ? mobileSize : isTablet ? tabletSize : desktopSize;
+  };
   return (
-    <SimpleGrid cols={1} bg={"#a48060"} h={"100vh"}>
-      <Stack align="center" justify="center">
-        <Text
-          size={isMobile ? "xl" : "3.5rem"}
-          fw={900}
-          c={"white"}
-          style={{
-            fontFamily: "Lora",
-            textAlign: "center",
-          }}
-        >
+    <SimpleGrid cols={1} bg="#a48060" h="100vh" p={isMobile ? 12 : isTablet ? 24 : 60}>
+      <Stack align="center" justify="center" gap={0} px={getFontSize("1rem", "2rem", "3rem")}>
+        <Text size={getFontSize("2rem", "3rem", "3.5rem")} fw={900} c="white" style={{ fontFamily: "Lora", textAlign: "center" }}>
           AYANA HOUSES
         </Text>
-      </Stack>
-
-      <Stack align="center" justify="center">
         <Text
-          size={isMobile ? "xl" : "3.5rem"}
-          mt={-40}
+          size={getFontSize("1.8rem", "2.5rem", "3.5rem")}
           fw={900}
-          style={{
-            fontFamily: "Lora",
-            color: "#e7a17a",
-
-            textAlign: "center",
-          }}
+          style={{ fontFamily: "Lora", color: "#e7a17a", textAlign: "center" }}
         >
           ON SALE PROJECT
         </Text>
       </Stack>
 
-      {/* Responsive Carousel */}
       <Carousel
-        p={isMobile ? 12 : 60}
+        p={isMobile ? 20 : isTablet ? 60 : 80}
         withIndicators
-        slideSize={isMobile ? "50%" : isTablet ? "33.33%" : "33.33%"}
-        slideGap={isMobile ? "sm" : "md"}
+        slideSize={isMobile ? "60%" : isTablet ? "50%" : "33.33%"}
+        slideGap={isMobile ? "xs" : isTablet ? "sm" : "md"}
         loop
-        height={isMobile ? 420 : 600}
+        height={isMobile ? 350 : isTablet ? 600 : 800}
         align="start"
       >
         {cards}
