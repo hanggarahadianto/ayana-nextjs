@@ -9,7 +9,8 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Install dependencies dengan caching (lebih hemat resource)
-RUN npm ci --ignore-scripts --prefer-offline
+# RUN npm ci --ignore-scripts --prefer-offline
+RUN npm install --legacy-peer-deps
 
 # Copy seluruh kode aplikasi setelah dependensi terinstall
 COPY . .
