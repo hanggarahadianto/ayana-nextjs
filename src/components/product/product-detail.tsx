@@ -20,6 +20,8 @@ interface ProductDetailProps {
 const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
+  // console.log("PRODUCT DETAIL ID", productId);
+
   // Jika productId belum tersedia, tampilkan loading
   if (!productId) return <p>Loading...</p>;
 

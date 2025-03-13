@@ -13,6 +13,7 @@ import { Notifications } from "@mantine/notifications";
 
 import dayjs from "dayjs";
 import "dayjs/locale/id";
+import { DefaultSeo } from "next-seo";
 
 dayjs.locale("id");
 
@@ -39,10 +40,30 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" {...mantineHtmlProps}>
       <head>
         <ColorSchemeScript />
+
         <link rel="shortcut icon" href="/favicon.svg" />
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no" />
       </head>
       <body>
+        <DefaultSeo
+          title="Perumahan Purbalingga - Ayana Group 99"
+          description="Cari perumahan terbaik di Purbalingga? Ayana Group 99 menawarkan hunian nyaman dan strategis dengan harga terbaik."
+          canonical="https://ayanagroup99.com"
+          openGraph={{
+            type: "website",
+            locale: "id_ID",
+            url: "https://ayanagroup99.com",
+            siteName: "Ayana Group 99",
+            title: "Perumahan Purbalingga - Ayana Group 99",
+            description: "Cari perumahan terbaik di Purbalingga? Kami menawarkan berbagai pilihan rumah dengan fasilitas terbaik.",
+            images: [
+              {
+                url: "https://ayanagroup99.com/images/thumbnail.jpg",
+                alt: "Perumahan Purbalingga",
+              },
+            ],
+          }}
+        />
         <QueryClientProvider client={queryClient}>
           <MantineProvider theme={theme} defaultColorScheme="auto" withCssVariables>
             <ModalsProvider>

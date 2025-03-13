@@ -6,6 +6,7 @@ import { Card, SimpleGrid, Stack, Text, Image, Flex, Group, Badge } from "@manti
 import { Carousel } from "@mantine/carousel";
 import Link from "next/link";
 import { getDataProduct } from "@/api/products/getDataProduct";
+import { generateSlug } from "@/utils/slug";
 
 const ProductPage = () => {
   // Media Queries for responsive adjustments
@@ -26,7 +27,7 @@ const ProductPage = () => {
   const products = productData;
 
   const cards = products?.data.map((home: IProduct) => {
-    console.log("ID", home?.id);
+    // console.log("ID", home?.id);
     const formattedPrice = isMobile
       ? `${(home?.price / 1_000_000).toFixed(0)} Juta`
       : new Intl.NumberFormat("id-ID", {
@@ -35,7 +36,15 @@ const ProductPage = () => {
         }).format(home?.price);
     return (
       <Carousel.Slide key={home.id}>
-        <Link href={{ pathname: `/product/${home.id}` }} passHref style={{ textDecoration: "none", cursor: "pointer" }}>
+        {/* <Link href={{ pathname: `/product/${home.id}` }} passHref style={{ textDecoration: "none", cursor: "pointer" }}> */}
+        <Link
+          href={{
+            pathname: `/product/${generateSlug(home.title)}`,
+            query: { id: home.id }, // Kirim home.id sebagai query parameter
+          }}
+          passHref
+          style={{ textDecoration: "none", cursor: "pointer" }}
+        >
           <Card
             shadow="sm"
             padding={isMobile ? "40px" : "40px"}
