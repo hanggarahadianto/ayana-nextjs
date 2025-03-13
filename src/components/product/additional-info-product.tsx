@@ -1,6 +1,5 @@
 "use client";
 import { Button, Container, Group, Stack, Text } from "@mantine/core";
-import AdditionalInfoMaps from "./maps";
 import { FaLocationArrow } from "react-icons/fa";
 
 interface AdditionalInfoProps {

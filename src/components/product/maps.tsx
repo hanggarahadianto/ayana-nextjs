@@ -1,74 +1,84 @@
-import React from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import React, { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-import { Stack } from "@mantine/core";
 
-// Fix the marker icon issue
-const customIcon = L.icon({
-  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
-  iconSize: [25, 41], // size of the icon
-  iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
-  popupAnchor: [1, -34], // point from which the popup should open relative to the iconAnchor
-  shadowSize: [41, 41], // size of the shadow
-});
+// Load Leaflet hanya di client
+const L = typeof window !== "undefined" ? require("leaflet") : null;
+const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), { ssr: false });
+const TileLayer = dynamic(() => import("react-leaflet").then((mod) => mod.TileLayer), { ssr: false });
+const Marker = dynamic(() => import("react-leaflet").then((mod) => mod.Marker), { ssr: false });
+const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), { ssr: false });
 
-// Utility function to parse Google Maps URL
-const parseGoogleMapsUrl = (url: string) => {
+// Utility function untuk parsing Google Maps URL
+const parseGoogleMapsUrl = (url: any) => {
+  if (!url || typeof url !== "string") {
+    console.warn("Google Maps URL is undefined or not a valid string");
+    return null; // Mengembalikan null untuk mencegah error
+  }
+
   const regex = /@(-?\d+\.\d+),(-?\d+\.\d+),(\d+)z/;
   const match = url.match(regex);
 
   if (match) {
-    const latitude = parseFloat(match[1]);
-    const longitude = parseFloat(match[2]);
-    const zoom = parseInt(match[3], 10);
-    return { latitude, longitude, zoom };
+    return {
+      latitude: parseFloat(match[1]),
+      longitude: parseFloat(match[2]),
+      zoom: parseInt(match[3], 10),
+    };
   }
 
-  throw new Error("Invalid Google Maps URL");
+  console.warn("Invalid Google Maps URL format");
+  return null;
 };
 
-// Component
-const ReactLeafletMap: React.FC<{ mapsUrl: string }> = ({ mapsUrl }) => {
+const ReactLeafletMap: React.FC<{ mapsUrl?: any }> = ({ mapsUrl }) => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Parsing URL untuk mendapatkan koordinat dan zoom
+  let latitude = 0;
+  let longitude = 0;
+  let zoom = 13; // Default zoom
+
   try {
-    const { latitude, longitude, zoom } = parseGoogleMapsUrl(mapsUrl);
+    const parsed = parseGoogleMapsUrl(mapsUrl);
+    if (!parsed) {
+      throw new Error("Invalid map URL");
+    }
 
-    return (
-      <MapContainer
-        center={[latitude, longitude]}
-        zoom={zoom}
-        style={{ height: "500px", width: "98%" }}
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <Marker position={[latitude, longitude]} icon={customIcon}>
-          <Popup>Location from Google Maps URL</Popup>
-        </Marker>
-      </MapContainer>
-    );
+    latitude = parsed.latitude;
+    longitude = parsed.longitude;
+    zoom = parsed.zoom;
   } catch (error) {
-    return <p>Error</p>;
-  }
-};
-
-// Example usage
-const AdditionalInfoMaps: React.FC<{ maps?: string }> = ({ maps }) => {
-  if (!maps) {
-    return <p>No map data available.</p>;
+    console.error("Error parsing Google Maps URL:", error);
+    return <p>Invalid map URL</p>;
   }
 
-  const googleMapsUrl = maps;
+  if (!isClient || !L) return <p>Loading...</p>;
+
+  const customIcon = L.icon({
+    iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+    shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+  });
 
   return (
-    <>
-      {/* <Stack align="center" justify="center" mr={34}> */}
-      <ReactLeafletMap mapsUrl={googleMapsUrl} />
-      {/* </Stack> */}
-    </>
+    <MapContainer center={[latitude, longitude]} zoom={zoom} style={{ height: "500px", width: "98%" }}>
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      />
+      <Marker position={[latitude, longitude]} icon={customIcon}>
+        <Popup>Location from Google Maps URL</Popup>
+      </Marker>
+    </MapContainer>
   );
 };
 
-export default AdditionalInfoMaps;
+export default ReactLeafletMap;

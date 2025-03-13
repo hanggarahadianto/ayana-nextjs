@@ -42,7 +42,7 @@
 // };
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
 };
 
 const { default: createPWA } = require("@ducanh2912/next-pwa");

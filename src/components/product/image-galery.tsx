@@ -20,15 +20,10 @@ const images = [
 
 const MyGallery = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const isTablet = useMediaQuery("(max-width: 1024px)");
 
   return (
-    <div
-      style={{
-        width: "95vw",
-        maxWidth: isMobile ? "400px" : "1400px", // ✅ Limit width on mobile
-        margin: "auto",
-      }}
-    >
+    <>
       <ImageGallery
         items={images}
         showThumbnails={!isMobile}
@@ -42,7 +37,7 @@ const MyGallery = () => {
       />
       <style jsx>{`
         :global(.custom-gallery .image-gallery-slide img) {
-          max-height: ${isMobile ? "220px" : "350px"}; /* ✅ Adjust height */
+          max-height: ${isMobile ? "220px" : isTablet ? "300px" : "400px"};
           object-fit: cover;
           width: 100%;
           border-radius: 12px;
@@ -60,7 +55,7 @@ const MyGallery = () => {
         }
 
         :global(.custom-gallery .image-gallery-thumbnail) {
-          height: 50px; /* ✅ Smaller thumbnails for mobile */
+          height: ${isMobile ? "40px" : "60px"};
           border-radius: 8px;
           overflow: hidden;
         }
@@ -70,7 +65,7 @@ const MyGallery = () => {
           border-radius: 8px;
         }
       `}</style>
-    </div>
+    </>
   );
 };
 

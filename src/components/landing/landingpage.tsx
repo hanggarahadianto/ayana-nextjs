@@ -48,29 +48,6 @@ const LandingPage = () => {
         </AspectRatio>
 
         {/* Section: Text dan Image */}
-        {/* <Grid mt={50} justify="center">
-          <Grid.Col span={{ base: 10, sm: 5 }}>
-            <Stack p={isMobile ? 10 : 20} align="center">
-              <Image src="/images/sublanding.png" height={isMobile ? 150 : 250} width={isMobile ? 150 : 250} alt="Sublanding" />
-            </Stack>
-          </Grid.Col>
-
-          <Grid.Col span={{ base: 12, sm: 7 }}>
-            <Stack align="center" p={isMobile ? 5 : 20}>
-              <Text size={isMobile ? "1.5rem" : "4rem"} fw={900} c="darksalmon" style={{ fontFamily: "Lora", textAlign: "center" }}>
-                LIVABLE CITY
-              </Text>
-              <Text size={isMobile ? "1.2rem" : "2rem"} fw={900} ta="center">
-                Inside The City
-              </Text>
-              <Text size={isMobile ? "md" : "lg"} fw={300} px={isMobile ? "sm" : "lg"} ta="center">
-                True to our name, all we know do revolve around one simple, profound mission: To make your dream home a reality. This is to
-                appreciate you hustlers, dreamers, and visionaries. Who dare to take responsibly the biggest leap of faith in life; to
-                decide on a home of your own
-              </Text>
-            </Stack>
-          </Grid.Col>
-        </Grid> */}
         <Grid>
           <Grid.Col span={isMobile ? 11 : 6}>
             <Stack p={isMobile ? 20 : 40} ml={isMobile ? 0 : 200} align={isMobile ? "center" : "flex-start"}>
