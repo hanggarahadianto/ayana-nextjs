@@ -17,17 +17,18 @@ const ProductPage = () => {
 
   const calculateCustomBackgroundHeight = (height: number): number => {
     if (height >= 780) return 90;
-    if (height >= 660) return 120;
-    if (height >= 480) return 130;
+    if (height >= 720) return 120;
+    if (height >= 660) return 150;
+    if (height >= 480) return 200;
     return 140; // Default jika height < 480
   };
 
   // Fungsi untuk menghitung tinggi Card
   const calculateCustomCardHeight = (height: number): number => {
     if (height >= 780) return 520;
-    if (height >= 720) return 560;
-    if (height >= 660) return 680;
-    if (height >= 480) return 950;
+    if (height >= 720) return 550;
+    if (height >= 660) return 600;
+    if (height >= 480) return 520;
     return 400; // Default jika height < 480
   };
   // Fungsi untuk menentukan lebar Card berdasarkan lebar layar

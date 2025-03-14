@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { AspectRatio, Badge, Container, Flex, Grid, Group, SimpleGrid, Stack, Text, useMantineTheme } from "@mantine/core";
+import { AspectRatio, Badge, Card, Container, Flex, Grid, Group, SimpleGrid, Stack, Text, useMantineTheme } from "@mantine/core";
 import Image from "next/image";
 import FloatingWhatsApp from "../product/floating-whatsapp";
 import { useMediaQuery } from "@mantine/hooks";
@@ -61,7 +61,7 @@ const LandingPage = () => {
             </Stack>
           </Grid.Col>
           <Grid.Col span={isMobile ? 13 : 7}>
-            <Stack mt={isMobile ? 40 : 140} align={isMobile ? "center" : "flex-start"}>
+            <Stack mt={isMobile ? 40 : 140} align={isMobile ? "center" : "flex-start"} p={isMobile ? "xl" : "md"}>
               <Text
                 size={isMobile ? "lg" : "xl"}
                 fw={900}
@@ -114,46 +114,56 @@ const LandingPage = () => {
             }}
           >
             {cards.map((card, index) => (
-              <Stack
+              <Card
                 key={index}
-                align="center"
-                gap={isMobile ? "sm" : "xl"}
-                p={isMobile ? "sm" : "lg"}
+                shadow="none" // Hilangkan shadow bawaan Mantine
+                padding={isMobile ? "sm" : "lg"}
+                radius="md"
+                bg="transparent" // Pastikan tidak ada background
                 style={{
                   maxWidth: isMobile ? 200 : 400,
+                  margin: "auto",
+                  border: "none", // Hilangkan border
+                  boxShadow: "none", // Hilangkan efek shadow yang bisa terlihat seperti border
                 }}
               >
-                <Image
-                  src={card.image}
-                  alt={card.alt}
-                  height={isMobile ? 120 : 260}
-                  width={isMobile ? 180 : 350}
-                  style={{ borderRadius: "10px" }}
-                />
-                <Text
-                  size={isMobile ? "md" : "xl"}
-                  fw={900}
-                  style={{
-                    fontFamily: "Lora",
-                    color: "black",
-                    textAlign: "center",
-                    lineHeight: isMobile ? "1.2" : "1.5",
-                  }}
-                >
-                  {card.title}
-                </Text>
-                <Text
-                  size={isMobile ? "sm" : "md"}
-                  style={{
-                    fontFamily: "Lora",
-                    color: "black",
-                    textAlign: "center",
-                    padding: isMobile ? "0.3rem" : "1rem",
-                  }}
-                >
-                  {card.description}
-                </Text>
-              </Stack>
+                <Stack align="center" gap={30}>
+                  <Group mr={isMobile ? 40 : 80} ps="center">
+                    <Image
+                      src={card.image}
+                      alt={card.alt}
+                      height={isMobile ? 180 : 360}
+                      width={isMobile ? 240 : 480}
+                      style={{ borderRadius: "10px" }}
+                    />
+                  </Group>
+
+                  <Text
+                    size={isMobile ? "md" : "xl"}
+                    fw={900}
+                    style={{
+                      fontFamily: "Lora",
+                      color: "black",
+                      textAlign: "center",
+                      lineHeight: isMobile ? "1.2" : "1.5",
+                    }}
+                  >
+                    {card.title}
+                  </Text>
+
+                  <Text
+                    size={isMobile ? "sm" : "md"}
+                    style={{
+                      fontFamily: "Lora",
+                      color: "black",
+                      textAlign: "center",
+                      padding: isMobile ? "0.3rem" : "1rem",
+                    }}
+                  >
+                    {card.description}
+                  </Text>
+                </Stack>
+              </Card>
             ))}
           </Flex>
         </Stack>

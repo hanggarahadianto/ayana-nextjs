@@ -13,55 +13,55 @@ const Testimony = () => {
 
   return (
     <>
-      <Paper h={"auto"}>
-        <Grid style={{ height: "100%" }} gutter={isMobile ? 20 : 40}>
-          {/* Left Side */}
-          <Grid.Col span={isMobile ? 12 : 6} style={{ backgroundColor: "#486245", padding: isMobile ? "10vw" : "5vw" }}>
-            <Stack align="start" gap={10}>
-              <Text c="white" style={{ fontFamily: "Lora", fontSize: isMobile ? "8vw" : "4vw" }}>
-                What They Say of
-              </Text>
-              <Text fw={800} c="#a67d67" style={{ fontFamily: "Montserrat", fontSize: isMobile ? "6vw" : "3vw" }}>
-                AYANA HOME
-              </Text>
-              <Text c="white" style={{ fontFamily: "Lora", fontSize: isMobile ? "3.5vw" : "1.5vw" }}>
-                Find out more about Cendana Homes from the customers and residents.
-              </Text>
-            </Stack>
-          </Grid.Col>
+      {/* <Paper h={"auto"}> */}
+      <Grid style={{ height: "100%" }} gutter={isMobile ? 20 : 40}>
+        {/* Left Side */}
+        <Grid.Col span={isMobile ? 12 : 6} style={{ backgroundColor: "#486245", padding: isMobile ? "10vw" : "5vw" }}>
+          <Stack align="start" gap={10}>
+            <Text c="white" style={{ fontFamily: "Lora", fontSize: isMobile ? "8vw" : "4vw" }}>
+              What They Say of
+            </Text>
+            <Text fw={800} c="#a67d67" style={{ fontFamily: "Montserrat", fontSize: isMobile ? "6vw" : "3vw" }}>
+              AYANA HOME
+            </Text>
+            <Text c="white" style={{ fontFamily: "Lora", fontSize: isMobile ? "3.5vw" : "1.5vw" }}>
+              Find out more about Cendana Homes from the customers and residents.
+            </Text>
+          </Stack>
+        </Grid.Col>
 
-          {/* Right Side */}
-          <Grid.Col span={isMobile ? 12 : 6} style={{ backgroundColor: "#22492a", padding: isMobile ? "5vw" : "3vw" }}>
-            <Card
-              shadow="sm"
-              radius="md"
-              withBorder
-              w={isMobile ? "100%" : isWide ? "60%" : "80%"}
-              style={{ backgroundColor: "#e1d9c9", margin: "auto" }}
-            >
-              <Group justify="space-between" mt="md" mb="xs" p={40}>
-                <FaQuoteLeft size={isMobile ? 30 : 40} color="#486245" />
-                <Text style={{ fontFamily: "Lora", fontSize: isMobile ? "3.5vw" : "1.2rem", color: "black" }}>
-                  Tinggal di Ayana sangat nyaman, dari udara yang sejuk, fasilitas lengkap, dan lokasi strategis.
+        {/* Right Side */}
+        <Grid.Col span={isMobile ? 12 : 6} style={{ backgroundColor: "#22492a", padding: isMobile ? "5vw" : "3vw" }}>
+          <Card
+            shadow="sm"
+            radius="md"
+            withBorder
+            w={isMobile ? "100%" : isWide ? "60%" : "80%"}
+            style={{ backgroundColor: "#e1d9c9", margin: "auto" }}
+          >
+            <Group justify="space-between" mt="md" mb="xs" p={40}>
+              <FaQuoteLeft size={isMobile ? 30 : 40} color="#486245" />
+              <Text style={{ fontFamily: "Lora", fontSize: isMobile ? "3.5vw" : "1.2rem", color: "black" }}>
+                Tinggal di Ayana sangat nyaman, dari udara yang sejuk, fasilitas lengkap, dan lokasi strategis.
+              </Text>
+            </Group>
+            <Group mt={20} align="center">
+              <Image src="/images/people.png" height={isMobile ? 50 : 70} width={isMobile ? 50 : 70} alt="User" radius={100} />
+              <Stack gap={0}>
+                <Text fw={800} c="#f05a36" style={{ fontFamily: "Montserrat", fontSize: isMobile ? "4vw" : "1.5rem" }}>
+                  Briyan Ongko Wijaya
                 </Text>
-              </Group>
-              <Group mt={20} align="center">
-                <Image src="/images/people.png" height={isMobile ? 50 : 70} width={isMobile ? 50 : 70} alt="User" radius={100} />
-                <Stack gap={0}>
-                  <Text fw={800} c="#f05a36" style={{ fontFamily: "Montserrat", fontSize: isMobile ? "4vw" : "1.5rem" }}>
-                    Briyan Ongko Wijaya
-                  </Text>
-                  <Text fw={500} c={"black"} style={{ fontSize: isMobile ? "3vw" : "1rem" }}>
-                    Ayana Resident
-                  </Text>
-                </Stack>
-              </Group>
-            </Card>
-          </Grid.Col>
-        </Grid>
+                <Text fw={500} c={"black"} style={{ fontSize: isMobile ? "3vw" : "1rem" }}>
+                  Ayana Resident
+                </Text>
+              </Stack>
+            </Group>
+          </Card>
+        </Grid.Col>
+      </Grid>
 
-        {/* Marquee & Footer */}
-      </Paper>
+      {/* Marquee & Footer */}
+      {/* </Paper> */}
       <SimpleGrid style={{ position: "relative", width: "100%", height: "auto", overflow: "hidden" }} mt={isMobile ? -10 : 0}>
         <Image src="/images/footer.jpg" height={isMobile ? 200 : 600} width="100%" alt="Footer" />
         <div
