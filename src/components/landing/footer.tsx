@@ -16,7 +16,7 @@ const Footer = () => {
 
   return (
     <>
-      <SimpleGrid p="md" bg={"#363a3d"}>
+      <SimpleGrid p="xl" bg={"#363a3d"}>
         <Grid gutter={isMobile ? "md" : "xl"} ml={40}>
           {/* Logo & Address Section */}
           <Grid.Col span={isMobile ? 12 : 4}>

@@ -1,16 +1,22 @@
 "use client";
 
-import { Button, Card, Group, SimpleGrid, Text, Stack, ActionIcon } from "@mantine/core";
-
+import { Button, Card, Group, SimpleGrid, Text, Stack } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import AddProjectModal from "./AddProjectModal";
 import { useQuery } from "@tanstack/react-query";
-
 import Link from "next/link";
 import { getDataProject } from "@/api/project/getDataProject";
 import { useDeleteDataProject } from "@/api/project/deleteDataProject";
 import ButtonDeleteWithConfirmation from "@/components/button/buttonDeleteConfirmation";
 
 const ProjectPage = () => {
+  const isSmallScreen = useMediaQuery("(max-width: 767px)"); // Mobile
+  const isMediumScreen = useMediaQuery("(min-width: 768px) and (max-width: 1199px)"); // Tablet & Laptop Kecil
+  const isWideScreen = useMediaQuery("(min-width: 1200px)"); // Layar Lebar
+
+  const height = window.innerHeight;
+  const width = window.innerWidth;
+
   const {
     data: projectData,
     isLoading: isLoadingGetProjectData,
@@ -24,46 +30,44 @@ const ProjectPage = () => {
   const { mutate: mutateDeleteDataProject, isPending: isLoadingDeleteDataProject } = useDeleteDataProject(refetchProjectData);
 
   const handleDeleteProject = (idToDelete: string) => {
-    mutateDeleteDataProject(idToDelete); // Pass only the string, not an object
+    mutateDeleteDataProject(idToDelete);
   };
-
-  console.log("Project Data", projectData?.data);
 
   return (
     <>
-      <Group justify="space-between">
+      <Group justify="space-between" mb={20}>
         <Text fw={900} size="2rem">
           Daftar Project
         </Text>
-        <Stack mr={40}>
+        <Stack>
           <AddProjectModal refetchProjectData={refetchProjectData} />
         </Stack>
       </Group>
 
-      <SimpleGrid mt={40} cols={4} p={40}>
+      <SimpleGrid mt={40} spacing="xl" p={20} cols={isSmallScreen ? 1 : isMediumScreen ? 2 : isWideScreen ? 4 : 3}>
         {projectData?.data.map((project) => (
           <Card
             key={project.id}
-            w={320}
+            w={300} // Tetap konsisten di semua ukuran layar
             h={160}
             style={{
+              maxWidth: 320,
+              minWidth: 300,
               background: "linear-gradient(135deg, rgba(255, 0, 150, 0.5), rgba(0, 204, 255, 0.5))",
               backdropFilter: "blur(8px)",
               borderRadius: "16px",
               boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
               padding: "20px",
-              position: "relative", // Ensures delete button positioning works
+              position: "relative",
               cursor: "pointer",
             }}
           >
             <Link href={`/internal/sidebar/project/${project.id}`} passHref legacyBehavior>
               <Group justify="space-between">
                 <Stack gap={4} align="start">
-                  <Group justify="space-between" w="100%">
-                    <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
-                      {project.project_name}
-                    </Text>
-                  </Group>
+                  <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
+                    {project.project_name}
+                  </Text>
 
                   <Text fw={500} mt={16} size="lg" style={{ color: "#ffffff" }}>
                     {project.project_leader}
@@ -77,13 +81,11 @@ const ProjectPage = () => {
                   </Text>
                 </Stack>
 
-                <Stack mt={-80}>
-                  <ButtonDeleteWithConfirmation
-                    id={project.id}
-                    onDelete={handleDeleteProject}
-                    description={`Apakah anda ingin menghapus proyek ${project?.project_name} ?`}
-                  />
-                </Stack>
+                <ButtonDeleteWithConfirmation
+                  id={project.id}
+                  onDelete={handleDeleteProject}
+                  description={`Apakah anda ingin menghapus proyek ${project?.project_name} ?`}
+                />
               </Group>
             </Link>
           </Card>
