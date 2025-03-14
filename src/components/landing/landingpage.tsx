@@ -49,8 +49,8 @@ const LandingPage = () => {
 
         {/* Section: Text dan Image */}
         <Grid>
-          <Grid.Col span={isMobile ? 11 : 6}>
-            <Stack p={isMobile ? 20 : 40} ml={isMobile ? 0 : 200} align={isMobile ? "center" : "flex-start"}>
+          <Grid.Col span={isMobile ? 11 : 3} mr={100}>
+            <Stack p={isMobile ? 20 : 40} align={isMobile ? "center" : "flex-start"}>
               <Image
                 className="rounded-tl-3xl"
                 src="/images/sublanding.png"
@@ -60,7 +60,7 @@ const LandingPage = () => {
               />
             </Stack>
           </Grid.Col>
-          <Grid.Col span={isMobile ? 13 : 6}>
+          <Grid.Col span={isMobile ? 13 : 7}>
             <Stack mt={isMobile ? 40 : 140} align={isMobile ? "center" : "flex-start"}>
               <Text
                 size={isMobile ? "lg" : "xl"}
@@ -159,9 +159,9 @@ const LandingPage = () => {
         </Stack>
       </Container>
       <ProductPage />
-      <Stack mt={isMobile ? 10 : 10}>
-        <Testimony />
-      </Stack>
+
+      <Testimony />
+
       <Stack>
         <Footer />
       </Stack>

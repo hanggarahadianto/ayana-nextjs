@@ -7,8 +7,54 @@ import { Carousel } from "@mantine/carousel";
 import Link from "next/link";
 import { getDataProduct } from "@/api/products/getDataProduct";
 import { generateSlug } from "@/utils/slug";
+import { useEffect, useState } from "react";
 
 const ProductPage = () => {
+  const [customBackgroundHeight, setCustomBackgroundHeight] = useState(140);
+  console.log("CUSTOM BG", customBackgroundHeight);
+  const [customCardHeight, setCustomCardHeight] = useState(400); // Default 400px
+  const [customCardWidth, setCustomCardWidth] = useState(300);
+
+  const calculateCustomBackgroundHeight = (height: number): number => {
+    if (height >= 780) return 90;
+    if (height >= 660) return 120;
+    if (height >= 480) return 130;
+    return 140; // Default jika height < 480
+  };
+
+  // Fungsi untuk menghitung tinggi Card
+  const calculateCustomCardHeight = (height: number): number => {
+    if (height >= 780) return 520;
+    if (height >= 720) return 560;
+    if (height >= 660) return 680;
+    if (height >= 480) return 950;
+    return 400; // Default jika height < 480
+  };
+  // Fungsi untuk menentukan lebar Card berdasarkan lebar layar
+  const calculateCustomCardWidth = (width: number): number => {
+    if (width >= 1200) return 600; // Desktop lebar
+    if (width >= 992) return 500; // Laptop / Tablet besar
+    if (width >= 768) return 400; // Tablet
+    if (width >= 480) return 350; // Mobile besar
+    return 300; // Mobile kecil
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      const height = window.innerHeight;
+      const width = window.innerWidth;
+      console.log("HEIGHT:", height);
+      setCustomBackgroundHeight(calculateCustomBackgroundHeight(height));
+      setCustomCardHeight(calculateCustomCardHeight(height)); // Update Card height
+      setCustomCardWidth(calculateCustomCardWidth(width));
+    };
+
+    handleResize(); // Set nilai awal saat komponen dimuat
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   // Media Queries for responsive adjustments
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(max-width: 1024px)");
@@ -46,11 +92,16 @@ const ProductPage = () => {
           style={{ textDecoration: "none", cursor: "pointer" }}
         >
           <Card
+            h={customCardHeight}
             shadow="sm"
-            padding={isMobile ? "40px" : "40px"}
+            padding="40px"
             radius="md"
             withBorder
-            style={{ height: isMobile ? 400 : 540, cursor: "pointer" }}
+            style={{
+              height: `${customCardHeight}px`,
+              width: `${customCardWidth}px`,
+              cursor: "pointer",
+            }}
           >
             <Card.Section>
               <Image src={home.image} alt={home.title} height={isMobile ? 180 : 280} fit="cover" />
@@ -99,7 +150,7 @@ const ProductPage = () => {
               </Stack>
             )}
 
-            <Flex justify="space-between" align="center" mt={16} w="100%">
+            <Flex justify="space-between" align="center" w="100%">
               <Badge w={isMobile ? 70 : 80} color={home.status === "sale" ? "green" : "pink"}>
                 {home.status === "sale" ? "On Sale" : "Sold"}
               </Badge>
@@ -116,7 +167,12 @@ const ProductPage = () => {
     return isMobile ? mobileSize : isTablet ? tabletSize : desktopSize;
   };
   return (
-    <SimpleGrid cols={1} bg="#a48060" h="100vh" p={isMobile ? 12 : isTablet ? 24 : 60}>
+    <SimpleGrid
+      cols={1}
+      bg="#a48060"
+      h={`${customBackgroundHeight}vh`} // Menggunakan custom height
+      p={isMobile ? 12 : isTablet ? 24 : 60}
+    >
       <Stack align="center" justify="center" gap={0} px={getFontSize("1rem", "2rem", "3rem")}>
         <Text size={getFontSize("2rem", "3rem", "3.5rem")} fw={900} c="white" style={{ fontFamily: "Lora", textAlign: "center" }}>
           AYANA HOUSES
