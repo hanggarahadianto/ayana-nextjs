@@ -76,7 +76,7 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData: IP
                     <TextInput
                       label="Investor"
                       value={values.investor}
-                      onChange={(event) => setFieldValue("investor", event.target.value)}
+                      onChange={(event) => setFieldValue("investor", event.target.value.toUpperCase())}
                     />
                   </InputWrapper>
 
