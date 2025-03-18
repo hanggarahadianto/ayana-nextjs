@@ -72,6 +72,14 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData: IP
                     />
                   </InputWrapper>
 
+                  <InputWrapper required error={touched.investor && errors.investor ? errors.investor : undefined}>
+                    <TextInput
+                      label="Investor"
+                      value={values.investor}
+                      onChange={(event) => setFieldValue("investor", event.target.value)}
+                    />
+                  </InputWrapper>
+
                   <InputWrapper required error={touched.total_cost && errors.total_cost ? errors.total_cost : undefined}>
                     <TextInput
                       w={240}

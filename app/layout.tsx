@@ -22,19 +22,40 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
 
   useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/service-worker.js")
-        .then((registration) => {
-          console.log("Service Worker registered with scope:", registration.scope);
-        })
-        .catch((error) => {
-          console.error("Service Worker registration failed:", error);
-        });
+    if (typeof window !== "undefined") {
+      console.log(`Screen Resolution: ${window.innerWidth}x${window.innerHeight}`);
+
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("/service-worker.js")
+          .then((registration) => {
+            console.log("Service Worker registered with scope:", registration.scope);
+          })
+          .catch((error) => {
+            console.error("Service Worker registration failed:", error);
+          });
+      }
     }
   }, []);
 
-  console.log("Children in RootLayout:", children); // ✅ Debugging
+  useEffect(() => {
+    const logScreenResolution = () => {
+      console.log(`Screen Resolution: ${window.innerWidth}x${window.innerHeight}`);
+    };
+
+    // Log saat pertama kali dimount
+    logScreenResolution();
+
+    // Tambahkan event listener untuk resize
+    window.addEventListener("resize", logScreenResolution);
+
+    // Cleanup listener saat komponen unmount
+    return () => {
+      window.removeEventListener("resize", logScreenResolution);
+    };
+  }, []);
+
+  // console.log("Children in RootLayout:", children); // ✅ Debugging
 
   return (
     <html lang="en">

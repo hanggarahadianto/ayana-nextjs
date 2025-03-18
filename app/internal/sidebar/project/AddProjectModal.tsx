@@ -115,14 +115,10 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
                       </InputWrapper>
                     </Group>
                     <Stack gap={20}>
-                      <InputWrapper
-                        label="Investor"
-                        withAsterisk
-                        error={touched.project_leader && errors.project_leader ? errors.project_leader : undefined}
-                      >
+                      <InputWrapper label="Investor" withAsterisk error={touched.investor && errors.investor ? errors.investor : undefined}>
                         <TextInput
                           placeholder="Masukan Investor"
-                          value={values.project_leader?.toUpperCase() || ""}
+                          value={values.investor?.toUpperCase() || ""}
                           onChange={(event) => setFieldValue("investor", event.currentTarget.value.toUpperCase())}
                         />
                       </InputWrapper>
