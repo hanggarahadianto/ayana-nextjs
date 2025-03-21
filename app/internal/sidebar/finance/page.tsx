@@ -119,9 +119,6 @@ export default function CompanyTabs() {
 
         {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />}
       </SimpleGrid>
-
-      {/* Pagination */}
-      {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />}
     </SimpleGrid>
   );
 }
