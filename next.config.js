@@ -1,7 +1,6 @@
 const nextConfig = {
   reactStrictMode: process.env.NODE_ENV === "production" ? false : true,
-  trailingSlash: true,
-  swcMinify: true,
+  // trailingSlash: true,
 
   async headers() {
     return [

@@ -6,7 +6,8 @@
     "build": "next build",
     "dev": "next dev",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+     "build:debug": "NEXT_DEBUG=true next build"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",

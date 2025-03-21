@@ -17,7 +17,7 @@ interface IWeeklyProgressCreate {
   percentage: string;
   amount_worker: number;
   amount_material: number;
-  note: "";
+  note: string;
   project_id: string;
   material: IMaterialCreate[];
   worker: IWorkerCreate[];

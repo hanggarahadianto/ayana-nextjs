@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { AppShell, NavLink, SimpleGrid, Stack, useMantineTheme, rem, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
-import { FaTasks, FaProjectDiagram, FaUser, FaCog, FaHome, FaNewspaper, FaShoppingBag, FaIdeal } from "react-icons/fa";
+import { FaTasks, FaProjectDiagram, FaUser, FaCog, FaHome, FaNewspaper, FaShoppingBag, FaIdeal, FaMoneyBill } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Cookies from "js-cookie";
 import router from "next/router";
@@ -33,8 +33,9 @@ export default function InternalLayout({ children }: { children: React.ReactNode
   const menuItems = [
     { label: "News", icon: <FaNewspaper />, href: "/internal/sidebar/news" },
     { label: "Task", icon: <FaTasks />, href: "/internal/sidebar/task" },
-    { label: "Marketing", icon: <FaIdeal />, href: "/internal/sidebar/marketing" },
     { label: "Product", icon: <FaShoppingBag />, href: "/internal/sidebar/product" },
+    { label: "Marketing", icon: <FaIdeal />, href: "/internal/sidebar/marketing" },
+    { label: "Finance", icon: <FaMoneyBill />, href: "/internal/sidebar/finance" },
     { label: "Project", icon: <FaProjectDiagram />, href: "/internal/sidebar/project" },
     { label: "Profile", icon: <FaUser />, href: "/internal/sidebar/profile" },
     { label: "Setting", icon: <FaCog />, href: "/internal/sidebar/setting" },
@@ -42,7 +43,9 @@ export default function InternalLayout({ children }: { children: React.ReactNode
 
   return (
     <>
-      <Navbar />
+      <div style={{ position: "fixed", top: 0, left: 0, width: "100%", zIndex: 1000 }}>
+        <Navbar />
+      </div>
       <SimpleGrid>
         <AppShell
           padding="md"

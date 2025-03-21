@@ -57,7 +57,7 @@ export function BankingPartnerComponent() {
           <Carousel.Slide key={bank.id}>
             <Card shadow="sm" p="md" radius="md" withBorder bg={"white"}>
               <Image
-                src={bank.logo}
+                src={bank.logo ?? ""}
                 alt={bank.name}
                 // height={1000}
                 w={1000}

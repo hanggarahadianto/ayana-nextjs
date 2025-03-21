@@ -1,25 +1,23 @@
 import axios from "axios";
 
-if (!process.env.NEXT_PUBLIC_BACKEND_URL) {
-  throw new Error("❌ NEXT_PUBLIC_BACKEND_URL is not defined in .env file");
-}
+const baseURL = process.env.NODE_ENV === "development" ? "http://localhost:8080" : process.env.NEXT_PUBLIC_BACKEND_URL;
 
-// Dapatkan baseURL dari environment variable
-const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+if (!baseURL) {
+  throw new Error("❌ BASE_URL is not defined in .env file");
+}
 
 export const APIAxiosInstance = axios.create({
   baseURL,
   timeout: 1000 * 60,
-  withCredentials: true, // ⬅️ AKTIFKAN INI!
+  withCredentials: true,
 });
 
 export const APIAxiosInstanceWithoutCredential = axios.create({
   baseURL,
-  timeout: 1000 * 60, // Timeout 60 detik
-  withCredentials: false, // Tidak mengirim kredensial (cookies, token)
+  timeout: 1000 * 60,
+  withCredentials: false,
 });
 
-// ✅ Fungsi header fleksibel
 export const httpHeader = (token?: string, isMultipart = false) => {
   const headers: Record<string, string> = {};
 
@@ -30,5 +28,5 @@ export const httpHeader = (token?: string, isMultipart = false) => {
 };
 
 export const httpWithoutHeader = () => {
-  return {}; // ⬅️ Jangan kirim header kosong
+  return {};
 };
