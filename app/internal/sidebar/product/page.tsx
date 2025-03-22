@@ -93,6 +93,7 @@ const ProjectPage = () => {
                   id={product.id}
                   onDelete={handleDeleteProduct}
                   description={`Apakah anda ingin menghapus proyek ${product?.title} ?`}
+                  size={2.5}
                 />
               </Stack>
             </Group>

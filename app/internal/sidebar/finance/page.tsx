@@ -1,11 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Pagination, ScrollArea, SimpleGrid, Stack, Table, Tabs } from "@mantine/core";
+import { ActionIcon, Group, Pagination, ScrollArea, SimpleGrid, Stack, Table, Tabs } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import AddPayoutModal from "./AddPayoutModal"; // Sesuaikan path
 import { getDataCompany } from "@/api/company/getCompany"; // Sesuaikan path
 import { getDataPayout } from "@/api/payout/getDataPayout";
+import router from "next/router";
+// import { useDeleteDataPayout } from "@/api/payout/deleteDataPayout";
+import ButtonDeleteWithConfirmation from "@/components/button/buttonDeleteConfirmation";
+import { useDeleteDataPayout } from "@/api/payout/deleteDataPayout";
+import BreathingActionIcon from "@/components/button/buttonAction";
+import EditPayoutModal from "./EditPayoutModal";
 
 export default function CompanyTabs() {
   const { data: companyData, isLoading } = useQuery({
@@ -40,7 +46,7 @@ export default function CompanyTabs() {
   const {
     data: payoutData,
     isLoading: isLoadingPayoutData,
-    refetch: refetchPayloadData,
+    refetch: refetchPayoutData,
   } = useQuery({
     queryKey: ["getPayoutData", activeTab], // Gunakan key unik
     queryFn: () => {
@@ -51,10 +57,17 @@ export default function CompanyTabs() {
     refetchOnWindowFocus: false,
   });
 
+  const { mutate: mutateDeleteDataPayout, isPending: isLoadingDeleteDataPayout } = useDeleteDataPayout(refetchPayoutData);
+
+  const handleDeletePayoutClick = (idToDelete: string) => {
+    console.log("Menghapus payout dengan ID:", idToDelete);
+    mutateDeleteDataPayout(idToDelete);
+  };
+
   const [page, setPage] = useState(1);
   const rowsPerPage = 5;
 
-  console.log("PAYOUT DATA", payoutData);
+  // console.log("PAYOUT DATA", payoutData);
 
   const totalPages = Math.ceil((payoutData?.total || 1) / rowsPerPage);
 
@@ -83,36 +96,51 @@ export default function CompanyTabs() {
         {companies.map((company: ICompany) => (
           <Tabs.Panel key={company.company_code} value={company.company_code}>
             <Stack p={20} justify="flex-end" align="flex-end" style={{ width: "100%" }}>
-              <AddPayoutModal refetchPayloadData={refetchPayloadData} companyCode={activeTab?.company_code} companyId={company?.id} />
+              <AddPayoutModal refetchPayloadData={refetchPayoutData} companyCode={activeTab?.company_code} companyId={company?.id} />
             </Stack>
           </Tabs.Panel>
         ))}
       </Tabs>
       <SimpleGrid p={40}>
         <ScrollArea>
-          <Table highlightOnHover striped withColumnBorders>
+          <Table highlightOnHover withColumnBorders>
             <Table.Thead>
               <Table.Tr>
                 <Table.Th style={{ minWidth: 120, maxWidth: 150, textAlign: "center" }}>Invoice</Table.Th>
                 <Table.Th style={{ minWidth: 100, maxWidth: 120, textAlign: "center" }}>Nominal</Table.Th>
                 <Table.Th style={{ minWidth: 100, maxWidth: 120, textAlign: "center" }}>Tanggal</Table.Th>
                 <Table.Th style={{ minWidth: 200, maxWidth: 250, textAlign: "center" }}>Catatan</Table.Th>
+                <Table.Th style={{ minWidth: 100, maxWidth: 120, textAlign: "center" }}>Aksi</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {payoutData?.data.map((payout) => (
-                <Table.Tr key={payout.id}>
-                  <Table.Td>{payout.invoice}</Table.Td>
-                  <Table.Td>{payout.nominal.toLocaleString("id-ID")}</Table.Td>
-                  <Table.Td>
-                    {new Intl.DateTimeFormat("id-ID", { day: "2-digit", month: "long", year: "numeric" }).format(
-                      new Date(payout.date_inputed)
-                    )}
-                  </Table.Td>
+              {payoutData?.data.map((payout: IPayoutUpdate) => {
+                console.log("payout di page", payout);
+                return (
+                  <Table.Tr key={payout.id}>
+                    <Table.Td>{payout.invoice}</Table.Td>
+                    <Table.Td>{payout.nominal.toLocaleString("id-ID")}</Table.Td>
+                    <Table.Td>
+                      {new Intl.DateTimeFormat("id-ID", { day: "2-digit", month: "long", year: "numeric" }).format(
+                        new Date(payout.date_inputed)
+                      )}
+                    </Table.Td>
 
-                  <Table.Td>{payout.note}</Table.Td>
-                </Table.Tr>
-              ))}
+                    <Table.Td>{payout.note}</Table.Td>
+                    <Table.Td style={{ textAlign: "center" }}>
+                      <Group ml={4}>
+                        <EditPayoutModal payout={payout} refetchPayoutData={refetchPayoutData} />
+                        <ButtonDeleteWithConfirmation
+                          id={payout?.id}
+                          onDelete={handleDeletePayoutClick} // Pastikan pakai handler yang benar
+                          description={`Apakah Anda yakin ingin menghapus invoice ${payout?.invoice}?`}
+                          size={2}
+                        />
+                      </Group>
+                    </Table.Td>
+                  </Table.Tr>
+                );
+              })}
             </Table.Tbody>
           </Table>
         </ScrollArea>

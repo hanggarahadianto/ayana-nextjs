@@ -7,6 +7,14 @@ export const initialValuePayoutCreate: IPayoutCreate = {
   note: "",
   company_id: "",
 };
+export const initialValuePayoutUpdate: IPayoutUpdate = {
+  id: "",
+  invoice: "",
+  nominal: 0,
+  date_inputed: "",
+  note: "",
+  company_id: "",
+};
 
 export const validationSchemaPayout = Yup.object({
   location: Yup.string().required("Nama Lokasi harus diisi"),
@@ -25,6 +33,19 @@ export const getInitialValuesUpdatePayout = (initialData: IPayoutUpdate) => ({
   id: initialData?.id || "",
   invoice: initialData?.invoice || "",
   nominal: initialData?.nominal || 0,
-  date_inputed: initialData?.date_inputed ? new Date(initialData.date_inputed) : null,
+  date_inputed: initialData?.date_inputed || "",
+  company_id: initialData?.company_id || "",
   note: initialData?.note || "",
 });
+
+// export const getInitialValuesUpdatePayout = (payoutData: IPayoutUpdate[]) => {
+//   const firstPayout = payoutData[0] || {}; // Ambil data pertama atau objek kosong
+//   return {
+//     id: firstPayout.id || "",
+//     invoice: firstPayout.invoice || "",
+//     nominal: firstPayout.nominal || 0,
+//     date_inputed: firstPayout.date_inputed ? new Date(firstPayout.date_inputed).toISOString() : "", // Konversi ke string ISO
+//     note: firstPayout.note || "",
+//     company_id: firstPayout.company_id || "",
+//   };
+// };

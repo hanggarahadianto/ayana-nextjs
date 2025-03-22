@@ -85,6 +85,7 @@ const ProjectPage = () => {
                   id={project.id}
                   onDelete={handleDeleteProject}
                   description={`Apakah anda ingin menghapus proyek ${project?.project_name} ?`}
+                  size={2.5}
                 />
               </Group>
             </Link>

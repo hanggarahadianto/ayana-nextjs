@@ -310,6 +310,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
                   id={weeklyProgress?.id}
                   onDelete={handleDeleteWeeklyProgress}
                   description={`Apakah anda yakin ingin menghapus progress minggu ke ${weeklyProgress?.week_number} ?`}
+                  size={2.5}
                 />
               </Stack>
             </Card>

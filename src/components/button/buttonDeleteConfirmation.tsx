@@ -6,9 +6,10 @@ interface ButtonDeleteProps {
   id: string;
   onDelete: (id: string) => void;
   description: string;
+  size: number;
 }
 
-const ButtonDeleteWithConfirmation: React.FC<ButtonDeleteProps> = ({ id, onDelete, description }) => {
+const ButtonDeleteWithConfirmation: React.FC<ButtonDeleteProps> = ({ id, onDelete, description, size }) => {
   const openDeleteModal = () => {
     modals.openConfirmModal({
       title: "Konfirmasi Hapus",
@@ -24,7 +25,7 @@ const ButtonDeleteWithConfirmation: React.FC<ButtonDeleteProps> = ({ id, onDelet
     <div onClick={(e) => e.stopPropagation()}>
       <ActionIcon
         onClick={openDeleteModal}
-        size="2.5rem"
+        size={`${size}rem`}
         radius="xl"
         variant="gradient"
         gradient={{ from: "red", to: "orange", deg: 90 }}
