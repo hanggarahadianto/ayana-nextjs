@@ -87,7 +87,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   return (
     <>
       <Grid>
-        <Grid.Col span={5}>
+        <Grid.Col span={{ base: 12, sm: 6, md: 6 }}>
           <Card
             shadow="md"
             padding="lg"
@@ -95,7 +95,9 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
             style={{
               background: "linear-gradient(135deg, #16a34a, #22c55e)", // Green gradient
               color: "white",
-              width: "520px",
+              minWidth: "280px",
+              maxWidth: "82vw", // Menyesuaikan dengan layar
+              width: "100%", // Fleksibel berdasarkan minWidth dan maxWidth
             }}
           >
             <Box
@@ -107,7 +109,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
             >
               <SimpleGrid>
                 <Group justify="space-between">
-                  <Text fw={900} size={"2.5rem"}>
+                  <Text fw={900} size={"2rem"}>
                     {projectDataDetail?.project_name}
                   </Text>
                   <Group variant="white" mr={0} style={{ cursor: "pointer" }}>
@@ -184,7 +186,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
             <Text size="xl" fw={900} c={"cyan"}>
               Progress Proyek
             </Text>
-            <Progress.Root size={40} w={800}>
+            <Progress.Root size={40} w="min(400px, 90vw)">
               <Tooltip label={`Progress Proyek: ${totalPercentage}%`}>
                 <Progress.Section value={totalPercentage} color="blue">
                   <Progress.Label>{totalPercentage}%</Progress.Label>

@@ -11,11 +11,9 @@ import ButtonDeleteWithConfirmation from "@/components/button/buttonDeleteConfir
 
 const ProjectPage = () => {
   const isSmallScreen = useMediaQuery("(max-width: 767px)"); // Mobile
-  const isMediumScreen = useMediaQuery("(min-width: 768px) and (max-width: 1199px)"); // Tablet & Laptop Kecil
-  const isWideScreen = useMediaQuery("(min-width: 1200px)"); // Layar Lebar
-
-  const height = window.innerHeight;
-  const width = window.innerWidth;
+  const isMediumScreen = useMediaQuery("(min-width: 768px) and (max-width: 1023px)"); // Tablet
+  const isLaptopScreen = useMediaQuery("(min-width: 1024px) and (max-width: 1439px)"); // Laptop 12-14 inch
+  const isWideScreen = useMediaQuery("(min-width: 1440px)"); // Laptop 15 inch ke atas
 
   const {
     data: projectData,
@@ -44,12 +42,18 @@ const ProjectPage = () => {
         </Stack>
       </Group>
 
-      <SimpleGrid mt={40} spacing="xl" p={20} cols={isSmallScreen ? 1 : isMediumScreen ? 2 : isWideScreen ? 4 : 3}>
+      <SimpleGrid
+        mt={40}
+        spacing="lg"
+        p={20}
+        cols={isSmallScreen ? 1 : isMediumScreen ? 2 : isLaptopScreen ? 3 : isWideScreen ? 4 : 3}
+        style={{ gap: "24px" }}
+      >
         {projectData?.data.map((project) => (
           <Card
             key={project.id}
-            w={300} // Tetap konsisten di semua ukuran layar
-            h={160}
+            w={300}
+            h={180}
             style={{
               maxWidth: 320,
               minWidth: 300,
@@ -64,12 +68,12 @@ const ProjectPage = () => {
           >
             <Link href={`/internal/sidebar/project/${project.id}`} passHref legacyBehavior>
               <Group justify="space-between">
-                <Stack gap={4} align="start">
+                <Stack align="start" gap="md">
                   <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
                     {project.project_name}
                   </Text>
 
-                  <Text fw={500} mt={16} size="lg" style={{ color: "#ffffff" }}>
+                  <Text fw={500} size="lg" style={{ color: "#ffffff" }}>
                     {project.project_leader}
                   </Text>
 
