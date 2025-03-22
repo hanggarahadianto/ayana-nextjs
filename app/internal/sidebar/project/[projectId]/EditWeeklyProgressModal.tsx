@@ -41,7 +41,7 @@ const EditWeeklyProgressModal = ({
 
   return (
     <>
-      <Modal opened={opened} onClose={onClose} size={"70%"} yOffset="100px">
+      <Modal opened={opened} onClose={onClose} size={"60%"} yOffset="100px">
         <Formik
           initialValues={getInitialValuesUpdateWeeklyProgress(initialData)}
           validateOnBlur={false}

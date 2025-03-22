@@ -86,7 +86,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   console.log("weeklyProgress", weeklyProgressData?.data);
   return (
     <>
-      <Grid>
+      <Grid p={16}>
         <Grid.Col span={{ base: 12, sm: 6, md: 6 }}>
           <Card
             shadow="md"
@@ -267,6 +267,9 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
                 boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
                 padding: "20px",
                 cursor: "pointer",
+                minWidth: "380px",
+                maxWidth: "82vw", // Menyesuaikan dengan layar
+                width: "100%", // Fleksibel berdasarkan minWidth dan maxWidth
               }}
             >
               <Stack gap={4} onClick={() => handleCardClick(weeklyProgress)}>

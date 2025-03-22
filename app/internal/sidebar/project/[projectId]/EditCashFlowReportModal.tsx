@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { startTransition, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Modal,
   TextInput,
@@ -15,7 +15,6 @@ import {
   Grid,
   Divider,
   Tabs,
-  FloatingIndicator,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
@@ -23,12 +22,7 @@ import { Form, Formik } from "formik";
 import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar, IconEdit, IconPlus } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import {
-  getInitialValuesCashFlow,
-  initialValuesCashFlowCreate,
-  initialValuesCashFlowUpdate,
-  validationSchemaCashFlowCreate,
-} from "./initialValuesCashFlow";
+import { getInitialValuesCashFlow, initialValuesCashFlowUpdate, validationSchemaCashFlowCreate } from "./initialValuesCashFlow";
 import { useUpdateCashFlowForm } from "@/api/cash-flow/editDataCashFlow";
 import BreathingActionIcon from "@/components/button/buttonAction";
 import ButtonAdd from "@/components/button/buttonAdd";
@@ -51,25 +45,26 @@ const EditCashFlowReportModal = ({
   const today = dayjs().toISOString(); // Get today's date in ISO format
 
   const { mutate: editData, isPending: isLoadingSubmitProjectData } = useUpdateCashFlowForm(refetchCashFlowData, close);
-
-  const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null);
   const [initialValues, setInitialValues] = useState(initialValuesCashFlowUpdate);
-  console.log("INITIAL ATAS", initialValues);
-  const [controlsRefs, setControlsRefs] = useState<Record<string, HTMLButtonElement | null>>({});
-  const setControlRef = (val: string) => (node: HTMLButtonElement) => {
-    controlsRefs[val] = node;
-    setControlsRefs(controlsRefs);
-  };
+
+  const controlsRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  const setControlRef = useCallback(
+    (val: string) => (node: HTMLButtonElement | null) => {
+      if (node) {
+        controlsRefs.current[val] = node;
+      }
+    },
+    []
+  );
 
   const handleSubmit = (values: ICashFlowCreate) => {
-    const formData = { ...values, project_id: projectId };
-
-    console.log("Form values submitted:", formData);
-
-    editData(formData);
+    startTransition(() => {
+      editData({ ...values, project_id: projectId });
+    });
   };
 
-  console.log("CashFlowData", cashFlowData);
+  // console.log("CashFlowData", cashFlowData);
 
   return (
     <>
@@ -90,29 +85,29 @@ const EditCashFlowReportModal = ({
           initialValues={getInitialValuesCashFlow(initialValues)}
           validationSchema={validationSchemaCashFlowCreate}
           validateOnBlur={false}
-          enableReinitialize={true}
-          validateOnChange={true}
           validateOnMount={false}
           onSubmit={handleSubmit}
+          enableReinitialize={true}
+          validateOnChange={true}
         >
           {({ values, errors, touched, setFieldValue, handleBlur }) => {
-            console.log(values);
-            console.log("ERROR", errors);
-
-            const addGoodField = (good: IGoodCreate[]) => {
-              const newGood: IGoodCreate = {
-                good_name: "",
-                status: "",
-                quantity: 0,
-                unit: "",
-                price: 0,
-                good_purchase_date: "",
-                good_settlement_date: "",
-                costs_due: 0,
-                total_cost: 0,
-              };
-              setFieldValue("good", [...good, newGood]);
-            };
+            const addGoodField = useCallback(
+              (good: IGoodCreate[]) => {
+                const newGood: IGoodCreate = {
+                  good_name: "",
+                  status: "",
+                  quantity: 0,
+                  unit: "",
+                  price: 0,
+                  good_purchase_date: "",
+                  good_settlement_date: "",
+                  costs_due: 0,
+                  total_cost: 0,
+                };
+                setFieldValue("good", [...good, newGood]);
+              },
+              [setFieldValue]
+            );
 
             const deleteGoodField = (worker: IGoodCreate[], index: number) => {
               // Remove the good from the list
@@ -153,18 +148,22 @@ const EditCashFlowReportModal = ({
             const calculateAccountBalance = (cashIn: number, cashOut: number): number => {
               return cashIn - cashOut;
             };
-
             const cashIn = values.cash_in || 0;
             const cashOut = values.cash_out || 0;
-            const accountBalance = calculateAccountBalance(cashIn, cashOut);
+
+            const accountBalance = useMemo(() => {
+              return calculateAccountBalance(cashIn, cashOut);
+            }, [cashIn, cashOut]);
+
+            const prevValuesRef = useRef<string | null>(null);
 
             useEffect(() => {
               const firstWeek = cashFlowData.find((item) => item.week_number === "1");
-              if (firstWeek) setInitialValues({ ...firstWeek });
+              if (firstWeek && prevValuesRef.current !== JSON.stringify(firstWeek)) {
+                setInitialValues({ ...firstWeek });
+                prevValuesRef.current = JSON.stringify(firstWeek);
+              }
             }, [cashFlowData]);
-
-            console.log("INITIAL VALUES", initialValues);
-
             return (
               <SimpleGrid p={20}>
                 <Form>
