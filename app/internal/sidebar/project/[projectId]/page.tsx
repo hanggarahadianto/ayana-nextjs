@@ -62,6 +62,8 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   const totalCashIn = cashFlowData?.data.reduce((sum, item) => sum + item.cash_in, 0);
   const totalCashOut = cashFlowData?.data.reduce((sum, item) => sum + item.cash_out, 0);
 
+  let grossProfit = (totalCashIn ?? 0) - (totalCashOut ?? 0);
+
   return (
     <>
       <Grid p={16}>
@@ -73,7 +75,13 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
           // refetchWeeklyProgressData={undefined}
           totalCashIn={totalCashIn}
         />
-        <ProjectCardSummary totalPercentage={0} />
+        <ProjectCardSummary
+          totalPercentage={0}
+          projectDataDetail={projectDataDetail}
+          totalCashIn={totalCashIn}
+          totalCashOut={totalCashOut}
+          grossProfit={grossProfit}
+        />
       </Grid>
 
       <Divider mt={40} mb={20} />

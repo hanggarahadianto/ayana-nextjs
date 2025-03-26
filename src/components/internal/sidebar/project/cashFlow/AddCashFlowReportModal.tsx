@@ -41,8 +41,8 @@ const AddCashFlowReportModal = ({
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const { mutate: postDataCashFlow, isPending: isLoadingSubmitCashFlowData } = useSubmitCashFlowForm();
-  const { mutate: postDataGoods, isPending: isLoadingSubmitGoodsData } = useSubmitGoodForm();
+  const { mutate: postDataCashFlow, isPending: isLoadingPostDataCashFlow } = useSubmitCashFlowForm();
+  const { mutate: postDataGoods, isPending: isLoadingPostDataGoods } = useSubmitGoodForm();
 
   const handleSubmit = async (values: ICashFlowCreate) => {
     try {
@@ -117,22 +117,22 @@ const AddCashFlowReportModal = ({
           onSubmit={handleSubmit}
         >
           {({ values, errors, touched, setFieldValue, handleBlur }) => {
-            console.log(values);
+            // console.log(values);
             // console.log("ERROR", errors);
 
             const [debouncedGoods, setDebouncedGoods] = useState(values.good || []);
-            console.log("DEBOUNCH GOODS", debouncedGoods);
+            // console.log("DEBOUNCH GOODS", debouncedGoods);
 
             useEffect(() => {
               const handler = setTimeout(() => {
                 const totalCost = debouncedGoods.reduce((acc, good) => acc + (good.total_cost || 0), 0);
                 setFieldValue("cash_out", totalCost);
-              }, 300); // Delay 300ms sebelum menghitung ulang cash_out
+              }, 500); // Delay 300ms sebelum menghitung ulang cash_out
 
               return () => clearTimeout(handler);
             }, [debouncedGoods]);
 
-            const addGoodField = (good: IGoodsCreate[]) => {
+            const addGoodField = () => {
               const newGood: IGoodsCreate = {
                 good_name: "",
                 status: "tunai",
@@ -143,9 +143,12 @@ const AddCashFlowReportModal = ({
                 costs_due: 0,
                 total_cost: 0,
               };
-              setDebouncedGoods([...good, newGood]);
+              setDebouncedGoods((prevGoods) => {
+                const updatedGoods = [...prevGoods, newGood];
+                setFieldValue("good", updatedGoods); // Update Formik values
+                return updatedGoods;
+              });
             };
-
             const deleteGoodField = (goods: IGoodsCreate[], index: number) => {
               const updatedGoods = goods.filter((_, i) => i !== index);
               setDebouncedGoods(updatedGoods); // Perbarui state sementara
@@ -243,7 +246,7 @@ const AddCashFlowReportModal = ({
 
                   <Group justify="space-between" p={20}>
                     <Text fw={700}>Tambahkan Daftar Pengeluaran</Text>
-                    <ButtonAdd onClick={() => addGoodField(values.good || [])} size="3.5rem" />
+                    <ButtonAdd onClick={() => addGoodField()} size="3.5rem" />
                   </Group>
 
                   <Stack mt="md">
@@ -299,9 +302,6 @@ const AddCashFlowReportModal = ({
                             <Stack mt={20}>
                               <ButtonDelete onClick={() => deleteGoodField(debouncedGoods || [], index)} />
                             </Stack>
-                            {/* <Stack mt={20}>
-                              <ButtonDelete onClick={() => deleteGoodField(values?.good || [], index)} />
-                            </Stack> */}
                           </Group>
                         </Card>
                       ))}
@@ -331,7 +331,12 @@ const AddCashFlowReportModal = ({
                     <Button onClick={close} variant="default">
                       Cancel
                     </Button>
-                    <Button type="submit" color="blue">
+                    <Button
+                      type="submit"
+                      color="blue"
+                      disabled={isLoadingPostDataCashFlow || isLoadingPostDataGoods}
+                      loading={isLoadingPostDataCashFlow || isLoadingPostDataGoods}
+                    >
                       Tambah
                     </Button>
                   </Group>

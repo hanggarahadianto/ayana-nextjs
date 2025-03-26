@@ -160,7 +160,11 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData: IP
                     </Group>
                   </Group>
 
-                  <Textarea label="Note" value={values.note} onChange={(event) => setFieldValue("note", event.target.value)} />
+                  <Textarea
+                    label="Note"
+                    value={values.note}
+                    onChange={(event) => setFieldValue("note", event.target.value.toUpperCase())}
+                  />
                   <Group justify="flex-end" mt="md">
                     <Button onClick={close} variant="default">
                       Cancel

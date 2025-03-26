@@ -31,6 +31,7 @@ import { showNotification } from "@mantine/notifications";
 import FormGoods from "./FormGoods";
 import { useEditGoodForm } from "@/api/good/editGoods";
 import ButtonDeleteWithConfirmation from "@/components/button/buttonDeleteConfirmation";
+import { useDeleteDataCashFlow } from "@/api/cash-flow/deleteDataCashFlow";
 
 const EditCashFlowReportModal = ({
   projectName,
@@ -68,12 +69,16 @@ const EditCashFlowReportModal = ({
   });
 
   const [debouncedGoods, setDebouncedGoods] = useState<IGoods[] | undefined>(undefined);
-  console.log("debounche goods", debouncedGoods);
+  // console.log("debounche goods", debouncedGoods);
 
   // const [debouncedGoods, setDebouncedGoods] = useState(values.good || []);
 
-  const { mutateAsync: updateDataCashFlow } = useUpdateCashFlowForm();
-  const { mutateAsync: updateDataGoods } = useEditGoodForm();
+  const { mutateAsync: updateDataCashFlow, isPending: isLoadingUpdateDataCashFlow } = useUpdateCashFlowForm();
+  const { mutateAsync: updateDataGoods, isPending: isLoadingUpdateDataGoods } = useEditGoodForm();
+  const { mutate: mutateDeleteDataCashFlow, isPending: isLoadingDeleteDataCashFlow } = useDeleteDataCashFlow(
+    refetchCashFlowData,
+    refetchGoodsData
+  );
 
   const handleSubmit = async (values: ICashFlowUpdate) => {
     const id = initialValues.id;
@@ -98,14 +103,16 @@ const EditCashFlowReportModal = ({
         });
         return;
       }
-
-      refetchCashFlowData();
-
+      console.log("Memanggil refetchCashFlowData...");
+      refetchCashFlowData(); // Tambahkan await untuk memastikan selesai
+      refetchGoodsData();
+      console.log("refetchCashFlowData selesai");
       showNotification({
         title: "Sukses",
         message: "Data cash flow dan barang berhasil diperbarui!",
         color: "green",
       });
+
       close();
     } catch (error) {
       console.error("Error di handleSubmit:", error);
@@ -113,39 +120,12 @@ const EditCashFlowReportModal = ({
     }
   };
 
+  const handleDeleteCashFlow = (idToDelete: string) => {
+    console.log("Menghapus cashflow dengan ID:", idToDelete);
+    mutateDeleteDataCashFlow(idToDelete);
+  };
+
   // console.log("GOODS DATA", goodsData);
-
-  // Fungsi untuk menambah item
-
-  // Fungsi untuk mengubah item
-  // const handleGoodChange = useCallback((index, field, value) => {
-  //   setUpdatedGoods((prev) => {
-  //     const newGoods = [...prev];
-  //     newGoods[index] = { ...newGoods[index], [field]: value };
-
-  //     // Jika harga atau kuantitas berubah, update total_cost
-  //     if (field === "price" || field === "quantity") {
-  //       newGoods[index].total_cost = (newGoods[index].quantity || 0) * (newGoods[index].price || 0);
-  //     }
-
-  //     return newGoods;
-  //   });
-  // }, []);
-
-  // Fungsi untuk menghapus item (dieksekusi di FormGoods)
-  // const deleteGoodField = useCallback((index: number) => {
-  //   setUpdatedGoods((prev) => {
-  //     console.log("Sebelum hapus:", prev);
-  //     if (!prev || prev.length === 0) {
-  //       console.log("Tidak ada data untuk dihapus");
-  //       return prev;
-  //     }
-  //     const newGoods = prev.filter((_, i) => i !== index);
-  //     console.log(`Menghapus item ke-${index}:`, newGoods);
-
-  //     return newGoods;
-  //   });
-  // }, []);
 
   return (
     <>
@@ -184,7 +164,7 @@ const EditCashFlowReportModal = ({
               }
             }, [goodsData]);
 
-            console.log("DEBOUNCH GOODS", debouncedGoods);
+            // console.log("DEBOUNCH GOODS", debouncedGoods);
 
             useEffect(() => {
               const handler = setTimeout(() => {
@@ -227,18 +207,19 @@ const EditCashFlowReportModal = ({
               setFieldValue("good", updatedGoods);
             };
 
-            const handleGoodChange = <T extends keyof IGoodsCreate>(index: number, field: T, value: IGoodsCreate[T]) => {
-              const updatedGood = [...(values?.good || [])];
-              updatedGood[index][field] = value;
+            const handleGoodChange = useCallback((index, field, value) => {
+              setDebouncedGoods((prev) => {
+                const newGoods = [...(prev || [])];
+                newGoods[index] = { ...newGoods[index], [field]: value };
 
-              if (field === "price" || field === "quantity" || field === "costs_due") {
-                const { price = 0, quantity = 0, costs_due = 0 } = updatedGood[index];
-                updatedGood[index].total_cost = calculateTotalCost(price, quantity, costs_due);
-              }
+                // Jika harga atau kuantitas berubah, update total_cost
+                if (field === "price" || field === "quantity") {
+                  newGoods[index].total_cost = (newGoods[index].quantity || 0) * (newGoods[index].price || 0);
+                }
 
-              setDebouncedGoods(updatedGood); // Tidak langsung update cash_out
-              // setFieldValue("good", updatedGood);
-            };
+                return newGoods;
+              });
+            }, []);
 
             const calculateTotalCost = (price: number, quantity: number, costsDue: number): number => {
               const baseCost = price * quantity;
@@ -288,9 +269,7 @@ const EditCashFlowReportModal = ({
                     <Stack mt={24}>
                       <ButtonDeleteWithConfirmation
                         id={values?.id}
-                        onDelete={function (id: string): void {
-                          throw new Error("Function not implemented.");
-                        }}
+                        onDelete={handleDeleteCashFlow}
                         description={`Apakah anda ingin menghapus data minggu ke ${values?.week_number}`}
                         size={2}
                       />
@@ -353,11 +332,36 @@ const EditCashFlowReportModal = ({
                     setPage={setPage} // Kirim setPage
                   />
 
+                  <Stack justify="flex-start" align="start">
+                    <Text
+                      size="md"
+                      fw={500}
+                      c="blue"
+                      ta="center"
+                      mt="md"
+                      variant="gradient"
+                      gradient={{ from: "blue", to: "cyan", deg: 90 }}
+                    >
+                      Total Pengeluaran{" "}
+                      {values?.cash_out
+                        ? `Rp. ${values.cash_out.toLocaleString("id-ID", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}`
+                        : "Rp. 0,00"}
+                    </Text>
+                  </Stack>
+
                   <Group justify="flex-end" mt="md">
                     <Button onClick={close} variant="default">
                       Cancel
                     </Button>
-                    <Button type="submit" color="blue">
+                    <Button
+                      type="submit"
+                      color="blue"
+                      disabled={isLoadingUpdateDataCashFlow || isLoadingUpdateDataGoods}
+                      loading={isLoadingUpdateDataCashFlow || isLoadingUpdateDataGoods}
+                    >
                       Ubah
                     </Button>
                   </Group>

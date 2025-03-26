@@ -5,7 +5,7 @@ interface ProjectCardSummaryProps {
   projectDataDetail?: { note?: string };
   totalCashIn?: number;
   totalCashOut?: number;
-  totalOutstanding?: number;
+  grossProfit?: number;
 }
 
 const ProjectCardSummary: React.FC<ProjectCardSummaryProps> = ({
@@ -13,8 +13,9 @@ const ProjectCardSummary: React.FC<ProjectCardSummaryProps> = ({
   projectDataDetail,
   totalCashIn = 0,
   totalCashOut = 0,
-  totalOutstanding = 0,
+  grossProfit = 0,
 }) => {
+  console.log(projectDataDetail);
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <Stack>
@@ -29,11 +30,11 @@ const ProjectCardSummary: React.FC<ProjectCardSummaryProps> = ({
           </Tooltip>
         </Progress.Root>
         <Group gap={10}>
-          <Text size="lg" fw={900}>
+          <Text size="md" fw={900}>
             Catatan :
           </Text>
-          <Text size="lg" fw={900}>
-            {projectDataDetail?.note ? projectDataDetail.note.charAt(0).toUpperCase() + projectDataDetail.note.slice(1).toLowerCase() : "-"}
+          <Text size="md" fw={900} style={{ maxWidth: 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            {projectDataDetail?.note ?? "-"}
           </Text>
         </Group>
       </Stack>
@@ -65,10 +66,10 @@ const ProjectCardSummary: React.FC<ProjectCardSummaryProps> = ({
 
           <Group justify="space-between">
             <Text size="md" fw={500} c="orange">
-              Uang Terhutang
+              Margin
             </Text>
             <Text size="md" fw={600}>
-              Rp {totalOutstanding.toLocaleString("id-ID")}
+              Rp {grossProfit.toLocaleString("id-ID")}
             </Text>
           </Group>
         </Stack>

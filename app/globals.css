@@ -2,3 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* NotFound.css */
+.not-found-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+/* Rest of the CSS remains the same as in the styles const above */
