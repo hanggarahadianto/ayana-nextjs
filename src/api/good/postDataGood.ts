@@ -2,24 +2,24 @@ import { useMutation } from "@tanstack/react-query"; // Correct import from '@ta
 import { showNotification } from "@mantine/notifications";
 import { APIAxiosInstance } from "..";
 
-const handleSubmitCashFlowForm = async (values: ICashFlowCreate) => {
+const handleSubmitGoodForm = async (values: IPayoutCreate) => {
   console.log("values on fetching", values);
-  const response = await APIAxiosInstance.post(`/cashflow/post`, values);
+  const response = await APIAxiosInstance.post("good/post", values);
   return response.data; // Return the response data
 };
 
 // Custom hook for the mutation
-export const useSubmitCashFlowForm = () => {
+export const useSubmitGoodForm = () => {
   return useMutation({
-    mutationFn: async (values: any) => await handleSubmitCashFlowForm(values),
+    mutationFn: (values: any) => handleSubmitGoodForm(values),
 
-    onError: (error: any) => {
-      console.error("Gagal menyimpan data:", error);
+    onError: (data: any) => {
       showNotification({
         title: "Data Gagal Disimpan",
-        message: error.message || "Terjadi kesalahan",
+        message: `${data.message}`,
         color: "red",
       });
     },
+    onSettled: () => {},
   });
 };

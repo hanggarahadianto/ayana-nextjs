@@ -7,10 +7,9 @@
     "dev": "next dev",
     "start": "next start",
     "lint": "next lint",
-     "build:debug": "NEXT_DEBUG=true next build"
+    "build:debug": "NEXT_DEBUG=true next build"
   },
   "dependencies": {
-    "@ducanh2912/next-pwa": "^10.2.9",
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@mantine/carousel": "^7.16.2",
     "@mantine/core": "^7.16.2",
@@ -30,7 +29,7 @@
     "framer-motion": "^11.15.0",
     "js-cookie": "^3.0.5",
     "leaflet": "^1.9.4",
-    "next": "^15.3.0-canary.5",
+    "next": "^15.2.3",
     "next-auth": "^4.24.11",
     "next-seo": "^6.6.0",
     "or": "^0.2.0",
@@ -41,9 +40,7 @@
     "react-image-gallery": "^1.4.0",
     "react-leaflet": "4",
     "react-router-dom": "^7.1.1",
-    "sharp": "^0.33.5",
-    "workbox-build": "^7.3.0",
-    "workbox-cli": "^7.3.0",
+    "react-virtualized": "^9.22.6",
     "yup": "^1.6.1"
   },
   "devDependencies": {
@@ -52,12 +49,12 @@
     "@types/lodash": "^4.17.14",
     "@types/node": "^22.13.5",
     "@types/react": "^19",
+    "@types/react-virtualized": "^9.22.2",
     "postcss": "^8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
     "webpack": "^5.98.0"
-  },
-  "packageManager": "yarn@4.6.0+sha512.5383cc12567a95f1d668fbe762dfe0075c595b4bfff433be478dbbe24e05251a8e8c3eb992a986667c1d53b6c3a9c85b8398c35a960587fbd9fa3a0915406728"
+  }
 }

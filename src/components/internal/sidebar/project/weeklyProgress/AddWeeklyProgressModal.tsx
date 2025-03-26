@@ -16,11 +16,11 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
-import { initialValueWeeklyProgressCreate, validationSchemaWeeklyProgressCreate } from "./initialValuesWeeklyProgress";
 import { useSubmitWeeklyProgressForm } from "@/api/weekly-progress/postDataWeeklyProgress";
 import ButtonAdd from "@/components/button/buttonAdd";
 import ButtonDelete from "@/components/button/butttonDelete";
 import { satuan } from "@/lib/satuan";
+import { initialValueWeeklyProgressCreate, validationSchemaWeeklyProgressCreate } from "@/lib/initialValues/initialValuesWeeklyProgress";
 
 const AddWeeklyProgressModal = ({
   projectId,

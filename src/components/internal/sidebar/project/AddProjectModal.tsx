@@ -20,7 +20,7 @@ import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import { IconCalendar, IconPlus } from "@tabler/icons-react";
-import { initialValueProjectCreate, validationSchemaProject } from "./initialValuesProject";
+import { initialValueProjectCreate, validationSchemaProject } from "../../../../lib/initialValues/initialValuesProject";
 import { useSubmitProjectForm } from "@/api/project/postDataProject";
 
 const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => void }) => {

@@ -1,12 +1,14 @@
+"use client";
 import React, { useEffect } from "react";
 import { Modal, TextInput, Button, Group, Select, Textarea, Card, Text, Stack, NumberInput, SimpleGrid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
-import { getInitialValuesUpdateWeeklyProgress } from "./initialValuesWeeklyProgress";
+
 import { useUpdateWeeklyProgressForm } from "@/api/weekly-progress/editDataWeeklyProgress";
 import ButtonAdd from "@/components/button/buttonAdd";
 import ButtonDelete from "@/components/button/butttonDelete";
 import { satuan } from "@/lib/satuan";
+import { getInitialValuesUpdateWeeklyProgress } from "@/lib/initialValues/initialValuesWeeklyProgress";
 
 const EditWeeklyProgressModal = ({
   projectId,

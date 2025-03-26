@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import { Modal, TextInput, Button, Group, Select, Textarea, InputWrapper, NumberInput, ActionIcon, Stack } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
-import { IconCalendar, IconEdit } from "@tabler/icons-react";
-import { getInitialValuesUpdateProject } from "./initialValuesProject";
+import { IconCalendar } from "@tabler/icons-react";
+import { getInitialValuesUpdateProject } from "../../../../lib/initialValues/initialValuesProject";
 import { FiSettings } from "react-icons/fi";
 import { useUpdateProjectForm } from "@/api/project/editDataProject";
 import BreathingActionIcon from "@/components/button/buttonAction";
@@ -27,8 +29,6 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData: IP
       //   open();
     }
   }, [initialData]);
-
-  //   console.log("Edit project", initialData);
 
   return (
     <>

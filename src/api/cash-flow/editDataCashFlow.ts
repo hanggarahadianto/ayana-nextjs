@@ -1,34 +1,30 @@
-import { useMutation } from "@tanstack/react-query"; // Correct import from '@tanstack/react-query'
+import { useMutation } from "@tanstack/react-query";
 import { showNotification } from "@mantine/notifications";
 import { APIAxiosInstance } from "..";
 
-const handleEditCashFlowForm = async (values: ICashFlowUpdate) => {
-  console.log("values on fetching", values);
-  const response = await APIAxiosInstance.put(`/cashflow/edit`, values);
-  return response.data; // Return the response data
+// Handle PUT request to update cash flow (tanpa ID di payload)
+const handleEditCashFlowForm = async (id: string, values: ICashFlowUpdate) => {
+  try {
+    console.log("Sending updated cash flow data:", values);
+    const response = await APIAxiosInstance.put(`/cashflow/edit/${id}`, values);
+    return response.data;
+  } catch (error: any) {
+    console.error("Error updating cash flow:", error);
+    throw error.response?.data?.error || "Terjadi kesalahan saat memperbarui data";
+  }
 };
 
-// Custom hook for the mutation
-export const useUpdateCashFlowForm = (refetchProjectData: () => void, closeModal: () => void) => {
+// Custom hook untuk update cash flow
+export const useUpdateCashFlowForm = () => {
   return useMutation({
-    mutationFn: (values: any) => handleEditCashFlowForm(values),
-    onSuccess: (data: any) => {
-      console.log("pesan sukses terkirim");
-      refetchProjectData();
-      closeModal();
-      showNotification({
-        title: "Data Berhasil Diubah",
-        message: "",
-        color: "green",
-      });
-    },
-    onError: (data: any) => {
+    mutationFn: ({ id, values }: { id: string; values: ICashFlowUpdate }) => handleEditCashFlowForm(id, values),
+
+    onError: (error: any) => {
       showNotification({
         title: "Data Gagal Disimpan",
-        message: `${data.message}`,
+        message: error as string,
         color: "red",
       });
     },
-    onSettled: () => {},
   });
 };

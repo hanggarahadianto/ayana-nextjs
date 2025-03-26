@@ -1,3 +1,5 @@
+"use client";
+
 import { ActionIcon } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
 import { modals } from "@mantine/modals";
