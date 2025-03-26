@@ -5,7 +5,7 @@ import { Card, Group, NumberInput, Pagination, Select, Stack, Text, TextInput } 
 import { useQuery } from "@tanstack/react-query";
 import { Form, Formik } from "formik";
 
-const FormGoods = ({ goodsData, addGoodField, handleGoodChange, deleteGoodField, totalPages, page, setPage }) => {
+const FormGoods = ({ goodsData, debouncedGoods, addGoodField, handleGoodChange, deleteGoodField, totalPages, page, setPage }) => {
   // console.log("goods data di form", goodsData);
   return (
     <>
@@ -64,7 +64,7 @@ const FormGoods = ({ goodsData, addGoodField, handleGoodChange, deleteGoodField,
               />
 
               <Stack mt={20}>
-                <ButtonDelete onClick={() => deleteGoodField(index)} />
+                <ButtonDelete onClick={() => deleteGoodField(debouncedGoods || [], index)} />
               </Stack>
             </Group>
           </Card>

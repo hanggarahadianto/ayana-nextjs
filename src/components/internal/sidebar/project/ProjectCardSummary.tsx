@@ -30,10 +30,10 @@ const ProjectCardSummary: React.FC<ProjectCardSummaryProps> = ({
           </Tooltip>
         </Progress.Root>
         <Group gap={10}>
-          <Text size="md" fw={900}>
+          <Text size="sm" fw={900}>
             Catatan :
           </Text>
-          <Text size="md" fw={900} style={{ maxWidth: 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          <Text size="sm" fw={900} style={{ maxWidth: 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {projectDataDetail?.note ?? "-"}
           </Text>
         </Group>

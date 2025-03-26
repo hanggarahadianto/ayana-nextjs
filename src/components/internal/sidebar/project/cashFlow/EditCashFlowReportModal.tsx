@@ -77,7 +77,8 @@ const EditCashFlowReportModal = ({
   const { mutateAsync: updateDataGoods, isPending: isLoadingUpdateDataGoods } = useEditGoodForm();
   const { mutate: mutateDeleteDataCashFlow, isPending: isLoadingDeleteDataCashFlow } = useDeleteDataCashFlow(
     refetchCashFlowData,
-    refetchGoodsData
+    refetchGoodsData,
+    close
   );
 
   const handleSubmit = async (values: ICashFlowUpdate) => {
@@ -131,7 +132,7 @@ const EditCashFlowReportModal = ({
     <>
       <BreathingActionIcon
         onClick={open}
-        size="3rem"
+        size="2.5rem"
         icon={<IconEdit size="1.5rem" />}
         gradient="linear-gradient(135deg, #93C5FD, #BFDBFE)"
       />
@@ -204,7 +205,7 @@ const EditCashFlowReportModal = ({
             const deleteGoodField = (goods: IGoods[], index: number) => {
               const updatedGoods = goods.filter((_, i) => i !== index);
               setDebouncedGoods(updatedGoods); // Perbarui state sementara
-              setFieldValue("good", updatedGoods);
+              // setFieldValue("good", updatedGoods);
             };
 
             const handleGoodChange = useCallback((index, field, value) => {
@@ -221,11 +222,11 @@ const EditCashFlowReportModal = ({
               });
             }, []);
 
-            const calculateTotalCost = (price: number, quantity: number, costsDue: number): number => {
-              const baseCost = price * quantity;
-              const additionalCost = (costsDue / 100) * baseCost; // costsDue as percentage
-              return baseCost + additionalCost;
-            };
+            // const calculateTotalCost = (price: number, quantity: number, costsDue: number): number => {
+            //   const baseCost = price * quantity;
+            //   const additionalCost = (costsDue / 100) * baseCost; // costsDue as percentage
+            //   return baseCost + additionalCost;
+            // };
 
             const calculateAccountBalance = (cashIn: number, cashOut: number): number => {
               return cashIn - cashOut;
@@ -266,14 +267,16 @@ const EditCashFlowReportModal = ({
                         },
                       }}
                     />
-                    <Stack mt={24}>
-                      <ButtonDeleteWithConfirmation
-                        id={values?.id}
-                        onDelete={handleDeleteCashFlow}
-                        description={`Apakah anda ingin menghapus data minggu ke ${values?.week_number}`}
-                        size={2}
-                      />
-                    </Stack>
+                    {values?.id && (
+                      <Stack mt={24}>
+                        <ButtonDeleteWithConfirmation
+                          id={values?.id}
+                          onDelete={handleDeleteCashFlow}
+                          description={`Apakah anda ingin menghapus data minggu ke ${values?.week_number}`}
+                          size={2}
+                        />
+                      </Stack>
+                    )}
                   </Group>
 
                   <Grid>
@@ -324,6 +327,7 @@ const EditCashFlowReportModal = ({
 
                   <FormGoods
                     goodsData={debouncedGoods}
+                    debouncedGoods={debouncedGoods}
                     addGoodField={addGoodField}
                     handleGoodChange={handleGoodChange}
                     deleteGoodField={deleteGoodField}
@@ -359,7 +363,7 @@ const EditCashFlowReportModal = ({
                     <Button
                       type="submit"
                       color="blue"
-                      disabled={isLoadingUpdateDataCashFlow || isLoadingUpdateDataGoods}
+                      disabled={isLoadingUpdateDataCashFlow || isLoadingUpdateDataGoods || !debouncedGoods?.length}
                       loading={isLoadingUpdateDataCashFlow || isLoadingUpdateDataGoods}
                     >
                       Ubah

@@ -8,13 +8,14 @@ const deleteCashFlowAPI = async (idToDelete: string): Promise<AxiosResponse<any>
   return APIAxiosInstance.delete(`cashflow/deleteById/${idToDelete}`);
 };
 
-export const useDeleteDataCashFlow = (refetchCashFlowData: () => void, refetchGoodData: () => void) => {
+export const useDeleteDataCashFlow = (refetchCashFlowData: () => void, refetchGoodData: () => void, close: any) => {
   return useMutation({
     mutationFn: (id: string) => deleteCashFlowAPI(id), // Pastikan deletePayoutAPI menerima ID sebagai parameter
     onSuccess: (data) => {
       if (data?.status === 200) {
         refetchCashFlowData();
         refetchGoodData();
+        close();
         showNotification({
           title: "Data Berhasil Dihapus",
           message: "Data cashflow telah dihapus dengan sukses",

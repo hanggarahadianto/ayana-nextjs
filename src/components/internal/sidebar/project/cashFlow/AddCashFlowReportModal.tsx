@@ -96,7 +96,7 @@ const AddCashFlowReportModal = ({
     <>
       <BreathingActionIcon
         onClick={open}
-        size="3rem"
+        size="2.5rem"
         icon={<IconPlus size="1.5rem" />}
         gradient="linear-gradient(135deg, #A3E635, #86EFAC)"
       />
@@ -121,16 +121,25 @@ const AddCashFlowReportModal = ({
             // console.log("ERROR", errors);
 
             const [debouncedGoods, setDebouncedGoods] = useState(values.good || []);
-            // console.log("DEBOUNCH GOODS", debouncedGoods);
+            const [cashOut, setCashOut] = useState(0);
+            const [accountBalance, setAccountBalance] = useState(0);
 
             useEffect(() => {
               const handler = setTimeout(() => {
                 const totalCost = debouncedGoods.reduce((acc, good) => acc + (good.total_cost || 0), 0);
+                setCashOut(totalCost);
                 setFieldValue("cash_out", totalCost);
-              }, 500); // Delay 300ms sebelum menghitung ulang cash_out
+
+                // Update account balance
+                const updatedCashIn = values.cash_in || 0;
+                setAccountBalance(updatedCashIn - totalCost);
+              }, 500);
 
               return () => clearTimeout(handler);
-            }, [debouncedGoods]);
+            }, [debouncedGoods, values.cash_in]);
+
+            const calculateTotalCost = (price: number, quantity: number, costsDue: number): number =>
+              price * quantity + (costsDue / 100) * price * quantity;
 
             const addGoodField = () => {
               const newGood: IGoodsCreate = {
@@ -155,11 +164,11 @@ const AddCashFlowReportModal = ({
               setFieldValue("good", updatedGoods);
             };
 
-            const calculateTotalCost = (price: number, quantity: number, costsDue: number): number => {
-              const baseCost = price * quantity;
-              const additionalCost = (costsDue / 100) * baseCost; // costsDue as percentage
-              return baseCost + additionalCost;
-            };
+            // const calculateTotalCost = (price: number, quantity: number, costsDue: number): number => {
+            //   const baseCost = price * quantity;
+            //   const additionalCost = (costsDue / 100) * baseCost; // costsDue as percentage
+            //   return baseCost + additionalCost;
+            // };
 
             const handleGoodChange = <T extends keyof IGoodsCreate>(index: number, field: T, value: IGoodsCreate[T]) => {
               const updatedGood = [...(values?.good || [])];
@@ -174,13 +183,13 @@ const AddCashFlowReportModal = ({
               // setFieldValue("good", updatedGood);
             };
 
-            const calculateAccountBalance = (cashIn: number, cashOut: number): number => {
-              return cashIn - cashOut;
-            };
+            // const calculateAccountBalance = (cashIn: number, cashOut: number): number => {
+            //   return cashIn - cashOut;
+            // };
 
-            const cashIn = values.cash_in || 0;
-            const cashOut = values.cash_out || 0;
-            const accountBalance = calculateAccountBalance(cashIn, cashOut);
+            // const cashIn = values.cash_in || 0;
+            // const cashOut = values.cash_out || 0;
+            // const accountBalance = calculateAccountBalance(cashIn, cashOut);
 
             return (
               <SimpleGrid p={20}>
@@ -202,8 +211,8 @@ const AddCashFlowReportModal = ({
                             </Text>
                           </Grid.Col>
                           <Grid.Col span={6}>
-                            <Text> : Rp {cashIn.toLocaleString()}</Text>
-                            <Text> : Rp {cashOut.toLocaleString()}</Text>
+                            <Text>Rp {values.cash_in?.toLocaleString()}</Text>
+                            <Text>Rp {cashOut.toLocaleString()}</Text>
                             <Text c={accountBalance < 0 ? "red" : "green"}> : Rp {accountBalance.toLocaleString()}</Text>
                           </Grid.Col>
                         </Grid>

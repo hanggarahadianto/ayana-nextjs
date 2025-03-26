@@ -67,21 +67,25 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   return (
     <>
       <Grid p={16}>
-        <ProjectCardDetail
-          projectDataDetail={projectDataDetail}
-          cashFlowData={cashFlowData}
-          refetchProjectData={refetchProjectData}
-          refetchCashFlowData={refetchCashFlowData}
-          // refetchWeeklyProgressData={undefined}
-          totalCashIn={totalCashIn}
-        />
-        <ProjectCardSummary
-          totalPercentage={0}
-          projectDataDetail={projectDataDetail}
-          totalCashIn={totalCashIn}
-          totalCashOut={totalCashOut}
-          grossProfit={grossProfit}
-        />
+        <Grid.Col span={{ base: 12, sm: 6, md: 6 }}>
+          <ProjectCardDetail
+            projectDataDetail={projectDataDetail}
+            cashFlowData={cashFlowData}
+            refetchProjectData={refetchProjectData}
+            refetchCashFlowData={refetchCashFlowData}
+            // refetchWeeklyProgressData={undefined}
+            totalCashIn={totalCashIn}
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 6, md: 6 }}>
+          <ProjectCardSummary
+            totalPercentage={0}
+            projectDataDetail={projectDataDetail}
+            totalCashIn={totalCashIn}
+            totalCashOut={totalCashOut}
+            grossProfit={grossProfit}
+          />
+        </Grid.Col>
       </Grid>
 
       <Divider mt={40} mb={20} />
