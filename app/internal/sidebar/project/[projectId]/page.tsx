@@ -67,7 +67,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   return (
     <>
       <Grid p={16}>
-        <Grid.Col span={{ base: 12, sm: 6, md: 6 }}>
+        <Grid.Col span={{ base: 12, sm: 6, md: 5.7 }}>
           <ProjectCardDetail
             projectDataDetail={projectDataDetail}
             cashFlowData={cashFlowData}
