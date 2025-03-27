@@ -1,21 +1,9 @@
-import React, { useMemo, useState } from "react";
-import {
-  Modal,
-  TextInput,
-  Button,
-  Group,
-  Select,
-  Textarea,
-  Card,
-  Text,
-  Stack,
-  NumberInput,
-  Divider,
-  SimpleGrid,
-  InputWrapper,
-} from "@mantine/core";
+"use client";
+
+import React, { useMemo, useState, useCallback, useEffect } from "react";
+import { Modal, TextInput, Button, Group, Select, Textarea, Card, Text, Stack, NumberInput, Divider, SimpleGrid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Form, Formik } from "formik";
+import { Formik, Form } from "formik";
 import { useSubmitWeeklyProgressForm } from "@/api/weekly-progress/postDataWeeklyProgress";
 import ButtonAdd from "@/components/button/buttonAdd";
 import ButtonDelete from "@/components/button/butttonDelete";
@@ -23,312 +11,291 @@ import { satuan } from "@/lib/satuan";
 import { initialValueWeeklyProgressCreate, validationSchemaWeeklyProgressCreate } from "@/lib/initialValues/initialValuesWeeklyProgress";
 import { allWeeks } from "@/lib/weeks";
 
+// Define types
+interface IWorkerCreate {
+  worker_name: string;
+  position: string;
+}
+interface IMaterialCreate {
+  material_name: string;
+  quantity: number;
+  unit: string;
+  price: number;
+  total_cost: number;
+}
+interface IWeeklyProgressCreate {
+  week_number: string;
+  percentage: string;
+  note: string;
+  worker: IWorkerCreate[];
+  material: IMaterialCreate[];
+}
+
+// Custom debounce hook
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
 const AddWeeklyProgressModal = ({
   projectId,
   refetchWeeklyProgressData,
   weeklyProgress = [],
 }: {
-  projectId: any;
+  projectId: string;
   refetchWeeklyProgressData: () => void;
-  weeklyProgress?: IWeeklyProgress[];
+  weeklyProgress?: any[];
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
+  const { mutate: postData, isPending: isLoading } = useSubmitWeeklyProgressForm(refetchWeeklyProgressData, close);
 
-  const { mutate: postData, isPending: isLoadingSubmitProjectData } = useSubmitWeeklyProgressForm(refetchWeeklyProgressData, close);
+  const [workers, setWorkers] = useState<IWorkerCreate[]>(() => initialValueWeeklyProgressCreate.worker);
+  const [materials, setMaterials] = useState<IMaterialCreate[]>(() => initialValueWeeklyProgressCreate.material);
+  const [workerCount, setWorkerCount] = useState(0);
+  const [materialCost, setMaterialCost] = useState(0);
 
-  const handleSubmit = (values: IWeeklyProgressCreate) => {
-    const formData = { ...values, project_id: projectId };
+  console.log(workers, materials);
 
-    console.log("Form values submitted:", formData);
+  // Debounce the workers and materials state
+  const debouncedWorkers = useDebounce(workers, 1200);
+  const debouncedMaterials = useDebounce(materials, 1200);
 
-    postData(formData);
-  };
-
-  const selectedWeeks = weeklyProgress.map((item) => item.week_number);
-
-  // Filter available weeks (hide weeks that are already selected)
+  // Memoize available weeks
   const availableWeeks = useMemo(() => {
-    return allWeeks.filter((week: string) => !selectedWeeks.includes(week)).map((week) => ({ value: week, label: week }));
-  }, [selectedWeeks]);
+    const selectedWeeks = new Set(weeklyProgress.map((item) => item.week_number));
+    return allWeeks.filter((week) => !selectedWeeks.has(week)).map((week) => ({ value: week, label: week }));
+  }, [weeklyProgress]);
+
+  // Calculate worker count and material cost with debounced values
+  useEffect(() => {
+    setWorkerCount(debouncedWorkers.filter((w) => w.worker_name.trim() !== "").length);
+  }, [debouncedWorkers]);
+
+  useEffect(() => {
+    setMaterialCost(debouncedMaterials.reduce((acc, m) => acc + (m.total_cost || 0), 0));
+  }, [debouncedMaterials]);
+
+  const handleSubmit = useCallback(
+    (values: IWeeklyProgressCreate) => {
+      const formData = { ...values, project_id: projectId, worker: workers, material: materials };
+      postData(formData);
+    },
+    [workers, materials, projectId, postData]
+  );
+
+  const addWorker = useCallback(() => {
+    setWorkers((prev) => [...prev, { worker_name: "", position: "" }]);
+  }, []);
+
+  const deleteWorker = useCallback((index: number) => {
+    setWorkers((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
+  const addMaterial = useCallback(() => {
+    setMaterials((prev) => [...prev, { material_name: "", quantity: 0, unit: "", price: 0, total_cost: 0 }]);
+  }, []);
+
+  const deleteMaterial = useCallback((index: number) => {
+    setMaterials((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
+  const handleWorkerChange = useCallback((index: number, field: keyof IWorkerCreate, value: string) => {
+    setWorkers((prev) => {
+      const newWorkers = [...prev];
+      newWorkers[index] = { ...newWorkers[index], [field]: value };
+      return newWorkers;
+    });
+  }, []);
+  const handleMaterialChange = useCallback(<T extends keyof IMaterialCreate>(index: number, field: T, value: IMaterialCreate[T]) => {
+    setMaterials((prev) => {
+      const newMaterials = [...prev];
+      newMaterials[index] = { ...newMaterials[index], [field]: value };
+
+      if (field === "quantity" || field === "price") {
+        const quantity = Number(newMaterials[index].quantity) || 0;
+        const price = Number(newMaterials[index].price) || 0;
+        newMaterials[index].total_cost = quantity * price;
+      }
+      return newMaterials;
+    });
+  }, []);
 
   return (
     <>
-      <ButtonAdd onClick={open} size={"3.5rem"} />
-
-      <Modal yOffset="100px" opened={opened} onClose={close} size={"100%"}>
+      <ButtonAdd onClick={open} size="3.5rem" />
+      <Modal opened={opened} onClose={close} size="100%" yOffset="100px">
         <Formik
           initialValues={initialValueWeeklyProgressCreate}
           validationSchema={validationSchemaWeeklyProgressCreate}
-          validateOnBlur={false}
-          enableReinitialize={true}
-          validateOnChange={true}
-          validateOnMount={false}
           onSubmit={handleSubmit}
+          enableReinitialize
         >
-          {({ values, errors, touched, setFieldValue }) => {
-            console.log(values);
-            // console.log("ERROR", errors);
+          {({ values, errors, touched, setFieldValue, isSubmitting }) => (
+            <Form>
+              <SimpleGrid p={20}>
+                <Text fw={900} size="xl">
+                  Tambah Progress Mingguan
+                </Text>
 
-            const addWorkerField = (worker: IWorkerCreate[]) => {
-              const newWorker: IWorkerCreate = {
-                worker_name: "",
-                position: "",
-              };
-              setFieldValue("worker", [...worker, newWorker]);
-            };
+                <Select
+                  mt={2}
+                  w={200}
+                  label="Minggu Ke"
+                  placeholder="Pilih Minggu"
+                  data={availableWeeks}
+                  value={values.week_number}
+                  onChange={(value) => setFieldValue("week_number", value)}
+                  error={touched.week_number && errors.week_number}
+                  required
+                />
 
-            const deleteWorkerField = (worker: IWorkerCreate[], index: number) => {
-              // Remove the selected worker
-              const updatedWorkers = worker.filter((_, i) => i !== index);
+                <Divider />
+                <Group justify="space-between" p={20}>
+                  <Text fw={600}>Tambah Pekerja</Text>
+                  <ButtonAdd onClick={addWorker} size="2.5rem" />
+                </Group>
+                <Stack>
+                  {workers.map((worker, index) => {
+                    console.log(worker);
+                    return (
+                      <Card key={index} shadow="sm" radius="md" withBorder>
+                        <Group>
+                          <TextInput
+                            label={`Nama Pekerja ${index + 1}`}
+                            placeholder="Masukan nama pekerja"
+                            value={worker.worker_name || ""} // Fallback to empty string
+                            onChange={(e) => handleWorkerChange(index, "worker_name", e.target.value.toLocaleUpperCase())}
+                          />
+                          <Select
+                            label={`Posisi Pekerja ${index + 1}`}
+                            placeholder="Pilih posisi"
+                            value={worker.position || ""}
+                            onChange={(value) => handleWorkerChange(index, "position", value || "")}
+                            data={[
+                              { value: "tukang", label: "Tukang" },
+                              { value: "kuli", label: "Kuli" },
+                            ]}
+                            allowDeselect
+                            onFocus={() => console.log(`Select value for worker ${index}:`, worker.position)} // Debug on focus
+                          />
 
-              // Calculate the total based on the number of remaining workers
-              const totalWorkerCount = updatedWorkers.length; // This is the total based on how many workers are left
+                          <ButtonDelete onClick={() => deleteWorker(index)} />
+                        </Group>
+                      </Card>
+                    );
+                  })}
+                </Stack>
 
-              // Update the state
-              setFieldValue("worker", updatedWorkers);
-              setFieldValue("amount_worker", totalWorkerCount); // Update total worker count
-            };
+                <Group p={20}>
+                  <Text size="xl" fw={800}>
+                    Total Pekerja
+                  </Text>
+                  <Text fw={800}>{workerCount}</Text>
+                </Group>
 
-            const addMaterialField = (material: IMaterialCreate[]) => {
-              const newMaterial: IMaterialCreate = {
-                material_name: "",
-                quantity: 0,
-                unit: "",
-                price: 0,
-                total_cost: 0,
-              };
-              setFieldValue("material", [...material, newMaterial]);
-            };
+                <Divider />
+                <Group justify="space-between" p={20}>
+                  <Text fw={600}>Tambah Material</Text>
+                  <ButtonAdd onClick={addMaterial} size="2.5rem" />
+                </Group>
 
-            const deleteMaterialField = (worker: IMaterialCreate[], index: number) => {
-              // Remove the selected material
-              const updatedMaterials = worker.filter((_, i) => i !== index);
-
-              // Recalculate the total cost after deletion
-              const totalCost = updatedMaterials.reduce((acc, material) => acc + (material.total_cost || 0), 0);
-
-              // Update state
-              setFieldValue("material", updatedMaterials);
-              setFieldValue("amount_material", totalCost); // ✅ Ensure totalCost is updated
-            };
-
-            const handleWorkerChange = (index: number, field: keyof IWorkerCreate, value: string) => {
-              const updatedWorkers = [...values.worker];
-              updatedWorkers[index][field] = value;
-
-              // Update workers array with the new value
-              setFieldValue("worker", updatedWorkers);
-
-              const totalWorkers = updatedWorkers.filter((worker) => worker.worker_name.trim() !== "").length;
-              setFieldValue("amount_worker", totalWorkers);
-            };
-            const handleMaterialChange = <T extends keyof IMaterialCreate>(index: number, field: T, value: IMaterialCreate[T]) => {
-              const updatedMaterial = [...values.material];
-
-              // Update the changed field
-              updatedMaterial[index][field] = value;
-
-              // Recalculate total_cost when quantity or price is updated
-              if (field === "quantity" || field === "price") {
-                const quantity = Number(updatedMaterial[index].quantity) || 0;
-                const price = Number(updatedMaterial[index].price) || 0;
-                updatedMaterial[index].total_cost = quantity * price; // Calculate total cost
-              }
-
-              // Recalculate the total amount for all materials
-              const totalCost = updatedMaterial.reduce((acc, material) => acc + (material.total_cost || 0), 0);
-
-              console.log("Updated Material:", updatedMaterial);
-              console.log("Total Cost:", totalCost);
-
-              setFieldValue("material", updatedMaterial);
-              setFieldValue("amount_material", totalCost);
-            };
-
-            return (
-              <>
-                <Form>
-                  <SimpleGrid p={20}>
-                    <Text fw={900} size="xl">
-                      Tambah Progress Mingguan
-                    </Text>
-                    <InputWrapper required error={touched.week_number && errors.week_number ? errors.week_number : undefined}>
-                      <Select
-                        mt={2}
-                        w={200}
-                        label="Minggu Ke"
-                        placeholder="Pilih Minggu"
-                        onChange={(value: any) => {
-                          setFieldValue("week_number", value);
-                        }}
-                        data={availableWeeks}
-                        required
-                      />
-                    </InputWrapper>
-
-                    <Divider />
-                    <Group justify="space-between" p={20}>
-                      <Text fw={600}>Tambah Pekerja</Text>
-
-                      <ButtonAdd onClick={() => addWorkerField(values.worker)} size={"2.5rem"} />
-                    </Group>
-
-                    <Stack mt="md">
-                      {values.worker.map((worker: IWorkerCreate, index: number) => (
-                        <Card key={index} shadow="sm" radius="md">
-                          <Group>
-                            <TextInput
-                              label={`Nama Pekerja ${index + 1}`}
-                              placeholder="Masukan nama pekerja"
-                              value={worker.worker_name.toLocaleUpperCase()} // Ensure value is correctly bound
-                              onChange={(event) => handleWorkerChange(index, "worker_name", event.currentTarget.value.toLocaleUpperCase())} // Update the worker_name
-                            />
-                            <Select
-                              label={`Posisi Pekerja ${index + 1}`}
-                              placeholder="Pilih posisi"
-                              value={worker.position || ""}
-                              onChange={(value) => handleWorkerChange(index, "position", value || "")}
-                              data={[
-                                { value: "Tukang", label: "Tukang" },
-                                { value: "Kuli", label: "Kuli" },
-                              ]}
-                            />
-                            <Stack mt={20}>
-                              <ButtonDelete onClick={() => deleteWorkerField(values.worker, index)} />
-                            </Stack>
-                          </Group>
-                        </Card>
-                      ))}
-                    </Stack>
-                    <Group p={20}>
-                      <Text size="xl" fw={800}>
-                        Total Pekerja
-                      </Text>
-                      <Text fw={800} ml={20}>
-                        {values.amount_worker}
-                      </Text>
-                    </Group>
-
-                    <Divider mt={2} />
-                    <Group justify="space-between" mt={2} p={20}>
-                      <Text fw={600}>Tambah Material</Text>
-                      <ButtonAdd onClick={() => addMaterialField(values.material)} size={"2.5rem"} />
-                    </Group>
-
-                    <Stack mt="md">
-                      {values.material.map((material: IMaterialCreate, index: any) => {
-                        return (
-                          <Card key={index} shadow="sm" padding="lg" radius="md">
-                            <Group>
-                              <TextInput
-                                label={`Nama Material ${index + 1}`}
-                                placeholder="Masukan Nama Material"
-                                value={material.material_name.toLocaleUpperCase() || ""}
-                                onChange={(event) =>
-                                  handleMaterialChange(index, "material_name", event.currentTarget.value.toLocaleUpperCase())
-                                }
-                              />
-
-                              <NumberInput
-                                w={100}
-                                hideControls
-                                label={"Kuantitas"}
-                                placeholder="Masukan Kuantitas"
-                                value={material.quantity || ""}
-                                onChange={(value) => handleMaterialChange(index, "quantity", (value as number) || 0)}
-                              />
-
-                              <Select
-                                w={140}
-                                label={"Satuan"}
-                                placeholder="Satuan"
-                                value={material.unit || ""}
-                                data={satuan}
-                                onChange={(value) => handleMaterialChange(index, "unit", value || "")}
-                              />
-
-                              <TextInput
-                                w={140}
-                                label="Harga"
-                                placeholder="Masukan Harga"
-                                value={material.price ? `Rp. ${material.price.toLocaleString("id-ID")}` : ""}
-                                onChange={(event) => {
-                                  const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
-                                  const numericValue = Number(rawValue) || 0;
-                                  handleMaterialChange(index, "price", numericValue); // Store as number
-                                }}
-                              />
-
-                              <TextInput
-                                label={"Total"}
-                                value={material.total_cost?.toLocaleString("id-ID") || "0"} // Format as currency if needed
-                                readOnly
-                                styles={{ input: { fontWeight: "bold", cursor: "not-allowed" } }} // Light background to indicate it's view-only
-                              />
-                              <Stack mt={20}>
-                                <ButtonDelete onClick={() => deleteMaterialField(values.material, index)} />
-                              </Stack>
-                            </Group>
-                          </Card>
-                        );
-                      })}
-                      <Group p={20}>
-                        <Text size="xl" fw={900}>
-                          Total Biaya Material
-                        </Text>
-                        <Text fw={800} ml={20}>
-                          {new Intl.NumberFormat("id-ID", {
-                            style: "currency",
-                            currency: "IDR",
-                            minimumFractionDigits: 0,
-                          }).format(values.amount_material || 0)}
-                        </Text>
-                      </Group>
-
-                      <Divider mt={2} />
-
-                      <InputWrapper
-                        label="Persentase Pengerjaan"
-                        required
-                        error={touched.percentage && errors.percentage ? errors.percentage : undefined}
-                      >
-                        <NumberInput
-                          w={160}
-                          hideControls
-                          placeholder="Persentase"
-                          value={values.percentage ? String(values.percentage) : ""} // Ensure value is a string
-                          onChange={
-                            (value) => setFieldValue("percentage", value ? String(value) : "") // Convert value to string before saving
-                          }
-                          rightSection={
-                            <Text size="sm" c="gray">
-                              %
-                            </Text>
-                          }
+                <Stack>
+                  {materials.map((material, index) => (
+                    <Card key={index} shadow="sm" radius="md" withBorder>
+                      <Group>
+                        <TextInput
+                          label={`Nama Material ${index + 1}`}
+                          placeholder="Masukan Nama Material"
+                          value={material.material_name}
+                          onChange={(e) => handleMaterialChange(index, "material_name", e.target.value.toUpperCase())}
                         />
-                      </InputWrapper>
-                    </Stack>
-                    <Textarea
-                      label="Note"
-                      value={values?.note.toLocaleUpperCase()}
-                      placeholder="Enter additional information"
-                      onChange={(event) => setFieldValue("note", event.currentTarget.value.toLocaleUpperCase())}
-                      mt="md"
-                    />
+                        <NumberInput
+                          hideControls
+                          w={100}
+                          label="Kuantitas"
+                          placeholder="Masukan Kuantitas"
+                          value={material.quantity}
+                          onChange={(value) => handleMaterialChange(index, "quantity", value as number)}
+                        />
+                        <Select
+                          w={140}
+                          label="Satuan"
+                          placeholder="Satuan"
+                          value={material.unit}
+                          data={satuan}
+                          onChange={(value) => handleMaterialChange(index, "unit", value || "")}
+                        />
+                        <TextInput
+                          w={140}
+                          label="Harga"
+                          placeholder="Masukan Harga"
+                          value={material.price ? `Rp. ${material.price.toLocaleString("id-ID")}` : ""}
+                          onChange={(e) => {
+                            const rawValue = e.target.value.replace(/\D/g, "");
+                            handleMaterialChange(index, "price", Number(rawValue) || 0);
+                          }}
+                        />
+                        <TextInput
+                          label="Total"
+                          value={material.total_cost.toLocaleString("id-ID")}
+                          readOnly
+                          styles={{ input: { fontWeight: "bold", cursor: "not-allowed" } }}
+                        />
+                        <ButtonDelete onClick={() => deleteMaterial(index)} />
+                      </Group>
+                    </Card>
+                  ))}
+                </Stack>
 
-                    <Group justify="flex-end" mt="md">
-                      <Button onClick={close} variant="default">
-                        Cancel
-                      </Button>
-                      <Button type="submit" color="blue">
-                        Tambah
-                      </Button>
-                    </Group>
-                  </SimpleGrid>
-                </Form>
-              </>
-            );
-          }}
+                <Group p={20}>
+                  <Text size="xl" fw={900}>
+                    Total Biaya Material
+                  </Text>
+                  <Text fw={800}>
+                    {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(materialCost)}
+                  </Text>
+                </Group>
+
+                <Divider />
+                <NumberInput
+                  w={200}
+                  label="Persentase Pengerjaan"
+                  placeholder="Persentase"
+                  value={Number(values.percentage) || undefined}
+                  onChange={(value) => setFieldValue("percentage", String(value))}
+                  error={touched.percentage && errors.percentage}
+                  rightSection={
+                    <Text size="sm" c="gray">
+                      %
+                    </Text>
+                  }
+                  required
+                />
+                <Textarea
+                  label="Note"
+                  value={values.note}
+                  placeholder="Enter additional information"
+                  onChange={(e) => setFieldValue("note", e.target.value.toUpperCase())}
+                  mt="md"
+                />
+
+                <Group justify="flex-end" mt="md">
+                  <Button onClick={close} variant="default" disabled={isSubmitting}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" color="blue" loading={isLoading || isSubmitting}>
+                    Tambah
+                  </Button>
+                </Group>
+              </SimpleGrid>
+            </Form>
+          )}
         </Formik>
       </Modal>
     </>

@@ -10,10 +10,7 @@ import EditCashFlowReportModal from "../../../../../src/components/internal/side
 import { getDataProjectDetail } from "@/api/project/getDataProjectDetail";
 import { getDataWeeklyProgress } from "@/api/weekly-progress/getDataWeeklyProgress";
 import { getDataCashFlowListByProjectId } from "@/api/cash-flow/getCashFlowListProject";
-import { useDeleteDataWeeklyProgress } from "@/api/weekly-progress/deleteDataWeeklyProgress";
-import ButtonDeleteWithConfirmation from "@/components/button/buttonDeleteConfirmation";
-import AddWeeklyProgressModal from "@/components/internal/sidebar/project/weeklyProgress/AddWeeklyProgressModal";
-import EditWeeklyProgressModal from "@/components/internal/sidebar/project/weeklyProgress/EditWeeklyProgressModal";
+
 import { FC, use } from "react";
 import ProjectCardDetail from "@/components/internal/sidebar/project/ProjectCardDetail";
 import ProjectCardSummary from "@/components/internal/sidebar/project/ProjectCardSummary";
@@ -85,7 +82,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
           />
         </Grid.Col>
       </Grid>
-      <Stack p={20}>
+      <Stack p={24}>
         <Text size="xl" fw={900} c="cyan">
           Progress Proyek
         </Text>
