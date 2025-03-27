@@ -164,12 +164,6 @@ const AddCashFlowReportModal = ({
               setFieldValue("good", updatedGoods);
             };
 
-            // const calculateTotalCost = (price: number, quantity: number, costsDue: number): number => {
-            //   const baseCost = price * quantity;
-            //   const additionalCost = (costsDue / 100) * baseCost; // costsDue as percentage
-            //   return baseCost + additionalCost;
-            // };
-
             const handleGoodChange = <T extends keyof IGoodsCreate>(index: number, field: T, value: IGoodsCreate[T]) => {
               const updatedGood = [...(values?.good || [])];
               updatedGood[index][field] = value;
@@ -182,14 +176,6 @@ const AddCashFlowReportModal = ({
               setDebouncedGoods(updatedGood); // Tidak langsung update cash_out
               // setFieldValue("good", updatedGood);
             };
-
-            // const calculateAccountBalance = (cashIn: number, cashOut: number): number => {
-            //   return cashIn - cashOut;
-            // };
-
-            // const cashIn = values.cash_in || 0;
-            // const cashOut = values.cash_out || 0;
-            // const accountBalance = calculateAccountBalance(cashIn, cashOut);
 
             return (
               <SimpleGrid p={20}>
@@ -219,7 +205,7 @@ const AddCashFlowReportModal = ({
                       </Stack>
                     </Grid.Col>
                   </Grid>
-                  <Flex p={20} justify={"space-between"}></Flex>
+
                   <Group>
                     <InputWrapper required error={touched.week_number && errors.week_number ? errors.week_number : undefined}>
                       <Select

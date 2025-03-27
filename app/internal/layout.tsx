@@ -4,16 +4,29 @@ import { useState, useEffect } from "react";
 import { AppShell, NavLink, SimpleGrid, Stack, useMantineTheme, rem, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
-import { FaTasks, FaProjectDiagram, FaUser, FaCog, FaHome, FaNewspaper, FaShoppingBag, FaIdeal, FaMoneyBill } from "react-icons/fa";
+import {
+  FaTasks,
+  FaProjectDiagram,
+  FaUser,
+  FaCog,
+  FaNewspaper,
+  FaShoppingBag,
+  FaIdeal,
+  FaMoneyBill,
+  FaAngleDoubleLeft,
+  FaAngleDoubleRight,
+} from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Cookies from "js-cookie";
 import router from "next/router";
 import Navbar from "@/components/landing/navbar";
+
 export default function InternalLayout({ children }: { children: React.ReactNode }) {
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
   const [opened, { toggle }] = useDisclosure();
   const [isMounted, setIsMounted] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false); // State for sidebar collapse
 
   useEffect(() => {
     setIsMounted(true);
@@ -52,7 +65,7 @@ export default function InternalLayout({ children }: { children: React.ReactNode
           layout="alt"
           header={{ height: 60 }}
           navbar={{
-            width: 240,
+            width: isCollapsed ? 120 : 200, // Adjust width based on collapse state
             breakpoint: "sm",
             collapsed: { mobile: !opened },
           }}
@@ -69,6 +82,12 @@ export default function InternalLayout({ children }: { children: React.ReactNode
             style={{ background: isDark ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.1)", backdropFilter: "blur(10px)" }}
           >
             <Stack mt={40} gap="md" pt={40}>
+              <button
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                style={{ marginBottom: rem(20), cursor: "pointer", background: "transparent", border: "none", color: "white" }}
+              >
+                {isCollapsed ? <FaAngleDoubleRight /> : <FaAngleDoubleLeft />} {/* Icon to toggle collapse */}
+              </button>
               <AnimatePresence>
                 {menuItems.map((item, index) => (
                   <motion.div
@@ -81,14 +100,29 @@ export default function InternalLayout({ children }: { children: React.ReactNode
                     <NavLink
                       component={Link}
                       href={item.href}
-                      label={item.label}
+                      label={!isCollapsed ? item.label : undefined} // Show label only if not collapsed
                       leftSection={item.icon}
-                      style={{ color: "white", fontWeight: "bold", borderRadius: rem(8), padding: rem(12), transition: "all 0.3s" }}
-                      onMouseEnter={(e) =>
-                        (e.currentTarget.style.background = isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.2)")
-                      }
-                      onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                    />
+                      style={{
+                        color: "white",
+                        fontWeight: "bold",
+                        borderRadius: rem(8),
+                        padding: rem(12),
+                        transition: "background-color 0.3s ease, transform 0.3s ease",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = "scale(1.1)"; // Zoom in on hover
+                        e.currentTarget.style.background = isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.2)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "scale(1)"; // Zoom out on leave
+                        e.currentTarget.style.background = "transparent";
+                      }}
+                    >
+                      {/* Show icon only if collapsed */}
+                      {isCollapsed && <span style={{ marginRight: rem(10) }}>{item.icon}</span>}
+                    </NavLink>
                   </motion.div>
                 ))}
               </AnimatePresence>

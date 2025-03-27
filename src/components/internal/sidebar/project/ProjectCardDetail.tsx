@@ -13,7 +13,7 @@ const ProjectCardDetail: FC<{
   totalCashIn: any;
 }> = ({ projectDataDetail, cashFlowData, refetchProjectData, refetchCashFlowData, totalCashIn }) => {
   return (
-    <Grid.Col span={{ base: 12, sm: 6, md: 20 }} mr={40}>
+    <Grid.Col span={{ base: 12, sm: 6, md: 20 }}>
       <Card
         shadow="md"
         padding="lg"
@@ -27,7 +27,7 @@ const ProjectCardDetail: FC<{
         }}
       >
         <Box style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <SimpleGrid>
+          <SimpleGrid w={"100%"}>
             <Group justify="space-between">
               <Text fw={900} size="1.5rem">
                 {projectDataDetail?.project_name}
@@ -44,19 +44,23 @@ const ProjectCardDetail: FC<{
               {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(projectDataDetail?.total_cost || 0)}
             </Text>
             <Card
-              w={800}
               shadow="md"
               padding="lg"
               radius="md"
-              style={{ background: "linear-gradient(135deg, #16a34a, #22c55e)", color: "white", width: "450px" }}
+              style={{
+                background: "linear-gradient(135deg, #16a34a, #22c55e)",
+                color: "white",
+                width: "100%",
+                maxWidth: "100%", // Mengikuti lebar layar
+              }}
             >
-              <Grid>
-                <Grid.Col span={3.2}>
-                  <Stack>
+              <Grid grow justify="flex-start">
+                <Grid.Col span={{ base: 12, sm: 6, md: 4, lg: 3 }}>
+                  <Stack align="flex-start">
                     <Text fw={600} mb={12}>
                       Buku Kas Umum
                     </Text>
-                    <Group gap={12}>
+                    <Group wrap="wrap" gap="sm">
                       <AddCashFlowReportModal
                         projectName={projectDataDetail?.project_name}
                         projectId={projectDataDetail?.id}
@@ -69,18 +73,17 @@ const ProjectCardDetail: FC<{
                         refetchCashFlowData={refetchCashFlowData}
                         projectId={projectDataDetail?.id}
                       />
-                      <Stack ml={12}>
-                        <GetCashFlowReportModal
-                          projectName={projectDataDetail?.project_name}
-                          cashFlowData={cashFlowData?.data || []}
-                          totalCost={projectDataDetail?.total_cost}
-                        />
-                      </Stack>
+                      <GetCashFlowReportModal
+                        projectName={projectDataDetail?.project_name}
+                        cashFlowData={cashFlowData?.data || []}
+                        totalCost={projectDataDetail?.total_cost}
+                      />
                     </Group>
                   </Stack>
                 </Grid.Col>
-                <Grid.Col span={2.5}>
-                  <Stack justify="flex-start" align="start">
+
+                <Grid.Col span={{ base: 12, sm: 6, md: 3, lg: 2 }}>
+                  <Stack justify="center" align="center">
                     <Text size="sm" fw={900}>
                       Realisasi Investor
                     </Text>

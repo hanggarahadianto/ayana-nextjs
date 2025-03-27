@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Modal,
   TextInput,
@@ -21,6 +21,7 @@ import ButtonAdd from "@/components/button/buttonAdd";
 import ButtonDelete from "@/components/button/butttonDelete";
 import { satuan } from "@/lib/satuan";
 import { initialValueWeeklyProgressCreate, validationSchemaWeeklyProgressCreate } from "@/lib/initialValues/initialValuesWeeklyProgress";
+import { allWeeks } from "@/lib/weeks";
 
 const AddWeeklyProgressModal = ({
   projectId,
@@ -43,22 +44,18 @@ const AddWeeklyProgressModal = ({
     postData(formData);
   };
 
-  // Extract already selected week numbers safely
   const selectedWeeks = weeklyProgress.map((item) => item.week_number);
 
-  // All possible weeks
-  const allWeeks = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"];
-
   // Filter available weeks (hide weeks that are already selected)
-  const availableWeeks = allWeeks
-    .filter((week) => !selectedWeeks.includes(week)) // Remove used weeks
-    .map((week) => ({ value: week, label: week })); // Convert to Select format
+  const availableWeeks = useMemo(() => {
+    return allWeeks.filter((week: string) => !selectedWeeks.includes(week)).map((week) => ({ value: week, label: week }));
+  }, [selectedWeeks]);
 
   return (
     <>
       <ButtonAdd onClick={open} size={"3.5rem"} />
 
-      <Modal yOffset="100px" opened={opened} onClose={close} size={"70%"}>
+      <Modal yOffset="100px" opened={opened} onClose={close} size={"100%"}>
         <Formik
           initialValues={initialValueWeeklyProgressCreate}
           validationSchema={validationSchemaWeeklyProgressCreate}
@@ -157,7 +154,7 @@ const AddWeeklyProgressModal = ({
                     </Text>
                     <InputWrapper required error={touched.week_number && errors.week_number ? errors.week_number : undefined}>
                       <Select
-                        mt={22}
+                        mt={2}
                         w={200}
                         label="Minggu Ke"
                         placeholder="Pilih Minggu"
@@ -169,8 +166,8 @@ const AddWeeklyProgressModal = ({
                       />
                     </InputWrapper>
 
-                    <Divider mt={20} />
-                    <Group justify="space-between" mt={20} p={20}>
+                    <Divider />
+                    <Group justify="space-between" p={20}>
                       <Text fw={600}>Tambah Pekerja</Text>
 
                       <ButtonAdd onClick={() => addWorkerField(values.worker)} size={"2.5rem"} />
@@ -178,7 +175,7 @@ const AddWeeklyProgressModal = ({
 
                     <Stack mt="md">
                       {values.worker.map((worker: IWorkerCreate, index: number) => (
-                        <Card key={index} shadow="sm" padding="lg" radius="md">
+                        <Card key={index} shadow="sm" radius="md">
                           <Group>
                             <TextInput
                               label={`Nama Pekerja ${index + 1}`}
@@ -212,8 +209,8 @@ const AddWeeklyProgressModal = ({
                       </Text>
                     </Group>
 
-                    <Divider mt={40} />
-                    <Group justify="space-between" mt={20} p={20}>
+                    <Divider mt={2} />
+                    <Group justify="space-between" mt={2} p={20}>
                       <Text fw={600}>Tambah Material</Text>
                       <ButtonAdd onClick={() => addMaterialField(values.material)} size={"2.5rem"} />
                     </Group>
@@ -288,7 +285,7 @@ const AddWeeklyProgressModal = ({
                         </Text>
                       </Group>
 
-                      <Divider mt={20} />
+                      <Divider mt={2} />
 
                       <InputWrapper
                         label="Persentase Pengerjaan"

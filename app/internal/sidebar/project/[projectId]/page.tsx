@@ -67,19 +67,17 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   return (
     <>
       <Grid p={16}>
-        <Grid.Col span={{ base: 12, sm: 6, md: 5.7 }}>
+        <Grid.Col span={{ base: 12, sm: 6, md: 6 }}>
           <ProjectCardDetail
             projectDataDetail={projectDataDetail}
             cashFlowData={cashFlowData}
             refetchProjectData={refetchProjectData}
             refetchCashFlowData={refetchCashFlowData}
-            // refetchWeeklyProgressData={undefined}
             totalCashIn={totalCashIn}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 6 }}>
           <ProjectCardSummary
-            totalPercentage={0}
             projectDataDetail={projectDataDetail}
             totalCashIn={totalCashIn}
             totalCashOut={totalCashOut}
@@ -87,12 +85,24 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
           />
         </Grid.Col>
       </Grid>
+      <Stack p={20}>
+        <Text size="xl" fw={900} c="cyan">
+          Progress Proyek
+        </Text>
+        <Progress.Root size={40} w="min(920px, 90vw)">
+          <Tooltip label={`Progress Proyek: ${undefined}%`}>
+            <Progress.Section value={1} color="blue">
+              <Progress.Label>%</Progress.Label>
+            </Progress.Section>
+          </Tooltip>
+        </Progress.Root>
+      </Stack>
 
       <Divider mt={40} mb={20} />
       <WeeklyProgressMenu
-        refetchWeeklyProgressData={undefined}
-        projectDataDetail={undefined}
-        weeklyProgressData={undefined}
+        refetchWeeklyProgressData={refetchWeeklyProgressData}
+        projectDataDetail={projectDataDetail}
+        weeklyProgressData={weeklyProgressData}
         handleCardClick={undefined}
         handleDeleteWeeklyProgress={undefined}
       />

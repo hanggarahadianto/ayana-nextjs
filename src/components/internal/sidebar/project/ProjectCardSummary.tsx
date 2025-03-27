@@ -1,7 +1,6 @@
 import { Card, Divider, Group, Progress, Stack, Text, Tooltip } from "@mantine/core";
 
 interface ProjectCardSummaryProps {
-  totalPercentage: number;
   projectDataDetail?: { note?: string };
   totalCashIn?: number;
   totalCashOut?: number;
@@ -9,7 +8,6 @@ interface ProjectCardSummaryProps {
 }
 
 const ProjectCardSummary: React.FC<ProjectCardSummaryProps> = ({
-  totalPercentage,
   projectDataDetail,
   totalCashIn = 0,
   totalCashOut = 0,
@@ -17,9 +15,9 @@ const ProjectCardSummary: React.FC<ProjectCardSummaryProps> = ({
 }) => {
   console.log(projectDataDetail);
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
+    <Card shadow="sm" padding="lg" radius="md" withBorder mt={8}>
       <Stack>
-        <Text size="xl" fw={900} c="cyan">
+        {/* <Text size="xl" fw={900} c="cyan">
           Progress Proyek
         </Text>
         <Progress.Root size={40} w="min(400px, 90vw)">
@@ -28,10 +26,10 @@ const ProjectCardSummary: React.FC<ProjectCardSummaryProps> = ({
               <Progress.Label>{totalPercentage}%</Progress.Label>
             </Progress.Section>
           </Tooltip>
-        </Progress.Root>
+        </Progress.Root> */}
         <Group gap={10}>
           <Text size="sm" fw={900}>
-            Catatan :
+            CATATAN :
           </Text>
           <Text size="sm" fw={900} style={{ maxWidth: 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {projectDataDetail?.note ?? "-"}
