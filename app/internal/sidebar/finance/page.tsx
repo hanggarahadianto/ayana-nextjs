@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { ActionIcon, Group, Pagination, ScrollArea, SimpleGrid, Stack, Table, Tabs } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import AddPayoutModal from "./AddPayoutModal"; // Sesuaikan path
+import AddPayoutModal from "../../../../src/components/internal/sidebar/finance/AddPayoutModal"; // Sesuaikan path
 import { getDataCompany } from "@/api/company/getCompany"; // Sesuaikan path
 import { getDataPayout } from "@/api/payout/getDataPayout";
 import router from "next/router";
@@ -11,7 +11,7 @@ import router from "next/router";
 import ButtonDeleteWithConfirmation from "@/components/button/buttonDeleteConfirmation";
 import { useDeleteDataPayout } from "@/api/payout/deleteDataPayout";
 import BreathingActionIcon from "@/components/button/buttonAction";
-import EditPayoutModal from "./EditPayoutModal";
+import EditPayoutModal from "@/components/internal/sidebar/finance/EditPayoutModal";
 
 export default function CompanyTabs() {
   const { data: companyData, isLoading } = useQuery({
@@ -19,8 +19,6 @@ export default function CompanyTabs() {
     queryFn: getDataCompany,
     refetchOnWindowFocus: false,
   });
-
-  console.log(companyData);
 
   const companies = Array.isArray(companyData?.data) ? companyData.data.sort((a, b) => a.company_code.localeCompare(b.company_code)) : [];
 

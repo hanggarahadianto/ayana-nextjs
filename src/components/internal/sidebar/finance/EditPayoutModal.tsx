@@ -6,8 +6,9 @@ import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar, IconEdit } from "@tabler/icons-react";
 
 import BreathingActionIcon from "@/components/button/buttonAction";
-import { getInitialValuesUpdatePayout, validationSchemaPayout } from "./initialValuesPayout";
+
 import { useUpdatePayoutForm } from "@/api/payout/editDataPayout";
+import { getInitialValuesUpdatePayout } from "@/lib/initialValues/initialValuesPayout";
 
 const EditPayoutModal = ({ payout, refetchPayoutData }: { payout: IPayoutUpdate; refetchPayoutData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);

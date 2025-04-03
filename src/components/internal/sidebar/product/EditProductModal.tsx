@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, TextInput, Button, Group, Select, Textarea, InputWrapper, NumberInput, Stack, Text, FileInput, Flex } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
-import { getInitialValuesUpdateProduct } from "./initialValuesProduct";
+import { getInitialValuesUpdateProduct } from "../../../../lib/initialValues/initialValuesProduct";
 import { IconEdit } from "@tabler/icons-react";
 import { useEditProductForm } from "@/api/products/editDataProduct";
 import BreathingActionIcon from "@/components/button/buttonAction";
@@ -17,8 +17,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ initialData, refetc
   const { mutate: updateData, isPending: isLoadingUpdateProductData } = useEditProductForm(refetchProductData, close);
 
   const handleSubmit = (values: IProductUpdate, { setSubmitting }: any) => {
-    console.log("Updating product with values:", values);
-
     const formData = new FormData();
     formData.append("id", values.id);
     if (values.title) formData.append("title", values.title);
@@ -69,10 +67,10 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ initialData, refetc
             return (
               <Form>
                 <Stack p={20}>
-                  <Flex>
+                  <Group gap={8}>
                     <Text>EDIT PRODUK</Text>
                     <Text>{values?.title}</Text>
-                  </Flex>
+                  </Group>
 
                   <InputWrapper
                     label="Nama Produk"

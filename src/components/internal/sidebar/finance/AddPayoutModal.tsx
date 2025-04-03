@@ -20,7 +20,7 @@ import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import { IconCalendar, IconPlus } from "@tabler/icons-react";
-import { initialValuePayoutCreate } from "./initialValuesPayout";
+import { initialValuePayoutCreate } from "../../../../lib/initialValues/initialValuesPayout";
 import { useSubmitPayoutForm } from "@/api/payout/postDataPayout";
 import ButtonAdd from "@/components/button/buttonAdd";
 
