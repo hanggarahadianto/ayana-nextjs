@@ -60,6 +60,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   const totalCashOut = cashFlowData?.data.reduce((sum, item) => sum + item.cash_out, 0);
 
   let grossProfit = (totalCashIn ?? 0) - (totalCashOut ?? 0);
+  const progress = 20;
 
   return (
     <>
@@ -82,17 +83,65 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
           />
         </Grid.Col>
       </Grid>
-      <Stack p={24}>
-        <Text size="xl" fw={900} c="cyan">
-          Progress Proyek
-        </Text>
-        <Progress.Root size={40} w="min(920px, 90vw)">
-          <Tooltip label={`Progress Proyek: ${undefined}%`}>
-            <Progress.Section value={1} color="blue">
-              <Progress.Label>%</Progress.Label>
-            </Progress.Section>
-          </Tooltip>
-        </Progress.Root>
+      <Stack justify="center" align="center">
+        <Card
+          shadow="md"
+          radius="lg"
+          p="xs"
+          withBorder
+          style={{
+            maxWidth: "960px",
+            width: "90vw",
+            // background: "linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%)",
+            border: "1px solid rgba(0, 155, 255, 0.2)",
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)",
+          }}
+        >
+          <Stack gap="lg" align="center">
+            <Text size="xl" fw={900} c="cyan.8">
+              Progress Proyek
+            </Text>
+
+            <Progress.Root
+              size={40}
+              w="100%"
+              radius="md"
+              // bg="gray.2"
+              style={{
+                overflow: "visible",
+                border: "1px solid rgba(0, 155, 255, 0.1)",
+              }}
+            >
+              <Tooltip label={`Progress Proyek: ${progress ?? 0}%`} color="blue.6" position="top" offset={20} withArrow>
+                <Progress.Section
+                  value={progress ?? 1}
+                  color="blue"
+                  animated
+                  style={{
+                    background: "linear-gradient(45deg, #00b7ff 0%, #005eff 100%)",
+                    transition: "width 0.6s ease-in-out",
+                    position: "relative",
+                    overflow: "visible",
+                  }}
+                >
+                  <Progress.Label
+                    style={{
+                      color: "white",
+                      fontWeight: 600,
+                      padding: "0 16px",
+                      textShadow: "0 1px 2px rgba(0, 0, 0, 0.2)",
+                      position: "absolute",
+                      right: "8px",
+                      transform: "translateX(0)",
+                    }}
+                  >
+                    {progress ?? 0}%
+                  </Progress.Label>
+                </Progress.Section>
+              </Tooltip>
+            </Progress.Root>
+          </Stack>
+        </Card>
       </Stack>
 
       <Divider mt={40} mb={20} />
@@ -103,20 +152,6 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
         handleCardClick={undefined}
         handleDeleteWeeklyProgress={undefined}
       />
-
-      {/*
-
-
-
-      {/* Edit Modal */}
-      {/* {isModalOpen && selectedProgress && (
-        <EditWeeklyProgressModal
-          projectId={projectDataDetail?.id}
-          refetchWeeklyProgressData={refetchWeeklyProgressData}
-          initialData={selectedProgress}
-          onClose={handleModalClose}
-        />
-      )} */}
     </>
   );
 };

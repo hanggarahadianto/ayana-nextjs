@@ -20,6 +20,7 @@ export const initialValueWeeklyProgressCreate: IWeeklyProgressCreate = {
     {
       worker_name: "",
       position: "",
+      total_cost: 0,
     },
   ],
 };
@@ -44,6 +45,7 @@ export const initialValueWeeklyProgressUpdate: IWeeklyProgressUpdate = {
     {
       worker_name: "",
       position: "",
+      total_cost: 0,
     },
   ],
 };
@@ -91,6 +93,6 @@ export function getInitialValuesUpdateWeeklyProgress(weeklyProgressData: IWeekly
     material: weeklyProgressData?.material?.length
       ? weeklyProgressData.material
       : [{ material_name: "", quantity: 0, unit: "", price: 0, total_cost: 0 }],
-    worker: weeklyProgressData?.worker?.length ? weeklyProgressData.worker : [{ worker_name: "", position: "" }],
+    worker: weeklyProgressData?.worker?.length ? weeklyProgressData.worker : [{ worker_name: "", position: "", total_cost: 0 }],
   };
 }

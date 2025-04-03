@@ -17,16 +17,6 @@ const ProjectCardSummary: React.FC<ProjectCardSummaryProps> = ({
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder mt={8}>
       <Stack>
-        {/* <Text size="xl" fw={900} c="cyan">
-          Progress Proyek
-        </Text>
-        <Progress.Root size={40} w="min(400px, 90vw)">
-          <Tooltip label={`Progress Proyek: ${totalPercentage}%`}>
-            <Progress.Section value={totalPercentage} color="blue">
-              <Progress.Label>{totalPercentage}%</Progress.Label>
-            </Progress.Section>
-          </Tooltip>
-        </Progress.Root> */}
         <Group gap={10}>
           <Text size="sm" fw={900}>
             CATATAN :

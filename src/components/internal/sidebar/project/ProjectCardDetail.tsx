@@ -21,8 +21,7 @@ const ProjectCardDetail: FC<{
         style={{
           background: "linear-gradient(135deg, #16a34a, #22c55e)",
           color: "white",
-          // minWidth: "280px",
-          // maxWidth: "82vw",
+
           width: "100%",
         }}
       >

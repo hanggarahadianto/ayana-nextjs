@@ -59,7 +59,7 @@ const EditWeeklyProgressModal = ({
 
             // worker
             const addWorkerField = () => {
-              const newWorker: IWorkerCreate = { worker_name: "", position: "" };
+              const newWorker: IWorkerCreate = { worker_name: "", position: "", total_cost: 0 };
               setFieldValue("worker", [...values.worker, newWorker]);
             };
 
