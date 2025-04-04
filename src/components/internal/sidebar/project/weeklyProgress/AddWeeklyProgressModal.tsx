@@ -4,7 +4,7 @@ import { Modal, Button, Group, Select, Textarea, Card, Text, Stack, NumberInput,
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form } from "formik";
 import { useSubmitWeeklyProgressForm } from "@/api/weekly-progress/postDataWeeklyProgress";
-import ButtonAdd from "@/components/button/buttonAdd";
+import ButtonAdd from "@/lib/button/buttonAdd";
 import { initialValueWeeklyProgressCreate, validationSchemaWeeklyProgressCreate } from "@/lib/initialValues/initialValuesWeeklyProgress";
 import { allWeeks } from "@/lib/weeks";
 import FormAddWorker from "./FormAddWorker";

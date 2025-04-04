@@ -22,7 +22,7 @@ import { Form, Formik } from "formik";
 import { IconCalendar, IconPlus } from "@tabler/icons-react";
 import { initialValuePayoutCreate } from "../../../../lib/initialValues/initialValuesPayout";
 import { useSubmitPayoutForm } from "@/api/payout/postDataPayout";
-import ButtonAdd from "@/components/button/buttonAdd";
+import ButtonAdd from "@/lib/button/buttonAdd";
 
 interface AddPayoutModalProps {
   refetchPayloadData: () => void;

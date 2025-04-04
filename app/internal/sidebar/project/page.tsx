@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { getDataProject } from "@/api/project/getDataProject";
 import { useDeleteDataProject } from "@/api/project/deleteDataProject";
-import ButtonDeleteWithConfirmation from "@/components/button/buttonDeleteConfirmation";
+import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
 
 const ProjectPage = () => {
   const isSmallScreen = useMediaQuery("(max-width: 767px)"); // Mobile

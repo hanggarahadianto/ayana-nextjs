@@ -5,7 +5,7 @@ import { Form, Formik } from "formik";
 import { getInitialValuesUpdateProduct } from "../../../../lib/initialValues/initialValuesProduct";
 import { IconEdit } from "@tabler/icons-react";
 import { useEditProductForm } from "@/api/products/editDataProduct";
-import BreathingActionIcon from "@/components/button/buttonAction";
+import BreathingActionIcon from "@/lib/button/buttonAction";
 
 interface EditProductModalProps {
   initialData: IProductUpdate | undefined; // Adjust the type based on your actual data structure

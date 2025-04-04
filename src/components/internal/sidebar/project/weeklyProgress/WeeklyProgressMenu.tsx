@@ -1,4 +1,4 @@
-import ButtonDeleteWithConfirmation from "@/components/button/buttonDeleteConfirmation";
+import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
 import { Card, Grid, Group, RingProgress, SimpleGrid, Stack, Text } from "@mantine/core";
 import AddWeeklyProgressModal from "./AddWeeklyProgressModal";
 

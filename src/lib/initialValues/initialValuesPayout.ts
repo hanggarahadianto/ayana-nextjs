@@ -37,15 +37,3 @@ export const getInitialValuesUpdatePayout = (initialData: IPayoutUpdate) => ({
   company_id: initialData?.company_id || "",
   note: initialData?.note || "",
 });
-
-// export const getInitialValuesUpdatePayout = (payoutData: IPayoutUpdate[]) => {
-//   const firstPayout = payoutData[0] || {}; // Ambil data pertama atau objek kosong
-//   return {
-//     id: firstPayout.id || "",
-//     invoice: firstPayout.invoice || "",
-//     nominal: firstPayout.nominal || 0,
-//     date_inputed: firstPayout.date_inputed ? new Date(firstPayout.date_inputed).toISOString() : "", // Konversi ke string ISO
-//     note: firstPayout.note || "",
-//     company_id: firstPayout.company_id || "",
-//   };
-// };

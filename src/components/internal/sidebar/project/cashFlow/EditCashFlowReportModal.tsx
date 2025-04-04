@@ -24,13 +24,13 @@ import {
   validationSchemaCashFlowCreate,
 } from "../../../../../lib/initialValues/initialValuesCashFlow";
 import { useUpdateCashFlowForm } from "@/api/cash-flow/editDataCashFlow";
-import BreathingActionIcon from "@/components/button/buttonAction";
+import BreathingActionIcon from "@/lib/button/buttonAction";
 import { useQuery } from "@tanstack/react-query";
 import { getDataGoodsByCashFlowId } from "@/api/good/getDataGoodsByCashFlowId";
 import { showNotification } from "@mantine/notifications";
 import FormGoods from "./FormGoods";
 import { useEditGoodForm } from "@/api/good/editGoods";
-import ButtonDeleteWithConfirmation from "@/components/button/buttonDeleteConfirmation";
+import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
 import { useDeleteDataCashFlow } from "@/api/cash-flow/deleteDataCashFlow";
 
 const EditCashFlowReportModal = ({

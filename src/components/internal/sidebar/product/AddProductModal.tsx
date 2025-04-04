@@ -4,11 +4,11 @@ import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import { initialValueProductCreate, validationSchemaProduct } from "../../../../lib/initialValues/initialValuesProduct";
 import { useSubmitProductForm } from "@/api/products/postDataProduct";
-import ButtonAdd from "@/components/button/buttonAdd";
+import ButtonAdd from "@/lib/button/buttonAdd";
 
 const AddProductModal = ({ refetchProductData }: { refetchProductData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const { mutate: postData, isPending: isLoadingSubmitProductData } = useSubmitProductForm(refetchProductData, close);
+  const { mutate: postDataProduct, isPending: isLoadingSubmitProductData } = useSubmitProductForm(refetchProductData, close);
 
   const handleSubmit = useCallback(
     (values: IProductCreate, { setSubmitting }: any) => {
@@ -26,6 +26,7 @@ const AddProductModal = ({ refetchProductData }: { refetchProductData: () => voi
       formData.append("price", values.price.toString());
       formData.append("quantity", values.quantity.toString());
       formData.append("status", values.status);
+      formData.append("sequence", values.sequence.toString());
       formData.append("type", values.type);
 
       if (values.file) {
@@ -33,10 +34,10 @@ const AddProductModal = ({ refetchProductData }: { refetchProductData: () => voi
       }
 
       console.log("Form values submitted:", formData);
-      postData(formData);
+      postDataProduct(formData);
       setSubmitting(false);
     },
-    [postData]
+    [postDataProduct]
   );
 
   const locationOptions = useMemo(
@@ -71,6 +72,7 @@ const AddProductModal = ({ refetchProductData }: { refetchProductData: () => voi
         <Formik initialValues={initialValueProductCreate} validationSchema={validationSchemaProduct} onSubmit={handleSubmit}>
           {({ values, setFieldValue, errors, touched, handleBlur }) => {
             console.log("VALUES", values);
+            console.log("error", errors);
 
             return (
               <Form>
@@ -105,47 +107,47 @@ const AddProductModal = ({ refetchProductData }: { refetchProductData: () => voi
                     </InputWrapper>
                   </Group>
 
-                  <InputWrapper label="Address" required>
+                  <InputWrapper label="Alamat" required>
                     <TextInput
-                      placeholder="Enter address"
+                      placeholder="Masukan Alamat"
                       defaultValue={values.address}
                       onBlur={(e) => setFieldValue("address", e.target.value)} // Update saat onBlur
                     />
                   </InputWrapper>
 
-                  <InputWrapper label="Description" required>
+                  <InputWrapper label="Deskripsi" required>
                     <Textarea
-                      placeholder="Enter description"
+                      placeholder="Masukan Deskripsi"
                       defaultValue={values.content} // Pastikan values.note sudah terdefinisi dalam Formik state
                       onBlur={(e) => setFieldValue("content", e.target.value)} // Update saat onBlur
                     />
                   </InputWrapper>
 
                   <Group>
-                    <InputWrapper label="Bathroom" required>
+                    <InputWrapper label="Kamar Mandi" required>
                       <NumberInput
                         hideControls
-                        placeholder="Enter number of bathrooms"
+                        placeholder="Masukan Jumlah Kamar Mandi"
                         value={values.bathroom}
                         onChange={(value) => setFieldValue("bathroom", value)}
                         onBlur={handleBlur}
                       />
                     </InputWrapper>
 
-                    <InputWrapper label="Bedroom" required>
+                    <InputWrapper label="Kamar Tidur" required>
                       <NumberInput
                         hideControls
-                        placeholder="Enter number of bedrooms"
+                        placeholder="Masukan Jumlah Kamar Tidur"
                         value={values.bedroom}
                         onChange={(value) => setFieldValue("bedroom", value)}
                         onBlur={handleBlur}
                       />
                     </InputWrapper>
 
-                    <InputWrapper label="Square Meters" required>
+                    <InputWrapper label="Luas Tanah" required>
                       <NumberInput
                         hideControls
-                        placeholder="Enter square meters"
+                        placeholder="Masukan Luas Tanah"
                         value={values.square}
                         onBlur={(e) => setFieldValue("square", e.target.value)} // Update saat onBlur
                       />
@@ -157,44 +159,56 @@ const AddProductModal = ({ refetchProductData }: { refetchProductData: () => voi
                       <Select
                         w={180}
                         placeholder="Select status"
-                        value={values.status}
-                        onBlur={(e) => setFieldValue("square", e.target.value)} // Update saat onBlur
+                        defaultValue={values?.status}
+                        onBlur={(e) => setFieldValue("status", e.target.value)} // Update saat onBlur
                         data={statusOptions}
                       />
                     </InputWrapper>
 
-                    <InputWrapper label="Price" required>
+                    <InputWrapper label="Harga" required>
                       <TextInput
-                        placeholder="Enter price"
-                        defaultValue={values.price ? `Rp. ${values.price.toLocaleString("id-ID")}` : ""}
+                        placeholder="Masukan Harga (Rp)"
+                        defaultValue={values.price ? `Rp. ${Number(values.price).toLocaleString("id-ID")}` : ""}
                         onBlur={(event) => {
-                          const rawValue = event.target.value.replace(/\D/g, "");
-                          const numericValue = Number(rawValue) || 0;
+                          const rawValue = event.target.value.replace(/[^0-9]/g, "");
+                          const numericValue = rawValue === "" ? 0 : Number(rawValue);
                           setFieldValue("price", numericValue);
+                          // Optional: Untuk memformat ulang input setelah blur
+                          event.target.value = numericValue ? `Rp. ${numericValue.toLocaleString("id-ID")}` : "";
                         }}
                       />
                     </InputWrapper>
 
-                    <InputWrapper label="Quantity" required>
+                    <InputWrapper label="Kuantitas" required>
                       <NumberInput
                         hideControls
-                        placeholder="Enter quantity"
-                        value={values.quantity | 0}
+                        placeholder="Masukan Kuantitas"
+                        defaultValue={values.quantity ? values.quantity : ""}
                         onBlur={(e) => setFieldValue("quantity", e.target.value)} // Update saat onBlur
                       />
                     </InputWrapper>
                   </Group>
 
-                  <InputWrapper label="Upload files" required>
-                    <FileInput
-                      accept="image/png,image/jpeg"
-                      w={200}
-                      clearable
-                      placeholder="Upload files"
-                      onChange={(file) => setFieldValue("file", file)}
-                      onBlur={handleBlur}
-                    />
-                  </InputWrapper>
+                  <Group>
+                    <InputWrapper label="Urutan" required>
+                      <NumberInput
+                        hideControls
+                        placeholder="Masukan Urutan"
+                        defaultValue={values.sequence ? values.sequence : ""}
+                        onBlur={(e) => setFieldValue("sequence", e.target.value)} // Update saat onBlur
+                      />
+                    </InputWrapper>
+                    <InputWrapper label="Upload Gambar" required>
+                      <FileInput
+                        accept="image/png,image/jpeg"
+                        w={200}
+                        clearable
+                        placeholder="Upload files"
+                        onChange={(file) => setFieldValue("file", file)}
+                        onBlur={handleBlur}
+                      />
+                    </InputWrapper>
+                  </Group>
                 </SimpleGrid>
 
                 <Group justify="flex-end" mt="md">

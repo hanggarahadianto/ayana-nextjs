@@ -1,12 +1,11 @@
-import ButtonAdd from "@/components/button/buttonAdd";
-import ButtonDelete from "@/components/button/butttonDelete";
+import ButtonAdd from "@/lib/button/buttonAdd";
+import ButtonDelete from "@/lib/button/butttonDelete";
 import { satuan } from "@/lib/satuan";
 import { Card, Group, NumberInput, Pagination, Select, Stack, Text, TextInput } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { Form, Formik } from "formik";
 
 const FormGoods = ({ goodsData, debouncedGoods, addGoodField, handleGoodChange, deleteGoodField, totalPages, page, setPage }) => {
-  // console.log("goods data di form", goodsData);
   return (
     <>
       <Group justify="space-between" p={20}>

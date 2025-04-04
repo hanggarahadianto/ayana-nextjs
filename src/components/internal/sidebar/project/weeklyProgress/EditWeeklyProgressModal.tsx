@@ -5,8 +5,8 @@ import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 
 import { useUpdateWeeklyProgressForm } from "@/api/weekly-progress/editDataWeeklyProgress";
-import ButtonAdd from "@/components/button/buttonAdd";
-import ButtonDelete from "@/components/button/butttonDelete";
+import ButtonAdd from "@/lib/button/buttonAdd";
+import ButtonDelete from "@/lib/button/butttonDelete";
 import { satuan } from "@/lib/satuan";
 import { getInitialValuesUpdateWeeklyProgress } from "@/lib/initialValues/initialValuesWeeklyProgress";
 

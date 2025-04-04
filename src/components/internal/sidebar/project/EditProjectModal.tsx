@@ -9,7 +9,7 @@ import { IconCalendar } from "@tabler/icons-react";
 import { getInitialValuesUpdateProject } from "../../../../lib/initialValues/initialValuesProject";
 import { FiSettings } from "react-icons/fi";
 import { useUpdateProjectForm } from "@/api/project/editDataProject";
-import BreathingActionIcon from "@/components/button/buttonAction";
+import BreathingActionIcon from "@/lib/button/buttonAction";
 
 const EditProjectModal = ({ initialData, refetchProjectData }: { initialData: IProjectUpdate; refetchProjectData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);

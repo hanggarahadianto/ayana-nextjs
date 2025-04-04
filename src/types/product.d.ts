@@ -11,6 +11,7 @@ interface IProduct {
   status: string;
   price: number;
   quantity: number;
+  sequence: number;
   file: string;
   created_at: string;
   updated_at: string;
@@ -27,6 +28,7 @@ interface IProductCreate {
   square: string;
   status: string;
   price: number;
+  sequence: number;
   quantity: number;
   file: string;
 }
@@ -41,6 +43,8 @@ interface IProductUpdate {
   bedroom: string;
   square: string;
   status: string;
+  sequence: number;
+
   price: number;
   quantity: number;
   file: string;

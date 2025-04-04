@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Group, TextInput, NumberInput, Select, Card, Stack, Text } from "@mantine/core";
-import ButtonAdd from "@/components/button/buttonAdd";
-import ButtonDelete from "@/components/button/butttonDelete";
+import ButtonAdd from "@/lib/button/buttonAdd";
+import ButtonDelete from "@/lib/button/butttonDelete";
 import { satuan } from "@/lib/satuan";
 
 interface FormAddMaterialProps {

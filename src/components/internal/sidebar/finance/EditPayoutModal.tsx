@@ -5,7 +5,7 @@ import { Form, Formik } from "formik";
 import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar, IconEdit } from "@tabler/icons-react";
 
-import BreathingActionIcon from "@/components/button/buttonAction";
+import BreathingActionIcon from "@/lib/button/buttonAction";
 
 import { useUpdatePayoutForm } from "@/api/payout/editDataPayout";
 import { getInitialValuesUpdatePayout } from "@/lib/initialValues/initialValuesPayout";

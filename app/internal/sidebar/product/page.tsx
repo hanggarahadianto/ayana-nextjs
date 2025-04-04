@@ -8,7 +8,7 @@ import AddProductModal from "../../../../src/components/internal/sidebar/product
 import GetProductModal from "../../../../src/components/internal/sidebar/product/GetProductModal";
 import { getDataProduct } from "@/api/products/getDataProduct";
 import { useDeleteDataProduct } from "@/api/products/deleteDataProduct";
-import ButtonDeleteWithConfirmation from "@/components/button/buttonDeleteConfirmation";
+import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
 import EditProductModal from "@/components/internal/sidebar/product/EditProductModal";
 
 const ProjectPage = () => {
@@ -47,7 +47,7 @@ const ProjectPage = () => {
           <Card
             key={product.id}
             w="100%"
-            h={210}
+            h={240}
             maw={420}
             mah={300}
             style={{
@@ -61,7 +61,7 @@ const ProjectPage = () => {
             }}
             onClick={() => handleSelectProduct(product)}
           >
-            <Stack gap={4} align="start">
+            <Stack gap={4} align="start" w={240} maw={240}>
               <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
                 {product.title}
               </Text>

@@ -8,9 +8,9 @@ import { getDataCompany } from "@/api/company/getCompany"; // Sesuaikan path
 import { getDataPayout } from "@/api/payout/getDataPayout";
 import router from "next/router";
 // import { useDeleteDataPayout } from "@/api/payout/deleteDataPayout";
-import ButtonDeleteWithConfirmation from "@/components/button/buttonDeleteConfirmation";
+import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
 import { useDeleteDataPayout } from "@/api/payout/deleteDataPayout";
-import BreathingActionIcon from "@/components/button/buttonAction";
+import BreathingActionIcon from "@/lib/button/buttonAction";
 import EditPayoutModal from "@/components/internal/sidebar/finance/EditPayoutModal";
 
 export default function CompanyTabs() {
