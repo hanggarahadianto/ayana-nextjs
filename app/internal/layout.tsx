@@ -35,7 +35,7 @@ export default function InternalLayout({ children }: { children: React.ReactNode
     const token = Cookies.get("token"); // Replace "auth_token" with your actual cookie name
 
     if (!token) {
-      router.push("/auth/login"); // Redirect to login page if token is missing
+      router.push("/home"); // Redirect to login page if token is missing
     }
   }, [router]);
 

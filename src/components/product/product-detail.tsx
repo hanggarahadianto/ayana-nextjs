@@ -7,7 +7,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { getDataProductDetail } from "@/api/products/getDataProductDetail";
-import { getDataAdditionalInfo } from "@/api/additional-info/getDataAdditionalInfo";
+import { getDataAdditionalInfo } from "@/api/info/getDataInfo";
 import MyGallery from "./image-galery";
 import AdditionalInfoProduct from "./additional-info-product";
 import ReservationForm from "../reservation/ReservationForm";

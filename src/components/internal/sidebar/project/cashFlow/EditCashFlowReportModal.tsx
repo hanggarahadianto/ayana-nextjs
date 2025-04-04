@@ -208,7 +208,7 @@ const EditCashFlowReportModal = ({
               // setFieldValue("good", updatedGoods);
             };
 
-            const handleGoodChange = useCallback((index, field, value) => {
+            const handleGoodChange = useCallback((index: string | number, field: string, value: any) => {
               setDebouncedGoods((prev) => {
                 const newGoods = [...(prev || [])];
                 newGoods[index] = { ...newGoods[index], [field]: value };

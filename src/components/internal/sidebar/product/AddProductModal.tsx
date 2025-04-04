@@ -1,14 +1,27 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleGrid, InputWrapper, FileInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import { initialValueProductCreate, validationSchemaProduct } from "../../../../lib/initialValues/initialValuesProduct";
 import { useSubmitProductForm } from "@/api/products/postDataProduct";
 import ButtonAdd from "@/lib/button/buttonAdd";
+import { useSubmitInfoForm } from "@/api/info/postDataInfo";
+import FormInfo from "./FormInfo";
 
 const AddProductModal = ({ refetchProductData }: { refetchProductData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);
+
+  const [debouncedInfos, setDebouncedInfos] = useState<IInfoCreate>({
+    maps: "",
+    start_price: "",
+    home_id: "",
+    near_by: [],
+  });
+
+  console.log("DEBOUNCE INFO", debouncedInfos);
+
   const { mutate: postDataProduct, isPending: isLoadingSubmitProductData } = useSubmitProductForm(refetchProductData, close);
+  const { mutate: postDataInfo, isPending: isLoadingSubmitInfoData } = useSubmitInfoForm(refetchProductData, close);
 
   const handleSubmit = useCallback(
     (values: IProductCreate, { setSubmitting }: any) => {
@@ -74,6 +87,39 @@ const AddProductModal = ({ refetchProductData }: { refetchProductData: () => voi
             console.log("VALUES", values);
             console.log("error", errors);
 
+            const handleInfoChange = (field: keyof IInfoCreate, value: any) => {
+              setDebouncedInfos((prev) => ({
+                ...prev,
+                [field]: value,
+              }));
+
+              console.log(`Updated ${field}:`, value); // Debugging perubahan nilai
+            };
+
+            const addNearByField = () => {
+              setDebouncedInfos((prev) => ({
+                ...prev,
+                near_by: [
+                  ...(prev.near_by || []), // Pastikan near_by tetap array
+                  {
+                    name: "",
+                    distance: 0,
+                    info_id: "", // Sesuaikan dengan kebutuhan
+                  } as INearByCreate,
+                ],
+              }));
+            };
+
+            const handleNearByChange = <T extends keyof INearByCreate>(index: number, field: T, value: INearByCreate[T]) => {
+              const updatedNearBy = [...(debouncedInfos?.near_by || [])];
+              updatedNearBy[index][field] = value;
+
+              setDebouncedInfos((prev) => ({
+                ...prev,
+                near_by: updatedNearBy,
+              }));
+            };
+
             return (
               <Form>
                 <SimpleGrid p={20}>
@@ -128,9 +174,8 @@ const AddProductModal = ({ refetchProductData }: { refetchProductData: () => voi
                       <NumberInput
                         hideControls
                         placeholder="Masukan Jumlah Kamar Mandi"
-                        value={values.bathroom}
-                        onChange={(value) => setFieldValue("bathroom", value)}
-                        onBlur={handleBlur}
+                        defaultValue={values.bathroom}
+                        onBlur={(value) => setFieldValue("bathroom", value)}
                       />
                     </InputWrapper>
 
@@ -138,9 +183,8 @@ const AddProductModal = ({ refetchProductData }: { refetchProductData: () => voi
                       <NumberInput
                         hideControls
                         placeholder="Masukan Jumlah Kamar Tidur"
-                        value={values.bedroom}
-                        onChange={(value) => setFieldValue("bedroom", value)}
-                        onBlur={handleBlur}
+                        defaultValue={values.bedroom}
+                        onBlur={(value) => setFieldValue("bedroom", value)}
                       />
                     </InputWrapper>
 
@@ -188,6 +232,14 @@ const AddProductModal = ({ refetchProductData }: { refetchProductData: () => voi
                       />
                     </InputWrapper>
                   </Group>
+
+                  {/* <FormInfo
+                    debouncedInfos={debouncedInfos}
+                    handleInfoChange={handleInfoChange}
+                    addNearByField={addNearByField}
+                    handleNearByChange={handleNearByChange}
+                    deleteNearByField={undefined}
+                  /> */}
 
                   <Group>
                     <InputWrapper label="Urutan" required>

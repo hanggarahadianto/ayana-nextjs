@@ -11,9 +11,6 @@ import { Notifications } from "@mantine/notifications";
 
 import dayjs from "dayjs";
 import "dayjs/locale/id";
-import { DefaultSeo } from "next-seo";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import theme from "theme";
 import Providers from "./provider";
 
 dayjs.locale("id");
