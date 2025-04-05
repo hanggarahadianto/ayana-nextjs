@@ -1,60 +1,85 @@
 import ButtonAdd from "@/lib/button/buttonAdd";
 import ButtonDelete from "@/lib/button/butttonDelete";
-import { Card, Group, InputWrapper, Text, NumberInput, Select, Stack, Textarea, TextInput } from "@mantine/core";
-import { memo, useCallback } from "react";
+import { Card, Group, Text, NumberInput, Stack, Textarea, TextInput } from "@mantine/core";
+import { memo, useCallback, useRef } from "react";
 
-import _ from "lodash";
+import _, { debounce } from "lodash";
+import { validateInfos } from "@/lib/validation/info-validation";
 
-const FormInfo = ({ debouncedInfos, setDebouncedInfos }) => {
+interface FormInfoProps {
+  debouncedInfos: any;
+  setDebouncedInfos: React.Dispatch<React.SetStateAction<any>>;
+  isSubmitAttempted: boolean;
+  errorInfo: { [key: string]: string };
+  setErrorsInfo: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>;
+}
+
+const FormInfo = ({ debouncedInfos, setDebouncedInfos, isSubmitAttempted, errorInfo, setErrorsInfo }: FormInfoProps) => {
+  console.log("errors info", errorInfo);
+
+  const debouncedValidateRef = useRef(
+    debounce((values: IInfoCreate) => {
+      validateInfos(values, undefined, setErrorsInfo);
+    }, 900)
+  );
+
   const handleInfoChange = useCallback(
     (field: keyof IInfoCreate, value: any) => {
-      setDebouncedInfos((prev) => ({
-        ...prev,
+      const updated = {
+        ...debouncedInfos,
         [field]: value,
-      }));
+      };
+
+      setDebouncedInfos(updated);
+      debouncedValidateRef.current(updated); // validasi dengan debounce
     },
-    [setDebouncedInfos]
+    [debouncedInfos, setDebouncedInfos]
   );
 
   const addNearByField = useCallback(() => {
-    setDebouncedInfos((prev) => ({
+    setDebouncedInfos((prev: { near_by: any }) => ({
       ...prev,
       near_by: [...(prev.near_by || []), { name: "", distance: "" }],
     }));
   }, [setDebouncedInfos]);
 
   const handleNearByChange = useCallback(
-    <T extends keyof INearByCreate>(index: number, field: T, value: INearByCreate[T]) => {
-      setDebouncedInfos((prev) => {
-        const updatedNearBy = _.cloneDeep(prev?.near_by || []);
-        _.set(updatedNearBy, `[${index}].${String(field)}`, value);
+    (index: number, key: keyof INearBy, value: any) => {
+      const updatedNearBy = [...(debouncedInfos.near_by || [])];
+      updatedNearBy[index] = {
+        ...updatedNearBy[index],
+        [key]: value,
+      };
 
-        return {
-          ...prev,
-          near_by: updatedNearBy,
-        };
-      });
+      const updated = {
+        ...debouncedInfos,
+        near_by: updatedNearBy,
+      };
+
+      setDebouncedInfos(updated);
+      debouncedValidateRef.current(updated);
     },
-    [setDebouncedInfos] // Dependency array assumes setDebouncedInfos is a stable setter from useState or similar
+    [debouncedInfos, setDebouncedInfos]
   );
 
-  const deleteNearByField = useCallback(
-    (nearByList: INearBy[], index: number) => {
-      setDebouncedInfos((prev) => ({
-        ...prev,
-        near_by: nearByList.filter((_, i) => i !== index),
-      }));
-    },
-    [setDebouncedInfos]
-  );
+  const deleteNearByField = (nearByArray: INearBy[], index: number) => {
+    const updated = {
+      ...debouncedInfos,
+      near_by: nearByArray.filter((_, i) => i !== index),
+    };
+
+    setDebouncedInfos(updated);
+    debouncedValidateRef.current(updated); // ✅
+  };
 
   return (
     <>
       <Textarea
         label="Maps"
         placeholder="Masukan Maps"
-        defaultValue={debouncedInfos?.maps} // Pastikan values.note sudah terdefinisi dalam Formik state
-        onBlur={(e) => handleInfoChange("maps", e.target.value)} // Update saat onBlur
+        value={debouncedInfos?.maps}
+        onChange={(e) => handleInfoChange("maps", e.target.value)} // Update saat mengetik
+        error={isSubmitAttempted && errorInfo.maps}
       />
       <NumberInput
         hideControls
@@ -68,6 +93,7 @@ const FormInfo = ({ debouncedInfos, setDebouncedInfos }) => {
         decimalSeparator=","
         prefix="Rp. "
         required
+        error={isSubmitAttempted && errorInfo.start_price}
       />
 
       <Group justify="space-between">
@@ -81,17 +107,23 @@ const FormInfo = ({ debouncedInfos, setDebouncedInfos }) => {
               <Group>
                 <TextInput
                   label={`Nama Lokasi ${index + 1}`}
-                  defaultValue={nearBy.name}
-                  onBlur={(e) => handleNearByChange(index, "name", e.target.value.toUpperCase())}
-                  placeholder="Masukan Lokasi"
+                  value={nearBy.name}
+                  onChange={(e) => {
+                    handleNearByChange(index, "name", e.target.value);
+                  }}
+                  placeholder="Masukkan Lokasi"
+                  error={isSubmitAttempted && errorInfo[`near_by[${index}].name`]}
                 />
 
                 <NumberInput
                   hideControls
                   label={`Jarak ${index + 1}`}
-                  defaultValue={nearBy.distance}
-                  onBlur={(e) => handleNearByChange(index, "distance", e.target.value.toUpperCase())}
-                  placeholder="Masukan Jarak"
+                  value={nearBy.distance}
+                  onChange={(value) => {
+                    handleNearByChange(index, "distance", value ? value.toString() : "");
+                  }}
+                  placeholder="Masukkan Jarak"
+                  error={isSubmitAttempted && errorInfo[`near_by[${index}].distance`]}
                 />
 
                 <Stack mt={20}>

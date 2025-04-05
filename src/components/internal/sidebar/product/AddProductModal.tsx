@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleGrid, FileInput } from "@mantine/core";
+import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleGrid, FileInput, InputWrapper } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import { initialValueProductCreate, validationSchemaProduct } from "../../../../lib/initialValues/initialValuesProduct";
@@ -8,42 +8,27 @@ import ButtonAdd from "@/lib/button/buttonAdd";
 import { useSubmitInfoForm } from "@/api/info/postDataInfo";
 import FormInfo from "./FormInfo";
 import { debounce } from "lodash";
-import { validationSchemaInfo } from "@/lib/initialValues/initialValuesInfo";
 import { showNotification } from "@mantine/notifications";
+import { validateInfos } from "@/lib/validation/info-validation";
+import { availabilityOptions, locationOptions, typeOptions } from "@/lib/dictionary";
 
 const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData: () => void }) => {
-  console.log("🔄 AddProductModal Rerendered");
-  const renderCount = useRef(0);
-  renderCount.current += 1;
-
-  console.log("🔄 Render Count:", renderCount.current);
-
   const [opened, { open, close }] = useDisclosure(false);
   const { mutate: postDataProduct, isPending: isLoadingSubmitProductData } = useSubmitProductForm(refetchProductData, close);
   const { mutate: postDataInfo, isPending: isLoadingSubmitInfoData } = useSubmitInfoForm(refetchProductData, close);
 
-  const formValuesRef = useRef<Record<keyof IProductCreate, string | number | File>>({
-    title: "",
-    location: "",
-    type: "",
-    content: "",
-    address: "",
-    bathroom: 0,
-    bedroom: 0,
-    square: 0,
-    status: "",
-    price: "",
-    sequence: 0,
-    quantity: 0,
-    file: "",
-  });
+  const formValuesRef = useRef<Record<keyof IProductCreate, any>>(
+    Object.fromEntries(
+      Object.keys(initialValueProductCreate).map((key) => [key, initialValueProductCreate[key as keyof IProductCreate]])
+    ) as Record<keyof IProductCreate, string | number | File>
+  );
 
   console.log("FORM VALUES REF", formValuesRef.current);
 
   const debouncedUpdateFormikValue = useMemo(() => {
     return debounce((setFieldValue: any, field: keyof IProductCreate, value: any) => {
       setFieldValue(field, value);
-    }, 300);
+    }, 100);
   }, []);
 
   const handleChangeProduct = useCallback(
@@ -65,10 +50,18 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
 
   console.log("DEBOUNCE INFO", debouncedInfos);
 
+  const [errorsInfo, setErrorsInfo] = useState<{ [key: string]: any }>({});
+
   const handleSubmit = useCallback(
     async (values: IProductCreate, { setSubmitting }: any) => {
       try {
-        await validationSchemaInfo.validate(debouncedInfos, { abortEarly: false });
+        await validateInfos(debouncedInfos, undefined, setErrorsInfo);
+
+        if (Object.keys(errorsInfo).length > 0) {
+          console.warn("Masih ada error dalam form:", errorsInfo);
+          setSubmitting(false);
+          return;
+        }
 
         const projectName =
           values.title && values.location && values.type ? `${values.title} - ${values.location} - ${values.type}` : "Unnamed Project";
@@ -131,6 +124,12 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
           console.error("Submission Error:", error.message);
         }
       } finally {
+        setDebouncedInfos({
+          maps: "",
+          start_price: 0,
+          home_id: "",
+          near_by: [{ name: "", distance: "" }],
+        });
         setSubmitting(false);
       }
     },
@@ -142,9 +141,23 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
       <ButtonAdd onClick={open} size={"3.5rem"} />
       <Modal opened={opened} onClose={close} size="xl" yOffset={"100px"}>
         <Formik initialValues={initialValueProductCreate} validationSchema={validationSchemaProduct} onSubmit={handleSubmit}>
-          {({ values, errors, setFieldValue }) => {
+          {({ values, errors, setFieldValue, setErrors }) => {
             console.log("VALUES", values);
             console.log("error", errors);
+
+            const [isSubmitAttempted, setIsSubmitAttempted] = useState(false);
+
+            const handleManualSubmit = () => {
+              setIsSubmitAttempted(true);
+              validateInfos(debouncedInfos, undefined, setErrorsInfo);
+              validationSchemaProduct.validate(values, { abortEarly: false }).catch((err) => {
+                const validationErrors: { [key: string]: string } = {};
+                err.inner.forEach((error: any) => {
+                  validationErrors[error.path] = error.message;
+                });
+                setErrors(validationErrors);
+              });
+            };
 
             return (
               <Form>
@@ -157,6 +170,7 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
                         handleChangeProduct("title", e.currentTarget.value, setFieldValue);
                       }}
                       required
+                      error={isSubmitAttempted && errors.title}
                     />
 
                     <Select
@@ -166,10 +180,7 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
                       onChange={(e) => {
                         handleChangeProduct("location", e || "", setFieldValue);
                       }}
-                      data={[
-                        { value: "GAW", label: "GAW" },
-                        { value: "ABW", label: "ABW" },
-                      ]}
+                      data={locationOptions}
                     />
 
                     <Select
@@ -178,11 +189,9 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
                       onChange={(e) => {
                         handleChangeProduct("type", e || "", setFieldValue);
                       }}
-                      data={[
-                        { value: "32 / 60", label: "32 / 60" },
-                        { value: "36 / 60", label: "36 / 60" },
-                      ]}
+                      data={typeOptions}
                       required
+                      error={isSubmitAttempted && errors.type}
                     />
                   </Group>
 
@@ -193,6 +202,7 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
                       handleChangeProduct("address", e.currentTarget.value, setFieldValue);
                     }}
                     required
+                    error={isSubmitAttempted && errors.address}
                   />
 
                   <Textarea
@@ -203,6 +213,7 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
                       handleChangeProduct("content", e.currentTarget.value, setFieldValue);
                     }}
                     required
+                    error={isSubmitAttempted && errors.content}
                   />
 
                   <Group>
@@ -214,6 +225,7 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
                         handleChangeProduct("bathroom", value as number, setFieldValue); // Pastikan value adalah number
                       }}
                       required
+                      error={isSubmitAttempted && errors.bathroom}
                     />
                     <NumberInput
                       label="Kamar Tidur"
@@ -223,6 +235,7 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
                         handleChangeProduct("bedroom", Number(value) || 0, setFieldValue); // Pastikan nilai angka
                       }}
                       required
+                      error={isSubmitAttempted && errors.bedroom}
                     />
 
                     <NumberInput
@@ -233,6 +246,7 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
                         handleChangeProduct("square", Number(value) || 0, setFieldValue); // Pastikan nilai angka
                       }}
                       required
+                      error={isSubmitAttempted && errors.square}
                     />
                   </Group>
 
@@ -244,11 +258,9 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
                       onChange={(e) => {
                         handleChangeProduct("status", e || "", setFieldValue);
                       }}
-                      data={[
-                        { value: "available", label: "Available" },
-                        { value: "sold", label: "Sold" },
-                      ]}
                       required
+                      error={isSubmitAttempted && errors.status}
+                      data={availabilityOptions}
                     />
 
                     <NumberInput
@@ -259,13 +271,18 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
                         handleChangeProduct("quantity", Number(value) || 0, setFieldValue); // Pastikan nilai angka
                       }}
                       required
+                      error={isSubmitAttempted && errors.quantity}
                     />
 
                     <NumberInput
                       hideControls
-                      label="Harga Unit"
-                      placeholder="Masukan Harga Unit (Rp)"
-                      value={typeof formValuesRef.current.price === "number" ? formValuesRef.current.price : undefined}
+                      label="Harga Awal"
+                      placeholder="Masukan Harga Awal (Rp)"
+                      value={
+                        typeof formValuesRef.current.price
+                          ? `Rp. ${Number(typeof formValuesRef.current.price).toLocaleString("id-ID")}`
+                          : ""
+                      }
                       onChange={(value) => {
                         handleChangeProduct("price", Number(value) || "", setFieldValue);
                       }}
@@ -273,10 +290,17 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
                       decimalSeparator=","
                       prefix="Rp. "
                       required
+                      error={isSubmitAttempted && errors.price}
                     />
                   </Group>
 
-                  <FormInfo debouncedInfos={debouncedInfos} setDebouncedInfos={setDebouncedInfos} />
+                  <FormInfo
+                    debouncedInfos={debouncedInfos}
+                    setDebouncedInfos={setDebouncedInfos}
+                    isSubmitAttempted={isSubmitAttempted}
+                    errorInfo={errorsInfo}
+                    setErrorsInfo={setErrorsInfo}
+                  />
 
                   <Group>
                     <NumberInput
@@ -287,6 +311,7 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
                         handleChangeProduct("sequence", value as number, setFieldValue); // Pastikan value adalah number
                       }}
                       required
+                      error={isSubmitAttempted && errors.sequence}
                     />
 
                     <FileInput
@@ -297,13 +322,14 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
                       placeholder="Upload files"
                       onChange={(file) => setFieldValue("file", file)}
                       required
+                      error={isSubmitAttempted && errors.file}
                     />
                   </Group>
                   <Group justify="flex-end" mt="md">
                     <Button onClick={close} variant="default">
                       Cancel
                     </Button>
-                    <Button type="submit" loading={isLoadingSubmitProductData}>
+                    <Button type="submit" onClick={handleManualSubmit} loading={isLoadingSubmitProductData || isLoadingSubmitInfoData}>
                       Add Product
                     </Button>
                   </Group>

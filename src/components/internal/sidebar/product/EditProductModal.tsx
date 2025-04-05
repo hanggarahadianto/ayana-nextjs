@@ -37,7 +37,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ initialData, refetc
 
   useEffect(() => {
     if (initialData) {
-      // open();
     }
   }, [initialData]);
 

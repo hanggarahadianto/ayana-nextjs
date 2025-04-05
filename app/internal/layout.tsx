@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { AppShell, NavLink, SimpleGrid, Stack, useMantineTheme, rem, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -18,10 +17,11 @@ import {
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Cookies from "js-cookie";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import Navbar from "@/components/landing/navbar";
 
 export default function InternalLayout({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
   const [opened, { toggle }] = useDisclosure();
@@ -35,7 +35,7 @@ export default function InternalLayout({ children }: { children: React.ReactNode
     const token = Cookies.get("token");
 
     if (!token) {
-      router.push("/home"); // Redirect to login page if token is missing
+      router.push("/home");
     }
   }, []); // Router tidak perlu dalam dependency array
 
