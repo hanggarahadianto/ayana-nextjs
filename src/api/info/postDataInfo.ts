@@ -9,18 +9,18 @@ const handleSubmitInfoPostForm = async (values: IPayoutCreate) => {
 };
 
 // Custom hook for the mutation
-export const useSubmitInfoForm = (refetchPayoutData: () => void, closeModal: () => void) => {
+export const useSubmitInfoForm = (refetchInfoData: () => void, closeModal: () => void) => {
   return useMutation({
     mutationFn: (values: any) => handleSubmitInfoPostForm(values),
     onSuccess: (data: any) => {
       console.log("pesan sukses terkirim");
-      refetchPayoutData();
+      refetchInfoData();
       closeModal();
-      showNotification({
-        title: "Data Berhasil Dikirim",
-        message: "",
-        color: "green",
-      });
+      // showNotification({
+      //   title: "Data Berhasil Dikirim",
+      //   message: "",
+      //   color: "green",
+      // });
     },
     onError: (data: any) => {
       showNotification({

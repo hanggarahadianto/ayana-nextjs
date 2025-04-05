@@ -1,13 +1,11 @@
 interface INearBy {
   id: string;
   name: string;
-  distance: number;
-  info_id: string;
+  distance: string;
 }
 interface INearByCreate {
   name: string;
-  distance: number;
-  info_id: string;
+  distance: string;
 }
 
 interface INearBy {

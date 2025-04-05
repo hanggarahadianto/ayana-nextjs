@@ -1,31 +1,75 @@
 import ButtonAdd from "@/lib/button/buttonAdd";
 import ButtonDelete from "@/lib/button/butttonDelete";
 import { Card, Group, InputWrapper, Text, NumberInput, Select, Stack, Textarea, TextInput } from "@mantine/core";
+import { memo, useCallback } from "react";
 
-const FormInfo = ({ debouncedInfos, handleInfoChange, addNearByField, handleNearByChange, deleteNearByField }) => {
+import _ from "lodash";
+
+const FormInfo = ({ debouncedInfos, setDebouncedInfos }) => {
+  const handleInfoChange = useCallback(
+    (field: keyof IInfoCreate, value: any) => {
+      setDebouncedInfos((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+    },
+    [setDebouncedInfos]
+  );
+
+  const addNearByField = useCallback(() => {
+    setDebouncedInfos((prev) => ({
+      ...prev,
+      near_by: [...(prev.near_by || []), { name: "", distance: "" }],
+    }));
+  }, [setDebouncedInfos]);
+
+  const handleNearByChange = useCallback(
+    <T extends keyof INearByCreate>(index: number, field: T, value: INearByCreate[T]) => {
+      setDebouncedInfos((prev) => {
+        const updatedNearBy = _.cloneDeep(prev?.near_by || []);
+        _.set(updatedNearBy, `[${index}].${String(field)}`, value);
+
+        return {
+          ...prev,
+          near_by: updatedNearBy,
+        };
+      });
+    },
+    [setDebouncedInfos] // Dependency array assumes setDebouncedInfos is a stable setter from useState or similar
+  );
+
+  const deleteNearByField = useCallback(
+    (nearByList: INearBy[], index: number) => {
+      setDebouncedInfos((prev) => ({
+        ...prev,
+        near_by: nearByList.filter((_, i) => i !== index),
+      }));
+    },
+    [setDebouncedInfos]
+  );
+
   return (
     <>
-      <InputWrapper label="Harga Awal" required>
-        <TextInput
-          placeholder="Masukan Harga Awal (Rp)"
-          defaultValue={debouncedInfos?.start_price ? `Rp. ${Number(debouncedInfos?.start_price).toLocaleString("id-ID")}` : ""}
-          onBlur={(event) => {
-            const rawValue = event.target.value.replace(/[^0-9]/g, "");
-            const numericValue = rawValue === "" ? 0 : Number(rawValue);
-            handleInfoChange("start_price", numericValue);
+      <Textarea
+        label="Maps"
+        placeholder="Masukan Maps"
+        defaultValue={debouncedInfos?.maps} // Pastikan values.note sudah terdefinisi dalam Formik state
+        onBlur={(e) => handleInfoChange("maps", e.target.value)} // Update saat onBlur
+      />
+      <NumberInput
+        hideControls
+        label="Harga Awal"
+        placeholder="Masukan Harga Awal (Rp)"
+        value={debouncedInfos?.start_price ? `Rp. ${Number(debouncedInfos.start_price).toLocaleString("id-ID")}` : ""}
+        onChange={(value) => {
+          handleInfoChange("start_price", Number(value) || "");
+        }}
+        thousandSeparator="."
+        decimalSeparator=","
+        prefix="Rp. "
+        required
+      />
 
-            event.target.value = numericValue ? `Rp. ${numericValue.toLocaleString("id-ID")}` : "";
-          }}
-        />
-      </InputWrapper>
-
-      <InputWrapper label="Maps" required>
-        <Textarea
-          placeholder="Masukan Maps"
-          defaultValue={debouncedInfos?.maps} // Pastikan values.note sudah terdefinisi dalam Formik state
-          onBlur={(e) => handleInfoChange("maps", e.target.value)} // Update saat onBlur
-        />
-      </InputWrapper>
       <Group justify="space-between">
         <Text fw={400}>Tambahkan Lokasi Terdekat</Text>
         <ButtonAdd onClick={() => addNearByField()} size="2.5rem" />
@@ -37,15 +81,17 @@ const FormInfo = ({ debouncedInfos, handleInfoChange, addNearByField, handleNear
               <Group>
                 <TextInput
                   label={`Nama Lokasi ${index + 1}`}
-                  value={nearBy.name || ""}
+                  defaultValue={nearBy.name}
+                  onBlur={(e) => handleNearByChange(index, "name", e.target.value.toUpperCase())}
                   placeholder="Masukan Lokasi"
-                  onChange={(event) => handleNearByChange(index, "name", event.currentTarget.value.toUpperCase())}
                 />
-                <TextInput
+
+                <NumberInput
+                  hideControls
                   label={`Jarak ${index + 1}`}
-                  value={nearBy.distance || ""}
+                  defaultValue={nearBy.distance}
+                  onBlur={(e) => handleNearByChange(index, "distance", e.target.value.toUpperCase())}
                   placeholder="Masukan Jarak"
-                  onChange={(event) => handleNearByChange(index, "distance", event.currentTarget.value.toUpperCase())}
                 />
 
                 <Stack mt={20}>
@@ -59,4 +105,4 @@ const FormInfo = ({ debouncedInfos, handleInfoChange, addNearByField, handleNear
   );
 };
 
-export default FormInfo;
+export default memo(FormInfo);

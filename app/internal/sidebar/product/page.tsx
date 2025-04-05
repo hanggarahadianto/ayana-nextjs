@@ -1,28 +1,33 @@
 "use client";
 
-import { Card, Group, SimpleGrid, Text, Stack, Container } from "@mantine/core";
+import { Card, Group, SimpleGrid, Text, Stack, Container, Box, LoadingOverlay } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useMediaQuery } from "@mantine/hooks";
-import AddProductModal from "../../../../src/components/internal/sidebar/product/AddProductModal";
 import GetProductModal from "../../../../src/components/internal/sidebar/product/GetProductModal";
 import { getDataProduct } from "@/api/products/getDataProduct";
 import { useDeleteDataProduct } from "@/api/products/deleteDataProduct";
 import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
 import EditProductModal from "@/components/internal/sidebar/product/EditProductModal";
+import AddProductModal from "@/components/internal/sidebar/product/AddProductModal";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 const ProjectPage = () => {
   const isSmallScreen = useMediaQuery("(max-width: 640px)");
   const isMediumScreen = useMediaQuery("(max-width: 1024px)");
   const isLargeScreen = useMediaQuery("(max-width: 1280px)");
 
-  const { data: productData, refetch: refetchProductData } = useQuery({
+  const {
+    data: productData,
+    refetch: refetchProductData,
+    isPending: isLoadingProductData,
+  } = useQuery({
     queryKey: ["getProductData"],
     queryFn: getDataProduct,
     refetchOnWindowFocus: false,
   });
 
-  const { mutate: mutateDeleteDataProduct } = useDeleteDataProduct(refetchProductData);
+  const { mutate: mutateDeleteDataProduct, isPending: isLoadingDeleteProduct } = useDeleteDataProduct(refetchProductData);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | undefined>(undefined);
 
   const handleSelectProduct = (product: IProduct) => {
@@ -35,6 +40,8 @@ const ProjectPage = () => {
 
   return (
     <Container size="xl" px={isSmallScreen ? 20 : 40}>
+      <LoadingGlobal visible={isLoadingProductData || isLoadingDeleteProduct} />
+
       <Group justify="space-between" align="center" mt={20}>
         <Text fw={900} size={isSmallScreen ? "1.5rem" : "2rem"}>
           Daftar Produk
@@ -42,47 +49,51 @@ const ProjectPage = () => {
         <AddProductModal refetchProductData={refetchProductData} />
       </Group>
 
-      <SimpleGrid mt={40} cols={isSmallScreen ? 1 : isMediumScreen ? 2 : isLargeScreen ? 3 : 4} spacing={isSmallScreen ? "md" : "lg"}>
-        {productData?.data.map((product: IProduct) => (
-          <Card
-            key={product.id}
-            w="100%"
-            h={240}
-            maw={420}
-            mah={300}
-            style={{
-              background: "linear-gradient(135deg, rgba(255, 0, 150, 0.5), rgba(0, 204, 255, 0.5))",
-              backdropFilter: "blur(8px)",
-              borderRadius: "16px",
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-              padding: "20px",
-              position: "relative",
-              cursor: "pointer",
-            }}
-            onClick={() => handleSelectProduct(product)}
-          >
-            <Stack gap={4} align="start" w={240} maw={240}>
-              <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
-                {product.title}
-              </Text>
-              <Text fw={500} mt={16} size="lg" style={{ color: "#ffffff" }}>
-                {product.address}
-              </Text>
-            </Stack>
+      <Box mt={40} pos="relative" mih={300}>
+        <SimpleGrid mt={40} cols={isSmallScreen ? 1 : isMediumScreen ? 2 : isLargeScreen ? 3 : 4} spacing={isSmallScreen ? "md" : "lg"}>
+          {productData?.data.map((product: IProduct) => (
+            <Card
+              key={product.id}
+              w="100%"
+              h={300} // Menyesuaikan tinggi untuk menjaga konsistensi
+              maw={420}
+              style={{
+                background: "linear-gradient(135deg, rgba(255, 0, 150, 0.5), rgba(0, 204, 255, 0.5))",
+                backdropFilter: "blur(8px)",
+                borderRadius: "16px",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                padding: "20px",
+                position: "relative",
+                cursor: "pointer",
+                display: "flex",
+                flexDirection: "column", // Susunan elemen vertikal
+                justifyContent: "space-between", // Menjaga jarak antara elemen atas dan bawah
+              }}
+              onClick={() => handleSelectProduct(product)}
+            >
+              <Stack w="100%" mih={120} style={{ flexGrow: 1 }}>
+                <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
+                  {product.title}
+                </Text>
+                <Text fw={500} mt={8} size="lg" style={{ color: "#ffffff" }}>
+                  {product.address}
+                </Text>
+              </Stack>
 
-            <Group justify="flex-end" mt={20} wrap="nowrap">
-              <GetProductModal productData={selectedProduct} />
-              <EditProductModal initialData={selectedProduct} refetchProductData={refetchProductData} />
-              <ButtonDeleteWithConfirmation
-                id={product.id}
-                onDelete={handleDeleteProduct}
-                description={`Apakah anda ingin menghapus proyek ${product?.title} ?`}
-                size={2.5}
-              />
-            </Group>
-          </Card>
-        ))}
-      </SimpleGrid>
+              <Group justify="flex-end" wrap="nowrap">
+                <GetProductModal productData={selectedProduct} />
+                <EditProductModal initialData={selectedProduct} refetchProductData={refetchProductData} />
+                <ButtonDeleteWithConfirmation
+                  id={product.id}
+                  onDelete={handleDeleteProduct}
+                  description={`Apakah anda ingin menghapus produk ${product?.title} ?`}
+                  size={2.5}
+                />
+              </Group>
+            </Card>
+          ))}
+        </SimpleGrid>
+      </Box>
     </Container>
   );
 };

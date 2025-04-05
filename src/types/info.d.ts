@@ -1,7 +1,7 @@
 interface IInfo {
   id: string;
   maps: string;
-  start_price: string;
+  start_price: number;
   home_id: string;
   near_by: INearBy[];
   created_at: string;
@@ -9,7 +9,7 @@ interface IInfo {
 }
 interface IInfoCreate {
   maps: string;
-  start_price: string;
+  start_price: number;
   home_id: string;
   near_by: INearByCreate[];
 }

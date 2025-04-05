@@ -32,12 +32,12 @@ export default function InternalLayout({ children }: { children: React.ReactNode
     setIsMounted(true);
 
     // Check authentication token from cookies
-    const token = Cookies.get("token"); // Replace "auth_token" with your actual cookie name
+    const token = Cookies.get("token");
 
     if (!token) {
       router.push("/home"); // Redirect to login page if token is missing
     }
-  }, [router]);
+  }, []); // Router tidak perlu dalam dependency array
 
   if (!isMounted) return null;
 

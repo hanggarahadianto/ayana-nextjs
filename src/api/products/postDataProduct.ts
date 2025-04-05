@@ -16,11 +16,11 @@ export const useSubmitProductForm = (refetchProductData: () => void, closeModal:
       console.log("pesan sukses terkirim");
       refetchProductData();
       closeModal();
-      showNotification({
-        title: "Data Berhasil Dikirim",
-        message: "",
-        color: "green",
-      });
+      // showNotification({
+      //   title: "Data Berhasil Dikirim",
+      //   message: "",
+      //   color: "green",
+      // });
     },
     onError: (data: any) => {
       showNotification({

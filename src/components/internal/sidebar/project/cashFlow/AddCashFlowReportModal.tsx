@@ -174,7 +174,6 @@ const AddCashFlowReportModal = ({
               }
 
               setDebouncedGoods(updatedGood); // Tidak langsung update cash_out
-              // setFieldValue("good", updatedGood);
             };
 
             return (

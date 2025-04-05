@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleGrid, InputWrapper, FileInput } from "@mantine/core";
+import React, { useCallback, useMemo, useRef, useState } from "react";
+import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleGrid, FileInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import { initialValueProductCreate, validationSchemaProduct } from "../../../../lib/initialValues/initialValuesProduct";
@@ -7,270 +7,307 @@ import { useSubmitProductForm } from "@/api/products/postDataProduct";
 import ButtonAdd from "@/lib/button/buttonAdd";
 import { useSubmitInfoForm } from "@/api/info/postDataInfo";
 import FormInfo from "./FormInfo";
+import { debounce } from "lodash";
+import { validationSchemaInfo } from "@/lib/initialValues/initialValuesInfo";
+import { showNotification } from "@mantine/notifications";
 
-const AddProductModal = ({ refetchProductData }: { refetchProductData: () => void }) => {
+const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData: () => void }) => {
+  console.log("🔄 AddProductModal Rerendered");
+  const renderCount = useRef(0);
+  renderCount.current += 1;
+
+  console.log("🔄 Render Count:", renderCount.current);
+
   const [opened, { open, close }] = useDisclosure(false);
+  const { mutate: postDataProduct, isPending: isLoadingSubmitProductData } = useSubmitProductForm(refetchProductData, close);
+  const { mutate: postDataInfo, isPending: isLoadingSubmitInfoData } = useSubmitInfoForm(refetchProductData, close);
+
+  const formValuesRef = useRef<Record<keyof IProductCreate, string | number | File>>({
+    title: "",
+    location: "",
+    type: "",
+    content: "",
+    address: "",
+    bathroom: 0,
+    bedroom: 0,
+    square: 0,
+    status: "",
+    price: "",
+    sequence: 0,
+    quantity: 0,
+    file: "",
+  });
+
+  console.log("FORM VALUES REF", formValuesRef.current);
+
+  const debouncedUpdateFormikValue = useMemo(() => {
+    return debounce((setFieldValue: any, field: keyof IProductCreate, value: any) => {
+      setFieldValue(field, value);
+    }, 300);
+  }, []);
+
+  const handleChangeProduct = useCallback(
+    (field: keyof IProductCreate, value: string | number | File, setFieldValue: any) => {
+      if (formValuesRef.current[field] !== value) {
+        formValuesRef.current[field] = value;
+        debouncedUpdateFormikValue(setFieldValue, field, value);
+      }
+    },
+    [debouncedUpdateFormikValue]
+  );
 
   const [debouncedInfos, setDebouncedInfos] = useState<IInfoCreate>({
     maps: "",
-    start_price: "",
+    start_price: 0,
     home_id: "",
-    near_by: [],
+    near_by: [{ name: "", distance: "" }],
   });
 
   console.log("DEBOUNCE INFO", debouncedInfos);
 
-  const { mutate: postDataProduct, isPending: isLoadingSubmitProductData } = useSubmitProductForm(refetchProductData, close);
-  const { mutate: postDataInfo, isPending: isLoadingSubmitInfoData } = useSubmitInfoForm(refetchProductData, close);
-
   const handleSubmit = useCallback(
-    (values: IProductCreate, { setSubmitting }: any) => {
-      const projectName =
-        values.title && values.location && values.type ? `${values.title} - ${values.location} - ${values.type}` : "Unnamed Project";
+    async (values: IProductCreate, { setSubmitting }: any) => {
+      try {
+        await validationSchemaInfo.validate(debouncedInfos, { abortEarly: false });
 
-      const formData = new FormData();
-      formData.append("title", projectName);
-      formData.append("location", values.location);
-      formData.append("content", values.content);
-      formData.append("address", values.address);
-      formData.append("bathroom", values.bathroom.toString());
-      formData.append("bedroom", values.bedroom.toString());
-      formData.append("square", values.square.toString());
-      formData.append("price", values.price.toString());
-      formData.append("quantity", values.quantity.toString());
-      formData.append("status", values.status);
-      formData.append("sequence", values.sequence.toString());
-      formData.append("type", values.type);
+        const projectName =
+          values.title && values.location && values.type ? `${values.title} - ${values.location} - ${values.type}` : "Unnamed Project";
 
-      if (values.file) {
-        formData.append("file", values.file);
+        const formData = new FormData();
+        formData.append("title", projectName);
+        formData.append("location", values.location);
+        formData.append("content", values.content);
+        formData.append("address", values.address);
+        formData.append("bathroom", values.bathroom.toString());
+        formData.append("bedroom", values.bedroom.toString());
+        formData.append("square", values.square.toString());
+        formData.append("price", values.price.toString());
+        formData.append("quantity", values.quantity.toString());
+        formData.append("status", values.status);
+        formData.append("sequence", values.sequence ? values.sequence.toString() : "0");
+        formData.append("type", values.type);
+
+        if (values.file) {
+          formData.append("file", values.file);
+        }
+
+        postDataProduct(formData, {
+          onSuccess: (data) => {
+            console.log("DATA PRODUCT", data);
+            const productId = data.data?.id;
+            if (!productId) {
+              throw new Error("Product ID tidak valid.");
+            }
+
+            const updatedInfo = {
+              ...debouncedInfos,
+              home_id: productId,
+            };
+
+            postDataInfo(updatedInfo, {
+              onError: () => {
+                console.error("Gagal menyimpan data barang. Melakukan rollback...");
+              },
+            });
+            showNotification({
+              title: "Data Berhasil Dikirim",
+              message: "",
+              color: "green",
+            });
+            refetchProductData();
+          },
+          onError: (error) => {
+            console.error("Gagal menyimpan Info:", error);
+          },
+        });
+
+        // close();
+      } catch (error: any) {
+        if (error.inner) {
+          error.inner.forEach((err: any) => {
+            console.error("Validation Error:", err.path, err.message);
+          });
+        } else {
+          console.error("Submission Error:", error.message);
+        }
+      } finally {
+        setSubmitting(false);
       }
-
-      console.log("Form values submitted:", formData);
-      postDataProduct(formData);
-      setSubmitting(false);
     },
-    [postDataProduct]
-  );
-
-  const locationOptions = useMemo(
-    () => [
-      { value: "GAW", label: "GAW" },
-      { value: "ABW", label: "ABW" },
-    ],
-    []
-  );
-
-  const typeOptions = useMemo(
-    () => [
-      { value: "32 / 60", label: "32 / 60" },
-      { value: "36 / 60", label: "36 / 60" },
-    ],
-    []
-  );
-
-  const statusOptions = useMemo(
-    () => [
-      { value: "available", label: "Available" },
-      { value: "sold", label: "Sold" },
-    ],
-    []
+    [postDataProduct, postDataInfo, debouncedInfos]
   );
 
   return (
     <>
       <ButtonAdd onClick={open} size={"3.5rem"} />
-
       <Modal opened={opened} onClose={close} size="xl" yOffset={"100px"}>
         <Formik initialValues={initialValueProductCreate} validationSchema={validationSchemaProduct} onSubmit={handleSubmit}>
-          {({ values, setFieldValue, errors, touched, handleBlur }) => {
+          {({ values, errors, setFieldValue }) => {
             console.log("VALUES", values);
             console.log("error", errors);
 
-            const handleInfoChange = (field: keyof IInfoCreate, value: any) => {
-              setDebouncedInfos((prev) => ({
-                ...prev,
-                [field]: value,
-              }));
-
-              console.log(`Updated ${field}:`, value); // Debugging perubahan nilai
-            };
-
-            const addNearByField = () => {
-              setDebouncedInfos((prev) => ({
-                ...prev,
-                near_by: [
-                  ...(prev.near_by || []), // Pastikan near_by tetap array
-                  {
-                    name: "",
-                    distance: 0,
-                    info_id: "", // Sesuaikan dengan kebutuhan
-                  } as INearByCreate,
-                ],
-              }));
-            };
-
-            const handleNearByChange = <T extends keyof INearByCreate>(index: number, field: T, value: INearByCreate[T]) => {
-              const updatedNearBy = [...(debouncedInfos?.near_by || [])];
-              updatedNearBy[index][field] = value;
-
-              setDebouncedInfos((prev) => ({
-                ...prev,
-                near_by: updatedNearBy,
-              }));
-            };
-
             return (
               <Form>
-                <SimpleGrid p={20}>
+                <SimpleGrid p={40}>
                   <Group>
-                    <InputWrapper label="Nama Produk" withAsterisk>
-                      <TextInput
-                        placeholder="Masukan Nama Produk"
-                        defaultValue={values.title}
-                        onBlur={(e) => setFieldValue("title", e.target.value)} // Update saat onBlur
-                      />
-                    </InputWrapper>
-
-                    <InputWrapper label="Nama Lokasi" withAsterisk>
-                      <Select
-                        placeholder="Pilih Lokasi"
-                        defaultValue={values.location}
-                        onBlur={(e) => setFieldValue("location", e.target.value)} // Update saat onBlur
-                        data={locationOptions}
-                      />
-                    </InputWrapper>
-
-                    <InputWrapper required>
-                      <Select
-                        label="Tipe"
-                        placeholder="Pilih Tipe"
-                        defaultValue={values.type}
-                        onBlur={(e) => setFieldValue("type", e.target.value)} // Update saat onBlur
-                        data={typeOptions}
-                        required
-                      />
-                    </InputWrapper>
-                  </Group>
-
-                  <InputWrapper label="Alamat" required>
                     <TextInput
-                      placeholder="Masukan Alamat"
-                      defaultValue={values.address}
-                      onBlur={(e) => setFieldValue("address", e.target.value)} // Update saat onBlur
+                      label="Nama Produk"
+                      placeholder="Masukan Nama Produk"
+                      onChange={(e) => {
+                        handleChangeProduct("title", e.currentTarget.value, setFieldValue);
+                      }}
+                      required
                     />
-                  </InputWrapper>
 
-                  <InputWrapper label="Deskripsi" required>
-                    <Textarea
-                      placeholder="Masukan Deskripsi"
-                      defaultValue={values.content} // Pastikan values.note sudah terdefinisi dalam Formik state
-                      onBlur={(e) => setFieldValue("content", e.target.value)} // Update saat onBlur
+                    <Select
+                      clearable
+                      label="Nama Lokasi"
+                      placeholder="Pilih Lokasi"
+                      onChange={(e) => {
+                        handleChangeProduct("location", e || "", setFieldValue);
+                      }}
+                      data={[
+                        { value: "GAW", label: "GAW" },
+                        { value: "ABW", label: "ABW" },
+                      ]}
                     />
-                  </InputWrapper>
+
+                    <Select
+                      label="Tipe"
+                      placeholder="Pilih Tipe"
+                      onChange={(e) => {
+                        handleChangeProduct("type", e || "", setFieldValue);
+                      }}
+                      data={[
+                        { value: "32 / 60", label: "32 / 60" },
+                        { value: "36 / 60", label: "36 / 60" },
+                      ]}
+                      required
+                    />
+                  </Group>
+
+                  <TextInput
+                    label="Alamat"
+                    placeholder="Masukan Alamat"
+                    onChange={(e) => {
+                      handleChangeProduct("address", e.currentTarget.value, setFieldValue);
+                    }}
+                    required
+                  />
+
+                  <Textarea
+                    label="Deskripsi"
+                    placeholder="Masukan Deskripsi"
+                    defaultValue={values.content}
+                    onChange={(e) => {
+                      handleChangeProduct("content", e.currentTarget.value, setFieldValue);
+                    }}
+                    required
+                  />
 
                   <Group>
-                    <InputWrapper label="Kamar Mandi" required>
-                      <NumberInput
-                        hideControls
-                        placeholder="Masukan Jumlah Kamar Mandi"
-                        defaultValue={values.bathroom}
-                        onBlur={(value) => setFieldValue("bathroom", value)}
-                      />
-                    </InputWrapper>
+                    <NumberInput
+                      label="Kamar Mandi"
+                      hideControls
+                      placeholder="Masukan Jumlah Kamar Mandi"
+                      onChange={(value) => {
+                        handleChangeProduct("bathroom", value as number, setFieldValue); // Pastikan value adalah number
+                      }}
+                      required
+                    />
+                    <NumberInput
+                      label="Kamar Tidur"
+                      hideControls
+                      placeholder="Masukan Jumlah Kamar Tidur"
+                      onChange={(value) => {
+                        handleChangeProduct("bedroom", Number(value) || 0, setFieldValue); // Pastikan nilai angka
+                      }}
+                      required
+                    />
 
-                    <InputWrapper label="Kamar Tidur" required>
-                      <NumberInput
-                        hideControls
-                        placeholder="Masukan Jumlah Kamar Tidur"
-                        defaultValue={values.bedroom}
-                        onBlur={(value) => setFieldValue("bedroom", value)}
-                      />
-                    </InputWrapper>
-
-                    <InputWrapper label="Luas Tanah" required>
-                      <NumberInput
-                        hideControls
-                        placeholder="Masukan Luas Tanah"
-                        value={values.square}
-                        onBlur={(e) => setFieldValue("square", e.target.value)} // Update saat onBlur
-                      />
-                    </InputWrapper>
+                    <NumberInput
+                      label="Luas Tanah"
+                      hideControls
+                      placeholder="Masukan Luas Tanah"
+                      onChange={(value) => {
+                        handleChangeProduct("square", Number(value) || 0, setFieldValue); // Pastikan nilai angka
+                      }}
+                      required
+                    />
                   </Group>
 
                   <Group>
-                    <InputWrapper label="Status" required>
-                      <Select
-                        w={180}
-                        placeholder="Select status"
-                        defaultValue={values?.status}
-                        onBlur={(e) => setFieldValue("status", e.target.value)} // Update saat onBlur
-                        data={statusOptions}
-                      />
-                    </InputWrapper>
+                    <Select
+                      w={180}
+                      label="Status"
+                      placeholder="Pilih Status"
+                      onChange={(e) => {
+                        handleChangeProduct("status", e || "", setFieldValue);
+                      }}
+                      data={[
+                        { value: "available", label: "Available" },
+                        { value: "sold", label: "Sold" },
+                      ]}
+                      required
+                    />
 
-                    <InputWrapper label="Harga" required>
-                      <TextInput
-                        placeholder="Masukan Harga (Rp)"
-                        defaultValue={values.price ? `Rp. ${Number(values.price).toLocaleString("id-ID")}` : ""}
-                        onBlur={(event) => {
-                          const rawValue = event.target.value.replace(/[^0-9]/g, "");
-                          const numericValue = rawValue === "" ? 0 : Number(rawValue);
-                          setFieldValue("price", numericValue);
-                          // Optional: Untuk memformat ulang input setelah blur
-                          event.target.value = numericValue ? `Rp. ${numericValue.toLocaleString("id-ID")}` : "";
-                        }}
-                      />
-                    </InputWrapper>
+                    <NumberInput
+                      label="Kuantitas"
+                      hideControls
+                      placeholder="Masukan Kuantitas"
+                      onChange={(value) => {
+                        handleChangeProduct("quantity", Number(value) || 0, setFieldValue); // Pastikan nilai angka
+                      }}
+                      required
+                    />
 
-                    <InputWrapper label="Kuantitas" required>
-                      <NumberInput
-                        hideControls
-                        placeholder="Masukan Kuantitas"
-                        defaultValue={values.quantity ? values.quantity : ""}
-                        onBlur={(e) => setFieldValue("quantity", e.target.value)} // Update saat onBlur
-                      />
-                    </InputWrapper>
+                    <NumberInput
+                      hideControls
+                      label="Harga Unit"
+                      placeholder="Masukan Harga Unit (Rp)"
+                      value={typeof formValuesRef.current.price === "number" ? formValuesRef.current.price : undefined}
+                      onChange={(value) => {
+                        handleChangeProduct("price", Number(value) || "", setFieldValue);
+                      }}
+                      thousandSeparator="."
+                      decimalSeparator=","
+                      prefix="Rp. "
+                      required
+                    />
                   </Group>
 
-                  {/* <FormInfo
-                    debouncedInfos={debouncedInfos}
-                    handleInfoChange={handleInfoChange}
-                    addNearByField={addNearByField}
-                    handleNearByChange={handleNearByChange}
-                    deleteNearByField={undefined}
-                  /> */}
+                  <FormInfo debouncedInfos={debouncedInfos} setDebouncedInfos={setDebouncedInfos} />
 
                   <Group>
-                    <InputWrapper label="Urutan" required>
-                      <NumberInput
-                        hideControls
-                        placeholder="Masukan Urutan"
-                        defaultValue={values.sequence ? values.sequence : ""}
-                        onBlur={(e) => setFieldValue("sequence", e.target.value)} // Update saat onBlur
-                      />
-                    </InputWrapper>
-                    <InputWrapper label="Upload Gambar" required>
-                      <FileInput
-                        accept="image/png,image/jpeg"
-                        w={200}
-                        clearable
-                        placeholder="Upload files"
-                        onChange={(file) => setFieldValue("file", file)}
-                        onBlur={handleBlur}
-                      />
-                    </InputWrapper>
+                    <NumberInput
+                      label="Urutan"
+                      hideControls
+                      placeholder="Masukan Urutan"
+                      onChange={(value) => {
+                        handleChangeProduct("sequence", value as number, setFieldValue); // Pastikan value adalah number
+                      }}
+                      required
+                    />
+
+                    <FileInput
+                      w={200}
+                      label="Upload Gambar"
+                      accept="image/png,image/jpeg"
+                      clearable
+                      placeholder="Upload files"
+                      onChange={(file) => setFieldValue("file", file)}
+                      required
+                    />
+                  </Group>
+                  <Group justify="flex-end" mt="md">
+                    <Button onClick={close} variant="default">
+                      Cancel
+                    </Button>
+                    <Button type="submit" loading={isLoadingSubmitProductData}>
+                      Add Product
+                    </Button>
                   </Group>
                 </SimpleGrid>
-
-                <Group justify="flex-end" mt="md">
-                  <Button onClick={close} variant="default">
-                    Cancel
-                  </Button>
-                  <Button type="submit" loading={isLoadingSubmitProductData}>
-                    Add Product
-                  </Button>
-                </Group>
               </Form>
             );
           }}
@@ -278,6 +315,6 @@ const AddProductModal = ({ refetchProductData }: { refetchProductData: () => voi
       </Modal>
     </>
   );
-};
+});
 
 export default AddProductModal;

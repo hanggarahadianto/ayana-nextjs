@@ -23,18 +23,6 @@ export const initialValuesCashFlowUpdate: ICashFlowUpdate = {
   week_number: "",
   cash_in: 0,
   cash_out: 0,
-  // good: [
-  //   {
-  //     good_name: "",
-  //     status: "",
-  //     quantity: 0,
-  //     costs_due: 0,
-  //     unit: "",
-
-  //     total_cost: 0,
-  //     price: 0,
-  //   },
-  // ],
 };
 
 import * as Yup from "yup";
@@ -45,20 +33,6 @@ export const validationSchemaCashFlowCreate = Yup.object({
   cash_in: Yup.number().required("Cash in is required").min(0, "Cash in cannot be negative"),
 
   cash_out: Yup.number().required("Cash out is required").min(0, "Cash out cannot be negative"),
-
-  // good: Yup.array()
-  //   .of(
-  //     Yup.object({
-  //       good_name: Yup.string().required("Good name is required"),
-
-  //       status: Yup.string().required("Status is required"),
-
-  //       quantity: Yup.number().required("Quantity is required").min(1, "Quantity must be greater than 0"),
-
-  //       total_cost: Yup.number().required("Total cost is required").min(0, "Total cost cannot be negative"),
-  //     })
-  //   )
-  //   .min(1, "At least one good is required"),
 });
 
 export const validationSchemaCashFlowUpdate = Yup.object({

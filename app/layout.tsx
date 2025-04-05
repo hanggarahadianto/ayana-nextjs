@@ -1,13 +1,11 @@
 import "@mantine/core/styles.css";
 
 import React, { ReactNode } from "react";
-import { MantineProvider, ColorSchemeScript } from "@mantine/core";
+import { ColorSchemeScript } from "@mantine/core";
 
 import "@mantine/carousel/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/dates/styles.css";
-import { ModalsProvider } from "@mantine/modals";
-import { Notifications } from "@mantine/notifications";
 
 import dayjs from "dayjs";
 import "dayjs/locale/id";
