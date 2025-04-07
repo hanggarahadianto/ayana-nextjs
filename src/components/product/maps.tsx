@@ -31,7 +31,7 @@ const parseGoogleMapsUrl = (url: any) => {
   return null;
 };
 
-const ReactLeafletMap: React.FC<{ mapsUrl?: any }> = ({ mapsUrl }) => {
+const AdditionalInfoMaps: React.FC<{ mapsUrl?: any }> = ({ mapsUrl }) => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -81,4 +81,4 @@ const ReactLeafletMap: React.FC<{ mapsUrl?: any }> = ({ mapsUrl }) => {
   );
 };
 
-export default ReactLeafletMap;
+export default AdditionalInfoMaps;
