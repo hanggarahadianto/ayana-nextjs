@@ -14,7 +14,7 @@ interface FormInfoProps {
   setErrorsInfo: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>;
 }
 
-const FormInfo = ({ debouncedInfos, setDebouncedInfos, isSubmitAttempted, errorInfo, setErrorsInfo }: FormInfoProps) => {
+const FormCreateInfo = ({ debouncedInfos, setDebouncedInfos, isSubmitAttempted, errorInfo, setErrorsInfo }: FormInfoProps) => {
   console.log("errors info", errorInfo);
 
   const debouncedValidateRef = useRef(
@@ -137,4 +137,4 @@ const FormInfo = ({ debouncedInfos, setDebouncedInfos, isSubmitAttempted, errorI
   );
 };
 
-export default memo(FormInfo);
+export default memo(FormCreateInfo);

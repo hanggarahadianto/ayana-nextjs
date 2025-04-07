@@ -85,9 +85,6 @@ const AddCashFlowReportModal = ({
 
   const selectedWeeks = useMemo(() => cashFlowData.map((item) => item.week_number), [cashFlowData]);
 
-  // All possible weeks
-
-  // Filter available weeks (hide weeks that are already selected)
   const availableWeeks = useMemo(() => {
     return allWeeks.filter((week: string) => !selectedWeeks.includes(week)).map((week) => ({ value: week, label: week }));
   }, [selectedWeeks]);

@@ -1,12 +1,7 @@
 "use client";
 
-import { Box, Card, Divider, Grid, Group, Progress, RingProgress, SimpleGrid, Stack, Text, Tooltip } from "@mantine/core";
+import { Box, Card, Divider, Grid, Progress, Stack, Text, Tooltip } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import AddCashFlowReportModal from "../../../../../src/components/internal/sidebar/project/cashFlow/AddCashFlowReportModal";
-import GetCashFlowReportModal from "../../../../../src/components/internal/sidebar/project/cashFlow/GetCashFlowReportModal";
-
-import EditProjectModal from "../../../../../src/components/internal/sidebar/project/EditProjectModal";
-import EditCashFlowReportModal from "../../../../../src/components/internal/sidebar/project/cashFlow/EditCashFlowReportModal";
 import { getDataProjectDetail } from "@/api/project/getDataProjectDetail";
 import { getDataWeeklyProgress } from "@/api/weekly-progress/getDataWeeklyProgress";
 import { getDataCashFlowListByProjectId } from "@/api/cash-flow/getCashFlowListProject";

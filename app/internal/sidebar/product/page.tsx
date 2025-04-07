@@ -82,7 +82,12 @@ const ProjectPage = () => {
 
               <Group justify="flex-end" wrap="nowrap">
                 <GetProductModal productData={selectedProduct} />
-                <EditProductModal initialData={selectedProduct} refetchProductData={refetchProductData} />
+                <EditProductModal
+                  initialProductData={selectedProduct}
+                  // initialInfoData={initialInfoData}
+                  refetchProductData={refetchProductData}
+                  initialInfoData={undefined}
+                />
                 <ButtonDeleteWithConfirmation
                   id={product.id}
                   onDelete={handleDeleteProduct}

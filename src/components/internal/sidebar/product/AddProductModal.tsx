@@ -6,7 +6,7 @@ import { initialValueProductCreate, validationSchemaProduct } from "../../../../
 import { useSubmitProductForm } from "@/api/products/postDataProduct";
 import ButtonAdd from "@/lib/button/buttonAdd";
 import { useSubmitInfoForm } from "@/api/info/postDataInfo";
-import FormInfo from "./FormInfo";
+import FormInfo from "./FormCreateInfo";
 import { debounce } from "lodash";
 import { showNotification } from "@mantine/notifications";
 import { validateInfos } from "@/lib/validation/info-validation";
@@ -23,7 +23,7 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
     ) as Record<keyof IProductCreate, string | number | File>
   );
 
-  console.log("FORM VALUES REF", formValuesRef.current);
+  // console.log("FORM VALUES REF", formValuesRef.current);
 
   const debouncedUpdateFormikValue = useMemo(() => {
     return debounce((setFieldValue: any, field: keyof IProductCreate, value: any) => {
@@ -48,7 +48,7 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
     near_by: [{ name: "", distance: "" }],
   });
 
-  console.log("DEBOUNCE INFO", debouncedInfos);
+  // console.log("DEBOUNCE INFO", debouncedInfos);
 
   const [errorsInfo, setErrorsInfo] = useState<{ [key: string]: any }>({});
 
@@ -142,8 +142,8 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
       <Modal opened={opened} onClose={close} size="xl" yOffset={"100px"}>
         <Formik initialValues={initialValueProductCreate} validationSchema={validationSchemaProduct} onSubmit={handleSubmit}>
           {({ values, errors, setFieldValue, setErrors }) => {
-            console.log("VALUES", values);
-            console.log("error", errors);
+            // console.log("VALUES", values);
+            // console.log("error", errors);
 
             const [isSubmitAttempted, setIsSubmitAttempted] = useState(false);
 

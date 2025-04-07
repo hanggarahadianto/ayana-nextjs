@@ -13,6 +13,12 @@ interface IInfoCreate {
   home_id: string;
   near_by: INearByCreate[];
 }
+interface IInfoUpdate {
+  maps: string;
+  start_price: number;
+  home_id: string;
+  near_by: INearByCreate[];
+}
 interface IInfoResponse {
   data: IInfo[];
   status: string;
