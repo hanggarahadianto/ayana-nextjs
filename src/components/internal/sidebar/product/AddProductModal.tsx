@@ -279,8 +279,8 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
 
                     <NumberInput
                       hideControls
-                      label="Harga Awal"
-                      placeholder="Masukan Harga Awal (Rp)"
+                      label="Harga Unit"
+                      placeholder="Masukan Harga Unit (Rp)"
                       value={
                         typeof formValuesRef.current.price
                           ? `Rp. ${Number(typeof formValuesRef.current.price).toLocaleString("id-ID")}`

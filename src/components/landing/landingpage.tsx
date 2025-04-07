@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { AspectRatio, Badge, Card, Container, Flex, Grid, Group, SimpleGrid, Stack, Text, useMantineTheme } from "@mantine/core";
 import Image from "next/image";
-import FloatingWhatsApp from "../product/floating-whatsapp";
+import FloatingWhatsApp from "../product/FloatingWhatsapp";
 import { useMediaQuery } from "@mantine/hooks";
 import ProductPage from "app/product/page";
 import Testimony from "./testimony";

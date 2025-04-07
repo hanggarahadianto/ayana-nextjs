@@ -1,17 +1,16 @@
 "use client";
 import { Box, Button, Card, Center, Container, Divider, Flex, Grid, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FaBath, FaBed, FaLandmark } from "react-icons/fa";
 import { useMediaQuery } from "@mantine/hooks";
-import { useParams } from "next/navigation";
 import Link from "next/link";
 import { getDataProductDetail } from "@/api/products/getDataProductDetail";
-import { getDataAdditionalInfo } from "@/api/info/getDataInfo";
-import MyGallery from "./image-galery";
-import AdditionalInfoProduct from "./additional-info-product";
+import MyGallery from "./ImageGallery";
+import AdditionalInfoProduct from "./AdditionalInfo";
 import ReservationForm from "../reservation/ReservationForm";
-import AdditionalInfoMaps from "./maps";
+import AdditionalInfoMaps from "./Maps";
+import { getDataInfo } from "@/api/info/getDataInfo";
 
 interface ProductDetailProps {
   productId: string;
@@ -34,7 +33,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
 
   const { data: additionalInfo } = useQuery({
     queryKey: ["getAdditionalInfoData", productId],
-    queryFn: () => getDataAdditionalInfo(productId),
+    queryFn: () => getDataInfo(productId),
     enabled: !!productId,
     refetchOnWindowFocus: false,
   });
@@ -42,11 +41,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
   // console.log(additionalInfo);
 
   return (
-    <SimpleGrid
-      mt={40}
-      cols={1} // Default satu kolom
-      px="10vw" // Gunakan px agar responsif
-    >
+    <SimpleGrid mt={40} cols={1} px="10vw">
       <Stack align="center">
         <MyGallery />
       </Stack>
