@@ -15,6 +15,8 @@ import {
   FaAngleDoubleLeft,
   FaAngleDoubleRight,
 } from "react-icons/fa";
+import { AiOutlineDashboard } from "react-icons/ai";
+import { TbTransactionDollar } from "react-icons/tb";
 import { motion, AnimatePresence } from "framer-motion";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -44,12 +46,14 @@ export default function InternalLayout({ children }: { children: React.ReactNode
   const isDark = colorScheme === "dark";
 
   const menuItems = [
+    { label: "Dashboard", icon: <AiOutlineDashboard />, href: "/internal/sidebar/dashboard" },
     { label: "News", icon: <FaNewspaper />, href: "/internal/sidebar/news" },
     { label: "Task", icon: <FaTasks />, href: "/internal/sidebar/task" },
     { label: "Product", icon: <FaShoppingBag />, href: "/internal/sidebar/product" },
     { label: "Marketing", icon: <FaIdeal />, href: "/internal/sidebar/marketing" },
     { label: "Finance", icon: <FaMoneyBill />, href: "/internal/sidebar/finance" },
     { label: "Project", icon: <FaProjectDiagram />, href: "/internal/sidebar/project" },
+    { label: "Transaction", icon: <TbTransactionDollar />, href: "/internal/sidebar/transaction" },
     { label: "Profile", icon: <FaUser />, href: "/internal/sidebar/profile" },
     { label: "Setting", icon: <FaCog />, href: "/internal/sidebar/setting" },
   ];

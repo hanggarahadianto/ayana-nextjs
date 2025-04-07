@@ -6,11 +6,8 @@ import { useQuery } from "@tanstack/react-query";
 import AddPayoutModal from "../../../../src/components/internal/sidebar/finance/AddPayoutModal"; // Sesuaikan path
 import { getDataCompany } from "@/api/company/getCompany"; // Sesuaikan path
 import { getDataPayout } from "@/api/payout/getDataPayout";
-import router from "next/router";
-// import { useDeleteDataPayout } from "@/api/payout/deleteDataPayout";
 import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
 import { useDeleteDataPayout } from "@/api/payout/deleteDataPayout";
-import BreathingActionIcon from "@/lib/button/buttonAction";
 import EditPayoutModal from "@/components/internal/sidebar/finance/EditPayoutModal";
 
 export default function CompanyTabs() {
@@ -73,7 +70,7 @@ export default function CompanyTabs() {
   if (!payoutData || !payoutData.data) return <p>Data tidak tersedia.</p>;
 
   return (
-    <SimpleGrid mt={20}>
+    <SimpleGrid mt={10}>
       <Tabs
         value={activeTab?.company_code}
         onChange={(value: string | null) => {
@@ -93,13 +90,13 @@ export default function CompanyTabs() {
 
         {companies.map((company: ICompany) => (
           <Tabs.Panel key={company.company_code} value={company.company_code}>
-            <Stack p={20} justify="flex-end" align="flex-end" style={{ width: "100%" }}>
+            <Stack p={12} justify="flex-end" align="flex-end" style={{ width: "100%" }}>
               <AddPayoutModal refetchPayloadData={refetchPayoutData} companyCode={activeTab?.company_code} companyId={company?.id} />
             </Stack>
           </Tabs.Panel>
         ))}
       </Tabs>
-      <SimpleGrid p={40}>
+      <SimpleGrid p={20}>
         <ScrollArea>
           <Table highlightOnHover withColumnBorders>
             <Table.Thead>
