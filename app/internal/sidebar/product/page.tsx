@@ -11,6 +11,7 @@ import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation"
 import EditProductModal from "@/components/internal/sidebar/product/EditProductModal";
 import AddProductModal from "@/components/internal/sidebar/product/AddProductModal";
 import LoadingGlobal from "@/styles/loading/loading-global";
+import { getDataInfo } from "@/api/info/getDataInfo";
 
 const ProjectPage = () => {
   const isSmallScreen = useMediaQuery("(max-width: 640px)");
@@ -29,6 +30,16 @@ const ProjectPage = () => {
 
   const { mutate: mutateDeleteDataProduct, isPending: isLoadingDeleteProduct } = useDeleteDataProduct(refetchProductData);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | undefined>(undefined);
+
+  const {
+    data: selectedInfoProduct,
+    refetch: refetchSelectedInfoProduct,
+    isPending: isLoadingInfoData,
+  } = useQuery({
+    queryKey: ["getInfoData"],
+    queryFn: () => getDataInfo(selectedProduct?.id), // Provide an empty string or appropriate ID
+    refetchOnWindowFocus: false,
+  });
 
   const handleSelectProduct = (product: IProduct) => {
     setSelectedProduct(product);
@@ -84,9 +95,8 @@ const ProjectPage = () => {
                 <GetProductModal productData={selectedProduct} />
                 <EditProductModal
                   initialProductData={selectedProduct}
-                  // initialInfoData={initialInfoData}
+                  initialInfoData={selectedInfoProduct || undefined}
                   refetchProductData={refetchProductData}
-                  initialInfoData={undefined}
                 />
                 <ButtonDeleteWithConfirmation
                   id={product.id}

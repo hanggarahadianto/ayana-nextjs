@@ -7,100 +7,95 @@ import _, { debounce } from "lodash";
 import { validateInfos } from "@/lib/validation/info-validation";
 
 interface FormInfoProps {
-  debouncedInfos: any;
-  setDebouncedInfos: React.Dispatch<React.SetStateAction<any>>;
-  isSubmitAttempted: boolean;
-  errorInfo: { [key: string]: string };
-  setErrorsInfo: React.Dispatch<React.SetStateAction<{ [key: string]: any }>>;
+  initialData: any;
+  //   initialData: IProductUpdate | undefined;
 }
 
-const FormEditInfo = ({ debouncedInfos, setDebouncedInfos, isSubmitAttempted, errorInfo, setErrorsInfo }: FormInfoProps) => {
-  console.log("errors info", errorInfo);
+const FormEditInfo = ({ initialData }: FormInfoProps) => {
+  //   const debouncedValidateRef = useRef(
+  //     debounce((values: IInfoCreate) => {
+  //       validateInfos(values, undefined, setErrorsInfo);
+  //     }, 900)
+  //   );
 
-  const debouncedValidateRef = useRef(
-    debounce((values: IInfoCreate) => {
-      validateInfos(values, undefined, setErrorsInfo);
-    }, 900)
-  );
+  //   const handleInfoChange = useCallback(
+  //     (field: keyof IInfoCreate, value: any) => {
+  //       const updated = {
+  //         ...debouncedInfos,
+  //         [field]: value,
+  //       };
 
-  const handleInfoChange = useCallback(
-    (field: keyof IInfoCreate, value: any) => {
-      const updated = {
-        ...debouncedInfos,
-        [field]: value,
-      };
+  //       setDebouncedInfos(updated);
+  //       debouncedValidateRef.current(updated); // validasi dengan debounce
+  //     },
+  //     [debouncedInfos, setDebouncedInfos]
+  //   );
 
-      setDebouncedInfos(updated);
-      debouncedValidateRef.current(updated); // validasi dengan debounce
-    },
-    [debouncedInfos, setDebouncedInfos]
-  );
+  //   const addNearByField = useCallback(() => {
+  //     setDebouncedInfos((prev: { near_by: any }) => ({
+  //       ...prev,
+  //       near_by: [...(prev.near_by || []), { name: "", distance: "" }],
+  //     }));
+  //   }, [setDebouncedInfos]);
 
-  const addNearByField = useCallback(() => {
-    setDebouncedInfos((prev: { near_by: any }) => ({
-      ...prev,
-      near_by: [...(prev.near_by || []), { name: "", distance: "" }],
-    }));
-  }, [setDebouncedInfos]);
+  //   const handleNearByChange = useCallback(
+  //     (index: number, key: keyof INearBy, value: any) => {
+  //       const updatedNearBy = [...(debouncedInfos.near_by || [])];
+  //       updatedNearBy[index] = {
+  //         ...updatedNearBy[index],
+  //         [key]: value,
+  //       };
 
-  const handleNearByChange = useCallback(
-    (index: number, key: keyof INearBy, value: any) => {
-      const updatedNearBy = [...(debouncedInfos.near_by || [])];
-      updatedNearBy[index] = {
-        ...updatedNearBy[index],
-        [key]: value,
-      };
+  //       const updated = {
+  //         ...debouncedInfos,
+  //         near_by: updatedNearBy,
+  //       };
 
-      const updated = {
-        ...debouncedInfos,
-        near_by: updatedNearBy,
-      };
+  //       setDebouncedInfos(updated);
+  //       debouncedValidateRef.current(updated);
+  //     },
+  //     [debouncedInfos, setDebouncedInfos]
+  //   );
 
-      setDebouncedInfos(updated);
-      debouncedValidateRef.current(updated);
-    },
-    [debouncedInfos, setDebouncedInfos]
-  );
+  //   const deleteNearByField = (nearByArray: INearBy[], index: number) => {
+  //     const updated = {
+  //       ...debouncedInfos,
+  //       near_by: nearByArray.filter((_, i) => i !== index),
+  //     };
 
-  const deleteNearByField = (nearByArray: INearBy[], index: number) => {
-    const updated = {
-      ...debouncedInfos,
-      near_by: nearByArray.filter((_, i) => i !== index),
-    };
-
-    setDebouncedInfos(updated);
-    debouncedValidateRef.current(updated); // ✅
-  };
+  //     setDebouncedInfos(updated);
+  //     debouncedValidateRef.current(updated); // ✅
+  //   };
 
   return (
     <>
       <Textarea
         label="Maps"
         placeholder="Masukan Maps"
-        value={debouncedInfos?.maps}
-        onChange={(e) => handleInfoChange("maps", e.target.value)} // Update saat mengetik
-        error={isSubmitAttempted && errorInfo.maps}
+        // value={debouncedInfos?.maps}
+        // onChange={(e) => handleInfoChange("maps", e.target.value)} // Update saat mengetik
+        // error={isSubmitAttempted && errorInfo.maps}
       />
       <NumberInput
         hideControls
         label="Harga Awal"
         placeholder="Masukan Harga Awal (Rp)"
-        value={debouncedInfos?.start_price ? `Rp. ${Number(debouncedInfos.start_price).toLocaleString("id-ID")}` : ""}
-        onChange={(value) => {
-          handleInfoChange("start_price", Number(value) || "");
-        }}
-        thousandSeparator="."
-        decimalSeparator=","
-        prefix="Rp. "
-        required
-        error={isSubmitAttempted && errorInfo.start_price}
+        // value={debouncedInfos?.start_price ? `Rp. ${Number(debouncedInfos.start_price).toLocaleString("id-ID")}` : ""}
+        // onChange={(value) => {
+        //   handleInfoChange("start_price", Number(value) || "");
+        // }}
+        // thousandSeparator="."
+        // decimalSeparator=","
+        // prefix="Rp. "
+        // required
+        // error={isSubmitAttempted && errorInfo.start_price}
       />
 
       <Group justify="space-between">
         <Text fw={400}>Tambahkan Lokasi Terdekat</Text>
-        <ButtonAdd onClick={() => addNearByField()} size="2.5rem" />
+        {/* <ButtonAdd onClick={() => addNearByField()} size="2.5rem" /> */}
       </Group>
-      <Stack mt="md">
+      {/* <Stack mt="md">
         {Array.isArray(debouncedInfos?.near_by) &&
           debouncedInfos?.near_by?.map((nearBy: INearBy, index: number) => (
             <Card key={index} shadow="lg" padding="lg" radius="md">
@@ -132,7 +127,7 @@ const FormEditInfo = ({ debouncedInfos, setDebouncedInfos, isSubmitAttempted, er
               </Group>
             </Card>
           ))}
-      </Stack>
+      </Stack> */}
     </>
   );
 };

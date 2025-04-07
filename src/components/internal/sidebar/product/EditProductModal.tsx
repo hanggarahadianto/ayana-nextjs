@@ -13,8 +13,10 @@ interface EditProductModalProps {
   refetchProductData: () => void;
 }
 
-const EditProductModal: React.FC<EditProductModalProps> = ({ initialProductData, refetchProductData }) => {
+const EditProductModal: React.FC<EditProductModalProps> = ({ initialProductData, initialInfoData, refetchProductData }) => {
   const [opened, { open, close }] = useDisclosure(false);
+
+  console.log("INITIAL INFO DATA", initialInfoData);
 
   useEffect(() => {
     if (initialProductData) {
@@ -46,17 +48,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ initialProductData,
           </Tabs.Panel>
 
           <Tabs.Panel value="edit-info" pt="md">
-            <FormEditInfo
-              debouncedInfos={undefined}
-              setDebouncedInfos={function (value: any): void {
-                throw new Error("Function not implemented.");
-              }}
-              isSubmitAttempted={false}
-              errorInfo={{}}
-              setErrorsInfo={function (value: React.SetStateAction<{ [key: string]: any }>): void {
-                throw new Error("Function not implemented.");
-              }}
-            />
+            <FormEditInfo initialData={initialInfoData || undefined} />
           </Tabs.Panel>
 
           {/* <Tabs.Panel value="upload-gambar" pt="md">

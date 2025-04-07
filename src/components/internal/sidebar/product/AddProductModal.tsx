@@ -6,11 +6,12 @@ import { initialValueProductCreate, validationSchemaProduct } from "../../../../
 import { useSubmitProductForm } from "@/api/products/postDataProduct";
 import ButtonAdd from "@/lib/button/buttonAdd";
 import { useSubmitInfoForm } from "@/api/info/postDataInfo";
-import FormInfo from "./FormCreateInfo";
+
 import { debounce } from "lodash";
 import { showNotification } from "@mantine/notifications";
 import { validateInfos } from "@/lib/validation/info-validation";
 import { availabilityOptions, locationOptions, typeOptions } from "@/lib/dictionary";
+import FormCreateInfo from "./FormCreateInfo";
 
 const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -23,7 +24,7 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
     ) as Record<keyof IProductCreate, string | number | File>
   );
 
-  // console.log("FORM VALUES REF", formValuesRef.current);
+  console.log("FORM VALUES REF", formValuesRef.current);
 
   const debouncedUpdateFormikValue = useMemo(() => {
     return debounce((setFieldValue: any, field: keyof IProductCreate, value: any) => {
@@ -48,7 +49,7 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
     near_by: [{ name: "", distance: "" }],
   });
 
-  // console.log("DEBOUNCE INFO", debouncedInfos);
+  console.log("DEBOUNCE INFO", debouncedInfos);
 
   const [errorsInfo, setErrorsInfo] = useState<{ [key: string]: any }>({});
 
@@ -98,8 +99,17 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
             };
 
             postDataInfo(updatedInfo, {
-              onError: () => {
-                console.error("Gagal menyimpan data barang. Melakukan rollback...");
+              onSuccess: () => {
+                // ✅ Reset debouncedInfos setelah sukses
+                setDebouncedInfos({
+                  maps: "",
+                  start_price: 0,
+                  home_id: "",
+                  near_by: [{ name: "", distance: "" }],
+                });
+
+                refetchProductData();
+                // close();
               },
             });
             showNotification({
@@ -107,7 +117,6 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
               message: "",
               color: "green",
             });
-            refetchProductData();
           },
           onError: (error) => {
             console.error("Gagal menyimpan Info:", error);
@@ -124,12 +133,6 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
           console.error("Submission Error:", error.message);
         }
       } finally {
-        setDebouncedInfos({
-          maps: "",
-          start_price: 0,
-          home_id: "",
-          near_by: [{ name: "", distance: "" }],
-        });
         setSubmitting(false);
       }
     },
@@ -142,8 +145,8 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
       <Modal opened={opened} onClose={close} size="xl" yOffset={"100px"}>
         <Formik initialValues={initialValueProductCreate} validationSchema={validationSchemaProduct} onSubmit={handleSubmit}>
           {({ values, errors, setFieldValue, setErrors }) => {
-            // console.log("VALUES", values);
-            // console.log("error", errors);
+            console.log("VALUES", values);
+            console.log("error", errors);
 
             const [isSubmitAttempted, setIsSubmitAttempted] = useState(false);
 
@@ -294,7 +297,7 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
                     />
                   </Group>
 
-                  <FormInfo
+                  <FormCreateInfo
                     debouncedInfos={debouncedInfos}
                     setDebouncedInfos={setDebouncedInfos}
                     isSubmitAttempted={isSubmitAttempted}

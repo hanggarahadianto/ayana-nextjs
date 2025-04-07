@@ -20,7 +20,7 @@ const FormCreateInfo = ({ debouncedInfos, setDebouncedInfos, isSubmitAttempted, 
   const debouncedValidateRef = useRef(
     debounce((values: IInfoCreate) => {
       validateInfos(values, undefined, setErrorsInfo);
-    }, 900)
+    }, 100)
   );
 
   const handleInfoChange = useCallback(

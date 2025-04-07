@@ -1,6 +1,6 @@
 import { APIAxiosInstance } from "..";
 
-export const getDataAdditionalInfo = async (id: string): Promise<IInfo | null> => {
+export const getDataInfo = async (id: any): Promise<IInfo | null> => {
   try {
     const url = `info/get/${encodeURIComponent(id)}`;
     const response = await APIAxiosInstance.get(url);
