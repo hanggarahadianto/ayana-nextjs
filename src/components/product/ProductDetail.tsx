@@ -9,8 +9,8 @@ import { getDataProductDetail } from "@/api/products/getDataProductDetail";
 import MyGallery from "./ImageGallery";
 import AdditionalInfoProduct from "./AdditionalInfo";
 import ReservationForm from "../reservation/ReservationForm";
-import AdditionalInfoMaps from "./Maps";
 import { getDataInfo } from "@/api/info/getDataInfo";
+import AdditionalInfoMaps from "./AdditionalMaps";
 
 interface ProductDetailProps {
   productId: string;
