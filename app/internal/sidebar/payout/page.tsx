@@ -6,7 +6,7 @@ import useGetCompanies from "@/components/internal/sidebar/company/GetCompanyTab
 import AddPayoutModal from "@/components/internal/sidebar/finance/AddPayoutModal";
 import EditPayoutModal from "@/components/internal/sidebar/finance/EditPayoutModal";
 import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
-import { Group, Pagination, ScrollArea, SimpleGrid, Stack, Table, Tabs } from "@mantine/core";
+import { Group, Pagination, ScrollArea, SimpleGrid, Stack, Table, Tabs, ThemeIcon, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -82,18 +82,26 @@ export default function Payout() {
           <Table highlightOnHover withColumnBorders>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th style={{ textAlign: "center" }}>Invoice</Table.Th>
-                <Table.Th style={{ textAlign: "center" }}>Nominal</Table.Th>
-                <Table.Th style={{ textAlign: "center" }}>Tanggal</Table.Th>
-                <Table.Th style={{ textAlign: "center" }}>Catatan</Table.Th>
-                <Table.Th style={{ textAlign: "center" }}>Aksi</Table.Th>
+                <Table.Th style={{ textAlign: "center", width: "150px" }}>Invoice</Table.Th>
+                <Table.Th style={{ textAlign: "center", width: "120px" }}>Nominal</Table.Th>
+                <Table.Th style={{ textAlign: "center", width: "160px" }}>Tanggal Pembelian</Table.Th>
+                <Table.Th style={{ textAlign: "center", width: "160px" }}>Jatuh Tempo</Table.Th>
+                <Table.Th style={{ textAlign: "center", width: "200px" }}>Catatan</Table.Th>
+                <Table.Th style={{ textAlign: "center", width: "60px" }}>Status</Table.Th>
+                <Table.Th style={{ textAlign: "center", width: "100px" }}>Aksi</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
               {payoutData.data.map((payout: IPayoutUpdate) => (
                 <Table.Tr key={payout.id}>
                   <Table.Td>{payout.invoice}</Table.Td>
-                  <Table.Td>{payout.nominal.toLocaleString("id-ID")}</Table.Td>
+                  <Table.Td>
+                    {payout.nominal.toLocaleString("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                      minimumFractionDigits: 2,
+                    })}
+                  </Table.Td>
                   <Table.Td>
                     {new Intl.DateTimeFormat("id-ID", {
                       day: "2-digit",
@@ -101,7 +109,22 @@ export default function Payout() {
                       year: "numeric",
                     }).format(new Date(payout.date_inputed))}
                   </Table.Td>
+                  <Table.Td>
+                    {new Intl.DateTimeFormat("id-ID", {
+                      day: "2-digit",
+                      month: "long",
+                      year: "numeric",
+                    }).format(new Date(payout.due_date))}
+                  </Table.Td>
                   <Table.Td>{payout.note}</Table.Td>
+                  <Table.Td>
+                    <Group gap="xs" justify="center">
+                      <ThemeIcon size="sm" radius="xl" color={payout.status === "tempo" ? "red" : "green"}>
+                        {/* kosongkan icon atau tambahkan jika perlu */}
+                      </ThemeIcon>
+                      {/* <Text>{payout.status === "tempo" ? "Tempo" : "Tunai"}</Text> */}
+                    </Group>
+                  </Table.Td>
                   <Table.Td style={{ textAlign: "center" }}>
                     <Group ml={4}>
                       <EditPayoutModal payout={payout} refetchPayoutData={refetchPayoutData} />

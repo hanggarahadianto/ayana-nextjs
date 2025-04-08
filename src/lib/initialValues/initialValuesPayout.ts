@@ -4,15 +4,19 @@ export const initialValuePayoutCreate: IPayoutCreate = {
   invoice: "",
   nominal: 0,
   date_inputed: "",
+  due_date: "",
   note: "",
   company_id: "",
+  status: "tunai",
 };
 export const initialValuePayoutUpdate: IPayoutUpdate = {
   id: "",
   invoice: "",
   nominal: 0,
   date_inputed: "",
+  due_date: "",
   note: "",
+  status: "",
   company_id: "",
 };
 

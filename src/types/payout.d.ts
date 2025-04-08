@@ -3,9 +3,11 @@ interface IPayout {
   invoice: string;
   nominal: number;
   date_inputed: string;
+  due_date: string;
   note: string;
   company_id: string;
   company_name: string;
+  status: string;
   created_at: string;
   updated_at: string;
 }
@@ -14,16 +16,21 @@ interface IPayoutCreate {
   invoice: string;
   nominal: number;
   date_inputed: string;
+  due_date: string;
   note: string;
   company_id: string;
+  status: string;
 }
 interface IPayoutUpdate {
   id: string;
   invoice: string;
   nominal: number;
   date_inputed: string;
+  due_date: string;
   note: string;
+
   company_id: string;
+  status: string;
 }
 
 interface IPayoutResponse {
