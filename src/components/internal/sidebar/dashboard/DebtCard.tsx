@@ -25,8 +25,14 @@ export const DebtCard = ({ companyId }: { companyId: any }) => {
           Total Hutang (Status: Tempo)
         </Text>
         <Text size="xl" c="red">
-          Rp {totalNominal.toLocaleString("id-ID")}
+          {new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(totalNominal)}
         </Text>
+
         <Group mt="md">
           <Text size="sm" c="dimmed">
             {data?.total} data ditemukan

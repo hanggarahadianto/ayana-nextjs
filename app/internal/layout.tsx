@@ -21,6 +21,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/landing/navbar";
+import { HiOutlineCash } from "react-icons/hi";
 
 export default function InternalLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -51,7 +52,7 @@ export default function InternalLayout({ children }: { children: React.ReactNode
     { label: "Task", icon: <FaTasks />, href: "/internal/sidebar/task" },
     { label: "Product", icon: <FaShoppingBag />, href: "/internal/sidebar/product" },
     { label: "Marketing", icon: <FaIdeal />, href: "/internal/sidebar/marketing" },
-    { label: "Payin", icon: <FaMoneyBill />, href: "/internal/sidebar/payin" },
+    { label: "Payin", icon: <HiOutlineCash />, href: "/internal/sidebar/payin" },
     { label: "Payout", icon: <FaMoneyBill />, href: "/internal/sidebar/payout" },
 
     { label: "Project", icon: <FaProjectDiagram />, href: "/internal/sidebar/project" },
