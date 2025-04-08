@@ -28,7 +28,6 @@ interface IPayoutUpdate {
   date_inputed: string;
   due_date: string;
   note: string;
-
   company_id: string;
   status: string;
 }

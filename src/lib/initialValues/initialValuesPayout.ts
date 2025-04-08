@@ -38,6 +38,8 @@ export const getInitialValuesUpdatePayout = (initialData: IPayoutUpdate) => ({
   invoice: initialData?.invoice || "",
   nominal: initialData?.nominal || 0,
   date_inputed: initialData?.date_inputed || "",
+  due_date: initialData?.due_date || "",
   company_id: initialData?.company_id || "",
   note: initialData?.note || "",
+  status: initialData?.status || "",
 });
