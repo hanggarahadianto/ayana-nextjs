@@ -51,9 +51,11 @@ export default function InternalLayout({ children }: { children: React.ReactNode
     { label: "Task", icon: <FaTasks />, href: "/internal/sidebar/task" },
     { label: "Product", icon: <FaShoppingBag />, href: "/internal/sidebar/product" },
     { label: "Marketing", icon: <FaIdeal />, href: "/internal/sidebar/marketing" },
-    { label: "Finance", icon: <FaMoneyBill />, href: "/internal/sidebar/finance" },
+    { label: "Payin", icon: <FaMoneyBill />, href: "/internal/sidebar/payin" },
+    { label: "Payout", icon: <FaMoneyBill />, href: "/internal/sidebar/payout" },
+
     { label: "Project", icon: <FaProjectDiagram />, href: "/internal/sidebar/project" },
-    { label: "Transaction", icon: <TbTransactionDollar />, href: "/internal/sidebar/transaction" },
+    { label: "Transaction", icon: <TbTransactionDollar />, href: "/internal/sidebar/transaaction" },
     { label: "Profile", icon: <FaUser />, href: "/internal/sidebar/profile" },
     { label: "Setting", icon: <FaCog />, href: "/internal/sidebar/setting" },
   ];
@@ -79,19 +81,28 @@ export default function InternalLayout({ children }: { children: React.ReactNode
             color: isDark ? theme.colors.gray[3] : "white",
           }}
         >
-          {/* Sidebar */}
           <AppShell.Navbar
             pt="xl"
             p="xl"
             style={{ background: isDark ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.1)", backdropFilter: "blur(10px)" }}
           >
-            <Stack mt={40} gap="md" pt={40}>
-              <button
-                onClick={() => setIsCollapsed(!isCollapsed)}
-                style={{ marginBottom: rem(20), cursor: "pointer", background: "transparent", border: "none", color: "white" }}
-              >
-                {isCollapsed ? <FaAngleDoubleRight /> : <FaAngleDoubleLeft />} {/* Icon to toggle collapse */}
-              </button>
+            <Stack mt={10} gap="md" pt={40}>
+              <Stack justify="flex-end" align="flex-end" style={{ width: "100%" }}>
+                <button
+                  onClick={() => setIsCollapsed(!isCollapsed)}
+                  style={{
+                    marginBottom: rem(2),
+
+                    cursor: "pointer",
+                    background: "transparent",
+                    border: "none",
+                    color: "white",
+                  }}
+                >
+                  {isCollapsed ? <FaAngleDoubleRight /> : <FaAngleDoubleLeft />}
+                </button>
+              </Stack>
+
               <AnimatePresence>
                 {menuItems.map((item, index) => (
                   <motion.div
@@ -116,7 +127,7 @@ export default function InternalLayout({ children }: { children: React.ReactNode
                         alignItems: "center",
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "scale(1.1)"; // Zoom in on hover
+                        e.currentTarget.style.transform = "scale(1.1)";
                         e.currentTarget.style.background = isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.2)";
                       }}
                       onMouseLeave={(e) => {
@@ -124,7 +135,6 @@ export default function InternalLayout({ children }: { children: React.ReactNode
                         e.currentTarget.style.background = "transparent";
                       }}
                     >
-                      {/* Show icon only if collapsed */}
                       {isCollapsed && <span style={{ marginRight: rem(10) }}>{item.icon}</span>}
                     </NavLink>
                   </motion.div>

@@ -26,7 +26,7 @@ import ButtonAdd from "@/lib/button/buttonAdd";
 
 interface AddPayoutModalProps {
   refetchPayloadData: () => void;
-  companyCode: string | null;
+  companyCode: any | null;
   companyId: string | null;
 }
 
@@ -97,6 +97,24 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
                             type="default"
                             firstDayOfWeek={0}
                             placeholder="Tanggal"
+                            clearable
+                            locale="id"
+                            radius="sm"
+                            valueFormat="DD MMMM YYYY"
+                            rightSection={<IconCalendar size={18} />}
+                            onChange={(value: Date | null) => {
+                              if (value) {
+                                const formattedDate = value.toISOString(); // Convert to ISO format (e.g., "2025-01-01T00:00:00Z")
+                                handleInputChange(setFieldValue, "date_inputed", formattedDate);
+                              }
+                            }}
+                            onBlur={handleBlur}
+                          />
+                          <DatePickerInput
+                            w={200}
+                            type="default"
+                            firstDayOfWeek={0}
+                            placeholder=""
                             clearable
                             locale="id"
                             radius="sm"
