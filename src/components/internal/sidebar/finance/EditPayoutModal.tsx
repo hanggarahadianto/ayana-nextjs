@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, Group, InputWrapper, Modal, SimpleGrid, Stack, Textarea, TextInput } from "@mantine/core";
+import React, { memo, useCallback } from "react";
+import { Button, Group, Modal, Select, SimpleGrid, Stack, Textarea, TextInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import { DatePickerInput } from "@mantine/dates";
@@ -9,15 +9,27 @@ import BreathingActionIcon from "@/lib/button/buttonAction";
 
 import { useUpdatePayoutForm } from "@/api/payout/editDataPayout";
 import { getInitialValuesUpdatePayout } from "@/lib/initialValues/initialValuesPayout";
+import { validationSchemaPayout } from "@/lib/validation/payout-validation";
+import { payoutCategory } from "@/lib/dictionary";
 
 const EditPayoutModal = ({ payout, refetchPayoutData }: { payout: IPayoutUpdate; refetchPayoutData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const { mutate: editData, isPending: isLoading } = useUpdatePayoutForm(refetchPayoutData, close);
 
-  const handleSubmit = (values: IPayoutUpdate) => {
-    console.log("Submitting values:", values); // Debug log
-    editData(values);
-  };
+  const handleSubmit = useCallback(
+    (values: IPayoutUpdate) => {
+      const payload: Partial<IPayoutUpdate> = {
+        ...values,
+        nominal: Number(values.nominal),
+        payment_date: values.payment_date || null,
+      };
+
+      if (!payload.payment_date) delete payload.payment_date;
+
+      editData(payload as IPayoutUpdate); // Cast jika fungsi hanya menerima IPayoutUpdate
+    },
+    [editData]
+  );
 
   return (
     <>
@@ -31,73 +43,125 @@ const EditPayoutModal = ({ payout, refetchPayoutData }: { payout: IPayoutUpdate;
       <Modal opened={opened} onClose={close} size="lg" yOffset="100px">
         <Formik
           initialValues={getInitialValuesUpdatePayout(payout)}
+          validationSchema={validationSchemaPayout}
           validateOnBlur={false}
           enableReinitialize={true}
           validateOnChange={true}
           validateOnMount={false}
           onSubmit={handleSubmit}
         >
-          {({ values, errors, touched, setFieldValue, handleBlur }) => {
+          {({ values, errors, setFieldValue, handleBlur }) => {
             console.log("VALUES", values);
-            console.log(errors);
+            console.log("errors", errors);
+
+            const handleChangePayout = useCallback(
+              (setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void, field: string, value: any) => {
+                setFieldValue(field, value);
+              },
+              []
+            );
             return (
               <Form>
                 <SimpleGrid p={20}>
                   <Stack gap={20}>
-                    <InputWrapper label="No Invoice" withAsterisk error={touched.invoice && errors.invoice}>
-                      <TextInput
-                        placeholder="Masukan Invoice"
-                        value={values.invoice?.toUpperCase() || ""}
-                        onChange={(event) => setFieldValue("invoice", event.currentTarget.value.toUpperCase())}
-                      />
-                    </InputWrapper>
+                    <TextInput
+                      required
+                      name="invoice"
+                      label="Invoice"
+                      withAsterisk
+                      error={errors.invoice}
+                      placeholder="Masukan Invoice"
+                      value={values.invoice?.toUpperCase() || ""}
+                      onChange={(event) => handleChangePayout(setFieldValue, "invoice", event.currentTarget.value.toUpperCase())}
+                      onBlur={handleBlur}
+                    />
+
+                    <Select
+                      clearable
+                      label="Nama Lokasi"
+                      placeholder="Pilih Lokasi"
+                      onChange={(event) => handleChangePayout(setFieldValue, "category", event)}
+                      data={payoutCategory}
+                    />
 
                     <Group gap={40}>
-                      <InputWrapper label="Tanggal" required error={touched.date_inputed && errors.date_inputed}>
-                        <DatePickerInput
-                          w={200}
-                          firstDayOfWeek={0}
-                          value={values.date_inputed ? new Date(values.date_inputed) : null}
-                          onChange={(date) => setFieldValue("date_inputed", date ? date.toISOString() : "")}
-                          clearable
-                          locale="id"
-                          radius="sm"
-                          valueFormat="DD MMMM YYYY"
-                          rightSection={<IconCalendar size={18} />}
-                          placeholder="Pilih tanggal"
-                          onBlur={handleBlur}
-                        />
-                      </InputWrapper>
+                      <DatePickerInput
+                        clearable
+                        value={values.date_inputed ? new Date(values.date_inputed) : null}
+                        label="Tanggal Pembelian"
+                        w={200}
+                        type="default"
+                        firstDayOfWeek={0}
+                        placeholder="Tanggal"
+                        locale="id"
+                        radius="sm"
+                        valueFormat="DD MMMM YYYY"
+                        rightSection={<IconCalendar size={18} />}
+                        onChange={(value: Date | null) => {
+                          if (value) {
+                            const formattedDate = value.toISOString();
+                            handleChangePayout(setFieldValue, "date_inputed", formattedDate);
+                          }
+                        }}
+                        onBlur={handleBlur}
+                        error={errors.date_inputed}
+                      />
 
-                      <InputWrapper label="Nominal" withAsterisk error={touched.nominal && errors.nominal}>
-                        <TextInput
-                          placeholder="Masukan Biaya Proyek"
-                          value={values.nominal ? `Rp. ${values.nominal.toLocaleString("id-ID")}` : ""}
-                          onChange={(event) => {
-                            const rawValue = event.target.value.replace(/\D/g, "");
-                            setFieldValue("nominal", Number(rawValue) || 0);
-                          }}
-                        />
-                      </InputWrapper>
+                      <DatePickerInput
+                        value={values.due_date ? new Date(values.due_date) : null}
+                        label="Jatuh Tempo"
+                        w={200}
+                        type="default"
+                        firstDayOfWeek={0}
+                        placeholder="Jatuh Tempo"
+                        clearable
+                        locale="id"
+                        radius="sm"
+                        valueFormat="DD MMMM YYYY"
+                        rightSection={<IconCalendar size={18} />}
+                        onChange={(value: Date | null) => {
+                          if (value) {
+                            const formattedDate = value.toISOString();
+                            handleChangePayout(setFieldValue, "due_date", formattedDate);
+                          }
+                        }}
+                        onBlur={handleBlur}
+                        error={errors.due_date}
+                      />
                     </Group>
 
+                    <TextInput
+                      label="Nominal"
+                      withAsterisk
+                      required
+                      placeholder="Masukan Biaya Proyek"
+                      error={errors.nominal}
+                      value={`Rp. ${values.nominal.toLocaleString("id-ID")}`}
+                      onChange={(event) => {
+                        const rawValue = event.target.value.replace(/\D/g, "");
+                        const numericValue = Number(rawValue) || 0;
+                        setFieldValue("nominal", numericValue);
+                      }}
+                    />
+
                     <Textarea
-                      value={values.note?.toUpperCase() || ""}
+                      error={errors.note}
+                      value={values.note.toUpperCase()}
                       label="Keterangan"
                       placeholder="Masukan Keterangan"
-                      onChange={(event) => setFieldValue("note", event.currentTarget.value.toUpperCase())}
+                      onChange={(event) => handleChangePayout(setFieldValue, "note", event.currentTarget.value.toUpperCase())}
                       mt="md"
                     />
-                  </Stack>
 
-                  <Group justify="flex-end" mt="md">
-                    <Button onClick={close} variant="default">
-                      Cancel
-                    </Button>
-                    <Button type="submit" loading={isLoading}>
-                      Edit Payout
-                    </Button>
-                  </Group>
+                    <Group justify="flex-end" mt="md">
+                      <Button onClick={close} variant="default">
+                        Cancel
+                      </Button>
+                      <Button type="submit" loading={isLoading}>
+                        Edit Payout
+                      </Button>
+                    </Group>
+                  </Stack>
                 </SimpleGrid>
               </Form>
             );
@@ -108,4 +172,4 @@ const EditPayoutModal = ({ payout, refetchPayoutData }: { payout: IPayoutUpdate;
   );
 };
 
-export default EditPayoutModal;
+export default memo(EditPayoutModal);

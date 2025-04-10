@@ -8,6 +8,8 @@ import Link from "next/link";
 import { getDataProject } from "@/api/project/getDataProject";
 import { useDeleteDataProject } from "@/api/project/deleteDataProject";
 import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
+import { parseISO, differenceInDays, addDays } from "date-fns";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 const ProjectPage = () => {
   const isSmallScreen = useMediaQuery("(max-width: 767px)"); // Mobile
@@ -31,6 +33,35 @@ const ProjectPage = () => {
     mutateDeleteDataProject(idToDelete);
   };
 
+  function getProjectStatusWithColor(projectStart: string, projectTime: string) {
+    const startDate = parseISO(projectStart);
+    const duration = parseInt(projectTime, 10);
+    const plannedEndDate = addDays(startDate, duration);
+    const today = new Date();
+
+    const diffStartToNow = differenceInDays(today, startDate);
+    const diffEndToNow = differenceInDays(today, plannedEndDate);
+
+    if (diffStartToNow < 0) {
+      return {
+        text: `Belum mulai (mulai dalam ${Math.abs(diffStartToNow)} hari)`,
+        color: "gray",
+      };
+    }
+
+    if (diffEndToNow > 0) {
+      return {
+        text: `Terlambat ${diffEndToNow} hari`,
+        color: "red",
+      };
+    }
+
+    return {
+      text: `Berjalan ${diffStartToNow} hari`,
+      color: "green",
+    };
+  }
+
   return (
     <>
       <Group justify="space-between" mb={20}>
@@ -41,7 +72,7 @@ const ProjectPage = () => {
           <AddProjectModal refetchProjectData={refetchProjectData} />
         </Stack>
       </Group>
-
+      <LoadingGlobal visible={isLoadingDeleteDataProject || isLoadingGetProjectData} />
       <SimpleGrid
         mt={40}
         spacing="lg"
@@ -49,52 +80,61 @@ const ProjectPage = () => {
         cols={isSmallScreen ? 1 : isMediumScreen ? 2 : isLaptopScreen ? 3 : isWideScreen ? 4 : 3}
         style={{ gap: "24px" }}
       >
-        {projectData?.data.map((project) => (
-          <Card
-            key={project.id}
-            w={300}
-            h={180}
-            style={{
-              maxWidth: 320,
-              minWidth: 300,
-              background: "linear-gradient(135deg, rgba(255, 0, 150, 0.5), rgba(0, 204, 255, 0.5))",
-              backdropFilter: "blur(8px)",
-              borderRadius: "16px",
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-              padding: "20px",
-              position: "relative",
-              cursor: "pointer",
-            }}
-          >
-            <Link href={`/internal/sidebar/project/${project.id}`} passHref legacyBehavior>
-              <Group justify="space-between">
-                <Stack align="start" gap="md">
-                  <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
-                    {project.project_name}
-                  </Text>
+        {projectData?.data.map((project) => {
+          const { text, color } = getProjectStatusWithColor(project.project_start, project.project_time);
+          return (
+            <Card
+              key={project.id}
+              w={300}
+              h={180}
+              style={{
+                maxWidth: 320,
+                minWidth: 300,
+                background: "linear-gradient(135deg, rgba(255, 0, 150, 0.5), rgba(0, 204, 255, 0.5))",
+                backdropFilter: "blur(8px)",
+                borderRadius: "16px",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+                padding: "20px",
+                position: "relative",
+                cursor: "pointer",
+              }}
+            >
+              <Link href={`/internal/sidebar/project/${project.id}`} passHref legacyBehavior>
+                <Stack>
+                  <Stack align="start" gap="md">
+                    <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
+                      {project.project_name}
+                    </Text>
 
-                  <Text fw={500} size="lg" style={{ color: "#ffffff" }}>
-                    {project.project_leader}
-                  </Text>
+                    <Text mt={-12} fw={500} size="lg" style={{ color: "#ffffff" }}>
+                      {project.project_leader}
+                    </Text>
 
-                  <Text fw={500} style={{ color: "#ffffff" }}>
-                    {new Intl.NumberFormat("id-ID", {
-                      style: "currency",
-                      currency: "IDR",
-                    }).format(project.total_cost || 0)}
-                  </Text>
+                    <Text mt={-12} fw={500} style={{ color: "#ffffff" }}>
+                      {new Intl.NumberFormat("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                      }).format(project.total_cost || 0)}
+                    </Text>
+                  </Stack>
+
+                  <Group justify="space-between">
+                    <Text fw={600} key={project.id} c={color}>
+                      {text}
+                    </Text>
+
+                    <ButtonDeleteWithConfirmation
+                      id={project.id}
+                      onDelete={handleDeleteProject}
+                      description={`Apakah anda ingin menghapus proyek ${project?.project_name} ?`}
+                      size={2.5}
+                    />
+                  </Group>
                 </Stack>
-
-                <ButtonDeleteWithConfirmation
-                  id={project.id}
-                  onDelete={handleDeleteProject}
-                  description={`Apakah anda ingin menghapus proyek ${project?.project_name} ?`}
-                  size={2.5}
-                />
-              </Group>
-            </Link>
-          </Card>
-        ))}
+              </Link>
+            </Card>
+          );
+        })}
       </SimpleGrid>
     </>
   );

@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { Group, TextInput, NumberInput, Select, Card, Stack, Text } from "@mantine/core";
 import ButtonAdd from "@/lib/button/buttonAdd";
 import ButtonDelete from "@/lib/button/butttonDelete";
-import { satuan } from "@/lib/satuan";
+import { satuan } from "@/lib/dictionary";
 
 interface FormAddMaterialProps {
   materials: IMaterialCreate[];

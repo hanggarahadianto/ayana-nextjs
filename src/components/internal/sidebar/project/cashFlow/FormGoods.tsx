@@ -1,6 +1,6 @@
 import ButtonAdd from "@/lib/button/buttonAdd";
 import ButtonDelete from "@/lib/button/butttonDelete";
-import { satuan } from "@/lib/satuan";
+import { satuan } from "@/lib/dictionary";
 import { Card, Group, NumberInput, Pagination, Select, Stack, Text, TextInput } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { Form, Formik } from "formik";

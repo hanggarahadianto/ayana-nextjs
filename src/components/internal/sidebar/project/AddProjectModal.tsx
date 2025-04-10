@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import {
   Modal,
   TextInput,
@@ -22,6 +22,7 @@ import { Form, Formik } from "formik";
 import { IconCalendar, IconPlus } from "@tabler/icons-react";
 import { initialValueProjectCreate, validationSchemaProject } from "../../../../lib/initialValues/initialValuesProject";
 import { useSubmitProjectForm } from "@/api/project/postDataProject";
+import { locationOptions } from "@/lib/dictionary";
 
 const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -63,12 +64,9 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
           onSubmit={handleSubmit}
         >
           {({ values, errors, touched, setFieldValue, handleBlur }) => {
-            console.log(values);
-            // console.log("ERROR", errors);
-
-            const handleInputChange = (setFieldValue: any, field: string, value: any) => {
-              setFieldValue(field, value); // Update field value in Formik
-            };
+            const handleInputChange = useCallback((setFieldValue: any, field: string, value: any) => {
+              setFieldValue(field, value);
+            }, []);
 
             return (
               <>
@@ -78,28 +76,23 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
                   </Text>
                   <SimpleGrid p={20}>
                     <Group>
-                      <InputWrapper
+                      <Select
                         label="Nama Lokasi"
                         withAsterisk
                         error={touched.location && errors.location ? errors.location : undefined}
-                      >
-                        <Select
-                          placeholder="Pilih Lokasi"
-                          onChange={(value: any) => setFieldValue("location", value)}
-                          data={[
-                            { value: "GAW", label: "GAW" },
-                            { value: "ABW", label: "ABW" },
-                          ]}
-                        />
-                      </InputWrapper>
+                        placeholder="Pilih Lokasi"
+                        onChange={(value: any) => setFieldValue("location", value)}
+                        data={locationOptions}
+                      />
 
-                      <InputWrapper label="Nama Blok" withAsterisk error={touched.unit && errors.unit ? errors.unit : undefined}>
-                        <TextInput
-                          value={values?.unit.toUpperCase()}
-                          placeholder="Masukan Nama Blok"
-                          onChange={(event) => setFieldValue("unit", event.currentTarget.value.toUpperCase())}
-                        />
-                      </InputWrapper>
+                      <TextInput
+                        label="Nama Blok"
+                        withAsterisk
+                        error={touched.unit && errors.unit ? errors.unit : undefined}
+                        value={values?.unit.toUpperCase()}
+                        placeholder="Masukan Nama Blok"
+                        onChange={(event) => setFieldValue("unit", event.currentTarget.value.toUpperCase())}
+                      />
 
                       <InputWrapper required error={touched.type && errors.type ? errors.type : undefined}>
                         <Select
@@ -246,4 +239,4 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
   );
 };
 
-export default AddProjectModal;
+export default memo(AddProjectModal);

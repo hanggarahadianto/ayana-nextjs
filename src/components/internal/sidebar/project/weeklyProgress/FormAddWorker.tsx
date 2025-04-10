@@ -2,33 +2,47 @@ import React, { useCallback } from "react";
 import { Group, TextInput, Select, Card, Stack, Text } from "@mantine/core";
 import ButtonAdd from "@/lib/button/buttonAdd";
 import ButtonDelete from "@/lib/button/butttonDelete";
+import { useFormikContext } from "formik";
 
 interface FormAddWorkerProps {
   workers: IWorkerCreate[];
-  setWorkers: React.Dispatch<React.SetStateAction<IWorkerCreate[]>>;
+  setWorkers: (newWorkers: IWorkerCreate[]) => void; // ubah dari Dispatch
 }
 
-const FormAddWorker: React.FC<FormAddWorkerProps> = ({ workers, setWorkers }) => {
+const FormAddWorker: React.FC<FormAddWorkerProps> = React.memo(({ workers, setWorkers }) => {
+  const { setFieldValue } = useFormikContext<IWeeklyProgressCreate>();
+
+  const syncWorkers = useCallback(
+    (newWorkers: IWorkerCreate[]) => {
+      setWorkers(newWorkers);
+      setFieldValue("worker", newWorkers);
+    },
+    [setFieldValue, setWorkers]
+  );
+
   const addWorker = useCallback(() => {
-    setWorkers((prev) => [...prev, { worker_name: "", position: "", total_cost: 0 }]);
-  }, [setWorkers]);
+    const newWorkers = [...workers, { worker_name: "", position: "", total_cost: 0 }];
+    syncWorkers(newWorkers);
+  }, [workers, syncWorkers]);
 
   const deleteWorker = useCallback(
     (index: number) => {
-      setWorkers((prev) => prev.filter((_, i) => i !== index));
+      const newWorkers = workers.filter((_, i) => i !== index);
+      syncWorkers(newWorkers);
     },
-    [setWorkers]
+    [workers, syncWorkers]
   );
 
   const handleWorkerChange = useCallback(
     (index: number, field: keyof IWorkerCreate, value: string | number) => {
-      setWorkers((prev) => {
-        const newWorkers = [...prev];
-        newWorkers[index] = { ...newWorkers[index], [field]: value };
-        return newWorkers;
-      });
+      const oldWorker = workers[index];
+      if (oldWorker[field] === value) return;
+
+      const newWorkers = [...workers];
+      newWorkers[index] = { ...oldWorker, [field]: value };
+      syncWorkers(newWorkers);
     },
-    [setWorkers]
+    [workers, syncWorkers]
   );
 
   return (
@@ -77,6 +91,8 @@ const FormAddWorker: React.FC<FormAddWorkerProps> = ({ workers, setWorkers }) =>
       </Stack>
     </>
   );
-};
+});
 
-export default FormAddWorker;
+export default React.memo(FormAddWorker, (prevProps, nextProps) => {
+  return JSON.stringify(prevProps.workers) === JSON.stringify(nextProps.workers);
+});

@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useMemo, useState, useCallback, useEffect, useRef } from "react";
 import { useDebounce } from "use-debounce";
 import { Modal, Button, Group, Select, Textarea, Card, Text, Stack, NumberInput, Divider, SimpleGrid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -6,9 +6,10 @@ import { Formik, Form } from "formik";
 import { useSubmitWeeklyProgressForm } from "@/api/weekly-progress/postDataWeeklyProgress";
 import ButtonAdd from "@/lib/button/buttonAdd";
 import { initialValueWeeklyProgressCreate, validationSchemaWeeklyProgressCreate } from "@/lib/initialValues/initialValuesWeeklyProgress";
-import { allWeeks } from "@/lib/weeks";
 import FormAddWorker from "./FormAddWorker";
 import FormAddMaterial from "./FormAddMaterial";
+import { debounce } from "lodash";
+import { allWeeks } from "@/lib/dictionary";
 
 const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyProgress = [] as IWeeklyProgress[] }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -50,10 +51,25 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyPr
           initialValues={initialValueWeeklyProgressCreate}
           validationSchema={validationSchemaWeeklyProgressCreate}
           onSubmit={handleSubmit}
-          enableReinitialize
+          // enableReinitialize
         >
           {({ values, errors, touched, setFieldValue, isSubmitting }) => {
             console.log("valaues", values);
+            console.log("errors", errors);
+
+            const debouncedSetFieldValueRef = useRef(
+              debounce((val: IWorkerCreate[]) => {
+                setFieldValue("worker", val);
+              }, 500)
+            );
+
+            const syncWorkers = useCallback(
+              (newWorkers: IWorkerCreate[]) => {
+                setWorkers(newWorkers);
+                debouncedSetFieldValueRef.current(newWorkers);
+              },
+              [setWorkers]
+            );
 
             return (
               <Form>
@@ -75,7 +91,7 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyPr
                   />
 
                   <Divider />
-                  <FormAddWorker workers={workers} setWorkers={setWorkers} />
+                  <FormAddWorker workers={workers} setWorkers={syncWorkers} />
 
                   <Stack justify="flex-start" align="start">
                     <Text

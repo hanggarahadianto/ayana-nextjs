@@ -22,11 +22,11 @@ import { useSubmitCashFlowForm } from "@/api/cash-flow/postDataCashFlow";
 import BreathingActionIcon from "@/lib/button/buttonAction";
 import ButtonAdd from "@/lib/button/buttonAdd";
 import ButtonDelete from "@/lib/button/butttonDelete";
-import { satuan } from "@/lib/satuan";
+
 import { IconPlus } from "@tabler/icons-react";
 import { useSubmitGoodForm } from "@/api/good/postDataGood";
 import { showNotification } from "@mantine/notifications";
-import { allWeeks } from "@/lib/weeks";
+import { allWeeks, satuan } from "@/lib/dictionary";
 
 const AddCashFlowReportModal = ({
   projectName,

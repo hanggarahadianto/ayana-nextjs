@@ -10,6 +10,7 @@ import { FC, use } from "react";
 import ProjectCardDetail from "@/components/internal/sidebar/project/ProjectCardDetail";
 import ProjectCardSummary from "@/components/internal/sidebar/project/ProjectCardSummary";
 import WeeklyProgressMenu from "@/components/internal/sidebar/project/weeklyProgress/WeeklyProgressMenu";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 interface ProjectProps {
   params: Promise<{
@@ -60,6 +61,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   return (
     <>
       <Grid p={16}>
+        <LoadingGlobal visible={isLoadingCashFlowData || isLoadingGetProjectData || isLoadingGetWeeklyProgressData} />
         <Grid.Col span={{ base: 12, sm: 6, md: 6 }}>
           <ProjectCardDetail
             projectDataDetail={projectDataDetail}

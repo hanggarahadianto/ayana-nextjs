@@ -7,8 +7,8 @@ import { Form, Formik } from "formik";
 import { useUpdateWeeklyProgressForm } from "@/api/weekly-progress/editDataWeeklyProgress";
 import ButtonAdd from "@/lib/button/buttonAdd";
 import ButtonDelete from "@/lib/button/butttonDelete";
-import { satuan } from "@/lib/satuan";
 import { getInitialValuesUpdateWeeklyProgress } from "@/lib/initialValues/initialValuesWeeklyProgress";
+import { satuan } from "@/lib/dictionary";
 
 const EditWeeklyProgressModal = ({
   projectId,

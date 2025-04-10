@@ -1,12 +1,13 @@
-import * as Yup from "yup";
-
 export const initialValuePayoutCreate: IPayoutCreate = {
   invoice: "",
   nominal: 0,
   date_inputed: "",
   due_date: "",
+  payment_date: "",
   note: "",
   company_id: "",
+  category: "",
+  mitra: "",
   status: "tunai",
 };
 export const initialValuePayoutUpdate: IPayoutUpdate = {
@@ -15,23 +16,26 @@ export const initialValuePayoutUpdate: IPayoutUpdate = {
   nominal: 0,
   date_inputed: "",
   due_date: "",
+  payment_date: "",
   note: "",
+  category: "",
+  mitra: "",
   status: "",
   company_id: "",
 };
-
-export const validationSchemaPayout = Yup.object({
-  location: Yup.string().required("Nama Lokasi harus diisi"),
-  unit: Yup.string().required("Nama Blok harus diisi"),
-  type: Yup.string().required("Nama Tipe harus diisi"),
-  project_leader: Yup.string().required("Penanggung Jawab harus diisi"),
-  investor: Yup.string().required("Investor harus diisi"),
-  total_cost: Yup.number().required("Biaya Proyek harus diisi").positive("Biaya Proyek harus angka"),
-  project_time: Yup.string().required("Durasi Project harus diisi"),
-  project_start: Yup.string().required("Tanggal Mulai harus diisi"),
-  project_end: Yup.string().required("Tanggal Selesai harus diisi"),
-  note: Yup.string().optional(),
-});
+export const initialValuePayDebt: IPayoutUpdate = {
+  id: "",
+  invoice: "",
+  nominal: 0,
+  date_inputed: "",
+  due_date: "",
+  payment_date: null,
+  note: "",
+  category: "",
+  mitra: "",
+  status: "",
+  company_id: "",
+};
 
 export const getInitialValuesUpdatePayout = (initialData: IPayoutUpdate) => ({
   id: initialData?.id || "",
@@ -39,7 +43,17 @@ export const getInitialValuesUpdatePayout = (initialData: IPayoutUpdate) => ({
   nominal: initialData?.nominal || 0,
   date_inputed: initialData?.date_inputed || "",
   due_date: initialData?.due_date || "",
+  payment_date: initialData.payment_date || null,
   company_id: initialData?.company_id || "",
   note: initialData?.note || "",
+  category: initialData?.category || "",
+  mitra: initialData?.mitra || "",
   status: initialData?.status || "",
+});
+export const getInitialValuesUpdatePaydDebt = (initialData?: IPayDebtUpdate) => ({
+  id: initialData?.id || "",
+  invoice: initialData?.invoice || "",
+  payment_date: initialData?.payment_date || null,
+  company_id: initialData?.company_id || "",
+  status: "tunai",
 });

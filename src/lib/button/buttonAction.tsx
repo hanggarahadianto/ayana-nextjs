@@ -6,11 +6,16 @@ interface BreathingActionIconProps {
   icon: ReactNode;
   color?: string;
   gradient?: string;
+  disabled?: boolean;
 }
 
-const BreathingActionIcon = ({ onClick, size, icon, color = "white", gradient }: BreathingActionIconProps) => {
+const BreathingActionIcon = ({ onClick, size, icon, color = "white", gradient, disabled }: BreathingActionIconProps) => {
+  const backgroundColor = disabled ? "#1e293b" : gradient || "linear-gradient(135deg, #38a169, #2f855a)";
+  const cursorStyle = disabled ? "not-allowed" : "pointer";
+
   return (
     <button
+      disabled={disabled}
       onClick={onClick}
       style={{
         width: size,
@@ -19,15 +24,19 @@ const BreathingActionIcon = ({ onClick, size, icon, color = "white", gradient }:
         alignItems: "center",
         justifyContent: "center",
         borderRadius: "50%",
-        background: gradient || "linear-gradient(135deg, #38a169, #2f855a)", // Default green gradient
+        background: backgroundColor,
         color: color,
         border: "none",
-        cursor: "pointer",
+        cursor: cursorStyle,
         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
         transition: "transform 0.3s ease-in-out",
       }}
-      onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
-      onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+      onMouseEnter={(e) => {
+        if (!disabled) e.currentTarget.style.transform = "scale(1.1)";
+      }}
+      onMouseLeave={(e) => {
+        if (!disabled) e.currentTarget.style.transform = "scale(1)";
+      }}
     >
       {icon}
     </button>

@@ -1,5 +1,5 @@
-import React from "react";
-import { Modal, TextInput, Button, Group, Select, Textarea, Card, Text, Stack, InputWrapper, SimpleGrid, Input, Flex } from "@mantine/core";
+import React, { memo, useCallback } from "react";
+import { Modal, TextInput, Button, Group, Select, Textarea, Stack, InputWrapper, SimpleGrid, Input, Flex } from "@mantine/core";
 
 import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
@@ -8,6 +8,7 @@ import { IconCalendar, IconPlus } from "@tabler/icons-react";
 import { initialValuePayoutCreate } from "../../../../lib/initialValues/initialValuesPayout";
 import { useSubmitPayoutForm } from "@/api/payout/postDataPayout";
 import ButtonAdd from "@/lib/button/buttonAdd";
+import { paymentCategory, payoutCategory } from "@/lib/dictionary";
 
 interface AddPayoutModalProps {
   refetchPayloadData: () => void;
@@ -20,16 +21,20 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
 
   const { mutate: postData, isPending: isLoadingSubmitProjectData } = useSubmitPayoutForm(refetchPayloadData, close);
 
-  const handleSubmit = (values: IPayoutCreate, { setSubmitting }: any) => {
-    console.log("Form values submitted:", values);
-    const payload = {
-      ...values,
-      company: companyCode ?? "", // Default ke string kosong jika companyId null
-      company_id: companyId ?? "", // Default ke string kosong jika companyId null
-    };
-    postData(payload);
-    setSubmitting(false);
-  };
+  const handleSubmit = useCallback(
+    (values: IPayoutCreate, { setSubmitting }: any) => {
+      console.log("Form values submitted:", values);
+      const payload = {
+        ...values,
+        payment_date: values.payment_date === "" ? null : values.payment_date,
+        company: companyCode ?? "",
+        company_id: companyId ?? "",
+      };
+      postData(payload);
+      setSubmitting(false);
+    },
+    [companyCode, companyId, postData]
+  );
 
   return (
     <>
@@ -38,7 +43,7 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
       <Modal
         opened={opened}
         onClose={close}
-        size="xl"
+        size="lg"
         yOffset="100px" // Moves modal down
       >
         <Formik
@@ -51,11 +56,10 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
         >
           {({ values, errors, touched, setFieldValue, handleBlur }) => {
             console.log(values);
-            // console.log("ERROR", errors);
 
-            const handleInputChange = (setFieldValue: any, field: string, value: any) => {
-              setFieldValue(field, value); // Update field value in Formik
-            };
+            const handleInputChange = useCallback((setFieldValue: any, field: string, value: any) => {
+              setFieldValue(field, value);
+            }, []);
 
             return (
               <>
@@ -64,6 +68,7 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
                     <Stack gap={20}>
                       <Select
                         label="Status"
+                        w={200}
                         placeholder="Pilih Status"
                         value={values.status}
                         onChange={(value: any) => {
@@ -74,28 +79,58 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
                             setFieldValue("invoice", ""); // Kosongkan kembali jika status tunai
                           }
                         }}
-                        data={[
-                          { value: "tunai", label: "Tunai" },
-                          { value: "tempo", label: "Tempo" },
-                        ]}
+                        data={paymentCategory}
+                        error={touched.status && errors.status ? errors.status : undefined}
                         required
                       />
-
                       {values.status === "tunai" && (
-                        <InputWrapper
-                          label="No Invoice"
+                        <TextInput
                           withAsterisk
+                          w={200}
+                          label="No Invoice"
                           error={touched.invoice && errors.invoice ? errors.invoice : undefined}
+                          placeholder="Masukan Invoice"
+                          value={values.invoice?.toUpperCase() || ""}
+                          onChange={(event) => setFieldValue("invoice", event.currentTarget.value.toUpperCase())}
+                        />
+                      )}
+                      <TextInput
+                        withAsterisk
+                        w={200}
+                        label="Mitra"
+                        error={touched.mitra && errors.mitra ? errors.mitra : undefined}
+                        placeholder="Masukan Mitra"
+                        value={values.mitra || ""}
+                        onChange={(event) => setFieldValue("mitra", event.currentTarget.value.toUpperCase())}
+                      />
+                      <Group>
+                        <InputWrapper
+                          w={200}
+                          label="Nominal"
+                          withAsterisk
+                          required
+                          error={touched.nominal && errors.nominal ? errors.nominal : undefined}
                         >
                           <TextInput
-                            placeholder="Masukan Invoice"
-                            value={values.invoice?.toUpperCase() || ""}
-                            onChange={(event) => setFieldValue("invoice", event.currentTarget.value.toUpperCase())}
+                            placeholder="Masukan Biaya Proyek"
+                            value={values.nominal ? `Rp. ${values.nominal.toLocaleString("id-ID")}` : ""}
+                            onChange={(event) => {
+                              const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+                              const numericValue = Number(rawValue) || 0;
+                              setFieldValue("nominal", numericValue); // Store as number
+                            }}
                           />
                         </InputWrapper>
-                      )}
+                        <Select
+                          clearable
+                          label="Kategori"
+                          placeholder="Pilih Kategori"
+                          onChange={(event) => setFieldValue("category", event)}
+                          data={payoutCategory}
+                        />
+                      </Group>
 
-                      <Group gap={40}>
+                      <Group>
                         <DatePickerInput
                           label="Tanggal Pembelian"
                           w={200}
@@ -138,22 +173,6 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
                         />
                       </Group>
 
-                      <InputWrapper
-                        label="Nominal"
-                        withAsterisk
-                        required
-                        error={touched.nominal && errors.nominal ? errors.nominal : undefined}
-                      >
-                        <TextInput
-                          placeholder="Masukan Biaya Proyek"
-                          value={values.nominal ? `Rp. ${values.nominal.toLocaleString("id-ID")}` : ""}
-                          onChange={(event) => {
-                            const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
-                            const numericValue = Number(rawValue) || 0;
-                            setFieldValue("nominal", numericValue); // Store as number
-                          }}
-                        />
-                      </InputWrapper>
                       <Textarea
                         value={values.note.toUpperCase()}
                         label="Keterangan"
@@ -182,4 +201,4 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
   );
 };
 
-export default AddPayoutModal;
+export default memo(AddPayoutModal);

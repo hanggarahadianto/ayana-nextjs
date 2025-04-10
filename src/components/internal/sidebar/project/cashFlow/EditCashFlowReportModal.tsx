@@ -69,9 +69,6 @@ const EditCashFlowReportModal = ({
   });
 
   const [debouncedGoods, setDebouncedGoods] = useState<IGoods[] | undefined>(undefined);
-  // console.log("debounche goods", debouncedGoods);
-
-  // const [debouncedGoods, setDebouncedGoods] = useState(values.good || []);
 
   const { mutateAsync: updateDataCashFlow, isPending: isLoadingUpdateDataCashFlow } = useUpdateCashFlowForm();
   const { mutateAsync: updateDataGoods, isPending: isLoadingUpdateDataGoods } = useEditGoodForm();
@@ -221,12 +218,6 @@ const EditCashFlowReportModal = ({
                 return newGoods;
               });
             }, []);
-
-            // const calculateTotalCost = (price: number, quantity: number, costsDue: number): number => {
-            //   const baseCost = price * quantity;
-            //   const additionalCost = (costsDue / 100) * baseCost; // costsDue as percentage
-            //   return baseCost + additionalCost;
-            // };
 
             const calculateAccountBalance = (cashIn: number, cashOut: number): number => {
               return cashIn - cashOut;

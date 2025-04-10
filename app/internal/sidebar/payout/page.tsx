@@ -5,7 +5,10 @@ import { getDataPayout } from "@/api/payout/getDataPayout";
 import useGetCompanies from "@/components/internal/sidebar/company/GetCompanyTab";
 import AddPayoutModal from "@/components/internal/sidebar/finance/AddPayoutModal";
 import EditPayoutModal from "@/components/internal/sidebar/finance/EditPayoutModal";
+import PayPayoutButton from "@/components/internal/sidebar/finance/EditStatusPayout";
+import PayoutDetails from "@/components/internal/sidebar/finance/GetPayoutDetails";
 import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
+import LoadingGlobal from "@/styles/loading/loading-global";
 import { Group, Pagination, ScrollArea, SimpleGrid, Stack, Table, Tabs, ThemeIcon, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -54,11 +57,17 @@ export default function Payout() {
   const rowsPerPage = 5;
   const totalPages = useMemo(() => Math.ceil((payoutData?.total || 1) / rowsPerPage), [payoutData]);
 
-  if (isLoadingCompanies) return <p>Loading...</p>;
-  if (!payoutData || !payoutData.data) return <p>Data tidak tersedia.</p>;
+  const [selectedPayout, setSelectedPayout] = useState<IPayoutUpdate | null>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  console.log(isDetailsModalOpen);
 
+  const handleRowClick = (payout: IPayoutUpdate) => {
+    setSelectedPayout(payout);
+    setIsDetailsModalOpen(true);
+  };
   return (
     <SimpleGrid mt={10}>
+      <LoadingGlobal visible={isLoadingCompanies || isLoadingPayoutData} />
       <Tabs value={activeTab?.company_code} onChange={handleTabChange}>
         <Tabs.List>
           {companies.map((company) => (
@@ -84,16 +93,16 @@ export default function Payout() {
               <Table.Tr>
                 <Table.Th style={{ textAlign: "center", width: "150px" }}>Invoice</Table.Th>
                 <Table.Th style={{ textAlign: "center", width: "120px" }}>Nominal</Table.Th>
-                <Table.Th style={{ textAlign: "center", width: "160px" }}>Tanggal Pembelian</Table.Th>
+
                 <Table.Th style={{ textAlign: "center", width: "160px" }}>Jatuh Tempo</Table.Th>
-                <Table.Th style={{ textAlign: "center", width: "200px" }}>Catatan</Table.Th>
+
                 <Table.Th style={{ textAlign: "center", width: "60px" }}>Status</Table.Th>
-                <Table.Th style={{ textAlign: "center", width: "100px" }}>Aksi</Table.Th>
+                <Table.Th style={{ textAlign: "center", width: "120px" }}>Aksi</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {payoutData.data.map((payout: IPayoutUpdate) => (
-                <Table.Tr key={payout.id}>
+              {payoutData?.data.map((payout: IPayoutUpdate) => (
+                <Table.Tr key={payout.id} onClick={() => handleRowClick(payout)} style={{ cursor: "pointer" }}>
                   <Table.Td>{payout.invoice}</Table.Td>
                   <Table.Td>
                     {payout.nominal.toLocaleString("id-ID", {
@@ -102,13 +111,7 @@ export default function Payout() {
                       minimumFractionDigits: 2,
                     })}
                   </Table.Td>
-                  <Table.Td>
-                    {new Intl.DateTimeFormat("id-ID", {
-                      day: "2-digit",
-                      month: "long",
-                      year: "numeric",
-                    }).format(new Date(payout.date_inputed))}
-                  </Table.Td>
+
                   <Table.Td>
                     {new Intl.DateTimeFormat("id-ID", {
                       day: "2-digit",
@@ -116,17 +119,15 @@ export default function Payout() {
                       year: "numeric",
                     }).format(new Date(payout.due_date))}
                   </Table.Td>
-                  <Table.Td>{payout.note}</Table.Td>
+
                   <Table.Td>
                     <Group gap="xs" justify="center">
-                      <ThemeIcon size="sm" radius="xl" color={payout.status === "tempo" ? "red" : "green"}>
-                        {/* kosongkan icon atau tambahkan jika perlu */}
-                      </ThemeIcon>
-                      {/* <Text>{payout.status === "tempo" ? "Tempo" : "Tunai"}</Text> */}
+                      <ThemeIcon size="sm" radius="xl" color={payout.status === "tempo" ? "red" : "green"}></ThemeIcon>
                     </Group>
                   </Table.Td>
-                  <Table.Td style={{ textAlign: "center" }}>
+                  <Table.Td style={{ textAlign: "center" }} onClick={(e) => e.stopPropagation()}>
                     <Group ml={4}>
+                      <PayPayoutButton payout={payout} refetchPayoutData={refetchPayoutData} />
                       <EditPayoutModal payout={payout} refetchPayoutData={refetchPayoutData} />
                       <ButtonDeleteWithConfirmation
                         id={payout.id}
@@ -144,6 +145,12 @@ export default function Payout() {
 
         {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />}
       </SimpleGrid>
+      <PayoutDetails
+        payout={selectedPayout}
+        opened={isDetailsModalOpen}
+        onClose={() => setIsDetailsModalOpen(false)}
+        refetchPayoutData={refetchPayoutData}
+      />
     </SimpleGrid>
   );
 }
