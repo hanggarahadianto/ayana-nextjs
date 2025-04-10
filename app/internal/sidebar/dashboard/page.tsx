@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { SimpleGrid, Tabs } from "@mantine/core";
 
 import useGetCompanies from "@/components/internal/sidebar/company/GetCompanyTab";
-import { DebtCard } from "@/components/internal/sidebar/dashboard/DebtCard";
+import { ExpenseCard } from "@/components/internal/sidebar/dashboard/ExpenseCard";
 
 export default function Dashboard() {
   const { companies, isLoading: isLoadingCompanies } = useGetCompanies();
@@ -54,7 +54,7 @@ export default function Dashboard() {
         ))} */}
       </Tabs>
       <SimpleGrid p={20}>
-        <DebtCard companyId={activeTab?.id} />
+        <ExpenseCard companyId={activeTab?.id} />
       </SimpleGrid>
     </SimpleGrid>
   );

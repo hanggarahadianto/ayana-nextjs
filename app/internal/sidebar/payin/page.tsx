@@ -9,6 +9,8 @@ import { getDataPayout } from "@/api/payout/getDataPayout";
 import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
 import { useDeleteDataPayout } from "@/api/payout/deleteDataPayout";
 import EditPayoutModal from "@/components/internal/sidebar/finance/EditPayoutModal";
+import LoadingGlobal from "@/styles/loading/loading-global";
+import TableTransaction from "@/components/internal/sidebar/finance/TableTransaction";
 
 export default function CompanyTabs() {
   const { data: companyData, isLoading } = useQuery({
@@ -66,11 +68,18 @@ export default function CompanyTabs() {
 
   const totalPages = Math.ceil((payoutData?.total || 1) / rowsPerPage);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (!payoutData || !payoutData.data) return <p>Data tidak tersedia.</p>;
+  const [selectedPayout, setSelectedPayout] = useState<IPayoutUpdate | null>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  console.log(isDetailsModalOpen);
+
+  const handleRowClick = (payout: IPayoutUpdate) => {
+    setSelectedPayout(payout);
+    setIsDetailsModalOpen(true);
+  };
 
   return (
     <SimpleGrid mt={10}>
+      <LoadingGlobal visible={isLoadingPayoutData || isLoadingDeleteDataPayout} />
       <Tabs
         value={activeTab?.company_code}
         onChange={(value: string | null) => {
@@ -97,49 +106,12 @@ export default function CompanyTabs() {
         ))}
       </Tabs>
       <SimpleGrid p={20}>
-        <ScrollArea>
-          <Table highlightOnHover withColumnBorders>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th style={{ minWidth: 120, maxWidth: 150, textAlign: "center" }}>Invoice</Table.Th>
-                <Table.Th style={{ minWidth: 100, maxWidth: 120, textAlign: "center" }}>Nominal</Table.Th>
-                <Table.Th style={{ minWidth: 100, maxWidth: 120, textAlign: "center" }}>Tanggal</Table.Th>
-                <Table.Th style={{ minWidth: 200, maxWidth: 250, textAlign: "center" }}>Catatan</Table.Th>
-                <Table.Th style={{ minWidth: 100, maxWidth: 120, textAlign: "center" }}>Aksi</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {payoutData?.data.map((payout: IPayoutUpdate) => {
-                console.log("payout di page", payout);
-                return (
-                  <Table.Tr key={payout.id}>
-                    <Table.Td>{payout.invoice}</Table.Td>
-                    <Table.Td>{payout.nominal.toLocaleString("id-ID")}</Table.Td>
-                    <Table.Td>
-                      {new Intl.DateTimeFormat("id-ID", { day: "2-digit", month: "long", year: "numeric" }).format(
-                        new Date(payout.date_inputed)
-                      )}
-                    </Table.Td>
-
-                    <Table.Td>{payout.note}</Table.Td>
-                    <Table.Td style={{ textAlign: "center" }}>
-                      <Group ml={4}>
-                        <EditPayoutModal payout={payout} refetchPayoutData={refetchPayoutData} />
-                        <ButtonDeleteWithConfirmation
-                          id={payout?.id}
-                          onDelete={handleDeletePayoutClick} // Pastikan pakai handler yang benar
-                          description={`Apakah Anda yakin ingin menghapus invoice ${payout?.invoice}?`}
-                          size={2}
-                        />
-                      </Group>
-                    </Table.Td>
-                  </Table.Tr>
-                );
-              })}
-            </Table.Tbody>
-          </Table>
-        </ScrollArea>
-
+        <TableTransaction
+          data={payoutData?.data || []}
+          onRowClick={handleRowClick}
+          onDelete={handleDeletePayoutClick}
+          refetchPayoutData={refetchPayoutData}
+        />
         {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />}
       </SimpleGrid>
     </SimpleGrid>

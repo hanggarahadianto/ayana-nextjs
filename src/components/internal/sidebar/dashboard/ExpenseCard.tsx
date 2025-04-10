@@ -4,7 +4,7 @@ import { Card, Text, Group, Stack, Loader } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useMemo } from "react";
 
-export const DebtCard = ({ companyId }: { companyId: any }) => {
+export const ExpenseCard = ({ companyId }: { companyId: any }) => {
   const { data, isLoading } = useQuery({
     queryKey: ["getDebtByCompanyId", companyId],
     queryFn: () => getDataDebt(companyId),
