@@ -10,6 +10,7 @@ import { useDeleteDataProject } from "@/api/project/deleteDataProject";
 import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
 import { parseISO, differenceInDays, addDays } from "date-fns";
 import LoadingGlobal from "@/styles/loading/loading-global";
+import { formatDateIndonesia } from "@/lib/formatDateIndonesia";
 
 const ProjectPage = () => {
   const isSmallScreen = useMediaQuery("(max-width: 767px)"); // Mobile
@@ -33,7 +34,7 @@ const ProjectPage = () => {
     mutateDeleteDataProject(idToDelete);
   };
 
-  function getProjectStatusWithColor(projectStart: string, projectTime: string) {
+  function getProjectStatusDateWithColor(projectStart: string, projectTime: string) {
     const startDate = parseISO(projectStart);
     const duration = parseInt(projectTime, 10);
     const plannedEndDate = addDays(startDate, duration);
@@ -52,12 +53,15 @@ const ProjectPage = () => {
     if (diffEndToNow > 0) {
       return {
         text: `Terlambat ${diffEndToNow} hari`,
+        sisaWaktu: null,
         color: "red",
       };
     }
 
+    const sisaHari = Math.abs(diffEndToNow);
     return {
       text: `Berjalan ${diffStartToNow} hari`,
+      sisaWaktu: `Sisa ${sisaHari} hari lagi`,
       color: "green",
     };
   }
@@ -81,12 +85,13 @@ const ProjectPage = () => {
         style={{ gap: "24px" }}
       >
         {projectData?.data.map((project) => {
-          const { text, color } = getProjectStatusWithColor(project.project_start, project.project_time);
+          const { text, sisaWaktu, color } = getProjectStatusDateWithColor(project.project_start, project.project_time);
+
           return (
             <Card
               key={project.id}
               w={300}
-              h={180}
+              h={220}
               style={{
                 maxWidth: 320,
                 minWidth: 300,
@@ -106,7 +111,7 @@ const ProjectPage = () => {
                       {project.project_name}
                     </Text>
 
-                    <Text mt={-12} fw={500} size="lg" style={{ color: "#ffffff" }}>
+                    <Text mt={-12} fw={500} size="sm" style={{ color: "#ffffff" }}>
                       {project.project_leader}
                     </Text>
 
@@ -118,18 +123,29 @@ const ProjectPage = () => {
                     </Text>
                   </Stack>
 
-                  <Group justify="space-between">
-                    <Text fw={600} key={project.id} c={color}>
-                      {text}
+                  <Stack>
+                    <Text fw={200} size="sm" style={{ color: "#ffffff" }}>
+                      {formatDateIndonesia(project.project_start)} - {formatDateIndonesia(project.project_end)}
                     </Text>
 
-                    <ButtonDeleteWithConfirmation
-                      id={project.id}
-                      onDelete={handleDeleteProject}
-                      description={`Apakah anda ingin menghapus proyek ${project?.project_name} ?`}
-                      size={2.5}
-                    />
-                  </Group>
+                    <Group justify="space-between" align="start" style={{ borderRadius: 8 }}>
+                      <Stack gap={2} style={{ minHeight: 48 }}>
+                        <Text fw={600} c={color}>
+                          {text}
+                        </Text>
+                        <Text size="xs" fw={300} c="red" style={{ visibility: color === "green" ? "visible" : "hidden", marginTop: -4 }}>
+                          {color === "green" ? sisaWaktu : "placeholder"}
+                        </Text>
+                      </Stack>
+
+                      <ButtonDeleteWithConfirmation
+                        id={project.id}
+                        onDelete={handleDeleteProject}
+                        description={`Apakah anda ingin menghapus proyek ${project?.project_name} ?`}
+                        size={2.5}
+                      />
+                    </Group>
+                  </Stack>
                 </Stack>
               </Link>
             </Card>
