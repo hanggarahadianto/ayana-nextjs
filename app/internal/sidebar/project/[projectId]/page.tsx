@@ -113,7 +113,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
                 <Progress.Section
                   value={progress ?? 1}
                   color="blue"
-                  animated
+                  // animated
                   style={{
                     background: "linear-gradient(45deg, #00b7ff 0%, #005eff 100%)",
                     transition: "width 0.6s ease-in-out",
