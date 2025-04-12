@@ -1,6 +1,6 @@
 import { Group, ScrollArea, Table, ThemeIcon } from "@mantine/core";
-import EditPayoutModal from "@/components/internal/sidebar/finance/EditPayoutModal";
-import PayPayoutButton from "@/components/internal/sidebar/finance/EditStatusPayout";
+import EditPayoutModal from "@/components/internal/sidebar/finance/payout/EditPayoutModal";
+import PayPayoutButton from "@/components/internal/sidebar/finance/payout/EditStatusPayout";
 import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
 
 interface TableTransactionProps {

@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback, useEffect, useRef } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import { useDebounce } from "use-debounce";
 import { Modal, Button, Group, Select, Textarea, Card, Text, Stack, NumberInput, Divider, SimpleGrid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -8,7 +8,6 @@ import ButtonAdd from "@/lib/button/buttonAdd";
 import { initialValueWeeklyProgressCreate } from "@/lib/initialValues/initialValuesWeeklyProgress";
 import FormAddWorker from "./FormAddWorker";
 import FormAddMaterial from "./FormAddMaterial";
-import { debounce } from "lodash";
 import { allWeeks } from "@/lib/dictionary";
 import { validationSchemaWeeklyProgressCreate } from "@/lib/validation/weeeklyProgress-validation";
 
@@ -16,18 +15,11 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyPr
   const [opened, { open, close }] = useDisclosure(false);
   const { mutate: postData, isPending: isLoading } = useSubmitWeeklyProgressForm(refetchWeeklyProgressData, close);
 
-  const [materials, setMaterials] = useState(initialValueWeeklyProgressCreate.material);
-
   // Filter minggu yang belum dipilih
   const availableWeeks = useMemo(() => {
     const selectedWeeks = new Set(weeklyProgress.map((item) => item.week_number));
     return allWeeks.filter((week) => !selectedWeeks.has(week)).map((week) => ({ value: week, label: week }));
   }, [weeklyProgress]);
-
-  // Hitung jumlah pekerja & total biaya secara langsung
-  const [debouncedMaterials] = useDebounce(materials, 1200);
-
-  const materialCost = useMemo(() => debouncedMaterials.reduce((sum, m) => sum + (m.total_cost || 0), 0), [debouncedMaterials]);
 
   const handleSubmit = async (values: IWeeklyProgressCreate, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
     try {
@@ -79,7 +71,12 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyPr
 
                   <Divider />
 
-                  <FormAddWorker workers={values.worker} setWorkers={(val) => setFieldValue("worker", val)} />
+                  <FormAddWorker
+                    workers={values.worker}
+                    setWorkers={(val) => setFieldValue("worker", val)}
+                    errors={errors.worker}
+                    touched={touched.worker}
+                  />
 
                   <Stack justify="flex-start" align="start">
                     <Text
@@ -97,7 +94,7 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyPr
                   </Stack>
                   <Divider />
 
-                  <FormAddMaterial materials={materials} setMaterials={(val) => setFieldValue("material", val)} />
+                  <FormAddMaterial materials={values.material} setMaterials={(val) => setFieldValue("material", val)} />
                   <Stack justify="flex-start" align="start">
                     <Text
                       size="md"
@@ -109,7 +106,7 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyPr
                       gradient={{ from: "blue", to: "cyan", deg: 90 }}
                     >
                       Total Pengeluaran Material{" "}
-                      {`Rp. ${materialCost.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                      {`Rp. ${values.amount_material.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                     </Text>
                   </Stack>
 

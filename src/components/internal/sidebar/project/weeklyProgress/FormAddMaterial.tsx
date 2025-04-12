@@ -1,41 +1,56 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useEffect, useMemo } from "react";
 import { Group, TextInput, NumberInput, Select, Card, Stack, Text } from "@mantine/core";
 import ButtonAdd from "@/lib/button/buttonAdd";
 import ButtonDelete from "@/lib/button/butttonDelete";
 import { satuan } from "@/lib/dictionary";
+import { useFormikContext } from "formik";
+import { useDebouncedCallback } from "use-debounce";
+import { debounce } from "lodash";
 
 interface FormAddMaterialProps {
   materials: IMaterialCreate[];
-  setMaterials: React.Dispatch<React.SetStateAction<IMaterialCreate[]>>;
+  setMaterials: (newMaterials: IMaterialCreate[]) => void; // ubah dari Dispatch
 }
 
-const FormAddMaterial: React.FC<FormAddMaterialProps> = ({ materials, setMaterials }) => {
-  const addMaterial = useCallback(() => {
-    setMaterials((prev) => [...prev, { material_name: "", quantity: 0, unit: "", price: 0, total_cost: 0 }]);
-  }, [setMaterials]);
+const FormAddMaterial: React.FC<FormAddMaterialProps> = React.memo(({ materials, setMaterials }) => {
+  const { setFieldValue } = useFormikContext<IWeeklyProgressCreate>();
 
+  // ✅ Debounced total cost update for materials
+  const updateAmountMaterial = useMemo(() => {
+    return debounce((updatedMaterials: IMaterialCreate[]) => {
+      const total = updatedMaterials.reduce((sum, material) => sum + (material.total_cost || 0), 0);
+      setFieldValue("amount_material", total);
+    }, 300);
+  }, [setFieldValue]);
+
+  // ✅ Update amount_material automatically on materials change
+  useEffect(() => {
+    updateAmountMaterial(materials);
+  }, [materials, updateAmountMaterial]);
+
+  // ✅ Add material
+  const addMaterial = useCallback(() => {
+    const updated = [...materials, { material_name: "", quantity: 0, total_cost: 0, unit: "", price: 0 }];
+    setMaterials(updated);
+  }, [materials, setMaterials]);
+
+  // ✅ Delete material
   const deleteMaterial = useCallback(
     (index: number) => {
-      setMaterials((prev) => prev.filter((_, i) => i !== index));
+      const updated = materials.filter((_, i) => i !== index);
+      setMaterials(updated);
     },
-    [setMaterials]
+    [materials, setMaterials]
   );
 
+  // ✅ Handle material field change
   const handleMaterialChange = useCallback(
-    <T extends keyof IMaterialCreate>(index: number, field: T, value: IMaterialCreate[T]) => {
-      setMaterials((prev) => {
-        const newMaterials = [...prev];
-        newMaterials[index] = { ...newMaterials[index], [field]: value };
-
-        if (field === "quantity" || field === "price") {
-          const quantity = Number(newMaterials[index].quantity) || 0;
-          const price = Number(newMaterials[index].price) || 0;
-          newMaterials[index].total_cost = quantity * price;
-        }
-        return newMaterials;
-      });
+    (index: number, field: keyof IMaterialCreate, value: string | number) => {
+      const updated = [...materials];
+      updated[index] = { ...updated[index], [field]: value };
+      setMaterials(updated);
     },
-    [setMaterials]
+    [materials, setMaterials]
   );
 
   return (
@@ -93,6 +108,6 @@ const FormAddMaterial: React.FC<FormAddMaterialProps> = ({ materials, setMateria
       </Stack>
     </>
   );
-};
+});
 
 export default memo(FormAddMaterial);

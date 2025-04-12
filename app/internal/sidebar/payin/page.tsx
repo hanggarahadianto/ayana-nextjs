@@ -1,16 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ActionIcon, Group, Pagination, ScrollArea, SimpleGrid, Stack, Table, Tabs } from "@mantine/core";
-import { useQuery } from "@tanstack/react-query";
-import AddPayoutModal from "../../../../src/components/internal/sidebar/finance/AddPayoutModal"; // Sesuaikan path
+import { Pagination, SimpleGrid, Stack, Table, Tabs } from "@mantine/core";
+import { useQuery } from "@tanstack/react-query"; // Sesuaikan path
 import { getDataCompany } from "@/api/company/getCompany"; // Sesuaikan path
 import { getDataPayout } from "@/api/payout/getDataPayout";
-import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
 import { useDeleteDataPayout } from "@/api/payout/deleteDataPayout";
-import EditPayoutModal from "@/components/internal/sidebar/finance/EditPayoutModal";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import TableTransaction from "@/components/internal/sidebar/finance/TableTransaction";
+import AddPayoutModal from "@/components/internal/sidebar/finance/payout/AddPayoutModal";
 
 export default function CompanyTabs() {
   const { data: companyData, isLoading } = useQuery({

@@ -1,41 +1,56 @@
-import React, { memo } from "react";
+import React, { memo, useCallback, useEffect, useMemo } from "react";
 import { Group, TextInput, Select, Card, Stack, Text } from "@mantine/core";
 import ButtonAdd from "@/lib/button/buttonAdd";
 import ButtonDelete from "@/lib/button/butttonDelete";
 import { useFormikContext } from "formik";
-import { useDebouncedCallback } from "use-debounce";
+import { debounce } from "lodash";
 
 interface FormAddWorkerProps {
   workers: IWorkerCreate[];
   setWorkers: (newWorkers: IWorkerCreate[]) => void; // ubah dari Dispatch
+  errors?: any; // ubah dari any[] ke any
+  touched?: any;
 }
 
-const FormAddWorker: React.FC<FormAddWorkerProps> = React.memo(({ workers, setWorkers }) => {
+const FormAddWorker: React.FC<FormAddWorkerProps> = React.memo(({ workers, setWorkers, errors, touched }) => {
+  console.log("ERROR DI COMPONENT FORM ADD WORKER", errors);
   const { setFieldValue } = useFormikContext<IWeeklyProgressCreate>();
 
-  const addWorker = () => {
+  // ✅ Debounced function using lodash (more reliable than custom hooks)
+  const updateAmountWorker = useMemo(() => {
+    return debounce((updatedWorkers: IWorkerCreate[]) => {
+      const total = updatedWorkers.reduce((sum, worker) => sum + (worker.total_cost || 0), 0);
+      setFieldValue("amount_worker", total);
+    }, 300);
+  }, [setFieldValue]);
+
+  // ✅ Automatically update amount when workers change
+  useEffect(() => {
+    updateAmountWorker(workers);
+  }, [workers, updateAmountWorker]);
+
+  // ✅ useCallback to memoize function
+  const addWorker = useCallback(() => {
     const updated = [...workers, { worker_name: "", position: "", total_cost: 0 }];
     setWorkers(updated);
-    updateAmountWorker(updated);
-  };
+  }, [workers, setWorkers]);
 
-  const deleteWorker = (index: number) => {
-    const updated = workers.filter((_, i) => i !== index);
-    setWorkers(updated);
-    updateAmountWorker(updated);
-  };
+  const deleteWorker = useCallback(
+    (index: number) => {
+      const updated = workers.filter((_, i) => i !== index);
+      setWorkers(updated);
+    },
+    [workers, setWorkers]
+  );
 
-  const handleWorkerChange = (index: number, field: keyof IWorkerCreate, value: string | number) => {
-    const updated = [...workers];
-    updated[index] = { ...updated[index], [field]: value };
-    setWorkers(updated);
-    updateAmountWorker(updated); // <== panggil di sini
-  };
-
-  const updateAmountWorker = useDebouncedCallback((updatedWorkers: IWorkerCreate[]) => {
-    const total = updatedWorkers.reduce((sum, worker) => sum + (worker.total_cost || 0), 0);
-    setFieldValue("amount_worker", total);
-  }, 300);
+  const handleWorkerChange = useCallback(
+    (index: number, field: keyof IWorkerCreate, value: string | number) => {
+      const updated = [...workers];
+      updated[index] = { ...updated[index], [field]: value };
+      setWorkers(updated);
+    },
+    [workers, setWorkers]
+  );
 
   return (
     <>
@@ -48,12 +63,14 @@ const FormAddWorker: React.FC<FormAddWorkerProps> = React.memo(({ workers, setWo
           <Card key={index} shadow="sm" radius="md" withBorder>
             <Group>
               <TextInput
+                error={touched?.[index]?.worker_name && errors?.[index]?.worker_name}
                 label={`Nama Pekerja ${index + 1}`}
                 placeholder="Masukan nama pekerja"
                 value={worker.worker_name || ""}
                 onChange={(e) => handleWorkerChange(index, "worker_name", e.target.value.toLocaleUpperCase())}
               />
               <Select
+                error={touched?.[index]?.position && errors?.[index]?.position}
                 label={`Posisi Pekerja ${index + 1}`}
                 placeholder="Pilih posisi"
                 value={worker.position || ""}
@@ -66,6 +83,7 @@ const FormAddWorker: React.FC<FormAddWorkerProps> = React.memo(({ workers, setWo
               />
 
               <TextInput
+                error={touched?.[index]?.total_cost && errors?.[index]?.total_cost}
                 w={140}
                 label="Harga"
                 placeholder="Masukan Harga"

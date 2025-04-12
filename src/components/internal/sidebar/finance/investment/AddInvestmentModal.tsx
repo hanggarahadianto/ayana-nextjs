@@ -1,37 +1,53 @@
-import React, { memo, useCallback } from "react";
-import { Modal, TextInput, Button, Group, Select, Textarea, Stack, InputWrapper, SimpleGrid, Input, Flex } from "@mantine/core";
-
+import React, { memo, useCallback, useEffect } from "react";
+import {
+  Modal,
+  TextInput,
+  Button,
+  Group,
+  Select,
+  Textarea,
+  Stack,
+  InputWrapper,
+  SimpleGrid,
+  Input,
+  Flex,
+  Text,
+  NumberInput,
+  Box,
+  FileInput,
+} from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
-import { IconCalendar, IconPlus } from "@tabler/icons-react";
-import { initialValuePayoutCreate } from "../../../../lib/initialValues/initialValuesPayout";
+import { IconCalendar } from "@tabler/icons-react";
 import { useSubmitPayoutForm } from "@/api/payout/postDataPayout";
 import ButtonAdd from "@/lib/button/buttonAdd";
-import { paymentCategory, payoutCategory } from "@/lib/dictionary";
+import { initialValuePayoutCreate } from "@/lib/initialValues/initialValuesPayout";
+import { differenceInMonths } from "date-fns";
+import { initialValueInvestmentCreate } from "@/lib/initialValues/initialValuesInvestment";
 
-interface AddPayoutModalProps {
+interface AddInvestmentModalProps {
   refetchPayloadData: () => void;
   companyCode: any | null;
   companyId: string | null;
 }
 
-const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayoutModalProps) => {
+const AddInvestmentModal = ({ refetchPayloadData, companyCode, companyId }: AddInvestmentModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const { mutate: postData, isPending: isLoadingSubmitProjectData } = useSubmitPayoutForm(refetchPayloadData, close);
 
   const handleSubmit = useCallback(
-    (values: IPayoutCreate, { setSubmitting }: any) => {
+    (values: IInvestmentCreate, { setSubmitting }: any) => {
       console.log("Form values submitted:", values);
-      const payload = {
-        ...values,
-        payment_date: values.payment_date === "" ? null : values.payment_date,
-        company: companyCode ?? "",
-        company_id: companyId ?? "",
-      };
-      postData(payload);
-      setSubmitting(false);
+      // const payload = {
+      //   ...values,
+      //   payment_date: values.payment_date === "" ? null : values.payment_date,
+      //   company: companyCode ?? "",
+      //   company_id: companyId ?? "",
+      // };
+      // postData(payload);
+      // setSubmitting(false);
     },
     [companyCode, companyId, postData]
   );
@@ -47,7 +63,7 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
         yOffset="100px" // Moves modal down
       >
         <Formik
-          initialValues={initialValuePayoutCreate}
+          initialValues={initialValueInvestmentCreate}
           validateOnBlur={false}
           enableReinitialize={true}
           validateOnChange={true}
@@ -61,78 +77,64 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
               setFieldValue(field, value);
             }, []);
 
+            useEffect(() => {
+              if ((values.nominal && values.percentage_profit, values.date_inputed && values.due_date)) {
+                const start = new Date(values.date_inputed);
+                const end = new Date(values.due_date);
+                const months = differenceInMonths(end, start);
+                const percentage = values.percentage_profit ?? 0;
+
+                const bagiHasil = values.nominal * (percentage / 100) * months;
+                console.log("Bagi Hasil:", bagiHasil);
+                setFieldValue("investment_profit", bagiHasil);
+              }
+            }, [values.nominal, values.percentage_profit, values.date_inputed, values.due_date]);
+
             return (
               <>
                 <Form>
                   <SimpleGrid p={20}>
                     <Stack gap={20}>
-                      <Select
-                        label="Status"
-                        w={200}
-                        placeholder="Pilih Status"
-                        value={values.status}
-                        onChange={(value: any) => {
-                          setFieldValue("status", value);
-                          if (value !== "tunai") {
-                            setFieldValue("invoice", "invoice-tempo");
-                          } else {
-                            setFieldValue("invoice", ""); // Kosongkan kembali jika status tunai
-                          }
-                        }}
-                        data={paymentCategory}
-                        error={touched.status && errors.status ? errors.status : undefined}
-                        required
-                      />
-                      {values.status === "tunai" && (
-                        <TextInput
-                          withAsterisk
-                          w={200}
-                          label="No Invoice"
-                          error={touched.invoice && errors.invoice ? errors.invoice : undefined}
-                          placeholder="Masukan Invoice"
-                          value={values.invoice?.toUpperCase() || ""}
-                          onChange={(event) => setFieldValue("invoice", event.currentTarget.value.toUpperCase())}
-                        />
-                      )}
                       <TextInput
                         withAsterisk
                         w={200}
-                        label="Mitra"
-                        error={touched.mitra && errors.mitra ? errors.mitra : undefined}
-                        placeholder="Masukan Mitra"
-                        value={values.mitra || ""}
-                        onChange={(event) => setFieldValue("mitra", event.currentTarget.value.toUpperCase())}
+                        label="Nama Investor"
+                        error={touched.investor_name && errors.investor_name ? errors.investor_name : undefined}
+                        placeholder="Masukan Nama Investor"
+                        value={values.investor_name?.toUpperCase() || ""}
+                        onChange={(event) => setFieldValue("investor_name", event.currentTarget.value.toUpperCase())}
                       />
+
                       <Group>
-                        <InputWrapper
+                        <TextInput
                           w={200}
                           label="Nominal"
                           withAsterisk
                           required
                           error={touched.nominal && errors.nominal ? errors.nominal : undefined}
-                        >
-                          <TextInput
-                            placeholder="Masukan Biaya Proyek"
-                            value={values.nominal ? `Rp. ${values.nominal.toLocaleString("id-ID")}` : ""}
-                            onChange={(event) => {
-                              const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
-                              const numericValue = Number(rawValue) || 0;
-                              setFieldValue("nominal", numericValue); // Store as number
-                            }}
-                          />
-                        </InputWrapper>
-                        <Select
-                          clearable
-                          label="Kategori"
-                          placeholder="Pilih Kategori"
-                          onChange={(event) => setFieldValue("category", event)}
-                          data={payoutCategory}
+                          placeholder="Masukan Nominal"
+                          value={values.nominal ? `Rp. ${values.nominal.toLocaleString("id-ID")}` : ""}
+                          onChange={(event) => {
+                            const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+                            const numericValue = Number(rawValue) || 0;
+                            setFieldValue("nominal", numericValue); // Store as number
+                          }}
+                        />
+                        <NumberInput
+                          hideControls
+                          prefix=""
+                          suffix="%"
+                          w={200}
+                          label="Persentase Profit"
+                          placeholder="Persentase"
+                          value={Number(values.percentage_profit) || undefined}
+                          onChange={(value) => handleInputChange(setFieldValue, "percentage_profit", value)}
                         />
                       </Group>
 
                       <Group>
                         <DatePickerInput
-                          label="Tanggal Pembelian"
+                          label="Tanggal Investasi"
                           w={200}
                           type="default"
                           firstDayOfWeek={0}
@@ -171,7 +173,26 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
                           }}
                           onBlur={handleBlur}
                         />
+                        <TextInput
+                          value={values.investment_profit ? `Rp. ${values.investment_profit.toLocaleString("id-ID")}` : ""}
+                          w={200}
+                          label="Total Nilai Bagi Hasil"
+                          readOnly
+                          withAsterisk
+                          required
+                          placeholder="Total Nilai Bagi Hasil"
+                        />
                       </Group>
+                      <FileInput
+                        w={200}
+                        label="Upload Bukti Perjanjian"
+                        accept="image/png,image/jpeg"
+                        clearable
+                        placeholder="Upload files"
+                        onChange={(file) => setFieldValue("file", file)}
+                        required
+                        // error={isSubmitAttempted && errors.file}
+                      />
 
                       <Textarea
                         value={values.note.toUpperCase()}
@@ -201,4 +222,4 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
   );
 };
 
-export default memo(AddPayoutModal);
+export default memo(AddInvestmentModal);

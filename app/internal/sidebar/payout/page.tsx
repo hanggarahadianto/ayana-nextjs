@@ -3,10 +3,8 @@
 import { useDeleteDataPayout } from "@/api/payout/deleteDataPayout";
 import { getDataPayout } from "@/api/payout/getDataPayout";
 import useGetCompanies from "@/components/internal/sidebar/company/GetCompanyTab";
-import AddPayoutModal from "@/components/internal/sidebar/finance/AddPayoutModal";
-import EditPayoutModal from "@/components/internal/sidebar/finance/EditPayoutModal";
-import PayPayoutButton from "@/components/internal/sidebar/finance/EditStatusPayout";
-import PayoutDetails from "@/components/internal/sidebar/finance/GetPayoutDetails";
+import AddPayoutModal from "@/components/internal/sidebar/finance/payout/AddPayoutModal";
+import PayoutDetails from "@/components/internal/sidebar/finance/payout/GetPayoutDetails";
 import TableTransaction from "@/components/internal/sidebar/finance/TableTransaction";
 import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
 import LoadingGlobal from "@/styles/loading/loading-global";

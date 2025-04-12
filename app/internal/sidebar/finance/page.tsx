@@ -5,8 +5,11 @@ import { SimpleGrid, Tabs } from "@mantine/core";
 
 import useGetCompanies from "@/components/internal/sidebar/company/GetCompanyTab";
 import { ExpenseCard } from "@/components/internal/sidebar/dashboard/ExpenseCard";
+import AddInvestmetn from "@/components/internal/sidebar/finance/investment/AddInvestmentModal";
+import AddInvestment from "@/components/internal/sidebar/finance/investment/AddInvestmentModal";
+import { InvestmentCard } from "@/components/internal/sidebar/finance/investment/InvestmentCard";
 
-export default function Dashboard() {
+export default function Finance() {
   const { companies, isLoading: isLoadingCompanies } = useGetCompanies();
   const [activeTab, setActiveTab] = useState<ICompany | null>(null);
 
@@ -22,9 +25,6 @@ export default function Dashboard() {
       setActiveTab(value);
     }
   };
-
-  const [page, setPage] = useState(1);
-  const rowsPerPage = 5;
 
   return (
     <SimpleGrid mt={10}>
@@ -46,7 +46,7 @@ export default function Dashboard() {
         </Tabs.List>
       </Tabs>
       <SimpleGrid p={20}>
-        <ExpenseCard companyId={activeTab?.id} />
+        <InvestmentCard companyId={undefined} />
       </SimpleGrid>
     </SimpleGrid>
   );

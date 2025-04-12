@@ -14,6 +14,7 @@ import {
   FaMoneyBill,
   FaAngleDoubleLeft,
   FaAngleDoubleRight,
+  FaWallet,
 } from "react-icons/fa";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { TbTransactionDollar } from "react-icons/tb";
@@ -52,9 +53,9 @@ export default function InternalLayout({ children }: { children: React.ReactNode
     { label: "Task", icon: <FaTasks />, href: "/internal/sidebar/task" },
     { label: "Product", icon: <FaShoppingBag />, href: "/internal/sidebar/product" },
     { label: "Marketing", icon: <FaIdeal />, href: "/internal/sidebar/marketing" },
+    { label: "Finance", icon: <FaWallet />, href: "/internal/sidebar/finance" },
     { label: "Payin", icon: <HiOutlineCash />, href: "/internal/sidebar/payin" },
     { label: "Payout", icon: <FaMoneyBill />, href: "/internal/sidebar/payout" },
-
     { label: "Project", icon: <FaProjectDiagram />, href: "/internal/sidebar/project" },
     { label: "Transaction", icon: <TbTransactionDollar />, href: "/internal/sidebar/transaaction" },
     { label: "Profile", icon: <FaUser />, href: "/internal/sidebar/profile" },
