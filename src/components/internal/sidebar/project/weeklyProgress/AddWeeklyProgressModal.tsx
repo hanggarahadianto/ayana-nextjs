@@ -5,18 +5,17 @@ import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form } from "formik";
 import { useSubmitWeeklyProgressForm } from "@/api/weekly-progress/postDataWeeklyProgress";
 import ButtonAdd from "@/lib/button/buttonAdd";
-import { initialValueWeeklyProgressCreate, validationSchemaWeeklyProgressCreate } from "@/lib/initialValues/initialValuesWeeklyProgress";
+import { initialValueWeeklyProgressCreate } from "@/lib/initialValues/initialValuesWeeklyProgress";
 import FormAddWorker from "./FormAddWorker";
 import FormAddMaterial from "./FormAddMaterial";
 import { debounce } from "lodash";
 import { allWeeks } from "@/lib/dictionary";
+import { validationSchemaWeeklyProgressCreate } from "@/lib/validation/weeeklyProgress-validation";
 
 const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyProgress = [] as IWeeklyProgress[] }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const { mutate: postData, isPending: isLoading } = useSubmitWeeklyProgressForm(refetchWeeklyProgressData, close);
 
-  const [workers, setWorkers] = useState(initialValueWeeklyProgressCreate.worker);
-  console.log("Workers", workers);
   const [materials, setMaterials] = useState(initialValueWeeklyProgressCreate.material);
 
   // Filter minggu yang belum dipilih
@@ -26,22 +25,18 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyPr
   }, [weeklyProgress]);
 
   // Hitung jumlah pekerja & total biaya secara langsung
-  const [debouncedWorkers] = useDebounce(workers, 1200);
   const [debouncedMaterials] = useDebounce(materials, 1200);
-
-  const workerCount = useMemo(() => debouncedWorkers.filter((w) => w.worker_name.trim() !== "").length, [debouncedWorkers]);
-
-  const workerCost = useMemo(() => debouncedWorkers.reduce((sum, w) => sum + (w.total_cost || 0), 0), [debouncedWorkers]);
 
   const materialCost = useMemo(() => debouncedMaterials.reduce((sum, m) => sum + (m.total_cost || 0), 0), [debouncedMaterials]);
 
-  const handleSubmit = useCallback(
-    (values: IWeeklyProgressCreate) => {
-      const formData = { ...values, project_id: projectId, worker: workers, material: materials };
+  const handleSubmit = async (values: IWeeklyProgressCreate, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
+    try {
+      const formData = { ...values, project_id: projectId };
       postData(formData);
-    },
-    [workers, materials, projectId, postData]
-  );
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -51,29 +46,22 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyPr
           initialValues={initialValueWeeklyProgressCreate}
           validationSchema={validationSchemaWeeklyProgressCreate}
           onSubmit={handleSubmit}
-          // enableReinitialize
+          validateOnBlur={false}
+          enableReinitialize={true}
+          validateOnChange={true}
+          validateOnMount={false}
         >
           {({ values, errors, touched, setFieldValue, isSubmitting }) => {
             console.log("valaues", values);
             console.log("errors", errors);
 
-            const debouncedSetFieldValueRef = useRef(
-              debounce((val: IWorkerCreate[]) => {
-                setFieldValue("worker", val);
-              }, 500)
-            );
-
-            const syncWorkers = useCallback(
-              (newWorkers: IWorkerCreate[]) => {
-                setWorkers(newWorkers);
-                debouncedSetFieldValueRef.current(newWorkers);
-              },
-              [setWorkers]
-            );
+            const handleInputChange = useCallback((setFieldValue: any, field: string, value: any) => {
+              setFieldValue(field, value);
+            }, []);
 
             return (
               <Form>
-                <SimpleGrid p={20}>
+                <SimpleGrid p={40}>
                   <Text fw={900} size="xl">
                     Tambah Progress Mingguan
                   </Text>
@@ -85,13 +73,13 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyPr
                     placeholder="Pilih Minggu"
                     data={availableWeeks}
                     value={values.week_number}
-                    onChange={(value) => setFieldValue("week_number", value)}
-                    error={touched.week_number && errors.week_number}
-                    required
+                    onChange={(value) => handleInputChange(setFieldValue, "week_number", value)}
+                    error={touched.week_number && errors.week_number ? errors.week_number : undefined}
                   />
 
                   <Divider />
-                  <FormAddWorker workers={workers} setWorkers={syncWorkers} />
+
+                  <FormAddWorker workers={values.worker} setWorkers={(val) => setFieldValue("worker", val)} />
 
                   <Stack justify="flex-start" align="start">
                     <Text
@@ -104,12 +92,12 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyPr
                       gradient={{ from: "blue", to: "cyan", deg: 90 }}
                     >
                       Total Pengeluaran Pekerja{" "}
-                      {`Rp. ${workerCost.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                      {`Rp. ${values.amount_worker?.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                     </Text>
                   </Stack>
                   <Divider />
 
-                  <FormAddMaterial materials={materials} setMaterials={setMaterials} />
+                  <FormAddMaterial materials={materials} setMaterials={(val) => setFieldValue("material", val)} />
                   <Stack justify="flex-start" align="start">
                     <Text
                       size="md"
@@ -130,23 +118,23 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyPr
                     w={200}
                     label="Persentase Pengerjaan"
                     placeholder="Persentase"
-                    defaultValue={Number(values.percentage) || undefined} // Use defaultValue to prevent constant re-renders
-                    onBlur={(e) => setFieldValue("percentage", String(e.target.value))} // Update Formik state on blur
-                    error={touched.percentage && errors.percentage}
+                    value={Number(values.percentage) || undefined} // Use defaultValue to prevent constant re-renders
+                    onChange={(value) => handleInputChange(setFieldValue, "percentage", value)}
+                    error={touched.percentage && errors.percentage ? errors.percentage : undefined}
                     rightSection={
                       <Text size="sm" c="gray">
                         %
                       </Text>
                     }
-                    required
                   />
 
                   <Textarea
                     label="Note"
-                    defaultValue={values.note.toLocaleUpperCase()} // Pastikan values.note sudah terdefinisi dalam Formik state
+                    value={values.note}
                     placeholder="Enter additional information"
-                    onBlur={(e) => setFieldValue("note", e.target.value.toUpperCase())} // Update saat onBlur
+                    onChange={(event) => handleInputChange(setFieldValue, "note", event.currentTarget.value)}
                     mt="md"
+                    error={touched.note && errors.note ? errors.note : undefined}
                   />
 
                   <Group justify="flex-end" mt="md">

@@ -1,8 +1,9 @@
-import React, { useCallback } from "react";
+import React, { memo } from "react";
 import { Group, TextInput, Select, Card, Stack, Text } from "@mantine/core";
 import ButtonAdd from "@/lib/button/buttonAdd";
 import ButtonDelete from "@/lib/button/butttonDelete";
 import { useFormikContext } from "formik";
+import { useDebouncedCallback } from "use-debounce";
 
 interface FormAddWorkerProps {
   workers: IWorkerCreate[];
@@ -12,38 +13,29 @@ interface FormAddWorkerProps {
 const FormAddWorker: React.FC<FormAddWorkerProps> = React.memo(({ workers, setWorkers }) => {
   const { setFieldValue } = useFormikContext<IWeeklyProgressCreate>();
 
-  const syncWorkers = useCallback(
-    (newWorkers: IWorkerCreate[]) => {
-      setWorkers(newWorkers);
-      setFieldValue("worker", newWorkers);
-    },
-    [setFieldValue, setWorkers]
-  );
+  const addWorker = () => {
+    const updated = [...workers, { worker_name: "", position: "", total_cost: 0 }];
+    setWorkers(updated);
+    updateAmountWorker(updated);
+  };
 
-  const addWorker = useCallback(() => {
-    const newWorkers = [...workers, { worker_name: "", position: "", total_cost: 0 }];
-    syncWorkers(newWorkers);
-  }, [workers, syncWorkers]);
+  const deleteWorker = (index: number) => {
+    const updated = workers.filter((_, i) => i !== index);
+    setWorkers(updated);
+    updateAmountWorker(updated);
+  };
 
-  const deleteWorker = useCallback(
-    (index: number) => {
-      const newWorkers = workers.filter((_, i) => i !== index);
-      syncWorkers(newWorkers);
-    },
-    [workers, syncWorkers]
-  );
+  const handleWorkerChange = (index: number, field: keyof IWorkerCreate, value: string | number) => {
+    const updated = [...workers];
+    updated[index] = { ...updated[index], [field]: value };
+    setWorkers(updated);
+    updateAmountWorker(updated); // <== panggil di sini
+  };
 
-  const handleWorkerChange = useCallback(
-    (index: number, field: keyof IWorkerCreate, value: string | number) => {
-      const oldWorker = workers[index];
-      if (oldWorker[field] === value) return;
-
-      const newWorkers = [...workers];
-      newWorkers[index] = { ...oldWorker, [field]: value };
-      syncWorkers(newWorkers);
-    },
-    [workers, syncWorkers]
-  );
+  const updateAmountWorker = useDebouncedCallback((updatedWorkers: IWorkerCreate[]) => {
+    const total = updatedWorkers.reduce((sum, worker) => sum + (worker.total_cost || 0), 0);
+    setFieldValue("amount_worker", total);
+  }, 300);
 
   return (
     <>
@@ -93,6 +85,4 @@ const FormAddWorker: React.FC<FormAddWorkerProps> = React.memo(({ workers, setWo
   );
 });
 
-export default React.memo(FormAddWorker, (prevProps, nextProps) => {
-  return JSON.stringify(prevProps.workers) === JSON.stringify(nextProps.workers);
-});
+export default memo(FormAddWorker);

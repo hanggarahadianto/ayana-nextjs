@@ -32,7 +32,6 @@ const ProjectCardSummary: React.FC<ProjectCardSummaryProps> = ({
           <Text size="lg" fw={900} c="cyan" ta="center">
             Ringkasan Keuangan
           </Text>
-          <Divider />
 
           <Group justify="space-between">
             <Text size="md" fw={500} c="green">

@@ -22,7 +22,7 @@ import { Form, Formik } from "formik";
 import { IconCalendar, IconPlus } from "@tabler/icons-react";
 import { initialValueProjectCreate, validationSchemaProject } from "../../../../lib/initialValues/initialValuesProject";
 import { useSubmitProjectForm } from "@/api/project/postDataProject";
-import { locationOptions } from "@/lib/dictionary";
+import { locationOptions, projectDuration, typeOptions } from "@/lib/dictionary";
 
 const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -99,10 +99,7 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
                           label="Tipe"
                           placeholder="Pilih Tipe"
                           onChange={(value: any) => setFieldValue("type", value)}
-                          data={[
-                            { value: "32 / 60", label: "32 / 60" },
-                            { value: "36 / 60", label: "36 / 60" },
-                          ]}
+                          data={typeOptions}
                           required
                         />
                       </InputWrapper>
@@ -150,13 +147,7 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
                           onChange={(value: any) => {
                             setFieldValue("project_time", value);
                           }}
-                          data={[
-                            { value: "35", label: "35 Hari" },
-                            { value: "45", label: "45 Hari" },
-                            { value: "65", label: "65 Hari" },
-                            { value: "95", label: "95 Hari" },
-                            { value: "125", label: "125 Hari" },
-                          ]}
+                          data={projectDuration}
                           required
                         />
                       </InputWrapper>

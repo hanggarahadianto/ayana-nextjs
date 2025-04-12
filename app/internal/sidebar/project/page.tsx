@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, Group, SimpleGrid, Text, Stack } from "@mantine/core";
+import { Card, Group, SimpleGrid, Text, Stack } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import AddProjectModal from "../../../../src/components/internal/sidebar/project/AddProjectModal";
 import { useQuery } from "@tanstack/react-query";

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { memo, useCallback } from "react";
 import { Group, TextInput, NumberInput, Select, Card, Stack, Text } from "@mantine/core";
 import ButtonAdd from "@/lib/button/buttonAdd";
 import ButtonDelete from "@/lib/button/butttonDelete";
@@ -95,4 +95,4 @@ const FormAddMaterial: React.FC<FormAddMaterialProps> = ({ materials, setMateria
   );
 };
 
-export default FormAddMaterial;
+export default memo(FormAddMaterial);
