@@ -8,6 +8,7 @@ interface IInvestment {
   investment_profit: number; // hasil dari bagi hasil
   percentage_profit: number; // persen keuntungan per bulan
   note: string;
+
   created_at: string;
   updated_at: string;
 }

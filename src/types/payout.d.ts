@@ -11,6 +11,7 @@ interface IPayout {
   status: string;
   category: string;
   mitra: string;
+  investment_id?: string;
   created_at: string;
   updated_at: string;
 }

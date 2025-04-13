@@ -25,6 +25,7 @@ import ButtonAdd from "@/lib/button/buttonAdd";
 import { initialValuePayoutCreate } from "@/lib/initialValues/initialValuesPayout";
 import { differenceInMonths } from "date-fns";
 import { initialValueInvestmentCreate } from "@/lib/initialValues/initialValuesInvestment";
+import { investmentOption } from "@/lib/dictionary";
 
 interface AddInvestmentModalProps {
   refetchPayloadData: () => void;
@@ -95,6 +96,13 @@ const AddInvestmentModal = ({ refetchPayloadData, companyCode, companyId }: AddI
                 <Form>
                   <SimpleGrid p={20}>
                     <Stack gap={20}>
+                      <Select
+                        clearable
+                        label="Jenis Investasi"
+                        placeholder="Pilih Jenis Investasi"
+                        onChange={(event) => setFieldValue("investor_type", event?.toUpperCase())}
+                        data={investmentOption}
+                      />
                       <TextInput
                         withAsterisk
                         w={200}
@@ -118,6 +126,34 @@ const AddInvestmentModal = ({ refetchPayloadData, companyCode, companyId }: AddI
                             const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
                             const numericValue = Number(rawValue) || 0;
                             setFieldValue("nominal", numericValue); // Store as number
+                          }}
+                        />
+                        <TextInput
+                          w={200}
+                          label="Biaya Administrasi"
+                          withAsterisk
+                          required
+                          error={touched.nominal && errors.nominal ? errors.nominal : undefined}
+                          placeholder="Masukan Biaya Admin"
+                          // value={values.nominal ? `Rp. ${values.nominal.toLocaleString("id-ID")}` : ""}
+                          onChange={(event) => {
+                            const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+                            const numericValue = Number(rawValue) || 0;
+                            setFieldValue("admin_fee", numericValue); // Store as number
+                          }}
+                        />
+                        <TextInput
+                          w={200}
+                          label="Biaya Tambahan"
+                          withAsterisk
+                          required
+                          error={touched.nominal && errors.nominal ? errors.nominal : undefined}
+                          placeholder="Masukan Biaya Tambahan"
+                          // value={values.nominal ? `Rp. ${values.nominal.toLocaleString("id-ID")}` : ""}
+                          onChange={(event) => {
+                            const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+                            const numericValue = Number(rawValue) || 0;
+                            setFieldValue("additional_fee", numericValue); // Store as number
                           }}
                         />
                         <NumberInput

@@ -48,6 +48,7 @@ export const allWeeks = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"
 export const payoutCategory = [
   { value: "hutang", label: "Hutang" },
   { value: "operasional", label: "Operasional" },
+  { value: "aset", label: "Aset" },
 ];
 export const paymentCategory = [
   { value: "tunai", label: "Tunai" },
@@ -60,4 +61,9 @@ export const projectDuration = [
   { value: "95", label: "95 Hari" },
   { value: "125", label: "125 Hari" },
   { value: "150", label: "150 Hari" },
+];
+
+export const investmentOption = [
+  { value: "Lump Sum", label: "Lump Sum" },
+  { value: "Installment Payment", label: "Installment Payment" },
 ];
