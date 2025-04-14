@@ -46,9 +46,9 @@ export const satuan: string[] = [
 export const allWeeks = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"];
 
 export const payoutCategory = [
-  { value: "hutang", label: "Hutang" },
   { value: "operasional", label: "Operasional" },
   { value: "aset", label: "Aset" },
+  { value: "hutang", label: "Hutang" },
 ];
 export const paymentCategory = [
   { value: "tunai", label: "Tunai" },
