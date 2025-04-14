@@ -38,25 +38,27 @@ const CashFlowReportTable: React.FC<CashFlowReportTableProps> = ({ groupedByWeek
                           </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>
-                          {goods.map((good: IGoods, index: number) => (
-                            <Table.Tr key={`${row.id}-${index}`}>
-                              <Table.Td>
-                                <Text variant="outline">{good.good_name}</Text>
-                              </Table.Td>
-                              <Table.Td>
-                                <Text variant="outline">{good.quantity}</Text>
-                              </Table.Td>
-                              <Table.Td>
-                                <Text variant="outline">{good.unit}</Text>
-                              </Table.Td>
-                              <Table.Td>
-                                <Text variant="outline">{formatCurrency(good.price)}</Text>
-                              </Table.Td>
-                              <Table.Td>
-                                <Text variant="outline">{good.total_cost.toLocaleString()}</Text>
-                              </Table.Td>
-                            </Table.Tr>
-                          ))}
+                          {goods
+                            .sort((a: { good_name: string }, b: { good_name: any }) => a.good_name.localeCompare(b.good_name))
+                            .map((good: IGoods, index: number) => (
+                              <Table.Tr key={`${row.id}-${index}`}>
+                                <Table.Td>
+                                  <Text variant="outline">{good.good_name}</Text>
+                                </Table.Td>
+                                <Table.Td>
+                                  <Text variant="outline">{good.quantity}</Text>
+                                </Table.Td>
+                                <Table.Td>
+                                  <Text variant="outline">{good.unit}</Text>
+                                </Table.Td>
+                                <Table.Td>
+                                  <Text variant="outline">{formatCurrency(good.price)}</Text>
+                                </Table.Td>
+                                <Table.Td>
+                                  <Text variant="outline">{formatCurrency(good.total_cost)}</Text>
+                                </Table.Td>
+                              </Table.Tr>
+                            ))}
                         </Table.Tbody>
                       </Table>
                     )}

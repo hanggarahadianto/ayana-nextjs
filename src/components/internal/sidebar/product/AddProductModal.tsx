@@ -1,17 +1,16 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
-import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleGrid, FileInput, InputWrapper } from "@mantine/core";
+import React, { useCallback, useRef, useState } from "react";
+import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleGrid, FileInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
-import { initialValueProductCreate, validationSchemaProduct } from "../../../../lib/initialValues/initialValuesProduct";
 import { useSubmitProductForm } from "@/api/products/postDataProduct";
 import ButtonAdd from "@/lib/button/buttonAdd";
 import { useSubmitInfoForm } from "@/api/info/postDataInfo";
-
-import { debounce } from "lodash";
 import { showNotification } from "@mantine/notifications";
 import { validateInfos } from "@/lib/validation/info-validation";
 import { availabilityOptions, locationOptions, typeOptions } from "@/lib/dictionary";
 import FormCreateInfo from "./FormCreateInfo";
+import { validationSchemaProduct } from "@/lib/validation/product-validation";
+import { initialValueProductCreate } from "@/lib/initialValues/initialValuesProduct";
 
 const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -24,23 +23,12 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
     ) as Record<keyof IProductCreate, string | number | File>
   );
 
-  console.log("FORM VALUES REF", formValuesRef.current);
-
-  const debouncedUpdateFormikValue = useMemo(() => {
-    return debounce((setFieldValue: any, field: keyof IProductCreate, value: any) => {
-      setFieldValue(field, value);
-    }, 100);
+  const handleChangeProduct = useCallback((field: keyof IProductCreate, value: string | number | File, setFieldValue: any) => {
+    if (formValuesRef.current[field] !== value) {
+      formValuesRef.current[field] = value;
+      setFieldValue(field, value); // Pembaruan langsung, tanpa debounce
+    }
   }, []);
-
-  const handleChangeProduct = useCallback(
-    (field: keyof IProductCreate, value: string | number | File, setFieldValue: any) => {
-      if (formValuesRef.current[field] !== value) {
-        formValuesRef.current[field] = value;
-        debouncedUpdateFormikValue(setFieldValue, field, value);
-      }
-    },
-    [debouncedUpdateFormikValue]
-  );
 
   const [debouncedInfos, setDebouncedInfos] = useState<IInfoCreate>({
     maps: "",
@@ -54,7 +42,7 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
   const [errorsInfo, setErrorsInfo] = useState<{ [key: string]: any }>({});
 
   const handleSubmit = useCallback(
-    async (values: IProductCreate, { setSubmitting }: any) => {
+    async (values: IProductCreate, { setSubmitting, resetForm }: any) => {
       try {
         await validateInfos(debouncedInfos, undefined, setErrorsInfo);
 
@@ -100,16 +88,16 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
 
             postDataInfo(updatedInfo, {
               onSuccess: () => {
-                // ✅ Reset debouncedInfos setelah sukses
-                setDebouncedInfos({
-                  maps: "",
-                  start_price: 0,
-                  home_id: "",
-                  near_by: [{ name: "", distance: "" }],
-                });
-
+                resetForm();
                 refetchProductData();
-                // close();
+              },
+              onError: (error) => {
+                console.error("Gagal menyimpan Info:", error);
+                showNotification({
+                  title: "Data Gagal Dikirim",
+                  message: error.message || "An error occurred",
+                  color: "red",
+                });
               },
             });
             showNotification({
@@ -120,6 +108,11 @@ const AddProductModal = React.memo(({ refetchProductData }: { refetchProductData
           },
           onError: (error) => {
             console.error("Gagal menyimpan Info:", error);
+            showNotification({
+              title: "Data Gagal Dikirim",
+              message: error.message || "An error occurred",
+              color: "red",
+            });
           },
         });
 

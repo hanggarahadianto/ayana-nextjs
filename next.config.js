@@ -1,5 +1,5 @@
 const nextConfig = {
-  reactStrictMode: process.env.NODE_ENV === "production" ? false : false,
+  reactStrictMode: process.env.NODE_ENV === "production" ? false : true,
   // trailingSlash: true,
 
   async headers() {

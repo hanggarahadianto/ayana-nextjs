@@ -4,10 +4,8 @@ import { useState, useEffect } from "react";
 import { SimpleGrid, Tabs } from "@mantine/core";
 
 import useGetCompanies from "@/components/internal/sidebar/company/GetCompanyTab";
-import { ExpenseCard } from "@/components/internal/sidebar/dashboard/ExpenseCard";
-import AddInvestmetn from "@/components/internal/sidebar/finance/investment/AddInvestmentModal";
-import AddInvestment from "@/components/internal/sidebar/finance/investment/AddInvestmentModal";
 import { InvestmentCard } from "@/components/internal/sidebar/finance/investment/InvestmentCard";
+import { AccountCard } from "@/components/internal/sidebar/finance/account/accountCard";
 
 export default function Finance() {
   const { companies, isLoading: isLoadingCompanies } = useGetCompanies();
@@ -46,6 +44,7 @@ export default function Finance() {
         </Tabs.List>
       </Tabs>
       <SimpleGrid p={20}>
+        <AccountCard companyId={undefined} />
         <InvestmentCard companyId={undefined} />
       </SimpleGrid>
     </SimpleGrid>
