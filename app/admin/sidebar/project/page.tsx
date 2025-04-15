@@ -104,7 +104,7 @@ const ProjectPage = () => {
                 cursor: "pointer",
               }}
             >
-              <Link href={`/internal/sidebar/project/${project.id}`} passHref legacyBehavior>
+              <Link href={`/admin/sidebar/project/${project.id}`} passHref style={{ textDecoration: "none" }}>
                 <Stack>
                   <Stack align="start" gap="md">
                     <Text fw={900} size="xl" style={{ color: "#ffffff" }}>

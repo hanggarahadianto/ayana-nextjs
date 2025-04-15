@@ -18,7 +18,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (Cookies.get("token")) {
-      router.push("/internal/sidebar/product");
+      router.push("/admin/sidebar/product");
     } else {
       setLoading(false);
     }
@@ -36,7 +36,7 @@ export default function LoginPage() {
     mutate(values, {
       onSuccess: (response: any) => {
         if (response) {
-          router.push("/internal/sidebar/product");
+          router.push("/admin/sidebar/product");
         }
       },
       onError: (response: any) => {

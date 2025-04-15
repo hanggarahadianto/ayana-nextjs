@@ -12,16 +12,16 @@ interface MenuItem {
 }
 
 export const menuItems: MenuItem[] = [
-  { label: "Dashboard", icon: <AiOutlineDashboard />, href: "/internal/sidebar/dashboard" },
-  { label: "News", icon: <FaNewspaper />, href: "/internal/sidebar/news" },
-  { label: "Task", icon: <FaTasks />, href: "/internal/sidebar/task" },
-  { label: "Product", icon: <FaShoppingBag />, href: "/internal/sidebar/product" },
-  { label: "Marketing", icon: <FaIdeal />, href: "/internal/sidebar/marketing" },
-  { label: "Finance", icon: <FaWallet />, href: "/internal/sidebar/finance" },
-  { label: "Payin", icon: <HiOutlineCash />, href: "/internal/sidebar/payin" },
-  { label: "Payout", icon: <FaMoneyBill />, href: "/internal/sidebar/payout" },
-  { label: "Project", icon: <FaProjectDiagram />, href: "/internal/sidebar/project" },
-  { label: "Transaction", icon: <TbTransactionDollar />, href: "/internal/sidebar/transaaction" },
-  { label: "Profile", icon: <FaUser />, href: "/internal/sidebar/profile" },
-  { label: "Setting", icon: <FaCog />, href: "/internal/sidebar/setting" },
+  { label: "Dashboard", icon: <AiOutlineDashboard />, href: "/admin/sidebar/dashboard" },
+  { label: "News", icon: <FaNewspaper />, href: "/admin/sidebar/news" },
+  { label: "Task", icon: <FaTasks />, href: "/admin/sidebar/task" },
+  { label: "Product", icon: <FaShoppingBag />, href: "/admin/sidebar/product" },
+  { label: "Marketing", icon: <FaIdeal />, href: "/admin/sidebar/marketing" },
+  { label: "Finance", icon: <FaWallet />, href: "/admin/sidebar/finance" },
+  { label: "Payin", icon: <HiOutlineCash />, href: "/admin/sidebar/payin" },
+  { label: "Payout", icon: <FaMoneyBill />, href: "/admin/sidebar/payout" },
+  { label: "Project", icon: <FaProjectDiagram />, href: "/admin/sidebar/project" },
+  { label: "Transaction", icon: <TbTransactionDollar />, href: "/admin/sidebar/transaaction" },
+  { label: "Profile", icon: <FaUser />, href: "/admin/sidebar/profile" },
+  { label: "Setting", icon: <FaCog />, href: "/admin/sidebar/setting" },
 ];

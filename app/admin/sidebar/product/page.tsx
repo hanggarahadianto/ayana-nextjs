@@ -68,7 +68,7 @@ const ProjectPage = () => {
               <Card
                 key={product.id}
                 w="100%"
-                h={300} // Menyesuaikan tinggi untuk menjaga konsistensi
+                h={200} // Menyesuaikan tinggi untuk menjaga konsistensi
                 maw={420}
                 style={{
                   background: "linear-gradient(135deg, rgba(255, 0, 150, 0.5), rgba(0, 204, 255, 0.5))",
@@ -88,7 +88,7 @@ const ProjectPage = () => {
                   <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
                     {product.title}
                   </Text>
-                  <Text fw={500} mt={8} size="lg" style={{ color: "#ffffff" }}>
+                  <Text fw={200} mt={0} size="sm" style={{ color: "#ffffff" }}>
                     {product.address}
                   </Text>
                 </Stack>
