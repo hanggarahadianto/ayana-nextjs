@@ -25,7 +25,7 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
       console.log("Form values submitted:", values);
       const payload = {
         ...values,
-        payment_date: values.payment_date === "" ? null : values.payment_date,
+        payment_date: values.payment_date === "" ? "" : values.payment_date,
         company: companyCode ?? "",
         company_id: companyId ?? "",
       };

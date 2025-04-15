@@ -94,7 +94,12 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyPr
                   </Stack>
                   <Divider />
 
-                  <FormAddMaterial materials={values.material} setMaterials={(val) => setFieldValue("material", val)} />
+                  <FormAddMaterial
+                    materials={values.material}
+                    setMaterials={(val) => setFieldValue("material", val)}
+                    errors={errors.worker}
+                    touched={touched.worker}
+                  />
                   <Stack justify="flex-start" align="start">
                     <Text
                       size="md"

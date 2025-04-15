@@ -16,18 +16,13 @@ const FormAddWorker: React.FC<FormAddWorkerProps> = React.memo(({ workers, setWo
   console.log("ERROR DI COMPONENT FORM ADD WORKER", errors);
   const { setFieldValue } = useFormikContext<IWeeklyProgressCreate>();
 
-  // ✅ Debounced function using lodash (more reliable than custom hooks)
-  const updateAmountWorker = useMemo(() => {
-    return debounce((updatedWorkers: IWorkerCreate[]) => {
-      const total = updatedWorkers.reduce((sum, worker) => sum + (worker.total_cost || 0), 0);
-      setFieldValue("amount_worker", total);
-    }, 300);
-  }, [setFieldValue]);
+  const amountWorker = useMemo(() => {
+    return workers.reduce((sum, worker) => sum + (worker.total_cost || 0), 0);
+  }, [workers]);
 
-  // ✅ Automatically update amount when workers change
   useEffect(() => {
-    updateAmountWorker(workers);
-  }, [workers, updateAmountWorker]);
+    setFieldValue("amount_worker", amountWorker);
+  }, [amountWorker, setFieldValue]);
 
   // ✅ useCallback to memoize function
   const addWorker = useCallback(() => {

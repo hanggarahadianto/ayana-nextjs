@@ -10,27 +10,23 @@ import { debounce } from "lodash";
 interface FormAddMaterialProps {
   materials: IMaterialCreate[];
   setMaterials: (newMaterials: IMaterialCreate[]) => void; // ubah dari Dispatch
+  errors?: any; // ubah dari any[] ke any
+  touched?: any;
 }
 
-const FormAddMaterial: React.FC<FormAddMaterialProps> = React.memo(({ materials, setMaterials }) => {
+const FormAddMaterial: React.FC<FormAddMaterialProps> = React.memo(({ materials, setMaterials, errors, touched }) => {
   const { setFieldValue } = useFormikContext<IWeeklyProgressCreate>();
 
-  // ✅ Debounced total cost update for materials
-  const updateAmountMaterial = useMemo(() => {
-    return debounce((updatedMaterials: IMaterialCreate[]) => {
-      const total = updatedMaterials.reduce((sum, material) => sum + (material.total_cost || 0), 0);
-      setFieldValue("amount_material", total);
-    }, 300);
-  }, [setFieldValue]);
+  const amountMaterial = useMemo(() => {
+    return materials.reduce((sum, worker) => sum + (worker.total_cost || 0), 0);
+  }, [materials]);
 
-  // ✅ Update amount_material automatically on materials change
   useEffect(() => {
-    updateAmountMaterial(materials);
-  }, [materials, updateAmountMaterial]);
+    setFieldValue("amount_material", amountMaterial);
+  }, [amountMaterial, setFieldValue]);
 
-  // ✅ Add material
   const addMaterial = useCallback(() => {
-    const updated = [...materials, { material_name: "", quantity: 0, total_cost: 0, unit: "", price: 0 }];
+    const updated = [...materials, { material_name: "", quantity: 0, unit: "", price: 0, total_cost: 0 }];
     setMaterials(updated);
   }, [materials, setMaterials]);
 
@@ -47,7 +43,16 @@ const FormAddMaterial: React.FC<FormAddMaterialProps> = React.memo(({ materials,
   const handleMaterialChange = useCallback(
     (index: number, field: keyof IMaterialCreate, value: string | number) => {
       const updated = [...materials];
-      updated[index] = { ...updated[index], [field]: value };
+      const current = { ...updated[index], [field]: value };
+
+      // Auto-calculate total_cost when quantity or price changes
+      if (field === "quantity" || field === "price") {
+        const quantity = field === "quantity" ? Number(value) : Number(current.quantity);
+        const price = field === "price" ? Number(value) : Number(current.price);
+        current.total_cost = quantity * price;
+      }
+
+      updated[index] = current;
       setMaterials(updated);
     },
     [materials, setMaterials]

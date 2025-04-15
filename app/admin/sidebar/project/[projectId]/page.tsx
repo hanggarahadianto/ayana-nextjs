@@ -92,8 +92,6 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
           refetchWeeklyProgressData={refetchWeeklyProgressData}
           projectDataDetail={projectDataDetail}
           weeklyProgressData={weeklyProgressData}
-          handleCardClick={undefined}
-          handleDeleteWeeklyProgress={undefined}
         />
       </Stack>
     </>
