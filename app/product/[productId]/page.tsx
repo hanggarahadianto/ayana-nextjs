@@ -1,10 +1,10 @@
 "use client"; // ✅ Ensure it's a client component
 
 import { useParams, useSearchParams } from "next/navigation";
-import Footer from "@/components/landing/footer";
-import Navbar from "@/components/landing/navbar";
-import ProductDetail from "@/components/product/ProductDetail";
-import FloatingWhatsApp from "@/components/product/FloatingWhatsapp";
+import Footer from "@/components/page/landing/footer";
+import Navbar from "@/components/page/landing/navbar";
+import FloatingWhatsApp from "@/components/page/product/FloatingWhatsapp";
+import ProductDetail from "@/components/page/product/ProductDetail";
 
 export default function ProductDetailPage() {
   const searchParams = useSearchParams();

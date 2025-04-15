@@ -2,15 +2,15 @@
 
 import { Card, Group, SimpleGrid, Text, Stack } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import AddProjectModal from "../../../../src/components/internal/sidebar/project/AddProjectModal";
+import AddProjectModal from "../../../../src/components/page/admin/project/AddProjectModal";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { getDataProject } from "@/api/project/getDataProject";
 import { useDeleteDataProject } from "@/api/project/deleteDataProject";
-import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { parseISO, differenceInDays, addDays } from "date-fns";
-import LoadingGlobal from "@/styles/loading/loading-global";
-import { formatDateIndonesia } from "@/lib/formatDateIndonesia";
+import LoadingGlobal from "@/helper/styles/loading/loading-global";
+import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 
 const ProjectPage = () => {
   const isSmallScreen = useMediaQuery("(max-width: 767px)"); // Mobile

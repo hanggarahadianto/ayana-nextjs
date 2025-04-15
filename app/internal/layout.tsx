@@ -3,26 +3,12 @@ import { useState, useEffect } from "react";
 import { AppShell, NavLink, SimpleGrid, Stack, useMantineTheme, rem, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
-import {
-  FaTasks,
-  FaProjectDiagram,
-  FaUser,
-  FaCog,
-  FaNewspaper,
-  FaShoppingBag,
-  FaIdeal,
-  FaMoneyBill,
-  FaAngleDoubleLeft,
-  FaAngleDoubleRight,
-  FaWallet,
-} from "react-icons/fa";
-import { AiOutlineDashboard } from "react-icons/ai";
-import { TbTransactionDollar } from "react-icons/tb";
+import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/landing/navbar";
-import { HiOutlineCash } from "react-icons/hi";
+import Navbar from "@/components/page/landing/navbar";
+import { menuItems } from "@/constants/navigation";
 
 export default function InternalLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -46,21 +32,6 @@ export default function InternalLayout({ children }: { children: React.ReactNode
   if (!isMounted) return null;
 
   const isDark = colorScheme === "dark";
-
-  const menuItems = [
-    { label: "Dashboard", icon: <AiOutlineDashboard />, href: "/internal/sidebar/dashboard" },
-    { label: "News", icon: <FaNewspaper />, href: "/internal/sidebar/news" },
-    { label: "Task", icon: <FaTasks />, href: "/internal/sidebar/task" },
-    { label: "Product", icon: <FaShoppingBag />, href: "/internal/sidebar/product" },
-    { label: "Marketing", icon: <FaIdeal />, href: "/internal/sidebar/marketing" },
-    { label: "Finance", icon: <FaWallet />, href: "/internal/sidebar/finance" },
-    { label: "Payin", icon: <HiOutlineCash />, href: "/internal/sidebar/payin" },
-    { label: "Payout", icon: <FaMoneyBill />, href: "/internal/sidebar/payout" },
-    { label: "Project", icon: <FaProjectDiagram />, href: "/internal/sidebar/project" },
-    { label: "Transaction", icon: <TbTransactionDollar />, href: "/internal/sidebar/transaaction" },
-    { label: "Profile", icon: <FaUser />, href: "/internal/sidebar/profile" },
-    { label: "Setting", icon: <FaCog />, href: "/internal/sidebar/setting" },
-  ];
 
   return (
     <>
@@ -106,7 +77,7 @@ export default function InternalLayout({ children }: { children: React.ReactNode
               </Stack>
 
               <AnimatePresence>
-                {menuItems.map((item, index) => (
+                {menuItems.map((item: any, index: any) => (
                   <motion.div
                     key={item.href}
                     initial={{ opacity: 0, x: -20 }}

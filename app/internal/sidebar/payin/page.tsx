@@ -6,9 +6,8 @@ import { useQuery } from "@tanstack/react-query"; // Sesuaikan path
 import { getDataCompany } from "@/api/company/getCompany"; // Sesuaikan path
 import { getDataPayout } from "@/api/payout/getDataPayout";
 import { useDeleteDataPayout } from "@/api/payout/deleteDataPayout";
-import LoadingGlobal from "@/styles/loading/loading-global";
-import TableTransaction from "@/components/internal/sidebar/finance/TableTransaction";
-import AddPayoutModal from "@/components/internal/sidebar/finance/payout/AddPayoutModal";
+import LoadingGlobal from "@/helper/styles/loading/loading-global";
+import AddPayoutModal from "@/components/page/admin/finance/payout/AddPayoutModal";
 
 export default function CompanyTabs() {
   const { data: companyData, isLoading } = useQuery({
@@ -104,12 +103,12 @@ export default function CompanyTabs() {
         ))}
       </Tabs>
       <SimpleGrid p={20}>
-        <TableTransaction
+        {/* <TableTransaction
           data={payoutData?.data || []}
           onRowClick={handleRowClick}
           onDelete={handleDeletePayoutClick}
           refetchPayoutData={refetchPayoutData}
-        />
+        /> */}
         {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />}
       </SimpleGrid>
     </SimpleGrid>

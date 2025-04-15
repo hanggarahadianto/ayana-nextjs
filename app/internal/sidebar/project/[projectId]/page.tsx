@@ -7,11 +7,11 @@ import { getDataWeeklyProgress } from "@/api/weekly-progress/getDataWeeklyProgre
 import { getDataCashFlowListByProjectId } from "@/api/cash-flow/getCashFlowListProject";
 
 import { FC, use } from "react";
-import ProjectCardDetail from "@/components/internal/sidebar/project/ProjectCardDetail";
-import ProjectCardSummary from "@/components/internal/sidebar/project/projectDetail/ProjectCardSummary";
-import WeeklyProgressMenu from "@/components/internal/sidebar/project/weeklyProgress/WeeklyProgressMenu";
-import LoadingGlobal from "@/styles/loading/loading-global";
-import ProgressBar from "@/components/internal/sidebar/project/projectDetail/progressBar";
+import ProjectCardDetail from "@/components/page/admin/project/ProjectCardDetail";
+import ProjectCardSummary from "@/components/page/admin/project/projectDetail/ProjectCardSummary";
+import WeeklyProgressMenu from "@/components/page/admin/project/weeklyProgress/WeeklyProgressMenu";
+import LoadingGlobal from "@/helper/styles/loading/loading-global";
+import ProgressBar from "@/components/page/admin/project/projectDetail/progressBar";
 
 interface ProjectProps {
   params: Promise<{

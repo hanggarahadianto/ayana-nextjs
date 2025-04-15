@@ -10,50 +10,33 @@ import LoadingGlobal from "@/helper/styles/loading/loading-global";
 import { Group, Pagination, ScrollArea, SimpleGrid, Stack, Table, Tabs, ThemeIcon, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import AccountTable from "@/components/common/table/accountTable";
+import { getDataAccount } from "@/api/account/getDataAccount";
 
-export default function Payout() {
-  const { companies, isLoading: isLoadingCompanies } = useGetCompanies();
-
-  const [activeTab, setActiveTab] = useState<ICompany | null>(null);
-
-  useEffect(() => {
-    if (companies.length > 0 && !activeTab) {
-      setActiveTab(companies[0]);
-    }
-  }, [companies, activeTab]);
-
-  const handleTabChange = useCallback(
-    (companyCode: string | null) => {
-      const selected = companies.find((company) => company.company_code === companyCode);
-      if (selected) setActiveTab(selected);
-    },
-    [companies]
-  );
-
+export default function AccountDataByCompanyId(companyId: string) {
   const {
-    data: payoutData,
-    isLoading: isLoadingPayoutData,
-    refetch: refetchPayoutData,
+    data: accountData,
+    isLoading: isLoadingAccountData,
+    refetch: refetchAccountData,
   } = useQuery({
-    queryKey: ["getPayoutData", activeTab?.id],
-    queryFn: () => (activeTab ? getDataPayout(activeTab.id) : Promise.resolve(null)),
-    enabled: !!activeTab,
+    queryKey: ["getAccountData", companyId],
+    queryFn: () => (companyId ? getDataAccount(companyId) : Promise.resolve(null)),
+    enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
 
-  const { mutate: mutateDeleteDataPayout, isPending: isLoadingDeleteDataPayout } = useDeleteDataPayout(refetchPayoutData);
+  //   const { mutate: mutateDeleteDataPayout, isPending: isLoadingDeleteDataPayout } = useDeleteDataPayout(refetchPayoutData);
 
-  const handleDeletePayoutClick = useCallback(
-    (idToDelete: string) => {
-      console.log("Menghapus payout dengan ID:", idToDelete);
-      mutateDeleteDataPayout(idToDelete);
-    },
-    [mutateDeleteDataPayout]
-  );
+  //   const handleDeletePayoutClick = useCallback(
+  //     (idToDelete: string) => {
+  //       mutateDeleteDataPayout(idToDelete);
+  //     },
+  //     [mutateDeleteDataPayout]
+  //   );
 
   const [page, setPage] = useState(1);
   const rowsPerPage = 5;
-  const totalPages = useMemo(() => Math.ceil((payoutData?.total || 1) / rowsPerPage), [payoutData]);
+  const totalPages = useMemo(() => Math.ceil((accountData?.total || 1) / rowsPerPage), [accountData]);
 
   const [selectedPayout, setSelectedPayout] = useState<IPayoutUpdate | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
@@ -65,8 +48,26 @@ export default function Payout() {
   };
   return (
     <SimpleGrid mt={10}>
-      <LoadingGlobal visible={isLoadingCompanies || isLoadingPayoutData} />
-      <Tabs value={activeTab?.company_code} onChange={handleTabChange}>
+      <LoadingGlobal visible={isLoadingAccountData} />
+      <AccountTable
+        data={accountData?.data || []}
+        onRowClick={function (account: IAccount): void {
+          throw new Error("Function not implemented.");
+        }}
+        onDelete={function (id: string): void {
+          throw new Error("Function not implemented.");
+        }}
+        refetchAccountData={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
+      {/* <TableTransaction
+        data={accountData?.data || []}
+        onRowClick={handleRowClick}
+        // onDelete={handleDeletePayoutClick}
+        refetchAccountData={refetchAccountData}
+      /> */}
+      {/*  <Tabs value={activeTab?.company_code} onChange={handleTabChange}>
         <Tabs.List>
           {companies.map((company) => (
             <Tabs.Tab key={company.company_code} value={company.company_code}>
@@ -85,12 +86,12 @@ export default function Payout() {
       </Tabs>
 
       <SimpleGrid p={20}>
-        {/* <TableTransaction
+        <TableTransaction
           data={payoutData?.data || []}
           onRowClick={handleRowClick}
           onDelete={handleDeletePayoutClick}
           refetchPayoutData={refetchPayoutData}
-        /> */}
+        />
 
         {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />}
       </SimpleGrid>
@@ -99,7 +100,7 @@ export default function Payout() {
         opened={isDetailsModalOpen}
         onClose={() => setIsDetailsModalOpen(false)}
         refetchPayoutData={refetchPayoutData}
-      />
+      /> */}
     </SimpleGrid>
   );
 }

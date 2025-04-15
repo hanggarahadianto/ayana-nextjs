@@ -1,22 +1,22 @@
-import { APIAxiosInstance } from "..";
+// import { APIAxiosInstance } from "..";
 
-export const getDataDebt = async (companyId: string) => {
-  if (!companyId) {
-    console.error("Company ID tidak ada!");
-    return;
-  }
+// export const getDataDebt = async (companyId: string) => {
+//   if (!companyId) {
+//     console.error("Company ID tidak ada!");
+//     return;
+//   }
 
-  try {
-    const url = `payout/debt/get?company_id=${companyId}`; // Tanpa "/" di awal
+//   try {
+//     const url = `payout/debt/get?company_id=${companyId}`; // Tanpa "/" di awal
 
-    console.log("Fetching URL:", url);
+//     console.log("Fetching URL:", url);
 
-    const response = await APIAxiosInstance.get(url);
-    console.log("Debt Response:", response.data);
+//     const response = await APIAxiosInstance.get(url);
+//     console.log("Debt Response:", response.data);
 
-    return response.data as IPayoutResponse;
-  } catch (error: any) {
-    console.error("Error fetching data:", error.message || error);
-    throw error;
-  }
-};
+//     return response.data as IPayoutResponse;
+//   } catch (error: any) {
+//     console.error("Error fetching data:", error.message || error);
+//     throw error;
+//   }
+// };

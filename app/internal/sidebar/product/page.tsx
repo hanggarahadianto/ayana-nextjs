@@ -4,13 +4,13 @@ import { Card, Group, SimpleGrid, Text, Stack, Container, Box, LoadingOverlay } 
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useMediaQuery } from "@mantine/hooks";
-import GetProductModal from "../../../../src/components/internal/sidebar/product/GetProductModal";
+import GetProductModal from "../../../../src/components/page/admin/product/GetProductModal";
 import { getDataProduct } from "@/api/products/getDataProduct";
 import { useDeleteDataProduct } from "@/api/products/deleteDataProduct";
-import ButtonDeleteWithConfirmation from "@/lib/button/buttonDeleteConfirmation";
-import EditProductModal from "@/components/internal/sidebar/product/EditProductModal";
-import AddProductModal from "@/components/internal/sidebar/product/AddProductModal";
-import LoadingGlobal from "@/styles/loading/loading-global";
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import EditProductModal from "@/components/page/admin/product/EditProductModal";
+import AddProductModal from "@/components/page/admin/product/AddProductModal";
+import LoadingGlobal from "@/helper/styles/loading/loading-global";
 import { getDataInfo } from "@/api/info/getDataInfo";
 
 const ProjectPage = () => {

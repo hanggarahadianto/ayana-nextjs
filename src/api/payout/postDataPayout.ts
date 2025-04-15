@@ -1,34 +1,50 @@
-import { useMutation } from "@tanstack/react-query"; // Correct import from '@tanstack/react-query'
+import { useMutation } from "@tanstack/react-query";
 import { showNotification } from "@mantine/notifications";
 import { APIAxiosInstance } from "..";
+import { AxiosError } from "axios";
+
+interface APIErrorResponse {
+  message?: string;
+  status?: string;
+  // Add other possible error response fields
+}
 
 const handleSubmitPayoutForm = async (values: IPayoutCreate) => {
-  console.log("values on fetching", values);
-  const response = await APIAxiosInstance.post("payout/post", values);
-  return response.data; // Return the response data
+  try {
+    console.log("Submitting payout form with values:", values);
+    const response = await APIAxiosInstance.post("payout/post", values);
+    return response.data;
+  } catch (error) {
+    console.error("Error in handleSubmitPayoutForm:", error);
+    throw error; // Re-throw to be caught by useMutation's onError
+  }
 };
 
-// Custom hook for the mutation
 export const useSubmitPayoutForm = (refetchPayoutData: () => void, closeModal: () => void) => {
-  return useMutation({
-    mutationFn: (values: any) => handleSubmitPayoutForm(values),
-    onSuccess: (data: any) => {
-      console.log("pesan sukses terkirim");
+  return useMutation<unknown, AxiosError<APIErrorResponse>, IPayoutCreate>({
+    mutationFn: handleSubmitPayoutForm,
+    onSuccess: () => {
+      console.log("Payout data successfully submitted");
       refetchPayoutData();
       closeModal();
       showNotification({
         title: "Data Berhasil Dikirim",
-        message: "",
+        message: "Data pembayaran berhasil disimpan",
         color: "green",
       });
     },
-    onError: (data: any) => {
+    onError: (error: AxiosError<APIErrorResponse>) => {
+      console.error("Mutation error:", error);
+
+      const errorMessage = error.response?.data?.message || error.message || "Terjadi kesalahan saat menyimpan data";
+
+      console.log("Error message to display:", errorMessage);
+
       showNotification({
         title: "Data Gagal Disimpan",
-        message: `${data.message}`,
+        message: errorMessage,
         color: "red",
       });
     },
-    onSettled: () => {},
   });
 };

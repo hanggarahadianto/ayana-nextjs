@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { SimpleGrid, Tabs } from "@mantine/core";
 
-import useGetCompanies from "@/components/internal/sidebar/company/GetCompanyTab";
-import { ExpenseCard } from "@/components/internal/sidebar/dashboard/ExpenseCard";
+import useGetCompanies from "@/components/page/admin/company/GetCompanyTab";
+// import { ExpenseCard } from "@/components/page/admin/dashboard/ExpenseCard";
 
 export default function Dashboard() {
   const { companies, isLoading: isLoadingCompanies } = useGetCompanies();
@@ -45,9 +45,7 @@ export default function Dashboard() {
           ))}
         </Tabs.List>
       </Tabs>
-      <SimpleGrid p={20}>
-        <ExpenseCard companyId={activeTab?.id} />
-      </SimpleGrid>
+      <SimpleGrid p={20}>{/* <ExpenseCard companyId={activeTab?.id} /> */}</SimpleGrid>
     </SimpleGrid>
   );
 }

@@ -1,6 +1,6 @@
 interface IAccount {
   id: string;
-  code: string;
+  code: number;
   name: string;
   type: string;
   category: string;
@@ -9,7 +9,7 @@ interface IAccount {
 }
 
 interface IAccountCreate {
-  code: string;
+  code: number;
   name: string;
   type: string;
   category: string;
@@ -19,7 +19,7 @@ interface IAccountCreate {
 
 // ICashFlowUpdate.ts
 interface IAccountUpdate {
-  code: string;
+  code: number;
   name: string;
   type: string;
   category: string;
@@ -30,4 +30,7 @@ interface IAccountUpdate {
 interface IAccountResponse {
   data: IAccount[];
   status: string;
+  limit?: number; // Optional jika tidak selalu ada
+  page?: number; // Optional jika tidak selalu ada
+  total?: number; // Optional jika tidak selalu ada
 }
