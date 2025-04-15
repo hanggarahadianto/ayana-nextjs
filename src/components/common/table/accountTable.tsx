@@ -8,24 +8,25 @@ interface AccountTableProps {
 }
 
 export default function AccountTable({ data, onRowClick, onDelete, refetchAccountData }: AccountTableProps) {
-  console.log("data account table", data);
+  // console.log("data account table", data);
   return (
-    <ScrollArea>
+    <ScrollArea style={{ minHeight: 400 }}>
       <Table
         highlightOnHover
         withColumnBorders
         style={{
-          tableLayout: "fixed", // ⛔ penting untuk ukuran kolom tetap
+          tableLayout: "fixed",
           width: "100%",
+          minWidth: 700, // atau sesuai kebutuhan
+          maxWidth: "100%",
         }}
       >
         <Table.Thead>
           <Table.Tr>
-            <Table.Th style={{ textAlign: "center", width: "80px" }}>Code</Table.Th>
-            <Table.Th style={{ textAlign: "center", width: "120px" }}>Nama</Table.Th>
-            {/* <Table.Th style={{ textAlign: "center", width: "160px" }}>Tipe</Table.Th> */}
-            <Table.Th style={{ textAlign: "center", width: "100px" }}>Kategori</Table.Th>
-            <Table.Th style={{ textAlign: "center", width: "180px" }}>Deskripsi</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 80, minWidth: 80 }}>Code</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 120, minWidth: 120 }}>Nama</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 100, minWidth: 100 }}>Kategori</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Deskripsi</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
