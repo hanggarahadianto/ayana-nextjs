@@ -15,7 +15,6 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyPr
   const [opened, { open, close }] = useDisclosure(false);
   const { mutate: postData, isPending: isLoading } = useSubmitWeeklyProgressForm(refetchWeeklyProgressData, close);
 
-  // Filter minggu yang belum dipilih
   const availableWeeks = useMemo(() => {
     const selectedWeeks = new Set(weeklyProgress.map((item) => item.week_number));
     return allWeeks.filter((week) => !selectedWeeks.has(week)).map((week) => ({ value: week, label: week }));
@@ -97,8 +96,8 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyPr
                   <FormAddMaterial
                     materials={values.material}
                     setMaterials={(val) => setFieldValue("material", val)}
-                    errors={errors.worker}
-                    touched={touched.worker}
+                    errors={errors.material}
+                    touched={touched.material}
                   />
                   <Stack justify="flex-start" align="start">
                     <Text

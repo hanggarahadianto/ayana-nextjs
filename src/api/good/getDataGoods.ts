@@ -1,6 +1,6 @@
 import { APIAxiosInstance } from "..";
 
-export const getDataGoods = async (cashFlowData: { id: string }[]) => {
+export const getDataGoods = async (cashFlowData?: { id: string }[]) => {
   if (!cashFlowData || cashFlowData.length === 0) {
     console.error("Tidak ada Cash Flow ID yang tersedia!");
     return [];

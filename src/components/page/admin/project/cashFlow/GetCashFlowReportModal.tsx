@@ -89,16 +89,18 @@ const GetCashFlowReportModal = ({
       >
         <Paper p="md" shadow="sm" mb={16}>
           <Grid>
-            <Grid.Col span={2} mr={40}>
+            <Grid.Col span={4}>
               <Stack>
-                <Text>BUKU KAS UMUM</Text>
+                <Text size="xl" fw={200}>
+                  BUKU KAS UMUM
+                </Text>
                 <Text size="lg" fw={700} mb="sm">
                   {`${projectName}`}
                 </Text>
               </Stack>
             </Grid.Col>
-            <Grid.Col span={9}>
-              <Group mt="md" gap="sm">
+            <Grid.Col span={8}>
+              <Group gap="sm">
                 {/*  */}
                 <Stack>
                   <Text size="xl" fw={900} c="blue">

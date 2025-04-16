@@ -1,32 +1,16 @@
-import React, { useEffect, useMemo, useState } from "react";
-import {
-  Modal,
-  TextInput,
-  Button,
-  Group,
-  Select,
-  Card,
-  Text,
-  Stack,
-  NumberInput,
-  InputWrapper,
-  SimpleGrid,
-  Flex,
-  Grid,
-  Divider,
-} from "@mantine/core";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Modal, TextInput, Button, Group, Select, Text, Stack, SimpleGrid, Grid, Divider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
-import { initialValuesCashFlowCreate, validationSchemaCashFlowCreate } from "../../../../../utils/initialValues/initialValuesCashFlow";
 import { useSubmitCashFlowForm } from "@/api/cash-flow/postDataCashFlow";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
-import ButtonAdd from "@/components/common/button/buttonAdd";
-import ButtonDelete from "@/components/common/button/butttonDelete";
-
 import { IconPlus } from "@tabler/icons-react";
 import { useSubmitGoodForm } from "@/api/good/postDataGood";
 import { showNotification } from "@mantine/notifications";
-import { allWeeks, satuan } from "@/constants/dictionary";
+import { allWeeks } from "@/constants/dictionary";
+import { initialValuesCashFlowCreate } from "@/utils/initialValues/initialValuesCashFlow";
+import FormGoods from "./FormGoods";
+import { validationSchemaCashFlowCreate } from "@/utils/validation/cashFlow-validation";
 
 const AddCashFlowReportModal = ({
   projectName,
@@ -34,15 +18,24 @@ const AddCashFlowReportModal = ({
   refetchCashFlowData,
   cashFlowData = [],
 }: {
-  projectName: any;
-  projectId: any;
+  projectName: string;
+  projectId: string;
   refetchCashFlowData: () => void;
-  cashFlowData?: ICashFlow[];
+  cashFlowData?: ICashFlowResponse[];
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
+  const [accountBalance, setAccountBalance] = useState(0);
 
   const { mutate: postDataCashFlow, isPending: isLoadingPostDataCashFlow } = useSubmitCashFlowForm();
   const { mutate: postDataGoods, isPending: isLoadingPostDataGoods } = useSubmitGoodForm();
+
+  const selectedWeeks = useMemo(() => {
+    return cashFlowData.flatMap((res) => res.data.map((item) => item.week_number));
+  }, [cashFlowData]);
+
+  const availableWeeks = useMemo(() => {
+    return allWeeks.filter((week: string) => !selectedWeeks.includes(week)).map((week) => ({ value: week, label: week }));
+  }, [selectedWeeks, allWeeks]);
 
   const handleSubmit = async (values: ICashFlowCreate) => {
     try {
@@ -83,12 +76,6 @@ const AddCashFlowReportModal = ({
     }
   };
 
-  const selectedWeeks = useMemo(() => cashFlowData.map((item) => item.week_number), [cashFlowData]);
-
-  const availableWeeks = useMemo(() => {
-    return allWeeks.filter((week: string) => !selectedWeeks.includes(week)).map((week) => ({ value: week, label: week }));
-  }, [selectedWeeks]);
-
   return (
     <>
       <BreathingActionIcon
@@ -113,65 +100,24 @@ const AddCashFlowReportModal = ({
           validateOnMount={false}
           onSubmit={handleSubmit}
         >
-          {({ values, errors, touched, setFieldValue, handleBlur }) => {
-            // console.log(values);
-            // console.log("ERROR", errors);
+          {({ values, errors, touched, setFieldValue }) => {
+            console.log("values", values);
+            console.log("error", errors);
+            const calculateCashOut = useCallback(() => {
+              const totalCost = (values.good || []).reduce((acc, good) => acc + (good.total_cost || 0), 0);
+              return totalCost; // Return the calculated cash_out
+            }, [values.good]);
 
-            const [debouncedGoods, setDebouncedGoods] = useState(values.good || []);
-            const [cashOut, setCashOut] = useState(0);
-            const [accountBalance, setAccountBalance] = useState(0);
+            // Calculate accountBalance as cash_in - cash_out
+            const accountBalance = useMemo(() => {
+              const cashOut = calculateCashOut();
+              return values.cash_in - cashOut; // cash_in - cash_out
+            }, [values.cash_in, calculateCashOut]);
 
             useEffect(() => {
-              const handler = setTimeout(() => {
-                const totalCost = debouncedGoods.reduce((acc, good) => acc + (good.total_cost || 0), 0);
-                setCashOut(totalCost);
-                setFieldValue("cash_out", totalCost);
-
-                // Update account balance
-                const updatedCashIn = values.cash_in || 0;
-                setAccountBalance(updatedCashIn - totalCost);
-              }, 500);
-
-              return () => clearTimeout(handler);
-            }, [debouncedGoods, values.cash_in]);
-
-            const calculateTotalCost = (price: number, quantity: number, costsDue: number): number =>
-              price * quantity + (costsDue / 100) * price * quantity;
-
-            const addGoodField = () => {
-              const newGood: IGoodsCreate = {
-                good_name: "",
-                status: "tunai",
-                quantity: 0,
-                unit: "",
-                price: 0,
-                cash_flow_id: "",
-                costs_due: 0,
-                total_cost: 0,
-              };
-              setDebouncedGoods((prevGoods) => {
-                const updatedGoods = [...prevGoods, newGood];
-                setFieldValue("good", updatedGoods); // Update Formik values
-                return updatedGoods;
-              });
-            };
-            const deleteGoodField = (goods: IGoodsCreate[], index: number) => {
-              const updatedGoods = goods.filter((_, i) => i !== index);
-              setDebouncedGoods(updatedGoods); // Perbarui state sementara
-              setFieldValue("good", updatedGoods);
-            };
-
-            const handleGoodChange = <T extends keyof IGoodsCreate>(index: number, field: T, value: IGoodsCreate[T]) => {
-              const updatedGood = [...(values?.good || [])];
-              updatedGood[index][field] = value;
-
-              if (field === "price" || field === "quantity" || field === "costs_due") {
-                const { price = 0, quantity = 0, costs_due = 0 } = updatedGood[index];
-                updatedGood[index].total_cost = calculateTotalCost(price, quantity, costs_due);
-              }
-
-              setDebouncedGoods(updatedGood); // Tidak langsung update cash_out
-            };
+              // Update cash_out field in Formik whenever goods change
+              setFieldValue("cash_out", calculateCashOut());
+            }, [values.good, setFieldValue, calculateCashOut]);
 
             return (
               <SimpleGrid p={20}>
@@ -194,7 +140,7 @@ const AddCashFlowReportModal = ({
                           </Grid.Col>
                           <Grid.Col span={6}>
                             <Text>Rp {values.cash_in?.toLocaleString()}</Text>
-                            <Text>Rp {cashOut.toLocaleString()}</Text>
+                            <Text>Rp {values.cash_out.toLocaleString()}</Text>
                             <Text c={accountBalance < 0 ? "red" : "green"}> : Rp {accountBalance.toLocaleString()}</Text>
                           </Grid.Col>
                         </Grid>
@@ -203,101 +149,39 @@ const AddCashFlowReportModal = ({
                   </Grid>
 
                   <Group>
-                    <InputWrapper required error={touched.week_number && errors.week_number ? errors.week_number : undefined}>
-                      <Select
-                        label="Minggu Ke"
-                        placeholder="Pilih Minggu"
-                        onChange={(value: any) => {
-                          setFieldValue("week_number", value);
-                        }}
-                        data={availableWeeks} // Hide selected & past weeks
-                        required
-                      />
-                    </InputWrapper>
-
-                    <InputWrapper
-                      required
+                    <Select
                       error={touched.week_number && errors.week_number ? errors.week_number : undefined}
-                    ></InputWrapper>
-                    <InputWrapper required error={touched.cash_in && errors.cash_in ? errors.cash_in : undefined}>
-                      <TextInput
-                        value={values?.cash_in ? `Rp. ${values?.cash_in.toLocaleString("id-ID")}` : ""}
-                        w={400}
-                        label={"Uang Masuk"}
-                        placeholder="Masukan Uang Masuk"
-                        onChange={(event) => {
-                          const numericValue = Number(event.target.value.replace(/\D/g, "")); // Hanya angka
-                          setFieldValue("cash_in", isNaN(numericValue) ? 0 : numericValue);
-                        }}
-                      />
-                    </InputWrapper>
+                      label="Minggu Ke"
+                      placeholder="Pilih Minggu"
+                      onChange={(value: any) => {
+                        setFieldValue("week_number", value);
+                      }}
+                      data={availableWeeks} // Hide selected & past weeks
+                      required
+                    />
+
+                    <TextInput
+                      error={touched.cash_in && errors.cash_in ? errors.cash_in : undefined}
+                      value={values?.cash_in ? `Rp. ${values?.cash_in.toLocaleString("id-ID")}` : ""}
+                      w={400}
+                      label={"Uang Masuk"}
+                      placeholder="Masukan Uang Masuk"
+                      onChange={(event) => {
+                        const numericValue = Number(event.target.value.replace(/\D/g, "")); // Hanya angka
+                        setFieldValue("cash_in", isNaN(numericValue) ? 0 : numericValue);
+                      }}
+                    />
                   </Group>
 
                   <Divider mt={20} />
 
-                  <Group justify="space-between" p={20}>
-                    <Text fw={700}>Tambahkan Daftar Pengeluaran</Text>
-                    <ButtonAdd onClick={() => addGoodField()} size="3.5rem" />
-                  </Group>
-
-                  <Stack mt="md">
-                    {Array.isArray(values.good) &&
-                      values.good.map((good, index) => (
-                        <Card key={index} shadow="lg" padding="lg" radius="md">
-                          <Group>
-                            <TextInput
-                              label={`Nama Pengeluaran ${index + 1}`}
-                              value={good.good_name || ""}
-                              placeholder="Masukan Pengeluaran"
-                              onChange={(event) => handleGoodChange(index, "good_name", event.currentTarget.value.toUpperCase())}
-                            />
-
-                            <NumberInput
-                              w={100}
-                              hideControls
-                              label={"Kuantitas"}
-                              placeholder="Masukan Kuantitas"
-                              value={good.quantity || ""}
-                              onChange={(value) => handleGoodChange(index, "quantity", Number(value) || 0)}
-                            />
-
-                            <Select
-                              w={100}
-                              label={"Satuan"}
-                              placeholder="Satuan"
-                              value={good.unit || ""}
-                              data={satuan}
-                              onChange={(value) => handleGoodChange(index, "unit", value || "")}
-                            />
-
-                            <TextInput
-                              w={140}
-                              label="Harga"
-                              placeholder="Masukan Harga"
-                              value={good.price ? `Rp. ${good.price.toLocaleString("id-ID")}` : ""}
-                              onChange={(event) => {
-                                const rawValue = event.target.value.replace(/\D/g, ""); // Hanya angka
-                                const numericValue = Number(rawValue) || 0;
-                                handleGoodChange(index, "price", numericValue);
-                              }}
-                            />
-
-                            <TextInput
-                              w={140}
-                              label={"Total"}
-                              value={good.total_cost?.toLocaleString("id-ID") || "0"}
-                              readOnly
-                              styles={{ input: { fontWeight: "bold", cursor: "not-allowed" } }}
-                            />
-
-                            <Stack mt={20}>
-                              <ButtonDelete onClick={() => deleteGoodField(debouncedGoods || [], index)} />
-                            </Stack>
-                          </Group>
-                        </Card>
-                      ))}
-                  </Stack>
-
+                  <FormGoods
+                    goods={values.good || []} // Directly bind to Formik's values.good
+                    onGoodsChange={(updatedGoods) => setFieldValue("good", updatedGoods)} // Update goods field in Formik
+                    isCreateMode={true} // Menandakan bahwa ini adalah mode create
+                    error={(errors.good as any) || []} // Kirimkan array error ke FormGoods
+                    touched={(touched.good as any) || []}
+                  />
                   <Stack justify="flex-start" align="start">
                     <Text
                       size="md"

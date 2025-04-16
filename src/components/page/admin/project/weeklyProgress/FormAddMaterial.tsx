@@ -4,8 +4,6 @@ import ButtonAdd from "@/components/common/button/buttonAdd";
 import ButtonDelete from "@/components/common/button/butttonDelete";
 import { satuan } from "@/constants/dictionary";
 import { useFormikContext } from "formik";
-import { useDebouncedCallback } from "use-debounce";
-import { debounce } from "lodash";
 
 interface FormAddMaterialProps {
   materials: IMaterialCreate[];
@@ -69,12 +67,14 @@ const FormAddMaterial: React.FC<FormAddMaterialProps> = React.memo(({ materials,
           <Card key={index} shadow="sm" radius="md" withBorder>
             <Group>
               <TextInput
+                error={touched?.[index]?.material_name && errors?.[index]?.material_name}
                 label={`Nama Material ${index + 1}`}
                 placeholder="Masukan Nama Material"
                 value={material.material_name}
                 onChange={(e) => handleMaterialChange(index, "material_name", e.target.value.toUpperCase())}
               />
               <NumberInput
+                error={touched?.[index]?.quantity && errors?.[index]?.quantity}
                 hideControls
                 w={100}
                 label="Kuantitas"
@@ -83,6 +83,7 @@ const FormAddMaterial: React.FC<FormAddMaterialProps> = React.memo(({ materials,
                 onChange={(value) => handleMaterialChange(index, "quantity", (value as number) || 0)}
               />
               <Select
+                error={touched?.[index]?.unit && errors?.[index]?.unit}
                 w={140}
                 label="Satuan"
                 placeholder="Satuan"
@@ -91,6 +92,7 @@ const FormAddMaterial: React.FC<FormAddMaterialProps> = React.memo(({ materials,
                 onChange={(value) => handleMaterialChange(index, "unit", value || "")}
               />
               <TextInput
+                error={touched?.[index]?.price && errors?.[index]?.price}
                 w={140}
                 label="Harga"
                 placeholder="Masukan Harga"

@@ -27,7 +27,7 @@ export const validationSchemaProject = Yup.object({
   note: Yup.string().optional(),
 });
 
-export const getInitialValuesUpdateProject = (initialData: IProjectUpdate) => ({
+export const getInitialValuesUpdateProject = (initialData?: IProjectUpdate) => ({
   id: initialData?.id || "",
   project_name: initialData?.project_name || "",
   project_leader: initialData?.project_leader || "",

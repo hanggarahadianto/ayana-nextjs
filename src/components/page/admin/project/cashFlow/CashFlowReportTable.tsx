@@ -3,7 +3,7 @@ import { ScrollArea, Flex, Divider, Text, Table, Stack, Grid } from "@mantine/co
 
 interface CashFlowReportTableProps {
   groupedByWeek: Record<string, any[]>; // Sesuaikan dengan tipe data sebenarnya
-  mergedData: any[];
+  mergedData?: any[];
 }
 
 const CashFlowReportTable: React.FC<CashFlowReportTableProps> = ({ groupedByWeek, mergedData }) => {
@@ -20,7 +20,7 @@ const CashFlowReportTable: React.FC<CashFlowReportTableProps> = ({ groupedByWeek
             <Flex direction="column" gap="sm">
               {groupedByWeek[week].map((row: any) => {
                 const balance = row.cash_in - row.cash_out;
-                const goods = mergedData.find((data) => data.id === row.id)?.goods || [];
+                const goods = mergedData?.find((data) => data.id === row.id)?.goods || [];
 
                 return (
                   <div key={row.id}>

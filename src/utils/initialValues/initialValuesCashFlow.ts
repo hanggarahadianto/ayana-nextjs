@@ -11,11 +11,11 @@ export const initialValuesCashFlowCreate = (projectId: string): ICashFlowCreate 
       quantity: 0,
       costs_due: 0,
       unit: "",
-
       total_cost: 0,
       price: 0,
+      cash_flow_id: "",
     },
-  ], // One initial empty good
+  ],
 });
 
 export const initialValuesCashFlowUpdate: ICashFlowUpdate = {
@@ -24,38 +24,6 @@ export const initialValuesCashFlowUpdate: ICashFlowUpdate = {
   cash_in: 0,
   cash_out: 0,
 };
-
-import * as Yup from "yup";
-
-export const validationSchemaCashFlowCreate = Yup.object({
-  week_number: Yup.string().required("Minggu ke harus diisi").matches(/^\d+$/, "Week number must be a number"),
-
-  cash_in: Yup.number().required("Cash in is required").min(0, "Cash in cannot be negative"),
-
-  cash_out: Yup.number().required("Cash out is required").min(0, "Cash out cannot be negative"),
-});
-
-export const validationSchemaCashFlowUpdate = Yup.object({
-  id: Yup.string().required("ID is required"),
-
-  week_number: Yup.string().required("Week number is required").matches(/^\d+$/, "Week number must be a number"),
-
-  cash_in: Yup.number().required("Cash in is required").min(0, "Cash in cannot be negative"),
-
-  cash_out: Yup.number().required("Cash out is required").min(0, "Cash out cannot be negative"),
-
-  // good: Yup.array().of(
-  //   Yup.object({
-  //     good_name: Yup.string().required("Good name is required"),
-
-  //     status: Yup.string().required("Status is required"),
-
-  //     quantity: Yup.number().required("Quantity is required").min(1, "Quantity must be greater than 0"),
-
-  //     total_cost: Yup.number().required("Total cost is required").min(0, "Total cost cannot be negative"),
-  //   })
-  // ),
-});
 
 export function getInitialValuesCashFlow(cashFlowData: ICashFlowUpdate): ICashFlowUpdate {
   return {
@@ -74,8 +42,9 @@ export function getInitialValuesCashFlow(cashFlowData: ICashFlowUpdate): ICashFl
             unit: "",
             price: 0,
             quantity: 0,
-            costs_due: 0, // This field was missing in the fallback
+            costs_due: 0,
             total_cost: 0,
+            cash_flow_id: "", // Added missing required field
           },
         ],
   };

@@ -12,6 +12,7 @@ import ProjectCardSummary from "@/components/page/admin/project/projectDetail/Pr
 import WeeklyProgressMenu from "@/components/page/admin/project/weeklyProgress/WeeklyProgressMenu";
 import LoadingGlobal from "@/helper/styles/loading/loading-global";
 import ProgressBar from "@/components/page/admin/project/projectDetail/progressBar";
+import { progressProject, totalMaterialCost, totalWorkerCost } from "@/lib/projectProgressUtils";
 
 interface ProjectProps {
   params: Promise<{
@@ -43,6 +44,8 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
     refetchOnWindowFocus: false,
   });
 
+  console.log("progres data", weeklyProgressData);
+
   const {
     data: cashFlowData,
     isLoading: isLoadingCashFlowData,
@@ -57,34 +60,38 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   const totalCashOut = cashFlowData?.data.reduce((sum, item) => sum + item.cash_out, 0);
 
   let grossProfit = (totalCashIn ?? 0) - (totalCashOut ?? 0);
-  const progress = 20;
+  const currentPercentage = progressProject(weeklyProgressData?.data || []);
+  const materialCost = totalMaterialCost(weeklyProgressData?.data || []);
+  const workerCost = totalWorkerCost(weeklyProgressData?.data || []);
 
+  // console.log("CASHFLOW DATA", cashFlowData);
   return (
     <>
       <Grid p={16}>
         <LoadingGlobal visible={isLoadingCashFlowData || isLoadingGetProjectData || isLoadingGetWeeklyProgressData} />
-        <Grid.Col span={{ base: 12, sm: 6, md: 6 }}>
+        <Grid.Col span={{ base: 14, sm: 7, md: 7 }}>
           <ProjectCardDetail
             projectDataDetail={projectDataDetail}
-            cashFlowData={cashFlowData}
+            cashFlowData={cashFlowData || undefined}
             refetchProjectData={refetchProjectData}
             refetchCashFlowData={refetchCashFlowData}
             totalCashIn={totalCashIn}
           />
         </Grid.Col>
-        <Grid.Col span={{ base: 12, sm: 6, md: 6 }}>
+        <Grid.Col span={{ base: 10, sm: 5, md: 5 }}>
           <ProjectCardSummary
-            projectDataDetail={projectDataDetail}
             totalCashIn={totalCashIn}
             totalCashOut={totalCashOut}
             grossProfit={grossProfit}
+            materialCost={materialCost}
+            workerCost={workerCost}
           />
         </Grid.Col>
       </Grid>
       <Divider mt={40} mb={20} />
 
       <Stack justify="center" align="center">
-        <ProgressBar progress={progress} />
+        <ProgressBar progress={currentPercentage} />
       </Stack>
 
       <Stack mt={20}>
