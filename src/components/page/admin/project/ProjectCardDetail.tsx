@@ -74,9 +74,8 @@ const ProjectCardDetail: FC<{
                       />
                       <EditCashFlowReportModal
                         projectName={projectDataDetail?.project_name ?? ""}
-                        projectId={projectDataDetail?.id ?? ""}
                         refetchCashFlowData={refetchCashFlowData}
-                        cashFlowData={cashFlowData ? [cashFlowData] : undefined}
+                        cashFlowData={cashFlowData?.data ?? []}
                       />
 
                       <GetCashFlowReportModal

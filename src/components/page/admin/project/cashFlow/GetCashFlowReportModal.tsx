@@ -5,7 +5,7 @@ import { IconEye, IconPlus } from "@tabler/icons-react";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { useQuery } from "@tanstack/react-query";
 import { getDataGoods } from "@/api/good/getDataGoods";
-import CashFlowReportTable from "./CashFlowReportTable";
+import CashFlowReportTable from "./TableCashFlowReport";
 
 const GetCashFlowReportModal = ({
   projectName,

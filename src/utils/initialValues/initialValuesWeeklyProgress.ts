@@ -52,7 +52,7 @@ export const initialValueWeeklyProgressUpdate: IWeeklyProgressUpdate = {
 
 import * as Yup from "yup";
 
-export function getInitialValuesUpdateWeeklyProgress(weeklyProgressData: IWeeklyProgressUpdate): IWeeklyProgressUpdate {
+export function getInitialValuesUpdateWeeklyProgress(weeklyProgressData?: IWeeklyProgressUpdate): IWeeklyProgressUpdate {
   return {
     id: weeklyProgressData?.id || "",
     week_number: weeklyProgressData?.week_number || "",

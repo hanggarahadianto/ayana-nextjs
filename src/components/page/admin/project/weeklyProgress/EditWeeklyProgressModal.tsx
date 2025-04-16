@@ -1,183 +1,168 @@
 "use client";
-import React, { useEffect } from "react";
-import { Modal, TextInput, Button, Group, Select, Textarea, Card, Text, Stack, NumberInput, SimpleGrid } from "@mantine/core";
+import React, { useCallback, useEffect } from "react";
+import { Modal, Button, Group, Select, Textarea, Text, Stack, NumberInput, SimpleGrid, Divider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 
 import { useUpdateWeeklyProgressForm } from "@/api/weekly-progress/editDataWeeklyProgress";
-import ButtonAdd from "@/components/common/button/buttonAdd";
-import ButtonDelete from "@/components/common/button/butttonDelete";
 import { getInitialValuesUpdateWeeklyProgress } from "@/utils/initialValues/initialValuesWeeklyProgress";
-import { allWeeks, satuan } from "@/constants/dictionary";
+import BreathingActionIcon from "@/components/common/button/buttonAction";
+import { IconPencil } from "@tabler/icons-react";
+import { allWeeks } from "@/constants/dictionary";
+import FormAddMaterial from "./FormAddMaterial";
+import FormAddWorker from "./FormAddWorker";
+import { validationSchemaWeeklyProgressCreate } from "@/utils/validation/weeeklyProgress-validation";
 
 const EditWeeklyProgressModal = ({
   projectId,
   refetchWeeklyProgressData,
   initialData,
-  onClose,
 }: {
   projectId: any;
   refetchWeeklyProgressData: () => void;
-  initialData: IWeeklyProgressUpdate;
-  onClose: () => void;
+  initialData?: IWeeklyProgressUpdate;
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
-
-  console.log("initialData", initialData);
-
-  const { mutate: updateData, isPending: isLoadingSubmitProjectData } = useUpdateWeeklyProgressForm(refetchWeeklyProgressData, close);
+  const { mutate: updateData, isPending: isLoadingUpdateWeeklyProgressData } = useUpdateWeeklyProgressForm(
+    refetchWeeklyProgressData,
+    close
+  );
 
   const handleSubmit = (values: IWeeklyProgressUpdate) => {
-    const formData = { ...values, id: initialData?.id, amount_worker: values?.worker?.length, project_id: projectId };
-
-    console.log("Form values submitted:", formData);
-
+    const formData = { ...values, id: initialData?.id };
     updateData(formData);
   };
 
-  useEffect(() => {
-    if (initialData) {
-      open();
-    }
-  }, [initialData]);
-
   return (
     <>
-      <Modal opened={opened} onClose={onClose} size={"60%"} yOffset="100px">
+      <BreathingActionIcon
+        onClick={open}
+        size="2.5rem"
+        icon={<IconPencil size="1.5rem" />}
+        gradient="linear-gradient(135deg, #60A5FA, #3B82F6)"
+      />
+
+      <Modal opened={opened} onClose={close} size="100%" yOffset="100px">
         <Formik
           initialValues={getInitialValuesUpdateWeeklyProgress(initialData)}
+          validationSchema={validationSchemaWeeklyProgressCreate}
+          onSubmit={handleSubmit}
           validateOnBlur={false}
           enableReinitialize={true}
           validateOnChange={true}
           validateOnMount={false}
-          onSubmit={handleSubmit}
         >
-          {({ values, errors, touched, setFieldValue }) => {
-            console.log("VALUES", values);
+          {({ values, errors, touched, setFieldValue, isSubmitting }) => {
+            console.log("valaues", values);
+            console.log("errors", errors);
 
-            console.log("VALUES PEKERJA", values.worker.length);
-
-            // worker
-            const addWorkerField = () => {
-              const newWorker: IWorkerCreate = { worker_name: "", position: "", total_cost: 0 };
-              setFieldValue("worker", [...values.worker, newWorker]);
-            };
-
-            const deleteWorkerField = (worker: IWorkerCreate[], index: number) => {
-              const updatedWorkers = worker.filter((_, i) => i !== index);
-              console.log("UPDATE WORKER", updatedWorkers);
-              setFieldValue("worker", updatedWorkers);
-            };
-
-            // const handleWorkerChange = <T extends keyof IWorkerCreate>(index: number, field: T, value: IWorkerCreate[T]) => {
-            //   console.log("Updating worker:", index, field, value); // Log the update
-            //   const updatedWorkers = [...values.worker];
-            //   updatedWorkers[index][field] = value;
-            //   setFieldValue("worker", updatedWorkers); // Update Formik state
-            // };
-
-            const addMaterialField = (material: IMaterialCreate[]) => {
-              const newMaterial: IMaterialCreate = {
-                material_name: "",
-                quantity: 0,
-                unit: "",
-                price: 0,
-                total_cost: 0,
-              };
-              setFieldValue("material", [...material, newMaterial]);
-            };
-
-            const deleteMaterialField = (worker: IMaterialCreate[], index: number) => {
-              const updatedMaterials = worker.filter((_, i) => i !== index);
-
-              // Recalculate the total cost after deletion
-              const totalCost = updatedMaterials.reduce((acc, material) => acc + (material.total_cost || 0), 0);
-
-              // Update state
-              setFieldValue("material", updatedMaterials);
-              setFieldValue("amount_material", totalCost); // ✅ Ensure totalCost is updated
-            };
-
-            const handleMaterialChange = <T extends keyof IMaterialCreate>(index: number, field: T, value: IMaterialCreate[T]) => {
-              const updatedMaterial = [...values.material];
-
-              // Update the changed field
-              updatedMaterial[index][field] = value;
-
-              // Recalculate total_cost when quantity or price is updated
-              if (field === "quantity" || field === "price") {
-                const quantity = Number(updatedMaterial[index].quantity) || 0;
-                const price = Number(updatedMaterial[index].price) || 0;
-                updatedMaterial[index].total_cost = quantity * price; // Calculate total cost
-              }
-
-              // Recalculate the total amount for all materials
-              const totalCost = updatedMaterial.reduce((acc, material) => acc + (material.total_cost || 0), 0);
-
-              setFieldValue("material", updatedMaterial);
-              setFieldValue("amount_material", totalCost);
-            };
+            const handleInputChange = useCallback((setFieldValue: any, field: string, value: any) => {
+              setFieldValue(field, value);
+            }, []);
 
             return (
-              <>
-                <Form>
-                  <SimpleGrid p={20}>
-                    <Text fw={900} size="xl">
-                      Ubah Progress Mingguan
-                    </Text>
+              <Form>
+                <SimpleGrid p={40}>
+                  <Text fw={900} size="xl">
+                    Tambah Progress Mingguan
+                  </Text>
 
-                    <Stack mt="md">
-                      <Group justify="space-between" p={20}>
-                        <Text>Ubah Material</Text>
-                        <ButtonAdd onClick={() => addMaterialField(values.material)} size={"xl"} />
-                      </Group>
+                  <Select
+                    mt={2}
+                    w={200}
+                    label="Minggu Ke"
+                    placeholder="Pilih Minggu"
+                    data={allWeeks}
+                    value={values.week_number}
+                    onChange={(value) => handleInputChange(setFieldValue, "week_number", value)}
+                    error={touched.week_number && errors.week_number ? errors.week_number : undefined}
+                  />
 
-                      <Group p={20}>
-                        <Text size="xl" fw={800}>
-                          Total Biaya Material
-                        </Text>
-                        <Text fw={800} ml={20}>
-                          {new Intl.NumberFormat("id-ID", {
-                            style: "currency",
-                            currency: "IDR",
-                            minimumFractionDigits: 0,
-                          }).format(values.amount_material || 0)}
-                        </Text>
-                      </Group>
+                  <Divider />
 
-                      <NumberInput
-                        w={160}
-                        hideControls
-                        label="Persentase"
-                        placeholder="Persentase"
-                        value={values.percentage ? String(values.percentage) : ""}
-                        onChange={(value) => setFieldValue("percentage", value ? String(value) : "")}
-                        rightSection={
-                          <Text size="sm" c="gray">
-                            %
-                          </Text>
-                        }
-                      />
-                    </Stack>
-                    <Textarea
-                      label="Note"
-                      placeholder="Enter additional information"
-                      value={values?.note}
-                      onChange={(event) => setFieldValue("note", event.currentTarget.value)}
+                  <FormAddWorker
+                    workers={values.worker}
+                    setWorkers={(val) => setFieldValue("worker", val)}
+                    errors={errors.worker}
+                    touched={touched.worker}
+                  />
+
+                  <Stack justify="flex-start" align="start">
+                    <Text
+                      size="md"
+                      fw={500}
+                      c="blue"
+                      ta="center"
                       mt="md"
-                    />
+                      variant="gradient"
+                      gradient={{ from: "blue", to: "cyan", deg: 90 }}
+                    >
+                      Total Pengeluaran Pekerja{" "}
+                      {`Rp. ${values.amount_worker?.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                    </Text>
+                  </Stack>
+                  <Divider />
 
-                    <Group justify="flex-end" mt="md">
-                      <Button onClick={close} variant="default">
-                        Cancel
-                      </Button>
-                      <Button type="submit" color="blue">
-                        Update
-                      </Button>
-                    </Group>
-                  </SimpleGrid>
-                </Form>
-              </>
+                  <FormAddMaterial
+                    materials={values.material}
+                    setMaterials={(val) => setFieldValue("material", val)}
+                    errors={errors.material}
+                    touched={touched.material}
+                  />
+                  <Stack justify="flex-start" align="start">
+                    <Text
+                      size="md"
+                      fw={500}
+                      c="blue"
+                      ta="center"
+                      mt="md"
+                      variant="gradient"
+                      gradient={{ from: "blue", to: "cyan", deg: 90 }}
+                    >
+                      Total Pengeluaran Material{" "}
+                      {`Rp. ${values.amount_material.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                    </Text>
+                  </Stack>
+
+                  <Divider />
+                  <NumberInput
+                    w={200}
+                    label="Persentase Pengerjaan"
+                    placeholder="Persentase"
+                    value={Number(values.percentage) || undefined} // Use defaultValue to prevent constant re-renders
+                    onChange={(value) => handleInputChange(setFieldValue, "percentage", value)}
+                    error={touched.percentage && errors.percentage ? errors.percentage : undefined}
+                    rightSection={
+                      <Text size="sm" c="gray">
+                        %
+                      </Text>
+                    }
+                  />
+
+                  <Textarea
+                    label="Note"
+                    value={values.note}
+                    placeholder="Enter additional information"
+                    onChange={(event) => handleInputChange(setFieldValue, "note", event.currentTarget.value)}
+                    mt="md"
+                    error={touched.note && errors.note ? errors.note : undefined}
+                  />
+
+                  <Group justify="flex-end" mt="md">
+                    <Button onClick={close} variant="default" disabled={isSubmitting}>
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      color="blue"
+                      disabled={isLoadingUpdateWeeklyProgressData}
+                      loading={isLoadingUpdateWeeklyProgressData || isSubmitting}
+                    >
+                      Ubah Progres
+                    </Button>
+                  </Group>
+                </SimpleGrid>
+              </Form>
             );
           }}
         </Formik>

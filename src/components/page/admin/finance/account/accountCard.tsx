@@ -3,7 +3,7 @@ import { Card, Text, Group, Stack, Loader, Pagination, Select } from "@mantine/c
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import AddAccountModal from "./addAccountModal";
 import { getDataAccount } from "@/api/account/getDataAccount";
-import AccountTable from "@/components/common/table/accountTable";
+import AccountTable from "@/components/page/admin/finance/account/accountTable";
 import { useEffect, useMemo, useState } from "react";
 import { accountTypeOptions, typeOptions } from "@/constants/dictionary";
 
@@ -85,6 +85,5 @@ export const AccountCard = ({ companyId }: AccountCardProps) => {
         )}
       </Group>
     </Card>
-    // </Group>
   );
 };

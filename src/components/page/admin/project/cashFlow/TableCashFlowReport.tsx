@@ -33,6 +33,7 @@ const CashFlowReportTable: React.FC<CashFlowReportTableProps> = ({ groupedByWeek
                             <Table.Th style={{ width: "25%" }}>PENGELUARAN</Table.Th>
                             <Table.Th style={{ width: "6%" }}>KUANTITAS</Table.Th>
                             <Table.Th style={{ width: "10%" }}>SATUAN</Table.Th>
+                            <Table.Th style={{ width: "10%" }}>STATUS</Table.Th>
                             <Table.Th style={{ width: "12%" }}>HARGA</Table.Th>
                             <Table.Th style={{ width: "22%" }}>TOTAL</Table.Th>
                           </Table.Tr>
@@ -41,7 +42,13 @@ const CashFlowReportTable: React.FC<CashFlowReportTableProps> = ({ groupedByWeek
                           {goods
                             .sort((a: { good_name: string }, b: { good_name: any }) => a.good_name.localeCompare(b.good_name))
                             .map((good: IGoods, index: number) => (
-                              <Table.Tr key={`${row.id}-${index}`}>
+                              <Table.Tr
+                                key={`${row.id}-${index}`}
+                                style={{
+                                  backgroundColor: good.status === "tempo" ? "#5c1a1a" : undefined,
+                                  color: good.status === "tempo" ? "#fff" : undefined, // warna teks agar tetap kebaca
+                                }}
+                              >
                                 <Table.Td>
                                   <Text variant="outline">{good.good_name}</Text>
                                 </Table.Td>
@@ -50,6 +57,9 @@ const CashFlowReportTable: React.FC<CashFlowReportTableProps> = ({ groupedByWeek
                                 </Table.Td>
                                 <Table.Td>
                                   <Text variant="outline">{good.unit}</Text>
+                                </Table.Td>
+                                <Table.Td>
+                                  <Text variant="outline">{good.status.toUpperCase()}</Text>
                                 </Table.Td>
                                 <Table.Td>
                                   <Text variant="outline">{formatCurrency(good.price)}</Text>

@@ -57,6 +57,14 @@ const FormGoods = ({ goods, onGoodsChange, isCreateMode = false, error, touched 
   const handleGoodChange = useCallback(
     (index: number, field: string, value: any) => {
       const updatedGoods = [...goods];
+
+      // If the status is "tempo", set price to 0
+      if (field === "status" && value === "tempo") {
+        updatedGoods[index].price = 0; // Set price to 0 when status is "tempo"
+      } else if (field === "price" && updatedGoods[index].status === "tempo") {
+        return; // Prevent price update if status is "tempo"
+      }
+
       updatedGoods[index][field] = value;
 
       // Hanya update total_cost untuk item yang berubah
