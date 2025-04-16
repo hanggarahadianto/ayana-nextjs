@@ -10,7 +10,7 @@ import LoadingGlobal from "@/helper/styles/loading/loading-global";
 import { Group, Pagination, ScrollArea, SimpleGrid, Stack, Table, Tabs, ThemeIcon, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import AccountTable from "@/components/page/admin/finance/account/accountTable";
+import AccountTable from "@/components/page/admin/finance/account/TableAccount";
 import { getDataAccount } from "@/api/account/getDataAccount";
 
 export default function AccountDataByCompanyId(companyId: string) {

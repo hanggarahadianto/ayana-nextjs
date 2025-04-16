@@ -31,7 +31,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ initialProductData,
           onClick={open}
           size="2.5rem"
           icon={<IconEdit size="1rem" />}
-          gradient="linear-gradient(135deg, #93C5FD, #BFDBFE)"
+          gradient="linear-gradient(135deg, #60A5FA, #3B82F6)"
         />
       </Stack>
 

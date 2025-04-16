@@ -32,7 +32,8 @@ const WeeklyProgressMenu = ({ refetchWeeklyProgressData, projectDataDetail, week
         />
       </Group>
 
-      <SimpleGrid mt={20} cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing="lg">
+      {/* <SimpleGrid mt={20} cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing="lg"> */}
+      <SimpleGrid mt={20} cols={{ base: 1, sm: 2, md: 3, lg: 4 }}>
         {weeklyProgressData?.data
           .sort((a: IWeeklyProgress, b: IWeeklyProgress) => {
             // Convert week_number from string to number for proper comparison
@@ -41,23 +42,29 @@ const WeeklyProgressMenu = ({ refetchWeeklyProgressData, projectDataDetail, week
             return weekNumberA - weekNumberB; // Sort in ascending order
           })
           .map((weeklyProgress: IWeeklyProgress) => {
-            console.log("urutan", weeklyProgress.week_number);
             return (
               <Card
                 key={weeklyProgress.id}
                 withBorder
                 shadow="md"
                 radius="lg"
-                p="lg"
                 style={{
                   background: "linear-gradient(135deg, rgba(255, 0, 150, 0.4), rgba(0, 204, 255, 0.4))",
                   backdropFilter: "blur(6px)",
                   color: "#fff",
                   cursor: "pointer",
+                  minWidth: "250px", // Fix card width
+                  minHeight: "240px", // Fix card height
+                  maxWidth: "280px", // Optional max width
+                  maxHeight: "280px", // Optional max height
+                  transition: "transform 0.3s ease-in-out, opacity 0.3s ease-in-out", // Added transition
+                  transform: "scale(1)", // Initial scale value
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")} // Scale up on hover
+                onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
                 onClick={() => handleCardClick(weeklyProgress)}
               >
-                <Stack gap="sm">
+                <Stack gap="sm" style={{ height: "100%" }}>
                   <Group>
                     <Text fw={900} size="lg" c="white">
                       Minggu Ke {weeklyProgress.week_number}

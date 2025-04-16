@@ -81,7 +81,11 @@ const ProjectPage = () => {
                   display: "flex",
                   flexDirection: "column", // Susunan elemen vertikal
                   justifyContent: "space-between", // Menjaga jarak antara elemen atas dan bawah
+                  transition: "transform 0.3s ease-in-out, opacity 0.3s ease-in-out", // Added transition
+                  transform: "scale(1)", // Initial scale value
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")} // Scale up on hover
+                onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
                 onClick={() => handleSelectProduct(product)}
               >
                 <Stack w="100%" mih={120} style={{ flexGrow: 1 }}>

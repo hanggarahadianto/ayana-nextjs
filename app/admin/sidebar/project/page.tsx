@@ -102,7 +102,11 @@ const ProjectPage = () => {
                 padding: "20px",
                 position: "relative",
                 cursor: "pointer",
+                transition: "transform 0.3s ease-in-out, opacity 0.3s ease-in-out", // Added transition
+                transform: "scale(1)", // Initial scale value
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")} // Scale up on hover
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
             >
               <Link href={`/admin/sidebar/project/${project.id}`} passHref style={{ textDecoration: "none" }}>
                 <Stack>

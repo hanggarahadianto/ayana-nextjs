@@ -3,15 +3,16 @@ import { Card, Text, Group, Stack, Loader, Pagination, Select } from "@mantine/c
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import AddAccountModal from "./addAccountModal";
 import { getDataAccount } from "@/api/account/getDataAccount";
-import AccountTable from "@/components/page/admin/finance/account/accountTable";
+import AccountTable from "@/components/page/admin/finance/account/TableAccount";
 import { useEffect, useMemo, useState } from "react";
 import { accountTypeOptions, typeOptions } from "@/constants/dictionary";
 
 interface AccountCardProps {
   companyId: string;
+  companyName?: string;
 }
 
-export const AccountCard = ({ companyId }: AccountCardProps) => {
+export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
   const [page, setPage] = useState(1);
   console.log("PAGE", page);
 
@@ -58,7 +59,7 @@ export const AccountCard = ({ companyId }: AccountCardProps) => {
       <Group justify="space-between" p={20}>
         <Stack>
           <Text size="lg" fw={600}>
-            Akun Keuangan
+            Akun Keuangan {companyName}
           </Text>
           <Select
             label="Filter berdasarkan Type"

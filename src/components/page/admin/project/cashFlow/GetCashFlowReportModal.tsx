@@ -91,7 +91,7 @@ const GetCashFlowReportModal = ({
           <Grid>
             <Grid.Col span={4}>
               <Stack>
-                <Text size="xl" fw={200}>
+                <Text size="xl" fw={400}>
                   BUKU KAS UMUM
                 </Text>
                 <Text size="lg" fw={700} mb="sm">
@@ -102,11 +102,19 @@ const GetCashFlowReportModal = ({
             <Grid.Col span={8}>
               <Group gap="sm">
                 {/*  */}
-                <Stack>
+                <Stack w="100%" maw="1000px" style={{ flexGrow: 1 }}>
                   <Text size="xl" fw={900} c="blue">
                     Alur Pengeluaran
                   </Text>
-                  <Progress.Root size={40} w={800}>
+                  <Progress.Root
+                    size={40}
+                    style={{
+                      width: "100%",
+                      maxWidth: "1000px",
+                      minInlineSize: "300px",
+                      marginInline: "auto",
+                    }}
+                  >
                     {Object.keys(groupedByWeek).map((week, index) => {
                       const weekTotal = calculateWeeklyCashOut(week);
                       const weekPercentage = calculateWeeklyPercentage(week);
@@ -124,8 +132,10 @@ const GetCashFlowReportModal = ({
                     })}
                   </Progress.Root>
                 </Stack>
-                <Stack justify="end" align="end" w="100%" mb={40}>
-                  <Grid w={400}>
+                {/* <Stack justify="end" align="end" w="100%" mb={40}>
+                  <Grid w={400}> */}
+                <Stack w="100%" maw="400px" justify="flex-end" align="flex-end" p={20}>
+                  <Grid w="100%">
                     <Grid.Col span={6}>
                       <Text size="md">💰 Uang Masuk</Text>
                       <Text size="md">💸 Uang Keluar</Text>

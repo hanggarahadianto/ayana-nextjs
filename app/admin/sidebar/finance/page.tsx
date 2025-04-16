@@ -43,7 +43,7 @@ export default function Finance() {
           ))}
         </Tabs.List>
         <SimpleGrid p={20}>
-          <AccountCard companyId={activeTab?.id || ""} />
+          <AccountCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
           {/* <InvestmentCard companyId={undefined} /> */}
         </SimpleGrid>
       </Tabs>
