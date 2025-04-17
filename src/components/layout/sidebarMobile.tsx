@@ -1,40 +1,25 @@
-import { Stack, NavLink, Drawer } from "@mantine/core";
-import Link from "next/link";
-import { menuItems } from "@/constants/navigation";
+import { useState } from "react";
+import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
+import { Stack, Button } from "@mantine/core";
 
-export default function SidebarMobile({ opened, close, isDark }: any) {
+export default function SidebarMobile({ opened, toggle }: { opened: boolean; toggle: () => void }) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
-    <Drawer
-      opened={opened}
-      onClose={close}
-      title="Menu"
-      padding="md"
-      size="xs"
-      overlayProps={{ opacity: 0.5, blur: 2 }}
-      styles={{
-        content: {
-          backgroundColor: isDark ? "#121212" : "#ffffff",
-        },
-      }}
-    >
-      <Stack gap="md">
-        {menuItems.map((item) => (
-          <NavLink
-            key={item.href}
-            component={Link}
-            href={item.href}
-            label={item.label}
-            leftSection={item.icon}
-            onClick={close}
-            style={{
-              color: isDark ? "white" : "#000",
-              fontWeight: "bold",
-              borderRadius: 8,
-              padding: 12,
-            }}
-          />
-        ))}
+    <Stack mt={10} gap="md" pt={40}>
+      <Stack justify="flex-end" align="flex-end" style={{ width: "100%" }}>
+        <Button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          variant="outline"
+          style={{
+            background: "transparent",
+            color: "white",
+            border: "none",
+          }}
+        >
+          {isCollapsed ? <FaAngleDoubleRight /> : <FaAngleDoubleLeft />}
+        </Button>
       </Stack>
-    </Drawer>
+    </Stack>
   );
 }

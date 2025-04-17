@@ -1,4 +1,4 @@
-import { APIAxiosInstance, APIAxiosInstanceWithoutCredential, httpWithoutHeader } from "../../lib";
+import { APIAxiosInstance, APIAxiosInstanceWithoutCredential } from "../../lib";
 
 export const getDataProduct = async () => {
   try {

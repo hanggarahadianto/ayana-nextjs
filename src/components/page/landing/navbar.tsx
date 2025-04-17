@@ -52,7 +52,7 @@ const Navbar = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         style={{
           background: isDark ? "#1a1b1e" : "#beab96",
-          padding: "1rem",
+          padding: "0.9rem",
           position: "sticky",
           top: 0,
           zIndex: 1000,

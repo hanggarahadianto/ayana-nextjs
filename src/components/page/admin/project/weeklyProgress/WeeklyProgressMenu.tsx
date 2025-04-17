@@ -5,8 +5,14 @@ import { formatCurrency } from "@/utils/formatRupiah";
 import { useDeleteDataWeeklyProgress } from "@/api/weekly-progress/deleteDataWeeklyProgress";
 import EditWeeklyProgressModal from "./EditWeeklyProgressModal";
 import { useState } from "react";
+import { useMediaQuery } from "@mantine/hooks";
 
 const WeeklyProgressMenu = ({ refetchWeeklyProgressData, projectDataDetail, weeklyProgressData }) => {
+  const isSmallScreen = useMediaQuery("(max-width: 767px)"); // Mobile
+  const isMediumScreen = useMediaQuery("(min-width: 768px) and (max-width: 1023px)"); // Tablet
+  const isLaptopScreen = useMediaQuery("(min-width: 1024px) and (max-width: 1439px)"); // Laptop 12-14 inch
+  const isWideScreen = useMediaQuery("(min-width: 1440px)"); // Laptop 15 inch ke atas
+
   const [selectedProgress, setSelectedProgress] = useState<IWeeklyProgress | null>(null);
 
   const { mutate: deleteWeeklyProgress } = useDeleteDataWeeklyProgress(refetchWeeklyProgressData);
@@ -33,7 +39,12 @@ const WeeklyProgressMenu = ({ refetchWeeklyProgressData, projectDataDetail, week
       </Group>
 
       {/* <SimpleGrid mt={20} cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing="lg"> */}
-      <SimpleGrid mt={20} cols={{ base: 1, sm: 2, md: 3, lg: 4 }}>
+      <SimpleGrid
+        spacing="lg"
+        p={20}
+        cols={isSmallScreen ? 1 : isMediumScreen ? 2 : isLaptopScreen ? 4 : isWideScreen ? 6 : 6}
+        style={{ gap: "24px" }}
+      >
         {weeklyProgressData?.data
           .sort((a: IWeeklyProgress, b: IWeeklyProgress) => {
             // Convert week_number from string to number for proper comparison
@@ -53,10 +64,11 @@ const WeeklyProgressMenu = ({ refetchWeeklyProgressData, projectDataDetail, week
                   backdropFilter: "blur(6px)",
                   color: "#fff",
                   cursor: "pointer",
-                  minWidth: "250px", // Fix card width
-                  minHeight: "240px", // Fix card height
-                  maxWidth: "280px", // Optional max width
-                  maxHeight: "280px", // Optional max height
+                  maxWidth: "80x",
+                  // minWidth: "250px", // Fix card width
+                  // minHeight: "240px", // Fix card height
+                  // maxWidth: "280px", // Optional max width
+                  // maxHeight: "280px", // Optional max height
                   transition: "transform 0.3s ease-in-out, opacity 0.3s ease-in-out", // Added transition
                   transform: "scale(1)", // Initial scale value
                 }}
@@ -67,7 +79,7 @@ const WeeklyProgressMenu = ({ refetchWeeklyProgressData, projectDataDetail, week
                 <Stack gap="sm" style={{ height: "100%" }}>
                   <Group>
                     <Text fw={900} size="lg" c="white">
-                      Minggu Ke {weeklyProgress.week_number}
+                      Minggu {weeklyProgress.week_number}
                     </Text>
 
                     <RingProgress
@@ -83,15 +95,15 @@ const WeeklyProgressMenu = ({ refetchWeeklyProgressData, projectDataDetail, week
                   </Group>
 
                   <Grid mt="md">
-                    <Grid.Col span={6}>
+                    <Grid.Col span={4}>
                       <Text size="sm" c="white">
-                        Biaya Material
+                        Material
                       </Text>
                       <Text size="sm" c="white">
-                        Biaya Pekerja
+                        Pekerja
                       </Text>
                     </Grid.Col>
-                    <Grid.Col span={6}>
+                    <Grid.Col span={8}>
                       <Text size="sm" c="white">
                         {formatCurrency(weeklyProgress.amount_material)}
                       </Text>

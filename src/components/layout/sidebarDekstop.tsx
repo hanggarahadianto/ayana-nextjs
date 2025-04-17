@@ -1,42 +1,46 @@
-import { Stack, NavLink } from "@mantine/core";
+import { motion, AnimatePresence } from "framer-motion";
+import { NavLink } from "@mantine/core";
 import Link from "next/link";
 import { menuItems } from "@/constants/navigation";
-import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 
-export default function SidebarDesktop({ isCollapsed, toggleCollapse, isDark }: any) {
+export default function SidebarDesktop({ isCollapsed, isDark, theme }: { isCollapsed: boolean; isDark: boolean; theme: any }) {
   return (
-    <Stack pt={40} gap="md">
-      <Stack justify="flex-end" align="flex-end" style={{ width: "100%" }}>
-        <button
-          onClick={toggleCollapse}
-          style={{
-            marginBottom: 8,
-            cursor: "pointer",
-            background: "transparent",
-            border: "none",
-            color: "white",
-          }}
-        >
-          {isCollapsed ? <FaAngleDoubleRight /> : <FaAngleDoubleLeft />}
-        </button>
-      </Stack>
-
-      {menuItems.map((item, idx) => (
-        <NavLink
+    <AnimatePresence>
+      {menuItems.map((item: any, index: any) => (
+        <motion.div
           key={item.href}
-          component={Link}
-          href={item.href}
-          label={!isCollapsed ? item.label : undefined}
-          leftSection={item.icon}
-          style={{
-            color: "white",
-            fontWeight: "bold",
-            borderRadius: 8,
-            padding: 12,
-            transition: "background-color 0.3s ease, transform 0.3s ease",
-          }}
-        />
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.3, delay: index * 0.1 }}
+        >
+          <NavLink
+            component={Link}
+            href={item.href}
+            label={!isCollapsed ? item.label : undefined}
+            leftSection={item.icon}
+            style={{
+              color: "white",
+              fontWeight: "bold",
+              borderRadius: "8px",
+              padding: "12px",
+              transition: "background-color 0.3s ease, transform 0.3s ease",
+              display: "flex",
+              alignItems: "center",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "scale(1.1)";
+              e.currentTarget.style.background = isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.2)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)"; // Zoom out on leave
+              e.currentTarget.style.background = "transparent";
+            }}
+          >
+            {isCollapsed && <span style={{ marginRight: "10px" }}>{item.icon}</span>}
+          </NavLink>
+        </motion.div>
       ))}
-    </Stack>
+    </AnimatePresence>
   );
 }

@@ -1,4 +1,4 @@
-import { Card, Divider, Group, Progress, Stack, Text, Tooltip } from "@mantine/core";
+import { Card, Group, Stack, Text } from "@mantine/core";
 
 interface ProjectCardSummaryProps {
   totalCashIn?: number;

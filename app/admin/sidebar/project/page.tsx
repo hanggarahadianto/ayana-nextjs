@@ -2,7 +2,6 @@
 
 import { Card, Group, SimpleGrid, Text, Stack } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import AddProjectModal from "../../../../src/components/page/admin/project/AddProjectModal";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { getDataProject } from "@/api/project/getDataProject";
@@ -11,6 +10,7 @@ import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDelet
 import { parseISO, differenceInDays, addDays } from "date-fns";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
+import AddProjectModal from "@/components/page/admin/project/AddProjectModal";
 
 const ProjectPage = () => {
   const isSmallScreen = useMediaQuery("(max-width: 767px)"); // Mobile
@@ -78,10 +78,9 @@ const ProjectPage = () => {
       </Group>
       <LoadingGlobal visible={isLoadingDeleteDataProject || isLoadingGetProjectData} />
       <SimpleGrid
-        mt={40}
         spacing="lg"
         p={20}
-        cols={isSmallScreen ? 1 : isMediumScreen ? 2 : isLaptopScreen ? 3 : isWideScreen ? 4 : 3}
+        cols={isSmallScreen ? 1 : isMediumScreen ? 2 : isLaptopScreen ? 3 : isWideScreen ? 5 : 5}
         style={{ gap: "24px" }}
       >
         {projectData?.data.map((project) => {
@@ -90,11 +89,7 @@ const ProjectPage = () => {
           return (
             <Card
               key={project.id}
-              w={300}
-              h={220}
               style={{
-                maxWidth: 320,
-                minWidth: 300,
                 background: "linear-gradient(135deg, rgba(255, 0, 150, 0.5), rgba(0, 204, 255, 0.5))",
                 backdropFilter: "blur(8px)",
                 borderRadius: "16px",
@@ -103,7 +98,7 @@ const ProjectPage = () => {
                 position: "relative",
                 cursor: "pointer",
                 transition: "transform 0.3s ease-in-out, opacity 0.3s ease-in-out", // Added transition
-                transform: "scale(1)", // Initial scale value
+                transform: "scale(1)",
               }}
               onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")} // Scale up on hover
               onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}

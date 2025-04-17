@@ -90,7 +90,7 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
       </Grid>
       <Divider mt={40} mb={20} />
 
-      <Stack justify="center" align="center">
+      <Stack justify="center" align="center" style={{ width: "100%" }}>
         <ProgressBar progress={currentPercentage} />
       </Stack>
 
