@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { showNotification } from "@mantine/notifications";
 import Cookies from "js-cookie";
-import { APIAxiosInstanceWithoutCredential } from "..";
+import { APIAxiosInstanceWithoutCredential } from "../../lib";
 
 const handleLogin = async (values: IUserPayload) => {
   const response = await APIAxiosInstanceWithoutCredential.post(`auth/login`, values);

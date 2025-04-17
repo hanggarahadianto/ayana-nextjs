@@ -108,7 +108,9 @@ const FormAddMaterial: React.FC<FormAddMaterialProps> = React.memo(({ materials,
                 readOnly
                 styles={{ input: { fontWeight: "bold", cursor: "not-allowed" } }}
               />
-              <ButtonDelete onClick={() => deleteMaterial(index)} />
+              <Stack mt={16}>
+                <ButtonDelete onClick={() => deleteMaterial(index)} />
+              </Stack>
             </Group>
           </Card>
         ))}

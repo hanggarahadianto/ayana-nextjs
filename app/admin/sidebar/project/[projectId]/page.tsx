@@ -10,7 +10,7 @@ import { FC, use } from "react";
 import ProjectCardDetail from "@/components/page/admin/project/ProjectCardDetail";
 import ProjectCardSummary from "@/components/page/admin/project/projectDetail/ProjectCardSummary";
 import WeeklyProgressMenu from "@/components/page/admin/project/weeklyProgress/WeeklyProgressMenu";
-import LoadingGlobal from "@/helper/styles/loading/loading-global";
+import LoadingGlobal from "@/styles/loading/loading-global";
 import ProgressBar from "@/components/page/admin/project/projectDetail/progressBar";
 import { progressProject, totalMaterialCost, totalWorkerCost } from "@/lib/projectProgressUtils";
 

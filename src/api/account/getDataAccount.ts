@@ -1,4 +1,4 @@
-import { APIAxiosInstance } from "..";
+import { APIAxiosInstance } from "../../lib";
 
 export const getDataAccount = async (companyId: string, page = 1, limit = 10, type?: string | null) => {
   if (!companyId) {

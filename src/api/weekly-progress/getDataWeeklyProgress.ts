@@ -1,4 +1,4 @@
-import { APIAxiosInstance } from "..";
+import { APIAxiosInstance } from "../../lib";
 
 export const getDataWeeklyProgress = async (id: string) => {
   try {

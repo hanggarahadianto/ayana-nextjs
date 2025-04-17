@@ -1,4 +1,4 @@
-import { APIAxiosInstance } from "..";
+import { APIAxiosInstance } from "../../lib";
 
 export const getDataInfo = async (id: any): Promise<IInfo | null> => {
   try {

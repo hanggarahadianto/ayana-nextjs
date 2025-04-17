@@ -1,4 +1,4 @@
-import LoadingGlobal from "@/helper/styles/loading/loading-global";
+import LoadingGlobal from "@/styles/loading/loading-global";
 import { Card, Text, Group, Stack, Loader, Pagination, Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import AddAccountModal from "./addAccountModal";

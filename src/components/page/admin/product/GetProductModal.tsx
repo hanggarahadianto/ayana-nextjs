@@ -3,7 +3,7 @@ import { Modal, Paper, Text, ScrollArea, Flex, Group, Badge, Stack, Grid, Image,
 import { useDisclosure } from "@mantine/hooks";
 import { IconEye } from "@tabler/icons-react";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
-import LoadingGlobal from "@/helper/styles/loading/loading-global";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 const GetProductModal = ({ productData }: { productData?: IProduct }) => {
   const [opened, { open, close }] = useDisclosure(false);

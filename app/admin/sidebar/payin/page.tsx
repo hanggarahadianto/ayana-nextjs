@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query"; // Sesuaikan path
 import { getDataCompany } from "@/api/company/getCompany"; // Sesuaikan path
 import { getDataPayout } from "@/api/payout/getDataPayout";
 import { useDeleteDataPayout } from "@/api/payout/deleteDataPayout";
-import LoadingGlobal from "@/helper/styles/loading/loading-global";
+import LoadingGlobal from "@/styles/loading/loading-global";
 import AddPayoutModal from "@/components/page/admin/finance/payout/AddPayoutModal";
 
 export default function CompanyTabs() {

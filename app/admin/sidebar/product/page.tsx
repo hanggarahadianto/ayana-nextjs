@@ -10,7 +10,7 @@ import { useDeleteDataProduct } from "@/api/products/deleteDataProduct";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import EditProductModal from "@/components/page/admin/product/EditProductModal";
 import AddProductModal from "@/components/page/admin/product/AddProductModal";
-import LoadingGlobal from "@/helper/styles/loading/loading-global";
+import LoadingGlobal from "@/styles/loading/loading-global";
 import { getDataInfo } from "@/api/info/getDataInfo";
 
 const ProjectPage = () => {

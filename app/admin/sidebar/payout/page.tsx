@@ -6,7 +6,7 @@ import useGetCompanies from "@/components/page/admin/company/GetCompanyTab";
 import AddPayoutModal from "@/components/page/admin/finance/payout/AddPayoutModal";
 import PayoutDetails from "@/components/page/admin/finance/payout/GetPayoutDetails";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
-import LoadingGlobal from "@/helper/styles/loading/loading-global";
+import LoadingGlobal from "@/styles/loading/loading-global";
 import { Group, Pagination, ScrollArea, SimpleGrid, Stack, Table, Tabs, ThemeIcon, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";

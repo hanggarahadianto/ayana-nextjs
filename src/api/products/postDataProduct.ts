@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query"; // Correct import from '@tanstack/react-query'
 import { showNotification } from "@mantine/notifications";
-import { APIAxiosInstance } from "..";
+import { APIAxiosInstance } from "../../lib";
 
 const handleSubmitProductForm = async (values: IProjectCreate) => {
   console.log("values on fetching", values);

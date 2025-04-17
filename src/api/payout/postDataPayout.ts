@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { showNotification } from "@mantine/notifications";
-import { APIAxiosInstance } from "..";
+import { APIAxiosInstance } from "../../lib";
 import { AxiosError } from "axios";
 
 interface APIErrorResponse {

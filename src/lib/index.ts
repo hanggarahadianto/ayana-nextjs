@@ -26,7 +26,3 @@ export const httpHeader = (token?: string, isMultipart = false) => {
 
   return { headers };
 };
-
-export const httpWithoutHeader = () => {
-  return {};
-};

@@ -1,4 +1,4 @@
-import { APIAxiosInstance } from "..";
+import { APIAxiosInstance } from "../../lib";
 
 export const getDataGoodsByCashFlowId = async (cashFlowId: string, page: number = 1, limit: number = 10) => {
   try {

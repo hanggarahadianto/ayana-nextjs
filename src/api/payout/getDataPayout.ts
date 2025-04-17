@@ -1,4 +1,4 @@
-import { APIAxiosInstance } from "..";
+import { APIAxiosInstance } from "../../lib";
 
 export const getDataPayout = async (companyId: string) => {
   console.log("COMPANY ID UNTUK DI DAPAT DI PAYOUT", companyId);

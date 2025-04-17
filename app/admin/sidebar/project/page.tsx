@@ -9,7 +9,7 @@ import { getDataProject } from "@/api/project/getDataProject";
 import { useDeleteDataProject } from "@/api/project/deleteDataProject";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { parseISO, differenceInDays, addDays } from "date-fns";
-import LoadingGlobal from "@/helper/styles/loading/loading-global";
+import LoadingGlobal from "@/styles/loading/loading-global";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 
 const ProjectPage = () => {

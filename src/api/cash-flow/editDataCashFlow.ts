@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { showNotification } from "@mantine/notifications";
-import { APIAxiosInstance } from "..";
+import { APIAxiosInstance } from "../../lib";
 
 // Handle PUT request to update cash flow (tanpa ID di payload)
 const handleEditCashFlowForm = async (id: string, values: ICashFlowUpdate) => {

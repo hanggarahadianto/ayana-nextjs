@@ -1,7 +1,7 @@
 import { showNotification } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
-import { APIAxiosInstance } from "..";
+import { APIAxiosInstance } from "../../lib";
 
 // Function to delete a project
 const handleDeleteProduct = async (idToDelete: string): Promise<AxiosResponse<any>> => {

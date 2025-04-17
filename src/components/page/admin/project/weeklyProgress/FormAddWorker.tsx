@@ -88,8 +88,9 @@ const FormAddWorker: React.FC<FormAddWorkerProps> = React.memo(({ workers, setWo
                   handleWorkerChange(index, "total_cost", Number(rawValue) || 0);
                 }}
               />
-
-              <ButtonDelete onClick={() => deleteWorker(index)} />
+              <Stack mt={16}>
+                <ButtonDelete onClick={() => deleteWorker(index)} />
+              </Stack>
             </Group>
           </Card>
         ))}
