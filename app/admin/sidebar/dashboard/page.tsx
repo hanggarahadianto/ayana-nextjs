@@ -4,24 +4,12 @@ import { useState, useEffect } from "react";
 import { SimpleGrid, Tabs } from "@mantine/core";
 
 import useGetCompanies from "@/components/page/admin/company/GetCompanyTab";
+import { ExpenseCard } from "@/components/page/admin/dashboard/ExpenseCard";
+import UseCompanyTabs from "@/components/common/tab/CompanyTab";
 // import { ExpenseCard } from "@/components/page/admin/dashboard/ExpenseCard";
 
 export default function Dashboard() {
-  const { companies, isLoading: isLoadingCompanies } = useGetCompanies();
-  const [activeTab, setActiveTab] = useState<ICompany | null>(null);
-
-  useEffect(() => {
-    if (companies.length > 0 && !activeTab) {
-      setActiveTab(companies[0]); // Set tab pertama sebagai default
-    }
-  }, [companies, activeTab]);
-
-  const handleTabChange = (value: ICompany) => {
-    console.log("VALUES", value);
-    if (value) {
-      setActiveTab(value);
-    }
-  };
+  const { companies, activeTab, handleTabChange } = UseCompanyTabs();
 
   const [page, setPage] = useState(1);
   const rowsPerPage = 5;
@@ -45,7 +33,9 @@ export default function Dashboard() {
           ))}
         </Tabs.List>
       </Tabs>
-      <SimpleGrid p={20}>{/* <ExpenseCard companyId={activeTab?.id} /> */}</SimpleGrid>
+      <SimpleGrid p={20}>
+        <ExpenseCard companyId={activeTab?.id} />
+      </SimpleGrid>
     </SimpleGrid>
   );
 }

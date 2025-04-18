@@ -1,6 +1,6 @@
-import { APIAxiosInstance } from "../../lib";
+import { APIAxiosInstance } from "@/lib";
 
-export const getDataAccount = async (companyId: string, page = 1, limit = 10, type?: string | null) => {
+export const getDataAccount = async (companyId: string, page = 1, limit: number, type?: string | null) => {
   if (!companyId) {
     console.error("Company ID tidak ada!");
     return;
@@ -12,7 +12,7 @@ export const getDataAccount = async (companyId: string, page = 1, limit = 10, ty
       url += `&type=${encodeURIComponent(type)}`;
     }
 
-    console.log(url);
+    console.log("url dapatkan select", url);
 
     const response = await APIAxiosInstance.get(url);
     return response.data as IAccountResponse;

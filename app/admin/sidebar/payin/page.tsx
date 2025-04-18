@@ -8,6 +8,7 @@ import { getDataPayout } from "@/api/payout/getDataPayout";
 import { useDeleteDataPayout } from "@/api/payout/deleteDataPayout";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import AddPayoutModal from "@/components/page/admin/finance/payout/AddPayoutModal";
+import AddPayinModal from "@/components/page/admin/finance/payin/AddPayinModal";
 
 export default function CompanyTabs() {
   const { data: companyData, isLoading } = useQuery({
@@ -97,7 +98,7 @@ export default function CompanyTabs() {
         {companies.map((company: ICompany) => (
           <Tabs.Panel key={company.company_code} value={company.company_code}>
             <Stack p={12} justify="flex-end" align="flex-end" style={{ width: "100%" }}>
-              <AddPayoutModal refetchPayloadData={refetchPayoutData} companyCode={activeTab?.company_code} companyId={company?.id} />
+              <AddPayinModal refetchPayloadData={refetchPayoutData} companyCode={activeTab?.company_code} companyId={company?.id} />
             </Stack>
           </Tabs.Panel>
         ))}

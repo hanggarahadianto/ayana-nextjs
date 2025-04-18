@@ -6,8 +6,9 @@ import { Form, Formik } from "formik";
 import { IconCalendar } from "@tabler/icons-react";
 import { useSubmitPayoutForm } from "@/api/payout/postDataPayout";
 import ButtonAdd from "@/components/common/button/buttonAdd";
-import { paymentCategory, payoutCategory } from "@/constants/dictionary";
+import { paymentCategory } from "@/constants/dictionary";
 import { initialValuePayoutCreate } from "@/utils/initialValues/initialValuesPayout";
+import SelectFinanceAccount from "@/components/common/select/SelectAccountType";
 
 interface AddPayoutModalProps {
   refetchPayloadData: () => void;
@@ -65,6 +66,7 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
                 <Form>
                   <SimpleGrid p={20}>
                     <Stack gap={20}>
+                      <SelectFinanceAccount companyId={companyId ?? ""} />
                       <Select
                         label="Status"
                         w={200}
@@ -120,13 +122,6 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
                             }}
                           />
                         </InputWrapper>
-                        <Select
-                          clearable
-                          label="Kategori"
-                          placeholder="Pilih Kategori"
-                          onChange={(event) => setFieldValue("category", event)}
-                          data={payoutCategory}
-                        />
                       </Group>
 
                       <Group>
