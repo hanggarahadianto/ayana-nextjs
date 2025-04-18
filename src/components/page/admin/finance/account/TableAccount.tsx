@@ -12,9 +12,11 @@ export default function AccountTable({ data, onRowClick, onDelete, refetchAccoun
   return (
     <ScrollArea style={{ minHeight: 400 }}>
       <Table
+        px={100}
         highlightOnHover
         withColumnBorders
         style={{
+          padding: 100,
           tableLayout: "fixed",
           width: "100%",
           minWidth: 700, // atau sesuai kebutuhan
@@ -23,9 +25,9 @@ export default function AccountTable({ data, onRowClick, onDelete, refetchAccoun
       >
         <Table.Thead>
           <Table.Tr>
-            <Table.Th style={{ textAlign: "center", width: 80, minWidth: 80 }}>Code</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 30, minWidth: 30 }}>Code</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 120, minWidth: 120 }}>Nama</Table.Th>
-            <Table.Th style={{ textAlign: "center", width: 100, minWidth: 100 }}>Kategori</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 140, minWidth: 140 }}>Kategori</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Deskripsi</Table.Th>
           </Table.Tr>
         </Table.Thead>

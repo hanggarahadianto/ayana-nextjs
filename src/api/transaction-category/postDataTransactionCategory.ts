@@ -10,21 +10,21 @@ interface APIErrorResponse {
   // Add other possible error response fields
 }
 
-const handleSubmitAccountForm = async (values: IAccountCreate) => {
-  console.log("Submitting account form with values:", values);
-  const response = await APIAxiosInstance.post("account/post", values);
+const handleSubmitTransactionCategoryForm = async (values: ITransactionCategoryCreate) => {
+  console.log("Submitting TransactionCategory form with values:", values);
+  const response = await APIAxiosInstance.post("transaction-category/post", values);
   return response.data;
 };
 
-export const useSubmitAccount = (refetchAccountData: () => void, closeModal: () => void) => {
-  return useMutation<void, AxiosError<APIErrorResponse>, IAccountCreate>({
-    mutationFn: handleSubmitAccountForm,
+export const useSubmitTransactionCategory = (refetchTransactionCategoryData: () => void, closeModal: () => void) => {
+  return useMutation<void, AxiosError<APIErrorResponse>, ITransactionCategoryCreate>({
+    mutationFn: handleSubmitTransactionCategoryForm,
     onSuccess: () => {
       try {
-        console.log("Account data successfully submitted");
+        console.log("TransactionCategory data successfully submitted");
 
         // Jalankan refetch dan tampilkan notifikasi
-        refetchAccountData?.(); // Gunakan optional chaining
+        refetchTransactionCategoryData?.(); // Gunakan optional chaining
         closeModal?.();
 
         showNotification({
@@ -42,7 +42,7 @@ export const useSubmitAccount = (refetchAccountData: () => void, closeModal: () 
       }
     },
     onError: (error) => {
-      console.error("Account submission error:", error);
+      console.error("TransactionCategory submission error:", error);
 
       const errorMessage =
         error.response?.data?.message || error.response?.data?.error || error.message || "Terjadi kesalahan saat menyimpan data akun";

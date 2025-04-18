@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { SimpleGrid, Tabs } from "@mantine/core";
+import { Grid, GridCol, SimpleGrid, Tabs } from "@mantine/core";
 
 import useGetCompanies from "@/components/page/admin/company/GetCompanyTab";
-// import { InvestmentCard } from "@/components/page/admin/finance/investment/InvestmentCard";
-import { AccountCard } from "@/components/page/admin/finance/account/accountCard";
+// import { InvestmentCard } from "@/components/page/admin/finance/investment/InvestmentCard"
+import { TransactionCategoryCard } from "@/components/page/admin/finance/transactionCategory/TransactionCategoryCard";
+import { AccountCard } from "@/components/page/admin/finance/account/AccountCard";
 
 export default function Finance() {
   const { companies, isLoading: isLoadingCompanies } = useGetCompanies();
@@ -42,10 +43,14 @@ export default function Finance() {
             </Tabs.Tab>
           ))}
         </Tabs.List>
-        <SimpleGrid p={20}>
-          <AccountCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
-          {/* <InvestmentCard companyId={undefined} /> */}
-        </SimpleGrid>
+        <Grid p={20}>
+          <Grid.Col span={6}>
+            <TransactionCategoryCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
+          </Grid.Col>
+          <Grid.Col span={6}>
+            <AccountCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
+          </Grid.Col>
+        </Grid>
       </Tabs>
     </SimpleGrid>
   );

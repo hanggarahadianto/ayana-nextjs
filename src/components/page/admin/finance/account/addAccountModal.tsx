@@ -5,8 +5,9 @@ import { Form, Formik } from "formik";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import { validationSchemaAccount } from "@/utils/validation/account-validation";
 import { initialAccountValues } from "@/utils/initialValues/initialValuesAccount";
-import { useSubmitAccountForm } from "@/api/account/postDataAccount";
+
 import { accountTypeOptions } from "@/constants/dictionary";
+import { useSubmitAccount } from "@/api/account/postDataAccount";
 
 interface AddAccountModalProps {
   refetchAccountData: () => void;
@@ -24,7 +25,7 @@ const AddAccountModal = ({ refetchAccountData, companyId }: AddAccountModalProps
 
   // console.log("KOMPANI ID", companyId);
 
-  const { mutate: postData, isPending: isLoadingSubmitAccountData } = useSubmitAccountForm(refetchAccountData, close);
+  const { mutate: postData, isPending: isLoadingSubmitAccountData } = useSubmitAccount(refetchAccountData, close);
 
   // Mock submit function - replace with your actual API call
   const handleSubmit = useCallback(

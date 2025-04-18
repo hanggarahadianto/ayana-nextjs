@@ -6,6 +6,8 @@ export const getDataAccount = async (companyId: string, page = 1, limit: number,
     return;
   }
 
+  console.log("TYPE", type);
+
   try {
     let url = `account/get?company_id=${companyId}&page=${page}&limit=${limit}`;
     if (type) {

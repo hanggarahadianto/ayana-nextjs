@@ -5,10 +5,11 @@ import { useMemo, useState } from "react";
 
 interface ISelectFinanceAccountProps {
   companyId: string;
-  onSelect: (selected: { id: string; code: number; type: string }) => void;
+  onSelect: (selected: { id: string; code: number; type: string; category: string }) => void;
+  label: string;
 }
 
-export default function SelectFinanceAccount({ companyId, onSelect }: ISelectFinanceAccountProps) {
+export default function SelectFinanceAccount({ companyId, onSelect, label }: ISelectFinanceAccountProps) {
   //   console.log("company id", companyId);
   const { data: accountData, isLoading } = useQuery({
     queryKey: ["getAccountData", companyId],
@@ -35,6 +36,7 @@ export default function SelectFinanceAccount({ companyId, onSelect }: ISelectFin
         id: account.id,
         code: account.code,
         type: account.type,
+        category: account.category,
       });
     }
   };
@@ -59,8 +61,8 @@ export default function SelectFinanceAccount({ companyId, onSelect }: ISelectFin
           },
         }}
         clearable
-        label="Kategori"
-        placeholder="Pilih Kategori"
+        label={label}
+        placeholder={`Pilih ${label ?? ""}`}
         onChange={handleSelect}
         data={accountOptions}
       />
