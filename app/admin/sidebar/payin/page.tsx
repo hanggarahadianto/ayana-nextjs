@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import { Pagination, SimpleGrid, Stack, Table, Tabs } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // Sesuaikan path
 import { getDataCompany } from "@/api/company/getCompany"; // Sesuaikan path
-import { getDataPayout } from "@/api/payout/getDataPayout";
 import { useDeleteDataPayout } from "@/api/payout/deleteDataPayout";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import AddPayoutModal from "@/components/page/admin/finance/payout/AddPayoutModal";
 import AddPayinModal from "@/components/page/admin/finance/payin/AddPayinModal";
+import CreateJournalEntryModal from "@/components/page/admin/finance/journalEntry/CreateJournalEntryModal";
 
 export default function CompanyTabs() {
   const { data: companyData, isLoading } = useQuery({
@@ -38,33 +38,33 @@ export default function CompanyTabs() {
 
   console.log("Active Tab:", activeTab);
 
-  const {
-    data: payoutData,
-    isLoading: isLoadingPayoutData,
-    refetch: refetchPayoutData,
-  } = useQuery({
-    queryKey: ["getPayoutData", activeTab], // Gunakan key unik
-    queryFn: () => {
-      if (!activeTab) return Promise.resolve(null); // Prevent fetch if ID is null
-      return getDataPayout(activeTab.id);
-    },
-    enabled: !!activeTab, // Hanya fetch jika ID ada
-    refetchOnWindowFocus: false,
-  });
+  // const {
+  //   data: payoutData,
+  //   isLoading: isLoadingPayoutData,
+  //   refetch: refetchPayoutData,
+  // } = useQuery({
+  //   queryKey: ["getPayoutData", activeTab], // Gunakan key unik
+  //   queryFn: () => {
+  //     if (!activeTab) return Promise.resolve(null); // Prevent fetch if ID is null
+  //     return getDataPayout(activeTab.id);
+  //   },
+  //   enabled: !!activeTab, // Hanya fetch jika ID ada
+  //   refetchOnWindowFocus: false,
+  // });
 
-  const { mutate: mutateDeleteDataPayout, isPending: isLoadingDeleteDataPayout } = useDeleteDataPayout(refetchPayoutData);
+  // const { mutate: mutateDeleteDataPayout, isPending: isLoadingDeleteDataPayout } = useDeleteDataPayout(refetchPayoutData);
 
-  const handleDeletePayoutClick = (idToDelete: string) => {
-    console.log("Menghapus payout dengan ID:", idToDelete);
-    mutateDeleteDataPayout(idToDelete);
-  };
+  // const handleDeletePayoutClick = (idToDelete: string) => {
+  //   console.log("Menghapus payout dengan ID:", idToDelete);
+  //   mutateDeleteDataPayout(idToDelete);
+  // };
 
   const [page, setPage] = useState(1);
   const rowsPerPage = 5;
 
   // console.log("PAYOUT DATA", payoutData);
 
-  const totalPages = Math.ceil((payoutData?.total || 1) / rowsPerPage);
+  // const totalPages = Math.ceil((payoutData?.total || 1) / rowsPerPage);
 
   const [selectedPayout, setSelectedPayout] = useState<IPayoutUpdate | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
@@ -77,7 +77,7 @@ export default function CompanyTabs() {
 
   return (
     <SimpleGrid mt={10}>
-      <LoadingGlobal visible={isLoadingPayoutData || isLoadingDeleteDataPayout} />
+      {/* <LoadingGlobal visible={isLoadingPayoutData || isLoadingDeleteDataPayout} /> */}
       <Tabs
         value={activeTab?.company_code}
         onChange={(value: string | null) => {
@@ -98,7 +98,9 @@ export default function CompanyTabs() {
         {companies.map((company: ICompany) => (
           <Tabs.Panel key={company.company_code} value={company.company_code}>
             <Stack p={12} justify="flex-end" align="flex-end" style={{ width: "100%" }}>
-              <AddPayinModal refetchPayloadData={refetchPayoutData} companyCode={activeTab?.company_code} companyId={company?.id} />
+              {/* <AddPayinModal companyCode={activeTab?.company_code} companyId={company?.id} />
+               */}
+              <CreateJournalEntryModal transactionType={"payin"} companyId={company?.id} />
             </Stack>
           </Tabs.Panel>
         ))}
@@ -110,7 +112,7 @@ export default function CompanyTabs() {
           onDelete={handleDeletePayoutClick}
           refetchPayoutData={refetchPayoutData}
         /> */}
-        {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />}
+        {/* {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />} */}
       </SimpleGrid>
     </SimpleGrid>
   );

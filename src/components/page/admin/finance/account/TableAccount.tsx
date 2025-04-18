@@ -10,23 +10,22 @@ interface AccountTableProps {
 export default function AccountTable({ data, onRowClick, onDelete, refetchAccountData }: AccountTableProps) {
   // console.log("data account table", data);
   return (
-    <ScrollArea style={{ minHeight: 400 }}>
+    <ScrollArea style={{ minHeight: 400 }} p={"xl"}>
       <Table
-        px={100}
+        // Menggunakan token ukuran Mantine (xs, sm, md, lg, xl)
         highlightOnHover
         withColumnBorders
         style={{
-          padding: 100,
           tableLayout: "fixed",
           width: "100%",
-          minWidth: 700, // atau sesuai kebutuhan
+          minWidth: 700,
           maxWidth: "100%",
         }}
       >
         <Table.Thead>
           <Table.Tr>
             <Table.Th style={{ textAlign: "center", width: 30, minWidth: 30 }}>Code</Table.Th>
-            <Table.Th style={{ textAlign: "center", width: 120, minWidth: 120 }}>Nama</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 160, minWidth: 1600 }}>Nama</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 140, minWidth: 140 }}>Kategori</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Deskripsi</Table.Th>
           </Table.Tr>

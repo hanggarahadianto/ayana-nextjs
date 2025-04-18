@@ -4,19 +4,17 @@ import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form } from "formik";
 import { IconCalendar } from "@tabler/icons-react";
-
-import { useSubmitPayoutForm } from "@/api/payout/postDataPayout";
 import ButtonAdd from "@/components/common/button/buttonAdd";
-import { initialValuePayoutCreate } from "@/utils/initialValues/initialValuesPayout";
-import SelectFinanceAccount from "@/components/common/select/SelectAccountType";
 import SelectFinanceTransactionCategory from "@/components/common/select/SelectTransactiontCategory";
+import { inititalValuesJournalEntry } from "@/utils/initialValues/initialValuesJournalEntry";
+import { validationSchemaJournalEntry } from "@/utils/validation/journalEntry-validation";
 
-interface AddPayinModalProps {
-  companyCode: string | null;
+interface AddJournalEntryModalProps {
+  transactionType: string | null;
   companyId: string | null;
 }
 
-const AddPayinModal = ({ companyCode, companyId }: AddPayinModalProps) => {
+const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
 
   // const { mutate: postData, isPending: isLoadingSubmitAccountData } = useSubmitPayoutForm(close);
@@ -26,13 +24,13 @@ const AddPayinModal = ({ companyCode, companyId }: AddPayinModalProps) => {
       const payload = {
         ...values,
         payment_date: values.payment_date || "",
-        company: companyCode ?? "",
+        transactionType: transactionType ?? "",
         company_id: companyId ?? "",
       };
       // postData(payload);
       setSubmitting(false);
     },
-    [companyCode, companyId]
+    [transactionType, companyId]
     // [companyCode, companyId, postData]
   );
 
@@ -46,7 +44,8 @@ const AddPayinModal = ({ companyCode, companyId }: AddPayinModalProps) => {
 
       <Modal opened={opened} onClose={close} size="lg" yOffset="100px">
         <Formik
-          initialValues={initialValuePayoutCreate}
+          initialValues={inititalValuesJournalEntry}
+          validationSchema={validationSchemaJournalEntry}
           validateOnBlur={false}
           enableReinitialize
           validateOnChange
@@ -62,24 +61,35 @@ const AddPayinModal = ({ companyCode, companyId }: AddPayinModalProps) => {
                     <SelectFinanceTransactionCategory
                       companyId={companyId ?? ""}
                       onSelect={(selected) => {
-                        setFieldValue("debit_account_id", selected.debit_account_id);
-                        setFieldValue("credit_account_id", selected.credit_account_id);
-                        setFieldValue("category", selected.name);
+                        // setFieldValue("debit_account_id", selected.debit_account_id);
+                        // setFieldValue("credit_account_id", selected.credit_account_id);
+                        // setFieldValue("category", selected.name);
+                        setFieldValue("transaction_category_id", selected.id);
                       }}
                       label={"Kategori Transaksi"}
                     />
 
                     <TextInput
                       withAsterisk
+                      label="No Invoice"
+                      placeholder="Contoh: INV/001"
+                      value={values.invoice}
+                      onChange={(e) => setFieldValue("invoice", e.currentTarget.value)}
+                      onBlur={handleBlur}
+                      error={touched.invoice && errors.invoice}
+                    />
+
+                    {/* <TextInput
+                      withAsterisk
                       label="Mitra"
                       placeholder="Masukkan Mitra"
                       value={values.mitra || ""}
                       onChange={(e) => setFieldValue("mitra", e.currentTarget.value.toUpperCase())}
                       error={touched.mitra && errors.mitra ? errors.mitra : undefined}
-                    />
+                    /> */}
 
-                    <InputWrapper label="Nominal" withAsterisk error={touched.nominal && errors.nominal ? errors.nominal : undefined}>
-                      <TextInput
+                    {/* <TextInput
+                       error={touched.nominal && errors.nominal ? errors.nominal : undefined}
                         placeholder="Masukan Jumlah"
                         value={values.nominal ? `Rp. ${values.nominal.toLocaleString("id-ID")}` : ""}
                         onChange={(e) => {
@@ -88,7 +98,7 @@ const AddPayinModal = ({ companyCode, companyId }: AddPayinModalProps) => {
                           setFieldValue("nominal", numericValue);
                         }}
                       />
-                    </InputWrapper>
+       */}
 
                     <Group grow>
                       <DatePickerInput
@@ -104,7 +114,7 @@ const AddPayinModal = ({ companyCode, companyId }: AddPayinModalProps) => {
                         error={touched.date_inputed && errors.date_inputed}
                       />
 
-                      <DatePickerInput
+                      {/* <DatePickerInput
                         label="Jatuh Tempo"
                         placeholder="Jatuh Tempo"
                         locale="id"
@@ -115,15 +125,15 @@ const AddPayinModal = ({ companyCode, companyId }: AddPayinModalProps) => {
                         onChange={(date) => handleInputChange(setFieldValue, "due_date", date?.toISOString() || "")}
                         onBlur={handleBlur}
                         error={touched.due_date && errors.due_date}
-                      />
+                      /> */}
                     </Group>
 
-                    <Textarea
+                    {/* <Textarea
                       label="Keterangan"
                       placeholder="Masukkan Keterangan"
                       value={values.note?.toUpperCase() || ""}
                       onChange={(e) => setFieldValue("note", e.currentTarget.value.toUpperCase())}
-                    />
+                    /> */}
                   </Stack>
 
                   <Group justify="flex-end" mt="md">
@@ -147,4 +157,4 @@ const AddPayinModal = ({ companyCode, companyId }: AddPayinModalProps) => {
   );
 };
 
-export default memo(AddPayinModal);
+export default memo(AddJournalEntryModal);

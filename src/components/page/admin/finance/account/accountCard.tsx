@@ -1,5 +1,5 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Group, Stack, Loader, Pagination, Select } from "@mantine/core";
+import { Card, Text, Group, Stack, Loader, Pagination, Select, Box } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import AddAccountModal from "./addAccountModal";
 import { getDataAccount } from "@/api/account/getDataAccount";
@@ -85,17 +85,29 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
 
           <AddAccountModal companyId={companyId} refetchAccountData={refetchAccountData} />
         </Group>
+        <Box
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "50vh", // Pastikan container mengisi tinggi layar
+            justifyContent: "space-between", // Paginasi akan tetap di bawah
+          }}
+        >
+          {/* Bagian Tabel */}
+          <Box style={{ flex: 1 }}>
+            <AccountTable data={accountData?.data || []} />
+          </Box>
 
-        <AccountTable data={accountData?.data || []} />
-
-        {totalPages > 0 && (
-          <Stack gap="xs" mt="md">
-            <Pagination total={totalPages} value={page} onChange={setPage} />
-            <Text size="sm" c="dimmed">
-              Menampilkan {startIndex} sampai {endIndex} dari {accountData?.total} data
-            </Text>
-          </Stack>
-        )}
+          {/* Bagian Paginasi */}
+          {totalPages > 0 && (
+            <Stack gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
+              <Pagination total={totalPages} value={page} onChange={setPage} />
+              <Text size="sm" c="dimmed">
+                Menampilkan {startIndex} sampai {endIndex} dari {accountData?.total} data
+              </Text>
+            </Stack>
+          )}
+        </Box>
       </Stack>
     </Card>
   );

@@ -17,12 +17,7 @@ export default function SelectFinanceAccount({ companyId, onSelect, label }: ISe
     refetchOnWindowFocus: false,
     enabled: !!companyId,
   });
-  //   console.log("account data", accountData);
 
-  //   const [selectedAccount, setSelectedAccount] = useState<IAccount | null>(null);
-  //   console.log("selec", selectedAccount);
-
-  // Memoized accounts data with sorting
   const accounts = useMemo(() => {
     return Array.isArray(accountData?.data)
       ? [...accountData.data].sort((a, b) => a.code - b.code) // sort descending by code
