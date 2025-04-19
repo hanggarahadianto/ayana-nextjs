@@ -7,5 +7,7 @@ export const initialValuesJournalEntry = (companyId: string | null, transactionT
   transaction_type: (transactionType as "payin" | "payout") || "",
   status: "draft",
   date_inputed: "",
+  due_date: "",
+
   company_id: companyId || "",
 });

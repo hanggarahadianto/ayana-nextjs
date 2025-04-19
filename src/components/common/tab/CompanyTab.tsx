@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import useGetCompanies from "@/components/page/admin/company/GetCompanyTab";
 

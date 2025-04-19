@@ -3,6 +3,7 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 import { Card, Text, Group, Stack, Loader, Pagination, Select, Box } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useEffect, useMemo, useState } from "react";
+import OutstandingDebtTable from "./OutstandingDebtTable";
 
 interface OutstandingDebtCardProps {
   companyId: string;
@@ -53,7 +54,7 @@ export const OutstandingDebtCard = ({ companyId, companyName }: OutstandingDebtC
         <Group justify="space-between" align="flex-start">
           <Stack gap="xs">
             <Text size="lg" fw={600}>
-              Akun Keuangan {companyName}
+              Hutang Berjalan {companyName}
             </Text>
             <Select
               label="Filter berdasarkan Type"
@@ -94,7 +95,9 @@ export const OutstandingDebtCard = ({ companyId, companyName }: OutstandingDebtC
           }}
         >
           {/* Bagian Tabel */}
-          <Box style={{ flex: 1 }}>{/* <OutstandingDebtTable data={OutstandingDebtData?.data || []} /> */}</Box>
+          <Box style={{ flex: 1 }}>
+            <OutstandingDebtTable data={OutstandingDebtData?.data || []} />
+          </Box>
 
           {/* Bagian Paginasi */}
           {totalPages > 0 && (

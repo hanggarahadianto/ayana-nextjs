@@ -13,7 +13,7 @@ export const getOutstandingDebt = async (
   }
 
   try {
-    let url = `finance/get-outstanding-debt?company_id=${companyId}&transaction_type=${transaction_type}status=${transactionStatus}&page=${page}&limit=${limit}`;
+    let url = `finance/get-outstanding-debt?company_id=${companyId}&transaction_type=${transaction_type}&status=${transactionStatus}&page=${page}&limit=${limit}`;
     // if (type) {
     //   url += `&type=${encodeURIComponent(type)}`;
     // }
@@ -21,7 +21,7 @@ export const getOutstandingDebt = async (
     // console.log("url dapatkan select", url);
 
     const response = await APIAxiosInstance.get(url);
-    return response.data as ITransactionCategoryResponse;
+    return response.data as IJournalEntryResponse;
   } catch (error: any) {
     console.error("Error fetching data:", error.message || error);
     throw error;

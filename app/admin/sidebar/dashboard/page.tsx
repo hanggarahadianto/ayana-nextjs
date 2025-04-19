@@ -11,7 +11,7 @@ import { OutstandingDebtCard } from "@/components/page/admin/finance/Outstanding
 
 export default function Dashboard() {
   const { companies, activeTab, handleTabChange } = UseCompanyTabs();
-  console.log("companies", companies);
+  console.log("active", activeTab);
 
   const [page, setPage] = useState(1);
   const rowsPerPage = 5;
@@ -38,7 +38,7 @@ export default function Dashboard() {
       <SimpleGrid p={20}>
         {/* <ExpenseCard companyId={activeTab?.id} />
          */}
-        {/* <OutstandingDebtCard companyId={companies} /> */}
+        <OutstandingDebtCard companyId={activeTab?.id ?? ""} companyName={activeTab?.title} />
       </SimpleGrid>
     </SimpleGrid>
   );

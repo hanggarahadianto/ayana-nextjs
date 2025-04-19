@@ -1,32 +1,20 @@
 "use client";
-
 import { useState, useEffect } from "react";
-import { Grid, GridCol, SimpleGrid, Tabs } from "@mantine/core";
+import { Grid, SimpleGrid, Tabs } from "@mantine/core";
 
-import useGetCompanies from "@/components/page/admin/company/GetCompanyTab";
-// import { InvestmentCard } from "@/components/page/admin/finance/investment/InvestmentCard"
 import { TransactionCategoryCard } from "@/components/page/admin/finance/transactionCategory/TransactionCategoryCard";
 import { AccountCard } from "@/components/page/admin/finance/account/AccountCard";
+import UseCompanyTabs from "@/components/common/tab/CompanyTab";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 export default function Finance() {
-  const { companies, isLoading: isLoadingCompanies } = useGetCompanies();
-  const [activeTab, setActiveTab] = useState<ICompany | null>(null);
+  const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
 
-  useEffect(() => {
-    if (companies.length > 0 && !activeTab) {
-      setActiveTab(companies[0]); // Set tab pertama sebagai default
-    }
-  }, [companies, activeTab]);
-
-  const handleTabChange = (value: ICompany) => {
-    console.log("VALUES", value);
-    if (value) {
-      setActiveTab(value);
-    }
-  };
+  console.log("active", activeTab);
 
   return (
     <SimpleGrid mt={10}>
+      <LoadingGlobal visible={isLoadingCompanies} />
       <Tabs
         value={activeTab?.company_code}
         onChange={(value: string | null) => {
