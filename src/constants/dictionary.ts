@@ -70,3 +70,28 @@ export const accountTypeOptions = [
   { value: "Revenue (Pendapatan)", label: "Revenue (Pendapatan)" },
   { value: "Expense (Beban)", label: "Expense (Beban)" },
 ];
+
+export const transactionStatusOption = {
+  draft: {
+    label: "Draft",
+    color: "gray",
+  },
+  approved: {
+    label: "Disetujui",
+    color: "blue",
+  },
+  paid: {
+    label: "Lunas",
+    color: "green",
+  },
+  unpaid: {
+    label: "Belum Lunas",
+    color: "orange",
+  },
+  cancelled: {
+    label: "Dibatalkan",
+    color: "red",
+  },
+} as const;
+
+export type TransactionStatus = keyof typeof transactionStatusOption;
