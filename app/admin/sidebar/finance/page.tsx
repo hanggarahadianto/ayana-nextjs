@@ -47,9 +47,8 @@ export default function Finance() {
           <Grid.Col span={6}>
             <TransactionCategoryCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
           </Grid.Col>
-          <Grid.Col span={6}>
-            <AccountCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
-          </Grid.Col>
+          <Grid.Col span={6}></Grid.Col>
+          <AccountCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
         </Grid>
       </Tabs>
     </SimpleGrid>

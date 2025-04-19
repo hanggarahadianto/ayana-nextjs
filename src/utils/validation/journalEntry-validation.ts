@@ -9,6 +9,8 @@ export const validationSchemaJournalEntry = yup.object().shape({
 
   amount: yup.number().required("Jumlah wajib diisi").min(1, "Jumlah harus lebih dari 0"),
 
+  partner: yup.string().required("Partner wajib diisi").max(255, "Deskripsi maksimal 255 karakter"),
+
   transaction_type: yup
     .mixed<"payin" | "payout">()
     .oneOf(["payin", "payout"], "Tipe transaksi tidak valid")

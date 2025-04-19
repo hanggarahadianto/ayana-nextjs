@@ -6,7 +6,7 @@ import { Formik, Form } from "formik";
 import { IconCalendar } from "@tabler/icons-react";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import SelectFinanceTransactionCategory from "@/components/common/select/SelectTransactiontCategory";
-import { inititalValuesJournalEntry } from "@/utils/initialValues/initialValuesJournalEntry";
+import { initialValuesJournalEntry } from "@/utils/initialValues/initialValuesJournalEntry";
 import { validationSchemaJournalEntry } from "@/utils/validation/journalEntry-validation";
 
 interface AddJournalEntryModalProps {
@@ -20,10 +20,10 @@ const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryMod
   // const { mutate: postData, isPending: isLoadingSubmitAccountData } = useSubmitPayoutForm(close);
 
   const handleSubmit = useCallback(
-    (values: any, { setSubmitting }: any) => {
+    (values: IJournalEntryCreate, { setSubmitting }: any) => {
       const payload = {
         ...values,
-        payment_date: values.payment_date || "",
+        // payment_date: values.payment_date || "",
         transactionType: transactionType ?? "",
         company_id: companyId ?? "",
       };
@@ -44,7 +44,7 @@ const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryMod
 
       <Modal opened={opened} onClose={close} size="lg" yOffset="100px">
         <Formik
-          initialValues={inititalValuesJournalEntry}
+          initialValues={initialValuesJournalEntry(companyId, transactionType)}
           validationSchema={validationSchemaJournalEntry}
           validateOnBlur={false}
           enableReinitialize
@@ -78,14 +78,25 @@ const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryMod
                       onBlur={handleBlur}
                       error={touched.invoice && errors.invoice}
                     />
+                    <TextInput
+                      label="Nominal"
+                      error={touched.amount && errors.amount ? errors.amount : undefined}
+                      placeholder="Masukan Nominal"
+                      value={values.amount ? `Rp. ${values.amount.toLocaleString("id-ID")}` : ""}
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/\D/g, "");
+                        const numericValue = Number(rawValue) || 0;
+                        setFieldValue("amount", numericValue);
+                      }}
+                    />
 
                     {/* <TextInput
                       withAsterisk
                       label="Mitra"
                       placeholder="Masukkan Mitra"
-                      value={values.mitra || ""}
+                      value={values.partner || ""}
                       onChange={(e) => setFieldValue("mitra", e.currentTarget.value.toUpperCase())}
-                      error={touched.mitra && errors.mitra ? errors.mitra : undefined}
+                      error={touched.partner && errors.partner ? errors.partner : undefined}
                     /> */}
 
                     {/* <TextInput
