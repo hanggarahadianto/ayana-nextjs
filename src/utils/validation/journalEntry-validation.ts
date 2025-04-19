@@ -17,8 +17,8 @@ export const validationSchemaJournalEntry = yup.object().shape({
     .required("Tipe transaksi wajib diisi"),
 
   status: yup
-    .mixed<"draft" | "completed" | "cancelled">()
-    .oneOf(["draft", "completed", "cancelled"], "Status tidak valid")
+    .mixed<"draft" | "unpaid" | "completed" | "cancelled">()
+    .oneOf(["draft", "unpaid", "completed", "cancelled"], "Status tidak valid")
     .required("Status wajib diisi"),
 
   date_inputed: yup

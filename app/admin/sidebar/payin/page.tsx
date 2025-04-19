@@ -9,34 +9,11 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 import AddPayoutModal from "@/components/page/admin/finance/payout/AddPayoutModal";
 import AddPayinModal from "@/components/page/admin/finance/payin/AddPayinModal";
 import CreateJournalEntryModal from "@/components/page/admin/finance/journalEntry/CreateJournalEntryModal";
+import UseCompanyTabs from "@/components/common/tab/CompanyTab";
+import { OutstandingDebtCard } from "@/components/page/admin/finance/OutstandingDebit/OutstandingDebtCard";
 
 export default function CompanyTabs() {
-  const { data: companyData, isLoading } = useQuery({
-    queryKey: ["getCompanyData"],
-    queryFn: getDataCompany,
-    refetchOnWindowFocus: false,
-  });
-
-  const companies = Array.isArray(companyData?.data) ? companyData.data.sort((a, b) => a.company_code.localeCompare(b.company_code)) : [];
-
-  console.log("companies", companies);
-
-  const [activeTab, setActiveTab] = useState<ICompany>(companies[0]);
-
-  useEffect(() => {
-    if (companies.length > 0 && !activeTab) {
-      setActiveTab(companies[0]); // Set tab pertama sebagai default
-    }
-  }, [companies, activeTab]);
-
-  const handleTabChange = (value: ICompany) => {
-    console.log("VALUES", value);
-    if (value) {
-      setActiveTab(value);
-    }
-  };
-
-  console.log("Active Tab:", activeTab);
+  const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
 
   // const {
   //   data: payoutData,
@@ -66,14 +43,13 @@ export default function CompanyTabs() {
 
   // const totalPages = Math.ceil((payoutData?.total || 1) / rowsPerPage);
 
-  const [selectedPayout, setSelectedPayout] = useState<IPayoutUpdate | null>(null);
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
-  console.log(isDetailsModalOpen);
+  // const [selectedPayout, setSelectedPayout] = useState<IPayoutUpdate | null>(null);
+  // const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
-  const handleRowClick = (payout: IPayoutUpdate) => {
-    setSelectedPayout(payout);
-    setIsDetailsModalOpen(true);
-  };
+  // const handleRowClick = (payout: IPayoutUpdate) => {
+  //   setSelectedPayout(payout);
+  //   setIsDetailsModalOpen(true);
+  // };
 
   return (
     <SimpleGrid mt={10}>
@@ -114,6 +90,7 @@ export default function CompanyTabs() {
         /> */}
         {/* {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />} */}
       </SimpleGrid>
+      <OutstandingDebtCard companyId={activeTab?.id ?? ""} />
     </SimpleGrid>
   );
 }

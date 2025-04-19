@@ -36,22 +36,18 @@ export default function OutstandingDebtTable({ data, onRowClick, onDelete, refet
         <Table.Thead>
           <Table.Tr>
             <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Invoice</Table.Th>
-            <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Partner</Table.Th>
-
+            <Table.Th style={{ textAlign: "center", width: 220, minWidth: 220 }}>Partner</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Amount</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Tanggal Masuk</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Tanggal Jatuh Tempo</Table.Th>
-            {/* <Table.Th style={{ textAlign: "center", width: 90, minWidth: 90 }}>Status</Table.Th> */}
-            {/* <Table.Th style={{ textAlign: "center", width: 90, minWidth: 90 }}>Status</Table.Th> */}
             <Table.Th style={{ textAlign: "center", width: 220, minWidth: 220 }}>Status</Table.Th>
 
-            <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Deskripsi</Table.Th>
-            {/* <Table.Th style={{ textAlign: "center", width: 140, minWidth: 140 }}>Kategori</Table.Th> */}
+            <Table.Th style={{ textAlign: "center", width: 300, minWidth: 300 }}>Deskripsi</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {data.map((OutstandingDebt: IJournalEntry) => {
-            const daysLeft = calculateDaysLeft(OutstandingDebt.due_date);
+            const daysLeft = OutstandingDebt.due_date ? calculateDaysLeft(OutstandingDebt.due_date) : 0;
             const statusText = formatDaysToMonths(daysLeft);
 
             const statusColor = daysLeft < 0 ? "red" : "green";
@@ -68,8 +64,8 @@ export default function OutstandingDebtTable({ data, onRowClick, onDelete, refet
                 <Table.Td>{formatCurrency(OutstandingDebt.amount)}</Table.Td>
                 {/* <Table.Td>{OutstandingDebt.type}</Table.Td> */}
                 {/* <Table.Td>{OutstandingDebt.category}</Table.Td> */}
-                <Table.Td>{formatDateIndonesia(OutstandingDebt.date_inputed)}</Table.Td>
-                <Table.Td>{formatDateIndonesia(OutstandingDebt.due_date)}</Table.Td>
+                <Table.Td>{OutstandingDebt.date_inputed ? formatDateIndonesia(OutstandingDebt.date_inputed) : "-"}</Table.Td>
+                <Table.Td>{OutstandingDebt.due_date ? formatDateIndonesia(OutstandingDebt.due_date) : "-"}</Table.Td>
                 {/* <Table.Td>{OutstandingDebt.status}</Table.Td> */}
                 <Table.Td>
                   <Badge color={statusColor} variant="light">

@@ -10,8 +10,6 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 export default function Finance() {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
 
-  console.log("active", activeTab);
-
   return (
     <SimpleGrid mt={10}>
       <LoadingGlobal visible={isLoadingCompanies} />

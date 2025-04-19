@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 
 interface ISelectFinanceTransactionCategoryProps {
   companyId: string;
-  onSelect: (selected: { id: string; debit_account_id: string; credit_account_id: string; name: string }) => void;
+  onSelect: (selected: { id: string; debit_account_id: string; credit_account_id: string; name: string; description: string }) => void;
   label: string;
 }
 
@@ -32,6 +32,7 @@ export default function SelectFinanceTransactionCategory({ companyId, onSelect, 
         debit_account_id: TransactionCategory.debit_account_id,
         credit_account_id: TransactionCategory.credit_account_id,
         name: TransactionCategory.name,
+        description: TransactionCategory.description,
       });
     }
   };

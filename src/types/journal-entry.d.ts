@@ -7,9 +7,11 @@ interface IJournalEntry {
   partner: string;
   transaction_type: "payin" | "payout"; // bisa disesuaikan kalau ada lebih dari dua tipe
   status: "draft" | "completed" | "cancelled"; // sesuaikan dengan status yang valid di sistem
-  date_inputed: string; // ISO string (e.g. "2025-04-18T00:00:00Z")
-  due_date: string;
+  date_inputed: string | null;
+  due_date: string | null;
+  installment: 0;
   status: string;
+  is_repaid: boolean;
   company_id: string;
 }
 interface IJournalEntryCreate {
@@ -19,10 +21,12 @@ interface IJournalEntryCreate {
   amount: number;
   partner: string;
   transaction_type: "payin" | "payout"; // bisa disesuaikan kalau ada lebih dari dua tipe
-  status: "draft" | "completed" | "cancelled"; // sesuaikan dengan status yang valid di sistem
-  date_inputed: string; // ISO string (e.g. "2025-04-18T00:00:00Z")
-  due_date: string;
+  status: "draft" | "unpaid" | "completed" | "cancelled"; // sesuaikan dengan status yang valid di sistem
+  date_inputed: string | null;
+  due_date: string | null;
+  installment: 0;
   status: string;
+  is_repaid: boolean;
   company_id: string;
 }
 

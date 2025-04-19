@@ -7,6 +7,7 @@ import useGetCompanies from "@/components/page/admin/company/GetCompanyTab";
 import { ExpenseCard } from "@/components/page/admin/dashboard/ExpenseCard";
 import UseCompanyTabs from "@/components/common/tab/CompanyTab";
 import { OutstandingDebtCard } from "@/components/page/admin/finance/OutstandingDebit/OutstandingDebtCard";
+import { CashSummaryCard } from "@/components/page/admin/dashboard/CashSummaryCard";
 // import { ExpenseCard } from "@/components/page/admin/dashboard/ExpenseCard";
 
 export default function Dashboard() {
@@ -39,6 +40,7 @@ export default function Dashboard() {
         {/* <ExpenseCard companyId={activeTab?.id} />
          */}
         <OutstandingDebtCard companyId={activeTab?.id ?? ""} companyName={activeTab?.title} />
+        <CashSummaryCard companyId={activeTab?.id ?? ""} />
       </SimpleGrid>
     </SimpleGrid>
   );

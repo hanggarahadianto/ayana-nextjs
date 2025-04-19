@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from "react";
-import { Modal, Button, Group, Stack, SimpleGrid, TextInput, Textarea, InputWrapper } from "@mantine/core";
+import { Modal, Button, Group, Stack, SimpleGrid, TextInput, Textarea, InputWrapper, NumberInput } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form } from "formik";
@@ -8,6 +8,7 @@ import ButtonAdd from "@/components/common/button/buttonAdd";
 import SelectFinanceTransactionCategory from "@/components/common/select/SelectTransactiontCategory";
 import { initialValuesJournalEntry } from "@/utils/initialValues/initialValuesJournalEntry";
 import { validationSchemaJournalEntry } from "@/utils/validation/journalEntry-validation";
+import { useSubmitJournalEntry } from "@/api/finance/postDataJournalEntry";
 
 interface AddJournalEntryModalProps {
   transactionType: string | null;
@@ -17,17 +18,17 @@ interface AddJournalEntryModalProps {
 const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  // const { mutate: postData, isPending: isLoadingSubmitAccountData } = useSubmitPayoutForm(close);
+  const { mutate: postData, isPending: isLoadingSubmitJournalEntry } = useSubmitJournalEntry(close);
 
   const handleSubmit = useCallback(
     (values: IJournalEntryCreate, { setSubmitting }: any) => {
-      const payload = {
+      const modifiedValues = {
         ...values,
-        // payment_date: values.payment_date || "",
-        transactionType: transactionType ?? "",
-        company_id: companyId ?? "",
+        date_inputed: values.date_inputed || null,
+        due_date: values.due_date || null,
       };
-      // postData(payload);
+
+      postData(modifiedValues);
       setSubmitting(false);
     },
     [transactionType, companyId]
@@ -35,7 +36,12 @@ const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryMod
   );
 
   const handleInputChange = (setFieldValue: any, field: string, value: any) => {
-    setFieldValue(field, value);
+    // Jika field adalah date_inputed atau due_date, ubah nilai kosong menjadi null
+    if (field === "date_inputed" || field === "due_date") {
+      setFieldValue(field, value ? value : null);
+    } else {
+      setFieldValue(field, value);
+    }
   };
 
   return (
@@ -54,6 +60,7 @@ const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryMod
         >
           {({ values, errors, touched, setFieldValue, handleBlur }) => {
             console.log("values", values);
+            console.log("error", errors);
             return (
               <Form>
                 <SimpleGrid p={20}>
@@ -61,9 +68,7 @@ const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryMod
                     <SelectFinanceTransactionCategory
                       companyId={companyId ?? ""}
                       onSelect={(selected) => {
-                        // setFieldValue("debit_account_id", selected.debit_account_id);
-                        // setFieldValue("credit_account_id", selected.credit_account_id);
-                        // setFieldValue("category", selected.name);
+                        setFieldValue("description", selected.description);
                         setFieldValue("transaction_category_id", selected.id);
                       }}
                       label={"Kategori Transaksi"}
@@ -78,6 +83,16 @@ const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryMod
                       onBlur={handleBlur}
                       error={touched.invoice && errors.invoice}
                     />
+
+                    <TextInput
+                      withAsterisk
+                      label="Partner"
+                      placeholder="Contoh: Pinjaman Bank BCA"
+                      value={values.partner}
+                      onChange={(e) => setFieldValue("partner", e.currentTarget.value.toLocaleUpperCase())}
+                      onBlur={handleBlur}
+                      error={touched.partner && errors.partner}
+                    />
                     <TextInput
                       label="Nominal"
                       error={touched.amount && errors.amount ? errors.amount : undefined}
@@ -90,26 +105,15 @@ const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryMod
                       }}
                     />
 
-                    {/* <TextInput
-                      withAsterisk
-                      label="Mitra"
-                      placeholder="Masukkan Mitra"
-                      value={values.partner || ""}
-                      onChange={(e) => setFieldValue("mitra", e.currentTarget.value.toUpperCase())}
-                      error={touched.partner && errors.partner ? errors.partner : undefined}
-                    /> */}
-
-                    {/* <TextInput
-                       error={touched.nominal && errors.nominal ? errors.nominal : undefined}
-                        placeholder="Masukan Jumlah"
-                        value={values.nominal ? `Rp. ${values.nominal.toLocaleString("id-ID")}` : ""}
-                        onChange={(e) => {
-                          const rawValue = e.target.value.replace(/\D/g, "");
-                          const numericValue = Number(rawValue) || 0;
-                          setFieldValue("nominal", numericValue);
-                        }}
-                      />
-       */}
+                    <NumberInput
+                      hideControls
+                      label="Total Cicilan"
+                      error={touched.installment && errors.installment ? errors.installment : undefined}
+                      placeholder="Contoh : 3 X"
+                      value={values.installment || ""}
+                      onChange={(e) => setFieldValue("installment", e)}
+                      suffix=" x"
+                    />
 
                     <Group grow>
                       <DatePickerInput
@@ -120,12 +124,12 @@ const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryMod
                         radius="sm"
                         valueFormat="DD MMMM YYYY"
                         rightSection={<IconCalendar size={18} />}
-                        onChange={(date) => handleInputChange(setFieldValue, "date_inputed", date?.toISOString() || "")}
+                        onChange={(date) => handleInputChange(setFieldValue, "date_inputed", date ? date.toISOString() : null)}
                         onBlur={handleBlur}
                         error={touched.date_inputed && errors.date_inputed}
                       />
 
-                      {/* <DatePickerInput
+                      <DatePickerInput
                         label="Jatuh Tempo"
                         placeholder="Jatuh Tempo"
                         locale="id"
@@ -133,10 +137,10 @@ const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryMod
                         radius="sm"
                         valueFormat="DD MMMM YYYY"
                         rightSection={<IconCalendar size={18} />}
-                        onChange={(date) => handleInputChange(setFieldValue, "due_date", date?.toISOString() || "")}
+                        onChange={(date) => handleInputChange(setFieldValue, "due_date", date ? date.toISOString() : null)}
                         onBlur={handleBlur}
                         error={touched.due_date && errors.due_date}
-                      /> */}
+                      />
                     </Group>
 
                     {/* <Textarea
@@ -151,11 +155,8 @@ const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryMod
                     <Button onClick={close} variant="default">
                       Cancel
                     </Button>
-                    <Button
-                      type="submit"
-                      // loading={isLoadingSubmitAccountData}
-                    >
-                      Tambah Payout
+                    <Button type="submit" loading={isLoadingSubmitJournalEntry} disabled={isLoadingSubmitJournalEntry}>
+                      Tambah Transaksi
                     </Button>
                   </Group>
                 </SimpleGrid>

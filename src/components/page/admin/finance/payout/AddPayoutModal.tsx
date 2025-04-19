@@ -66,7 +66,7 @@ const AddPayoutModal = ({ refetchPayloadData, companyCode, companyId }: AddPayou
                 <Form>
                   <SimpleGrid p={20}>
                     <Stack gap={20}>
-                      <SelectFinanceAccount companyId={companyId ?? ""} />
+                      {/* <SelectFinanceAccount companyId={companyId ?? ""} /> */}
                       <Select
                         label="Status"
                         w={200}

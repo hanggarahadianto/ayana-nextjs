@@ -5,7 +5,9 @@ export const initialValuesJournalEntry = (companyId: string | null, transactionT
   amount: 0,
   partner: "",
   transaction_type: (transactionType as "payin" | "payout") || "",
-  status: "draft",
+  status: "unpaid",
+  installment: 0,
+  is_repaid: false,
   date_inputed: "",
   due_date: "",
 
