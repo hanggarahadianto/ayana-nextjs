@@ -1,18 +1,16 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { Card, Text, Group, Stack, Loader, Pagination, Select, Box } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
-import AddAccountModal from "./addAccountModal";
-import { getDataAccount } from "@/api/account/getDataAccount";
-import AccountTable from "@/components/page/admin/finance/account/TableAccount";
 import { useEffect, useMemo, useState } from "react";
-import { accountTypeOptions, typeOptions } from "@/constants/dictionary";
+import ExpenseSummaryTable from "./ExpenseSummaryTable";
+import { getExpenseSummary } from "@/api/finance/getExpenseSummary";
 
-interface AccountCardProps {
-  companyId: string;
-  companyName?: string;
+interface ExpenseSummaryCardProps {
+  companyName: string;
+  expenseSummaryData: IExpenseSummaryResponse;
 }
 
-export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
+export const GetExpenseSummaryData = ({ companyName, expenseSummaryData }: ExpenseSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const limit = 10;
   const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -22,20 +20,9 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
     console.log("selectedType updated:", selectedType);
   }, [selectedType]);
 
-  const {
-    data: accountData,
-    isLoading,
-    refetch: refetchAccountData,
-  } = useQuery({
-    queryKey: ["getAccountByCompanyId", companyId, page, limit, selectedType],
-    queryFn: () => getDataAccount(companyId, page, limit, selectedType),
-    enabled: !!companyId,
-    refetchOnWindowFocus: false,
-  });
-
-  const totalPages = useMemo(() => {
-    return accountData?.total ? Math.ceil(accountData.total / limit) : 1;
-  }, [accountData]);
+  //   const totalPages = useMemo(() => {
+  //     return ExpenseSummaryData?.total ? Math.ceil(ExpenseSummaryData.total / limit) : 1;
+  //   }, [ExpenseSummaryData]);
 
   // Reset page when filter changes
   useEffect(() => {
@@ -43,22 +30,22 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
   }, [selectedType]);
 
   const startIndex = (page - 1) * limit + 1;
-  const endIndex = Math.min(page * limit, accountData?.total || 0);
+  //   const endIndex = Math.min(page * limit, ExpenseSummaryData?.total || 0);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <LoadingGlobal visible={isLoading} />
+      {/* <LoadingGlobal visible={isLoading} /> */}
 
       <Stack gap="md">
         <Group justify="space-between" align="flex-start">
           <Stack gap="xs">
             <Text size="lg" fw={600}>
-              Akun Keuangan {companyName}
+              Pengeluaran {companyName}
             </Text>
-            <Select
+            {/* <Select
               label="Filter berdasarkan Type"
               placeholder="Pilih Type"
-              data={accountTypeOptions}
+              data={ExpenseSummaryTypeOptions}
               value={selectedType}
               onChange={(value) => {
                 console.log("Select onChange:", value); // Debug
@@ -66,7 +53,7 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
               }}
               clearable
               style={{ width: 250 }}
-            />
+            /> */}
 
             {/* <Select
               label="Test Select"
@@ -83,7 +70,7 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
             /> */}
           </Stack>
 
-          <AddAccountModal companyId={companyId} refetchAccountData={refetchAccountData} />
+          {/* <AddExpenseSummaryModal companyId={companyId} refetchExpenseSummaryData={refetchExpenseSummaryData} /> */}
         </Group>
         <Box
           style={{
@@ -95,18 +82,18 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
         >
           {/* Bagian Tabel */}
           <Box style={{ flex: 1 }}>
-            <AccountTable data={accountData?.data || []} />
+            <ExpenseSummaryTable data={expenseSummaryData?.data.expenseList || []} />
           </Box>
 
           {/* Bagian Paginasi */}
-          {totalPages > 0 && (
+          {/* {totalPages > 0 && (
             <Stack gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
               <Pagination total={totalPages} value={page} onChange={setPage} />
               <Text size="sm" c="dimmed">
-                Menampilkan {startIndex} sampai {endIndex} dari {accountData?.total} data
+                Menampilkan {startIndex} sampai {endIndex} dari {ExpenseSummaryData?.total} data
               </Text>
             </Stack>
-          )}
+          )} */}
         </Box>
       </Stack>
     </Card>

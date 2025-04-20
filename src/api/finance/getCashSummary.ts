@@ -22,7 +22,7 @@ export const getCashSummary = async (
     // console.log("url dapatkan select", url);
 
     const response = await APIAxiosInstance.get(url);
-    return response.data as ICashSummaryData;
+    return response.data as ICashSummaryResponse;
   } catch (error: any) {
     console.error("Error fetching data:", error.message || error);
     throw error;

@@ -1,5 +1,6 @@
 import { getCashSummary } from "@/api/finance/getCashSummary";
 import LoadingGlobal from "@/styles/loading/loading-global";
+
 import { formatCurrency } from "@/utils/formatCurrency";
 import { Card, Text, Group, Stack, Loader, Pagination, Select, Box, Button, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
@@ -42,14 +43,14 @@ export const CashSummaryCard = ({ companyId, companyName }: CashSummaryCardProps
       <Card shadow="sm" padding="lg">
         <Title order={3}>Cash Summary</Title>
         <Group mb="md">
-          <Text>Cash Tersedia: {formatCurrency(CashSummaryData?.available_cash ?? 0)}</Text>
+          <Text>Cash Tersedia: {formatCurrency(CashSummaryData?.data.available_cash ?? 0)}</Text>
         </Group>
         {/* <Text>{cashSummary?.message}</Text> */}
 
         <div>
           <Title order={4}>Summary</Title>
           <ul>
-            {CashSummaryData?.summary?.map((item: ISummaryItem, index) => (
+            {CashSummaryData?.data.cashList?.map((item: ICashSummaryItem, index) => (
               <li key={index}>
                 <Text>{item.description}</Text>
                 <Text>Amount: {item.amount}</Text>

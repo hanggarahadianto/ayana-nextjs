@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  Modal,
-  TextInput,
-  Button,
-  Group,
-  Select,
-  Textarea,
-  Card,
-  Text,
-  Stack,
-} from "@mantine/core";
+import { Modal, TextInput, Button, Group, Select, Textarea, Card, Text, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik } from "formik";
 import { initialValueTask } from "./initialValuesTask";
@@ -42,13 +32,7 @@ const AddTaskModal = () => {
     setFieldValue("task", [...tasks, newTask]);
   };
 
-  const handleTaskChange = (
-    setFieldValue: any,
-    tasks: any,
-    index: number,
-    field: string,
-    value: string
-  ) => {
+  const handleTaskChange = (setFieldValue: any, tasks: any, index: number, field: string, value: string) => {
     // Clone the task array, modify the task, and set the new array
     const updatedTasks = [...tasks];
     updatedTasks[index][field] = value;
@@ -68,26 +52,12 @@ const AddTaskModal = () => {
           validateOnMount={false}
           onSubmit={handleSubmit}
         >
-          {({
-            values,
-            errors,
-            setFieldValue,
-            handleBlur,
-            isValid,
-            resetForm,
-          }) => {
+          {({ values, errors, setFieldValue, handleBlur, isValid, resetForm }) => {
             console.log(values);
 
             return (
               <>
-                <TextInput
-                  label="Name"
-                  placeholder="Name"
-                  onChange={(event) =>
-                    setFieldValue("name", event.currentTarget.value)
-                  }
-                  mt="md"
-                />
+                <TextInput label="Name" placeholder="Name" onChange={(event) => setFieldValue("name", event.currentTarget.value)} mt="md" />
                 <Select
                   label="Division"
                   placeholder="Select division"
@@ -109,30 +79,14 @@ const AddTaskModal = () => {
                         label={`Task Name ${index + 1}`}
                         placeholder="Enter task name"
                         value={task.name}
-                        onChange={(event) =>
-                          handleTaskChange(
-                            setFieldValue,
-                            values.task,
-                            index,
-                            "name",
-                            event.currentTarget.value
-                          )
-                        }
+                        onChange={(event) => handleTaskChange(setFieldValue, values.task, index, "name", event.currentTarget.value)}
                         required
                       />
                       <Select
                         label={`Task Status ${index + 1}`}
                         placeholder="Select status"
                         value={task.status}
-                        onChange={(value) =>
-                          handleTaskChange(
-                            setFieldValue,
-                            values.task,
-                            index,
-                            "status",
-                            value || "pending"
-                          )
-                        }
+                        onChange={(value) => handleTaskChange(setFieldValue, values.task, index, "status", value || "pending")}
                         data={[
                           { value: "done", label: "Done" },
                           { value: "pending", label: "Pending" },
@@ -140,31 +94,19 @@ const AddTaskModal = () => {
                         ]}
                         mt="xs"
                       />
-                      <Text
-                        mt="sm"
-                        color={getStatusColor(task.status)}
-                        fw={500}
-                      >
-                        Status:{" "}
-                        {task.status.charAt(0).toUpperCase() +
-                          task.status.slice(1)}
+                      <Text mt="sm" color={getStatusColor(task.status)} fw={500}>
+                        Status: {task.status.charAt(0).toUpperCase() + task.status.slice(1)}
                       </Text>
                     </Card>
                   ))}
                 </Stack>
-                <Button
-                  onClick={() => addTaskField(setFieldValue, values.task)}
-                  mt="sm"
-                  variant="light"
-                >
+                <Button onClick={() => addTaskField(setFieldValue, values.task)} mt="sm" variant="light">
                   Add Another Task
                 </Button>
                 <Textarea
                   label="Note"
                   placeholder="Enter additional information"
-                  onChange={(event) =>
-                    setFieldValue("note", event.currentTarget.value)
-                  }
+                  onChange={(event) => setFieldValue("note", event.currentTarget.value)}
                   mt="md"
                 />
                 <Group justify="flex-end" mt="md">

@@ -6,39 +6,28 @@ import AddPayoutModal from "@/components/page/admin/finance/payout/AddPayoutModa
 import PayoutDetails from "@/components/page/admin/finance/payout/GetPayoutDetails";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Group, Pagination, ScrollArea, SimpleGrid, Stack, Table, Tabs, ThemeIcon, Text } from "@mantine/core";
+import { Group, Pagination, ScrollArea, SimpleGrid, Stack, Table, ThemeIcon, Text, Tabs } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import CreateJournalEntryModal from "@/components/page/admin/finance/journalEntry/CreateJournalEntryModal";
+import UseCompanyTabs from "@/components/common/tab/CompanyTab";
+import { getExpenseSummary } from "@/api/finance/getExpenseSummary";
+import ExpenseSummaryTable from "@/components/page/admin/finance/payout/ExpenseSummaryTable";
+import { GetExpenseSummaryData } from "@/components/page/admin/finance/payout/GetExpenseSummayData";
 
 export default function Payout() {
-  const { companies, isLoading: isLoadingCompanies } = useGetCompanies();
+  const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
 
-  const [activeTab, setActiveTab] = useState<ICompany | null>(null);
-
-  useEffect(() => {
-    if (companies.length > 0 && !activeTab) {
-      setActiveTab(companies[0]);
-    }
-  }, [companies, activeTab]);
-
-  const handleTabChange = useCallback(
-    (companyCode: string | null) => {
-      const selected = companies.find((company) => company.company_code === companyCode);
-      if (selected) setActiveTab(selected);
-    },
-    [companies]
-  );
-
-  // const {
-  //   data: payoutData,
-  //   isLoading: isLoadingPayoutData,
-  //   refetch: refetchPayoutData,
-  // } = useQuery({
-  //   queryKey: ["getPayoutData", activeTab?.id],
-  //   queryFn: () => (activeTab ? getDataPayout(activeTab.id) : Promise.resolve(null)),
-  //   enabled: !!activeTab,
-  //   refetchOnWindowFocus: false,
-  // });
+  const {
+    data: expenseSummaryData,
+    isLoading: isLoadingExpenseSummaryData,
+    refetch: refetchPayoutData,
+  } = useQuery({
+    queryKey: ["getExpenseSummaryData", activeTab?.id],
+    queryFn: () => (activeTab ? getExpenseSummary({ companyId: activeTab?.id, page: 1, limit: 10 }) : Promise.resolve(null)),
+    enabled: !!activeTab,
+    refetchOnWindowFocus: false,
+  });
 
   // const { mutate: mutateDeleteDataPayout, isPending: isLoadingDeleteDataPayout } = useDeleteDataPayout(refetchPayoutData);
 
@@ -64,32 +53,34 @@ export default function Payout() {
   };
   return (
     <SimpleGrid mt={10}>
-      {/* <LoadingGlobal visible={isLoadingCompanies || isLoadingPayoutData} /> */}
-      <Tabs value={activeTab?.company_code} onChange={handleTabChange}>
+      {/* <LoadingGlobal visible={isLoadingPayoutData || isLoadingDeleteDataPayout} /> */}
+      <Tabs
+        value={activeTab?.company_code}
+        onChange={(value: string | null) => {
+          const selectedCompany = companies.find((company) => company.company_code === value);
+          if (selectedCompany) {
+            handleTabChange(selectedCompany);
+          }
+        }}
+      >
         <Tabs.List>
-          {companies.map((company) => (
+          {companies.map((company: ICompany) => (
             <Tabs.Tab key={company.company_code} value={company.company_code}>
               {company.title}
             </Tabs.Tab>
           ))}
         </Tabs.List>
 
-        {companies.map((company) => (
+        {companies.map((company: ICompany) => (
           <Tabs.Panel key={company.company_code} value={company.company_code}>
-            <Stack p={12} justify="flex-end" align="flex-end">
-              <AddPayoutModal
-                // refetchPayloadData={refetchPayoutData}
-                companyCode={activeTab?.company_code}
-                companyId={company?.id}
-                refetchPayloadData={function (): void {
-                  throw new Error("Function not implemented.");
-                }}
-              />
+            <Stack p={12} justify="flex-end" align="flex-end" style={{ width: "100%" }}>
+              {/* <AddPayinModal companyCode={activeTab?.company_code} companyId={company?.id} />
+               */}
+              <CreateJournalEntryModal transactionType={"payout"} companyId={company?.id} />
             </Stack>
           </Tabs.Panel>
         ))}
       </Tabs>
-
       <SimpleGrid p={20}>
         {/* <TableTransaction
           data={payoutData?.data || []}
@@ -97,6 +88,8 @@ export default function Payout() {
           onDelete={handleDeletePayoutClick}
           refetchPayoutData={refetchPayoutData}
         /> */}
+
+        {expenseSummaryData && <GetExpenseSummaryData companyName={activeTab?.title || ""} expenseSummaryData={expenseSummaryData} />}
 
         {/* {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />} */}
       </SimpleGrid>

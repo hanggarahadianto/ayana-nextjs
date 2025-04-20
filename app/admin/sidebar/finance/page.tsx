@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Grid, SimpleGrid, Tabs } from "@mantine/core";
 
 import { TransactionCategoryCard } from "@/components/page/admin/finance/transactionCategory/TransactionCategoryCard";
-import { AccountCard } from "@/components/page/admin/finance/account/AccountCard";
+import { AccountCard } from "@/components/page/admin/finance/account/GetAccountTable";
 import UseCompanyTabs from "@/components/common/tab/CompanyTab";
 import LoadingGlobal from "@/styles/loading/loading-global";
 

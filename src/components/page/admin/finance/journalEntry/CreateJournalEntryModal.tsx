@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from "react";
-import { Modal, Button, Group, Stack, SimpleGrid, TextInput, Textarea, InputWrapper, NumberInput } from "@mantine/core";
+import { Modal, Button, Group, Stack, SimpleGrid, TextInput, Textarea, InputWrapper, NumberInput, Select } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form } from "formik";
@@ -9,6 +9,7 @@ import SelectFinanceTransactionCategory from "@/components/common/select/SelectT
 import { initialValuesJournalEntry } from "@/utils/initialValues/initialValuesJournalEntry";
 import { validationSchemaJournalEntry } from "@/utils/validation/journalEntry-validation";
 import { useSubmitJournalEntry } from "@/api/finance/postDataJournalEntry";
+import { accountTypeOptions, transactionStatusOption } from "@/constants/dictionary";
 
 interface AddJournalEntryModalProps {
   transactionType: string | null;
@@ -142,6 +143,21 @@ const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryMod
                         error={touched.due_date && errors.due_date}
                       />
                     </Group>
+                    <Select
+                      clearable
+                      withAsterisk
+                      label="Status Pembayaran"
+                      placeholder="Pilih Status Pembayaran"
+                      data={[
+                        { value: "paid", label: "Tunai" },
+                        { value: "unpaid", label: "Tempo" },
+                      ]}
+                      onChange={(value: any) => {
+                        setFieldValue("status", value);
+                      }}
+                      onBlur={handleBlur}
+                      error={touched.status && errors.status}
+                    />
 
                     {/* <Textarea
                       label="Keterangan"

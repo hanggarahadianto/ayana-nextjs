@@ -10,7 +10,6 @@ import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { useUpdatePayoutForm } from "@/api/payout/editDataPayout";
 import { getInitialValuesUpdatePayout } from "@/utils/initialValues/initialValuesPayout";
 import { validationSchemaPayout } from "@/utils/validation/payout-validation";
-import { payoutCategory } from "@/constants/dictionary";
 
 const EditPayoutModal = ({ payout, refetchPayoutData }: { payout: IPayoutUpdate; refetchPayoutData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -76,13 +75,13 @@ const EditPayoutModal = ({ payout, refetchPayoutData }: { payout: IPayoutUpdate;
                       onBlur={handleBlur}
                     />
 
-                    <Select
+                    {/* <Select
                       clearable
                       label="Nama Lokasi"
                       placeholder="Pilih Lokasi"
                       onChange={(event) => handleChangePayout(setFieldValue, "category", event)}
                       data={payoutCategory}
-                    />
+                    /> */}
 
                     <Group gap={40}>
                       <DatePickerInput

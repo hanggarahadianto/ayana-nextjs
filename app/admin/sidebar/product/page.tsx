@@ -100,7 +100,7 @@ const ProjectPage = () => {
                 </Text>
               </Stack>
 
-              <Group justify="flex-end" wrap="nowrap">
+              <Group justify="flex-end" wrap="nowrap" mt={12}>
                 <GetProductModal productData={selectedProduct} />
                 <EditProductModal
                   initialProductData={selectedProduct}
