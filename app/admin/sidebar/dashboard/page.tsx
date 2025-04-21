@@ -6,7 +6,7 @@ import { SimpleGrid, Tabs } from "@mantine/core";
 import useGetCompanies from "@/components/page/admin/company/GetCompanyTab";
 import { ExpenseCard } from "@/components/page/admin/dashboard/ExpenseCard";
 import UseCompanyTabs from "@/components/common/tab/CompanyTab";
-import { OutstandingDebtCard } from "@/components/page/admin/finance/OutstandingDebit/OutstandingDebtCard";
+import { OutstandingDebtCard } from "@/components/page/admin/finance/outstandingDebit/OutstandingDebtCard";
 import { CashSummaryCard } from "@/components/page/admin/dashboard/CashSummaryCard";
 // import { ExpenseCard } from "@/components/page/admin/dashboard/ExpenseCard";
 

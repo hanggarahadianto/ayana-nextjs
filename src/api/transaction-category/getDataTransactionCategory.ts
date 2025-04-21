@@ -8,11 +8,11 @@ export const getDataTranasctionCategory = async (companyId: string, page = 1, li
 
   try {
     let url = `transaction-category/get?company_id=${companyId}&page=${page}&limit=${limit}`;
-    // if (type) {
-    //   url += `&type=${encodeURIComponent(type)}`;
-    // }
 
-    // console.log("url dapatkan select", url);
+    // ✅ Aktifkan parameter type, sesuai nama yang dipakai di backend: transaction_type
+    if (type) {
+      url += `&transaction_type=${encodeURIComponent(type)}`;
+    }
 
     const response = await APIAxiosInstance.get(url);
     return response.data as ITransactionCategoryResponse;

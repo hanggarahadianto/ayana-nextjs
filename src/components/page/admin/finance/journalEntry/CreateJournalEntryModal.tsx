@@ -12,8 +12,8 @@ import { useSubmitJournalEntry } from "@/api/finance/postDataJournalEntry";
 import { accountTypeOptions, transactionStatusOption } from "@/constants/dictionary";
 
 interface AddJournalEntryModalProps {
-  transactionType: string | null;
   companyId: string | null;
+  transactionType: string | null;
 }
 
 const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryModalProps) => {
@@ -67,12 +67,13 @@ const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryMod
                 <SimpleGrid p={20}>
                   <Stack gap={20}>
                     <SelectFinanceTransactionCategory
-                      companyId={companyId ?? ""}
+                      companyId={companyId ?? undefined}
                       onSelect={(selected) => {
                         setFieldValue("description", selected.description);
                         setFieldValue("transaction_category_id", selected.id);
                       }}
                       label={"Kategori Transaksi"}
+                      transactionType={transactionType ?? undefined}
                     />
 
                     <TextInput
@@ -159,12 +160,12 @@ const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryMod
                       error={touched.status && errors.status}
                     />
 
-                    {/* <Textarea
+                    <Textarea
                       label="Keterangan"
                       placeholder="Masukkan Keterangan"
                       value={values.note?.toUpperCase() || ""}
                       onChange={(e) => setFieldValue("note", e.currentTarget.value.toUpperCase())}
-                    /> */}
+                    />
                   </Stack>
 
                   <Group justify="flex-end" mt="md">

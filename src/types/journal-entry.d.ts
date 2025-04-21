@@ -13,6 +13,7 @@ interface IJournalEntry {
   installment: 0;
   status: string;
   is_repaid: boolean;
+  note: string;
   company_id: string;
 }
 interface IJournalEntryCreate {
@@ -27,6 +28,7 @@ interface IJournalEntryCreate {
   due_date: string | null;
   installment: 0;
   status: string;
+  note: string;
   is_repaid: boolean;
   company_id: string;
 }

@@ -4,16 +4,22 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 
 interface ISelectFinanceTransactionCategoryProps {
-  companyId: string;
+  companyId?: string;
   onSelect: (selected: { id: string; debit_account_id: string; credit_account_id: string; name: string; description: string }) => void;
   label: string;
+  transactionType?: string;
 }
 
-export default function SelectFinanceTransactionCategory({ companyId, onSelect, label }: ISelectFinanceTransactionCategoryProps) {
+export default function SelectFinanceTransactionCategory({
+  companyId,
+  onSelect,
+  label,
+  transactionType,
+}: ISelectFinanceTransactionCategoryProps) {
   //   console.log("company id", companyId);
   const { data: TransactionCategoryData, isLoading } = useQuery({
     queryKey: ["getTransactionCategoryData", companyId],
-    queryFn: () => getDataTranasctionCategory(companyId, 1, 1000),
+    queryFn: () => getDataTranasctionCategory(companyId as string, 1, 1000, transactionType),
     refetchOnWindowFocus: false,
     enabled: !!companyId,
   });

@@ -4,6 +4,8 @@ interface ICashSummaryItem {
   amount: number;
   date: string;
   status: string;
+  note: string;
+  cash_flow_type: string;
 }
 
 interface ICashSummaryData {
