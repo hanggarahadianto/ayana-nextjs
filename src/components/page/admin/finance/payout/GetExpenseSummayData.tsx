@@ -1,40 +1,51 @@
-import LoadingGlobal from "@/styles/loading/loading-global";
 import { Card, Text, Group, Stack, Loader, Pagination, Select, Box } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useEffect, useMemo, useState } from "react";
 import ExpenseSummaryTable from "./ExpenseSummaryTable";
 import { getExpenseSummary } from "@/api/finance/getExpenseSummary";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 interface ExpenseSummaryCardProps {
-  companyName: string;
-  expenseSummaryData: IExpenseSummaryResponse;
+  companyId?: string;
+  companyName?: string;
 }
 
-export const GetExpenseSummaryData = ({ companyName, expenseSummaryData }: ExpenseSummaryCardProps) => {
-  const [page, setPage] = useState(1);
+export const GetExpenseSummaryData = ({ companyId, companyName }: ExpenseSummaryCardProps) => {
+  const [pageExpense, setPageExpense] = useState(1);
   const limit = 10;
   const [selectedType, setSelectedType] = useState<string | null>(null);
+
+  const {
+    data: expenseSummaryData,
+    isLoading: isLoadingExpenseSummaryData,
+    refetch: refetchPayoutData,
+  } = useQuery({
+    queryKey: ["getExpenseSummaryData", companyId, pageExpense, limit],
+    queryFn: () => (companyId ? getExpenseSummary({ companyId: companyId, page: pageExpense, limit }) : Promise.resolve(null)),
+    enabled: !!companyId,
+    refetchOnWindowFocus: false,
+  });
 
   // Debug selectedType
   useEffect(() => {
     console.log("selectedType updated:", selectedType);
   }, [selectedType]);
 
-  //   const totalPages = useMemo(() => {
-  //     return ExpenseSummaryData?.total ? Math.ceil(ExpenseSummaryData.total / limit) : 1;
-  //   }, [ExpenseSummaryData]);
+  const totalPages = useMemo(() => {
+    return expenseSummaryData?.data.total ? Math.ceil(expenseSummaryData?.data.total / limit) : 1;
+  }, [expenseSummaryData]);
 
   // Reset page when filter changes
-  useEffect(() => {
-    setPage(1);
-  }, [selectedType]);
+  // useEffect(() => {
+  //   setPage(1);
+  // }, [selectedType]);
 
-  const startIndex = (page - 1) * limit + 1;
-  //   const endIndex = Math.min(page * limit, ExpenseSummaryData?.total || 0);
+  const startIndex = (pageExpense - 1) * limit + 1;
+  const endIndex = Math.min(pageExpense * limit, expenseSummaryData?.data.total || 0);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      {/* <LoadingGlobal visible={isLoading} /> */}
+      <LoadingGlobal visible={isLoadingExpenseSummaryData} />
 
       <Stack gap="md">
         <Group justify="space-between" align="flex-start">
@@ -85,15 +96,14 @@ export const GetExpenseSummaryData = ({ companyName, expenseSummaryData }: Expen
             <ExpenseSummaryTable data={expenseSummaryData?.data.expenseList || []} />
           </Box>
 
-          {/* Bagian Paginasi */}
-          {/* {totalPages > 0 && (
+          {totalPages > 0 && (
             <Stack gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
-              <Pagination total={totalPages} value={page} onChange={setPage} />
+              <Pagination total={totalPages} value={pageExpense} onChange={setPageExpense} />
               <Text size="sm" c="dimmed">
-                Menampilkan {startIndex} sampai {endIndex} dari {ExpenseSummaryData?.total} data
+                Menampilkan {startIndex} sampai {endIndex} dari {expenseSummaryData?.data.total} data
               </Text>
             </Stack>
-          )} */}
+          )}
         </Box>
       </Stack>
     </Card>

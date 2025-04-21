@@ -1,7 +1,6 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { Card, Text, Group, Stack, Loader, Pagination, Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
-// import AddAccountModal from "./addAccountModal";
 import { getDataAccount } from "@/api/account/getDataAccount";
 import AccountTable from "@/components/page/admin/finance/account/TableAccount";
 import { useEffect, useMemo, useState } from "react";

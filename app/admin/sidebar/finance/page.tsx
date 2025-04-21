@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Grid, SimpleGrid, Tabs } from "@mantine/core";
+import { Grid, SimpleGrid, Stack, Tabs } from "@mantine/core";
 
 import { TransactionCategoryCard } from "@/components/page/admin/finance/transactionCategory/TransactionCategoryCard";
 import { AccountCard } from "@/components/page/admin/finance/account/GetAccountTable";
@@ -30,10 +30,12 @@ export default function Finance() {
           ))}
         </Tabs.List>
         <Grid p={20}>
-          <Grid.Col span={6}>
-            <TransactionCategoryCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
-          </Grid.Col>
           <Grid.Col span={6}></Grid.Col>
+          <Grid.Col span={6}></Grid.Col>
+          <Stack mb={20}>
+            <TransactionCategoryCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
+          </Stack>
+
           <AccountCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
         </Grid>
       </Tabs>

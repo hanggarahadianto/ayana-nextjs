@@ -6,49 +6,44 @@ import { useEffect, useMemo, useState } from "react";
 import OutstandingDebtTable from "./OutstandingDebtTable";
 
 interface OutstandingDebtCardProps {
-  companyId: string;
+  companyId?: string;
   companyName?: string;
 }
 
 export const OutstandingDebtCard = ({ companyId, companyName }: OutstandingDebtCardProps) => {
-  const [page, setPage] = useState(1);
   const limit = 10;
+  const [pageOutstandingDebt, setPageOutstandingDebt] = useState(1);
+
   const [selectedType, setSelectedType] = useState<string | null>(null);
+
+  const {
+    data: outstandingDebtData,
+    isLoading: isLoadingOutstandingDebt,
+    refetch: refetchOutstandingDebtData,
+  } = useQuery({
+    queryKey: ["getOutstandingDebtByCompanyId", companyId, pageOutstandingDebt, limit],
+    queryFn: () => (companyId ? getOutstandingDebt(companyId, "payin", "unpaid", pageOutstandingDebt, limit) : Promise.resolve(null)),
+    enabled: !!companyId,
+    refetchOnWindowFocus: false,
+  });
 
   // Debug selectedType
   useEffect(() => {
     console.log("selectedType updated:", selectedType);
   }, [selectedType]);
 
-  const trasactionStatus = "unpaid";
-  const transactionType = "payin";
-
-  const {
-    data: OutstandingDebtData,
-    isLoading,
-    refetch: refetchOutstandingDebtData,
-  } = useQuery({
-    queryKey: ["getOutstandingDebtByCompanyId", companyId, page, limit, selectedType],
-    queryFn: () => getOutstandingDebt(companyId, transactionType, trasactionStatus, page, limit),
-    enabled: !!companyId,
-    refetchOnWindowFocus: false,
-  });
-
   const totalPages = useMemo(() => {
-    return OutstandingDebtData?.total ? Math.ceil(OutstandingDebtData.total / limit) : 1;
-  }, [OutstandingDebtData]);
+    return outstandingDebtData?.total ? Math.ceil(outstandingDebtData.total / limit) : 1;
+  }, [outstandingDebtData]);
 
   // Reset page when filter changes
-  useEffect(() => {
-    setPage(1);
-  }, [selectedType]);
 
-  const startIndex = (page - 1) * limit + 1;
-  const endIndex = Math.min(page * limit, OutstandingDebtData?.total || 0);
+  const startIndex = (pageOutstandingDebt - 1) * limit + 1;
+  const endIndex = Math.min(pageOutstandingDebt * limit, outstandingDebtData?.total || 0);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <LoadingGlobal visible={isLoading} />
+      <LoadingGlobal visible={isLoadingOutstandingDebt} />
 
       <Stack gap="md">
         <Group justify="space-between" align="flex-start">
@@ -62,7 +57,6 @@ export const OutstandingDebtCard = ({ companyId, companyName }: OutstandingDebtC
               //   data={OutstandingDebtTypeOptions}
               value={selectedType}
               onChange={(value) => {
-                console.log("Select onChange:", value); // Debug
                 setSelectedType(value);
               }}
               clearable
@@ -96,15 +90,15 @@ export const OutstandingDebtCard = ({ companyId, companyName }: OutstandingDebtC
         >
           {/* Bagian Tabel */}
           <Box style={{ flex: 1 }}>
-            <OutstandingDebtTable data={OutstandingDebtData?.data || []} />
+            <OutstandingDebtTable data={outstandingDebtData?.data || []} />
           </Box>
 
           {/* Bagian Paginasi */}
           {totalPages > 0 && (
             <Stack gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
-              <Pagination total={totalPages} value={page} onChange={setPage} />
+              <Pagination total={totalPages} value={pageOutstandingDebt} onChange={setPageOutstandingDebt} />
               <Text size="sm" c="dimmed">
-                Menampilkan {startIndex} sampai {endIndex} dari {OutstandingDebtData?.total} data
+                Menampilkan {startIndex} sampai {endIndex} dari {outstandingDebtData?.total} data
               </Text>
             </Stack>
           )}

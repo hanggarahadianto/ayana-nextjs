@@ -90,7 +90,7 @@ export default function CompanyTabs() {
         /> */}
         {/* {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />} */}
       </SimpleGrid>
-      <OutstandingDebtCard companyId={activeTab?.id ?? ""} />
+      {/* <OutstandingDebtCard companyName={activeTab?.title} OutstandingDebtData={undefined} /> */}
     </SimpleGrid>
   );
 }

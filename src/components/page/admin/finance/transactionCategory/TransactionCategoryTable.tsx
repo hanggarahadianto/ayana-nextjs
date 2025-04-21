@@ -31,6 +31,8 @@ export default function TransactionCategoryTable({
             {/* <Table.Th style={{ textAlign: "center", width: 80, minWidth: 80 }}>Code</Table.Th> */}
             <Table.Th style={{ textAlign: "center", width: 120, minWidth: 120 }}>Nama</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 100, minWidth: 100 }}>Kategori</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 100, minWidth: 100 }}>Debit</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 100, minWidth: 100 }}>Kredit</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Deskripsi</Table.Th>
           </Table.Tr>
         </Table.Thead>
@@ -45,6 +47,8 @@ export default function TransactionCategoryTable({
               <Table.Td>{TransactionCategory.name}</Table.Td>
               {/* <Table.Td>{TransactionCategory.type}</Table.Td> */}
               <Table.Td>{TransactionCategory.category}</Table.Td>
+              <Table.Td>{TransactionCategory.debit_account.name}</Table.Td>
+              <Table.Td>{TransactionCategory.credit_account.name}</Table.Td>
               <Table.Td>{TransactionCategory.description}</Table.Td>
               {/* <Table.Td style={{ textAlign: "center" }} onClick={(e) => e.stopPropagation()}>
                 <Group ml={4}>

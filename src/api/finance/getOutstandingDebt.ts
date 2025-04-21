@@ -1,29 +1,32 @@
 import { APIAxiosInstance } from "@/lib";
+// pastikan interface ini benar
 
 export const getOutstandingDebt = async (
   companyId: string,
   transaction_type: string,
   transactionStatus: string,
   page = 1,
-  limit: number
-) => {
+  limit = 10
+): Promise<IJournalEntryResponse | undefined> => {
   if (!companyId) {
-    console.error("Company ID tidak ada!");
+    console.error("Company ID tidak tersedia!");
     return;
   }
 
   try {
-    let url = `finance/get-outstanding-debt?company_id=${companyId}&transaction_type=${transaction_type}&status=${transactionStatus}&page=${page}&limit=${limit}`;
-    // if (type) {
-    //   url += `&type=${encodeURIComponent(type)}`;
-    // }
+    const params = new URLSearchParams({
+      company_id: companyId,
+      transaction_type: transaction_type,
+      status: transactionStatus,
+      page: page.toString(),
+      limit: limit.toString(),
+    });
 
-    // console.log("url dapatkan select", url);
-
+    const url = `/finance/get-outstanding-debt?${params.toString()}`;
     const response = await APIAxiosInstance.get(url);
     return response.data as IJournalEntryResponse;
   } catch (error: any) {
-    console.error("Error fetching data:", error.message || error);
+    console.error("Gagal mengambil data outstanding debt:", error.message || error);
     throw error;
   }
 };
