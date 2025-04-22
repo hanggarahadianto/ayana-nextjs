@@ -6,6 +6,7 @@ interface ICashSummaryItem {
   status: string;
   note: string;
   cash_flow_type: string;
+  category: string;
 }
 
 interface ICashSummaryData {

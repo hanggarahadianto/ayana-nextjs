@@ -37,15 +37,12 @@ export default function PayinComponent() {
 
         {companies.map((company: ICompany) => (
           <Tabs.Panel key={company.company_code} value={company.company_code}>
-            <Stack p={12} justify="flex-end" align="flex-end" style={{ width: "100%" }}>
-              {/* <AddPayinModal companyCode={activeTab?.company_code} companyId={company?.id} />
-               */}
-            </Stack>
+            <Stack p={12} justify="flex-end" align="flex-end" style={{ width: "100%" }}></Stack>
           </Tabs.Panel>
         ))}
       </Tabs>
       <SimpleGrid p={20}>
-        <GetCashSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} />
+        <GetCashSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} transactionType="payin" />
         {/* <TableTransaction
           data={payoutData?.data || []}
           onRowClick={handleRowClick}

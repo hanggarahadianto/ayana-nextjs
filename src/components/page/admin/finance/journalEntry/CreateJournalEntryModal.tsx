@@ -27,9 +27,11 @@ const AddJournalEntryModal = ({ transactionType, companyId, refetchData }: AddJo
         ...values,
         date_inputed: values.date_inputed || null,
         due_date: values.due_date || null,
+        transactionType: transactionType,
       };
 
       postData(modifiedValues);
+
       setSubmitting(false);
     },
     [transactionType, companyId]
@@ -143,21 +145,23 @@ const AddJournalEntryModal = ({ transactionType, companyId, refetchData }: AddJo
                         error={touched.due_date && errors.due_date}
                       />
                     </Group>
-                    <Select
-                      clearable
-                      withAsterisk
-                      label="Status Pembayaran"
-                      placeholder="Pilih Status Pembayaran"
-                      data={[
-                        { value: "paid", label: "Tunai" },
-                        { value: "unpaid", label: "Tempo" },
-                      ]}
-                      onChange={(value: any) => {
-                        setFieldValue("status", value);
-                      }}
-                      onBlur={handleBlur}
-                      error={touched.status && errors.status}
-                    />
+                    {transactionType !== "payin" && (
+                      <Select
+                        clearable
+                        withAsterisk
+                        label="Status Pembayaran"
+                        placeholder="Pilih Status Pembayaran"
+                        data={[
+                          { value: "paid", label: "Tunai" },
+                          { value: "unpaid", label: "Tempo" },
+                        ]}
+                        onChange={(value: any) => {
+                          setFieldValue("status", value);
+                        }}
+                        onBlur={handleBlur}
+                        error={touched.status && errors.status}
+                      />
+                    )}
 
                     <Textarea
                       label="Keterangan"

@@ -53,7 +53,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: ExpenseSummary
           <Text size="lg" fw={600}>
             Pengeluaran {companyName}
           </Text>
-          <CreateJournalEntryModal companyId={companyId} transactionType={null} refetchData={refetchExpenseSummaryData} />
+          <CreateJournalEntryModal companyId={companyId} transactionType="payout" refetchData={refetchExpenseSummaryData} />
         </Group>
 
         {/* <Group justify="space-between">

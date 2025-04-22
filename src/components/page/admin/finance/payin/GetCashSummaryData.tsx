@@ -10,30 +10,28 @@ import { CashSummaryTable } from "./CashSummaryTable";
 interface CashSummaryCardProps {
   companyId: string;
   companyName?: string;
+  transactionType?: string;
 }
 
-export const GetCashSummaryData = ({ companyId, companyName }: CashSummaryCardProps) => {
+export const GetCashSummaryData = ({ companyId, companyName, transactionType }: CashSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const limit = 10;
 
-  const cashFlowType = "cash_in";
   const {
     data: cashSummaryData,
     isPending: isLoadingCashSummaryData,
     refetch: refetchCashSummaryData,
   } = useQuery({
     queryKey: ["getCashSummaryByCompanyId", companyId, page],
-    queryFn: () => getCashSummary(companyId, page, limit, cashFlowType),
+    queryFn: () => getCashSummary(companyId, page, limit, transactionType),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
+  const cashList = cashSummaryData?.data.cashList;
 
-  console.log("cash smmary", cashSummaryData);
+  const inflowList = cashList?.filter((item) => item?.category === "inflow");
+  const outflowList = cashList?.filter((item) => item?.category === "outflow");
 
-  const cashList = cashSummaryData?.data?.cashList || [];
-
-  const cashIn = cashList.filter((item) => item.cash_flow_type === "cash_in");
-  const cashOut = cashList.filter((item) => item.cash_flow_type === "cash_out");
   const totalPages = Math.ceil((cashSummaryData?.data?.total ?? 0) / limit);
 
   const startIndex = (page - 1) * limit + 1;
@@ -69,7 +67,7 @@ export const GetCashSummaryData = ({ companyId, companyName }: CashSummaryCardPr
               {formatCurrency(cashSummaryData?.data?.available_cash ?? 0)}
             </Text>
           </Group>
-          <CashSummaryTable data={cashIn} />
+          <CashSummaryTable data={inflowList ?? []} />
 
           <Group gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
             <Pagination total={totalPages} value={page} onChange={setPage} />

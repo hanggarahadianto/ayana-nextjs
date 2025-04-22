@@ -4,7 +4,7 @@ export const getCashSummary = async (
   companyId: string,
   page: number = 1,
   limit: number = 10,
-  cash_flow_type?: string // optional param
+  transactionType?: string // optional param
 ) => {
   if (!companyId) {
     console.error("Company ID tidak ada!");
@@ -14,8 +14,8 @@ export const getCashSummary = async (
   try {
     // Bangun query string dengan optional cash_flow_type
     let url = `finance/get-cash-summary?company_id=${companyId}&page=${page}&limit=${limit}`;
-    if (cash_flow_type) {
-      url += `&cash_flow_type=${cash_flow_type}`;
+    if (transactionType) {
+      url += `&transaction_type=${transactionType}`;
     }
 
     const response = await APIAxiosInstance.get(url);
