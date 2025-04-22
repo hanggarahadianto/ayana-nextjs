@@ -4,9 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 import ExpenseSummaryTable from "./ExpenseSummaryTable";
 import { getExpenseSummary } from "@/api/finance/getExpenseSummary";
 import LoadingGlobal from "@/styles/loading/loading-global";
+import CreateJournalEntryModal from "../journalEntry/CreateJournalEntryModal";
 
 interface ExpenseSummaryCardProps {
-  companyId?: string;
+  companyId: string;
   companyName?: string;
 }
 
@@ -18,7 +19,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: ExpenseSummary
   const {
     data: expenseSummaryData,
     isLoading: isLoadingExpenseSummaryData,
-    refetch: refetchPayoutData,
+    refetch: refetchExpenseSummaryData,
   } = useQuery({
     queryKey: ["getExpenseSummaryData", companyId, pageExpense, limit],
     queryFn: () => (companyId ? getExpenseSummary({ companyId: companyId, page: pageExpense, limit }) : Promise.resolve(null)),
@@ -48,12 +49,29 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: ExpenseSummary
       <LoadingGlobal visible={isLoadingExpenseSummaryData} />
 
       <Stack gap="md">
-        <Group justify="space-between" align="flex-start">
-          <Stack gap="xs">
-            <Text size="lg" fw={600}>
-              Pengeluaran {companyName}
-            </Text>
-            {/* <Select
+        <Group justify="space-between" align="space-between">
+          <Text size="lg" fw={600}>
+            Pengeluaran {companyName}
+          </Text>
+          <CreateJournalEntryModal companyId={companyId} transactionType={null} refetchData={refetchExpenseSummaryData} />
+        </Group>
+
+        {/* <Group justify="space-between">
+              <Text size="lg" fw={600}>
+                Ringkasan Kas {companyName}
+              </Text>
+              <Stack p={20}>
+                <CreateJournalEntryModal
+                  transactionType={"payin"}
+                  companyId={companyId}
+                  refetchData={function (): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                />
+              </Stack>
+            </Group> */}
+
+        {/* <Select
               label="Filter berdasarkan Type"
               placeholder="Pilih Type"
               data={ExpenseSummaryTypeOptions}
@@ -66,7 +84,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: ExpenseSummary
               style={{ width: 250 }}
             /> */}
 
-            {/* <Select
+        {/* <Select
               label="Test Select"
               placeholder="Pilih Type"
               data={[
@@ -79,10 +97,9 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: ExpenseSummary
               }}
               clearable
             /> */}
-          </Stack>
 
-          {/* <AddExpenseSummaryModal companyId={companyId} refetchExpenseSummaryData={refetchExpenseSummaryData} /> */}
-        </Group>
+        {/* <AddExpenseSummaryModal companyId={companyId} refetchExpenseSummaryData={refetchExpenseSummaryData} /> */}
+
         <Box
           style={{
             display: "flex",

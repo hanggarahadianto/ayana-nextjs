@@ -1,10 +1,11 @@
-import { Card, Text, Group, Stack, Loader, Box } from "@mantine/core";
+import { Card, Text, Group, Stack, Loader, Box, Pagination } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { getCashSummary } from "@/api/finance/getCashSummary";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import CashSummaryTable from "./CashSummaryTable";
 import { formatCurrency } from "@/utils/formatCurrency";
+import CreateJournalEntryModal from "../journalEntry/CreateJournalEntryModal";
+import { CashSummaryTable } from "./CashSummaryTable";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -12,13 +13,17 @@ interface CashSummaryCardProps {
 }
 
 export const GetCashSummaryData = ({ companyId, companyName }: CashSummaryCardProps) => {
+  const [page, setPage] = useState(1);
+  const limit = 10;
+
+  const cashFlowType = "cash_in";
   const {
     data: cashSummaryData,
     isPending: isLoadingCashSummaryData,
     refetch: refetchCashSummaryData,
   } = useQuery({
-    queryKey: ["getCashSummaryByCompanyId", companyId],
-    queryFn: () => getCashSummary(companyId),
+    queryKey: ["getCashSummaryByCompanyId", companyId, page],
+    queryFn: () => getCashSummary(companyId, page, limit, cashFlowType),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
@@ -29,6 +34,10 @@ export const GetCashSummaryData = ({ companyId, companyName }: CashSummaryCardPr
 
   const cashIn = cashList.filter((item) => item.cash_flow_type === "cash_in");
   const cashOut = cashList.filter((item) => item.cash_flow_type === "cash_out");
+  const totalPages = Math.ceil((cashSummaryData?.data?.total ?? 0) / limit);
+
+  const startIndex = (page - 1) * limit + 1;
+  const endIndex = Math.min(page * limit, cashSummaryData?.data.total || 0);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -39,27 +48,43 @@ export const GetCashSummaryData = ({ companyId, companyName }: CashSummaryCardPr
           <Text size="lg" fw={600}>
             Ringkasan Kas {companyName}
           </Text>
+          <Stack p={20}>
+            <CreateJournalEntryModal transactionType={"payin"} companyId={companyId} refetchData={refetchCashSummaryData} />
+          </Stack>
         </Group>
 
-        <Box>
+        <Box
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "50vh", // Pastikan container mengisi tinggi layar
+            justifyContent: "space-between", // Paginasi akan tetap di bawah
+          }}
+        >
           <Group justify="space-between" p={20}>
             <Text fw={600} mb="xs" mt={20}>
               Cash In
             </Text>
             <Text fw={800} size="xl" c="green">
-              {formatCurrency(cashSummaryData?.data.available_cash ?? 0)}
+              {formatCurrency(cashSummaryData?.data?.available_cash ?? 0)}
             </Text>
           </Group>
-
           <CashSummaryTable data={cashIn} />
+
+          <Group gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
+            <Pagination total={totalPages} value={page} onChange={setPage} />
+            <Text size="sm" c="dimmed">
+              Menampilkan {startIndex} sampai {endIndex} dari {cashSummaryData?.data.total} data
+            </Text>
+          </Group>
         </Box>
 
-        <Box>
+        {/* <Box>
           <Text fw={600} mt={20} mb="xs">
             Cash Out
           </Text>
           <CashSummaryTable data={cashOut} />
-        </Box>
+        </Box> */}
       </Stack>
     </Card>
   );

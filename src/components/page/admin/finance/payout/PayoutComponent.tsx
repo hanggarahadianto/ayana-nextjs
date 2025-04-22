@@ -30,19 +30,17 @@ export default function PayoutComponent() {
 
         {companies.map((company: ICompany) => (
           <Tabs.Panel key={company.company_code} value={company.company_code}>
-            <Stack p={12} justify="flex-end" align="flex-end" style={{ width: "100%" }}>
-              <CreateJournalEntryModal companyId={company?.id} transactionType={"payout"} />
-            </Stack>
+            <Stack p={12} justify="flex-end" align="flex-end" style={{ width: "100%" }}></Stack>
           </Tabs.Panel>
         ))}
       </Tabs>
       <SimpleGrid p={20}>
         <Grid p={20}>
-          <Grid.Col span={5}>
-            <GetExpenseSummaryData companyId={activeTab?.id} companyName={activeTab?.title} />
-          </Grid.Col>
           <Grid.Col span={7}>
             <OutstandingDebtCard companyId={activeTab?.id} companyName={activeTab?.title} />
+          </Grid.Col>
+          <Grid.Col span={5}>
+            <GetExpenseSummaryData companyId={activeTab?.id ?? ""} companyName={activeTab?.title} />
           </Grid.Col>
         </Grid>
 

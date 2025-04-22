@@ -3,7 +3,7 @@
 import Navbar from "@/components/page/landing/navbar";
 import { menuItems } from "@/constants/navigation";
 import { AppShell, Burger, NavLink, rem, Stack, useMantineColorScheme, useMantineTheme } from "@mantine/core";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -53,8 +53,6 @@ export default function InternalLayout({ children }: { children: React.ReactNode
         padding="md"
       >
         <AppShell.Header>
-          {/* <Navbar /> */}
-          {/* <div>Logo</div> */}
           <Navbar />
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
         </AppShell.Header>

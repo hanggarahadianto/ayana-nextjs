@@ -11,21 +11,17 @@ interface APIErrorResponse {
 }
 
 const handleSubmitJournalEntry = async (values: IJournalEntryCreate) => {
-  console.log("Submitting TransactionCategory form with values:", values);
   const response = await APIAxiosInstance.post("journal-entry/post", values);
   return response.data;
 };
 
-export const useSubmitJournalEntry = (
-  // refetchTransactionCategoryData: () => void,
-  closeModal: () => void
-) => {
+export const useSubmitJournalEntry = (refetchData: () => void, closeModal: () => void) => {
   return useMutation<void, AxiosError<APIErrorResponse>, IJournalEntryCreate>({
     mutationFn: handleSubmitJournalEntry,
     onSuccess: () => {
       try {
         // Jalankan refetch dan tampilkan notifikasi
-        // refetchTransactionCategoryData?.(); // Gunakan optional chaining
+        refetchData(); // Gunakan optional chaining
         closeModal?.();
 
         showNotification({

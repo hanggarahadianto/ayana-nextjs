@@ -1,30 +1,60 @@
-// components/finance/CashSummaryTable.tsx
-import { Table, ScrollArea, Text } from "@mantine/core";
-import { formatCurrency } from "@/utils/formatCurrency"; // Pastikan sudah ada utilitas formatCurrency
+import { formatCurrency } from "@/utils/formatCurrency";
+import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
+import { ScrollArea, Table } from "@mantine/core";
 
 interface CashSummaryTableProps {
   data: ICashSummaryItem[];
 }
 
-const CashSummaryTable = ({ data }: CashSummaryTableProps) => {
+export const CashSummaryTable = ({ data }: CashSummaryTableProps) => {
+  console.log("cash table", data);
   return (
-    <ScrollArea style={{ minHeight: 200 }}>
-      <Table highlightOnHover withColumnBorders>
+    <ScrollArea style={{ minHeight: 400 }} p={"xl"}>
+      <Table
+        // Menggunakan token ukuran Mantine (xs, sm, md, lg, xl)
+        highlightOnHover
+        withColumnBorders
+        style={{
+          tableLayout: "fixed",
+          width: "100%",
+          minWidth: 700,
+          maxWidth: "100%",
+        }}
+      >
         <Table.Thead>
           <Table.Tr>
-            <Table.Th style={{ textAlign: "center", width: 160, minWidth: 160 }}>Tanggal</Table.Th>
-            <Table.Th style={{ textAlign: "center", width: 200, minWidth: 200 }}>Nominal</Table.Th>
-            <Table.Th style={{ textAlign: "center", width: 400, minWidth: 400 }}>Deskripsi</Table.Th>
-            <Table.Th>Keterangan</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 100, minWidth: 100 }}>Tanggal Pembayaran</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 100, minWidth: 100 }}>Nominal</Table.Th>
+            {/* <Table.Th style={{ textAlign: "center", width: 140, minWidth: 140 }}>Kategori</Table.Th> */}
+            <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Deskripsi</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {data.map((item) => (
-            <Table.Tr key={item.id}>
-              <Table.Td>{item.date}</Table.Td>
-              <Table.Td>{formatCurrency(item.amount)}</Table.Td>
-              <Table.Td>{item.description}</Table.Td>
-              <Table.Td>{item.note}</Table.Td>
+          {data.map((cashSummary: ICashSummaryItem) => (
+            <Table.Tr
+              key={cashSummary.id}
+              // onClick={() => onRowClick(cashSummary)}
+              style={{ cursor: "pointer" }}
+            >
+              {/* <Table.Td>{cashSummary.code}</Table.Td>
+              <Table.Td>{cashSummary.name}</Table.Td>
+              {/* <Table.Td>{cashSummary.type}</Table.Td> */}
+              {/* <Table.Td>{cashSummary.category}</Table.Td> */}
+              <Table.Td>{formatDateIndonesia(cashSummary?.date)}</Table.Td>
+              <Table.Td>{formatCurrency(cashSummary?.amount)}</Table.Td>
+              <Table.Td>{cashSummary?.description}</Table.Td>
+              {/* <Table.Td style={{ textAlign: "center" }} onClick={(e) => e.stopPropagation()}>
+                <Group ml={4}>
+                  <PaycashSummaryButton cashSummary={cashSummary} refetchcashSummaryData={refetchcashSummaryData} />
+                  <EditcashSummaryModal cashSummary={cashSummary} refetchcashSummaryData={refetchcashSummaryData} />
+                  <ButtonDeleteWithConfirmation
+                    id={cashSummary.id}
+                    onDelete={onDelete}
+                    description={`Apakah Anda yakin ingin menghapus invoice ${cashSummary.invoice}?`}
+                    size={2}
+                  />
+                </Group>
+              </Table.Td> */}
             </Table.Tr>
           ))}
         </Table.Tbody>
@@ -32,5 +62,3 @@ const CashSummaryTable = ({ data }: CashSummaryTableProps) => {
     </ScrollArea>
   );
 };
-
-export default CashSummaryTable;

@@ -9,17 +9,17 @@ import SelectFinanceTransactionCategory from "@/components/common/select/SelectT
 import { initialValuesJournalEntry } from "@/utils/initialValues/initialValuesJournalEntry";
 import { validationSchemaJournalEntry } from "@/utils/validation/journalEntry-validation";
 import { useSubmitJournalEntry } from "@/api/finance/postDataJournalEntry";
-import { accountTypeOptions, transactionStatusOption } from "@/constants/dictionary";
 
 interface AddJournalEntryModalProps {
+  refetchData: () => void;
   companyId: string | null;
   transactionType: string | null;
 }
 
-const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryModalProps) => {
+const AddJournalEntryModal = ({ transactionType, companyId, refetchData }: AddJournalEntryModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const { mutate: postData, isPending: isLoadingSubmitJournalEntry } = useSubmitJournalEntry(close);
+  const { mutate: postData, isPending: isLoadingSubmitJournalEntry } = useSubmitJournalEntry(close, refetchData);
 
   const handleSubmit = useCallback(
     (values: IJournalEntryCreate, { setSubmitting }: any) => {
@@ -33,7 +33,6 @@ const AddJournalEntryModal = ({ transactionType, companyId }: AddJournalEntryMod
       setSubmitting(false);
     },
     [transactionType, companyId]
-    // [companyCode, companyId, postData]
   );
 
   const handleInputChange = (setFieldValue: any, field: string, value: any) => {

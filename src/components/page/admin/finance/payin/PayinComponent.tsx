@@ -40,7 +40,6 @@ export default function PayinComponent() {
             <Stack p={12} justify="flex-end" align="flex-end" style={{ width: "100%" }}>
               {/* <AddPayinModal companyCode={activeTab?.company_code} companyId={company?.id} />
                */}
-              <CreateJournalEntryModal transactionType={"payin"} companyId={company?.id} />
             </Stack>
           </Tabs.Panel>
         ))}

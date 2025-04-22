@@ -26,5 +26,5 @@ export const validationSchemaJournalEntry = yup.object().shape({
     .required("Tanggal input wajib diisi")
     .test("is-date", "Format tanggal tidak valid", (val) => !isNaN(Date.parse(val || ""))),
 
-  company_id: yup.string().uuid("ID perusahaan tidak valid").required("Perusahaan wajib dipilih"),
+  // company_id: yup.string().uuid("ID perusahaan tidak valid").required("Perusahaan wajib dipilih"),
 });

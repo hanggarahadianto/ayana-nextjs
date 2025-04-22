@@ -10,6 +10,7 @@ export const initialValuesJournalEntry = (companyId: string | null, transactionT
   is_repaid: false,
   date_inputed: "",
   due_date: "",
+  note: "",
 
   company_id: companyId || "",
 });

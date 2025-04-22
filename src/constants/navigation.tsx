@@ -13,7 +13,7 @@ interface MenuItem {
 
 export const menuItems: MenuItem[] = [
   { label: "Dashboard", icon: <AiOutlineDashboard />, href: "/admin/sidebar/dashboard" },
-  { label: "News", icon: <FaNewspaper />, href: "/admin/sidebar/news" },
+  { label: "Feed", icon: <FaNewspaper />, href: "/admin/sidebar/feed" },
   { label: "Task", icon: <FaTasks />, href: "/admin/sidebar/task" },
   { label: "Product", icon: <FaShoppingBag />, href: "/admin/sidebar/product" },
   { label: "Marketing", icon: <FaIdeal />, href: "/admin/sidebar/marketing" },
