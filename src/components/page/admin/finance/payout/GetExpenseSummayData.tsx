@@ -7,8 +7,9 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 import CreateJournalEntryModal from "../journalEntry/CreateJournalEntryModal";
 
 interface ExpenseSummaryCardProps {
-  companyId: string;
+  companyId?: string;
   companyName?: string;
+  // refetchOutstandingDebtData: () => void;
 }
 
 export const GetExpenseSummaryData = ({ companyId, companyName }: ExpenseSummaryCardProps) => {
@@ -53,7 +54,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: ExpenseSummary
           <Text size="lg" fw={600}>
             Pengeluaran {companyName}
           </Text>
-          <CreateJournalEntryModal companyId={companyId} transactionType="payout" refetchData={refetchExpenseSummaryData} />
+          <CreateJournalEntryModal companyId={companyId} transactionType="payout" />
         </Group>
 
         {/* <Group justify="space-between">

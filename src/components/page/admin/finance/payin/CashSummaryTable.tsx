@@ -42,7 +42,7 @@ export const CashSummaryTable = ({ data }: CashSummaryTableProps) => {
               {/* <Table.Td>{cashSummary.category}</Table.Td> */}
               <Table.Td>{formatDateIndonesia(cashSummary?.date)}</Table.Td>
               <Table.Td>{formatCurrency(cashSummary?.amount)}</Table.Td>
-              <Table.Td>{cashSummary?.description}</Table.Td>
+              <Table.Td>{cashSummary?.note}</Table.Td>
               {/* <Table.Td style={{ textAlign: "center" }} onClick={(e) => e.stopPropagation()}>
                 <Group ml={4}>
                   <PaycashSummaryButton cashSummary={cashSummary} refetchcashSummaryData={refetchcashSummaryData} />

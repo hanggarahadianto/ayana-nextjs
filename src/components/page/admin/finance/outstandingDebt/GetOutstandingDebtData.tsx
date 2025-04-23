@@ -5,12 +5,12 @@ import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useEffect, useMemo, useState } from "react";
 import OutstandingDebtTable from "./OutstandingDebtTable";
 
-interface OutstandingDebtCardProps {
+interface GetOutStandingDebtDataProps {
   companyId?: string;
   companyName?: string;
 }
 
-export const OutstandingDebtCard = ({ companyId, companyName }: OutstandingDebtCardProps) => {
+export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandingDebtDataProps) => {
   const limit = 10;
   const [pageOutstandingDebt, setPageOutstandingDebt] = useState(1);
 

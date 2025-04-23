@@ -18,7 +18,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       {/* ✅ Hapus {...mantineHtmlProps} */}
       <head>
-        <ColorSchemeScript forceColorScheme="light" />
+        {/* <ColorSchemeScript forceColorScheme="light" /> */}
+        <ColorSchemeScript forceColorScheme="dark" />
+
         <link rel="shortcut icon" href="/favicon.svg" />
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no" />
       </head>

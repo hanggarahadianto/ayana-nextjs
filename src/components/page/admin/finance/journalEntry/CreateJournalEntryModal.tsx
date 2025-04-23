@@ -9,32 +9,52 @@ import SelectFinanceTransactionCategory from "@/components/common/select/SelectT
 import { initialValuesJournalEntry } from "@/utils/initialValues/initialValuesJournalEntry";
 import { validationSchemaJournalEntry } from "@/utils/validation/journalEntry-validation";
 import { useSubmitJournalEntry } from "@/api/finance/postDataJournalEntry";
+import { useQueryClient } from "@tanstack/react-query";
 
-interface AddJournalEntryModalProps {
-  refetchData: () => void;
-  companyId: string | null;
-  transactionType: string | null;
+interface CreateJournalEntryModalProps {
+  transactionType: string;
+  companyId?: string;
 }
 
-const AddJournalEntryModal = ({ transactionType, companyId, refetchData }: AddJournalEntryModalProps) => {
+const CreateJournalEntryModal = ({ transactionType, companyId }: CreateJournalEntryModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
+  const queryClient = useQueryClient();
 
-  const { mutate: postData, isPending: isLoadingSubmitJournalEntry } = useSubmitJournalEntry(close, refetchData);
-
+  const { mutate: postData, isPending: isLoadingSubmitJournalEntry } = useSubmitJournalEntry(close);
   const handleSubmit = useCallback(
     (values: IJournalEntryCreate, { setSubmitting }: any) => {
       const modifiedValues = {
         ...values,
         date_inputed: values.date_inputed || null,
         due_date: values.due_date || null,
-        transactionType: transactionType,
+        transactionType,
       };
 
-      postData(modifiedValues);
+      postData(modifiedValues, {
+        onSuccess: async () => {
+          try {
+            // Global refetch langsung dari queryClient
+            await Promise.all([
+              queryClient.refetchQueries({
+                queryKey: ["getExpenseSummaryData", companyId],
+                exact: false,
+              }),
+              queryClient.refetchQueries({
+                queryKey: ["getOutstandingDebtByCompanyId", companyId],
+                exact: false,
+              }),
+            ]);
 
-      setSubmitting(false);
+            close(); // Tutup modal setelah sukses
+          } catch (e) {
+            console.error("Error in onSuccess handler:", e);
+          } finally {
+            setSubmitting(false); // Stop loading state
+          }
+        },
+      });
     },
-    [transactionType, companyId]
+    [transactionType, companyId, postData, queryClient, close]
   );
 
   const handleInputChange = (setFieldValue: any, field: string, value: any) => {
@@ -189,4 +209,4 @@ const AddJournalEntryModal = ({ transactionType, companyId, refetchData }: AddJo
   );
 };
 
-export default memo(AddJournalEntryModal);
+export default memo(CreateJournalEntryModal);

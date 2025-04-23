@@ -15,13 +15,13 @@ const handleSubmitJournalEntry = async (values: IJournalEntryCreate) => {
   return response.data;
 };
 
-export const useSubmitJournalEntry = (refetchData: () => void, closeModal: () => void) => {
+export const useSubmitJournalEntry = (closeModal: () => void) => {
   return useMutation<void, AxiosError<APIErrorResponse>, IJournalEntryCreate>({
     mutationFn: handleSubmitJournalEntry,
     onSuccess: () => {
       try {
         // Jalankan refetch dan tampilkan notifikasi
-        refetchData(); // Gunakan optional chaining
+
         closeModal?.();
 
         showNotification({

@@ -1,14 +1,6 @@
 "use client";
+import { SimpleGrid, Stack, Table, Tabs } from "@mantine/core";
 
-import { useState, useEffect } from "react";
-import { Pagination, SimpleGrid, Stack, Table, Tabs } from "@mantine/core";
-import { useQuery } from "@tanstack/react-query"; // Sesuaikan path
-import { getDataCompany } from "@/api/company/getCompany"; // Sesuaikan path
-import { useDeleteDataPayout } from "@/api/payout/deleteDataPayout";
-import LoadingGlobal from "@/styles/loading/loading-global";
-import AddPayoutModal from "@/components/page/admin/finance/payout/AddPayoutModal";
-import AddPayinModal from "@/components/page/admin/finance/payin/AddPayinModal";
-import CreateJournalEntryModal from "@/components/page/admin/finance/journalEntry/CreateJournalEntryModal";
 import UseCompanyTabs from "@/components/common/tab/CompanyTab";
 import { GetCashSummaryData } from "./GetCashSummaryData";
 

@@ -4,7 +4,7 @@ import { SimpleGrid, Stack, Tabs, Grid } from "@mantine/core";
 import CreateJournalEntryModal from "@/components/page/admin/finance/journalEntry/CreateJournalEntryModal";
 import UseCompanyTabs from "@/components/common/tab/CompanyTab";
 import { GetExpenseSummaryData } from "@/components/page/admin/finance/payout/GetExpenseSummayData";
-import { OutstandingDebtCard } from "@/components/page/admin/finance/outstandingDebit/OutstandingDebtCard";
+import { GetOutstandingDebtData } from "../outstandingDebt/GetOutstandingDebtData";
 
 export default function PayoutComponent() {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
@@ -37,10 +37,10 @@ export default function PayoutComponent() {
       <SimpleGrid p={20}>
         <Grid p={20}>
           <Grid.Col span={7}>
-            <OutstandingDebtCard companyId={activeTab?.id} companyName={activeTab?.title} />
+            <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} />
           </Grid.Col>
           <Grid.Col span={5}>
-            <GetExpenseSummaryData companyId={activeTab?.id ?? ""} companyName={activeTab?.title} />
+            <GetExpenseSummaryData companyId={activeTab?.id} companyName={activeTab?.title} />
           </Grid.Col>
         </Grid>
 

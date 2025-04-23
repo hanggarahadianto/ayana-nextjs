@@ -1,4 +1,4 @@
-export const initialValuesJournalEntry = (companyId: string | null, transactionType: string | null): IJournalEntryCreate => ({
+export const initialValuesJournalEntry = (companyId?: string | null, transactionType?: string | null): IJournalEntryCreate => ({
   invoice: "",
   description: "",
   transaction_category_id: "",

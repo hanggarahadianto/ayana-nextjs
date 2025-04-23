@@ -11,3 +11,6 @@ export const formatDaysToMonths = (days: number): string => {
 
   return isLate ? `Terlambat ${fullText}` : `Sisa ${fullText} lagi`;
 };
+
+// Modifikasi logika statusColor
+//

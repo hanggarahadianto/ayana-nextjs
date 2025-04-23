@@ -29,7 +29,8 @@ export const GetCashSummaryData = ({ companyId, companyName, transactionType }: 
   });
   const cashList = cashSummaryData?.data.cashList;
 
-  const inflowList = cashList?.filter((item) => item?.category === "inflow");
+  // const inflowList = cashList?.filter((item) => item?.category === "inflow");
+  // const inflowList = cashList?.filter((item) => item?.category === "inflow");
   const outflowList = cashList?.filter((item) => item?.category === "outflow");
 
   const totalPages = Math.ceil((cashSummaryData?.data?.total ?? 0) / limit);
@@ -47,7 +48,7 @@ export const GetCashSummaryData = ({ companyId, companyName, transactionType }: 
             Ringkasan Kas {companyName}
           </Text>
           <Stack p={20}>
-            <CreateJournalEntryModal transactionType={"payin"} companyId={companyId} refetchData={refetchCashSummaryData} />
+            {/* <CreateJournalEntryModal transactionType={"payin"} companyId={companyId} refetchData={refetchCashSummaryData} /> */}
           </Stack>
         </Group>
 
@@ -67,7 +68,8 @@ export const GetCashSummaryData = ({ companyId, companyName, transactionType }: 
               {formatCurrency(cashSummaryData?.data?.available_cash ?? 0)}
             </Text>
           </Group>
-          <CashSummaryTable data={inflowList ?? []} />
+          <CashSummaryTable data={cashList ?? []} />
+          {/* <CashSummaryTable data={inflowList ?? []} /> */}
 
           <Group gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
             <Pagination total={totalPages} value={page} onChange={setPage} />

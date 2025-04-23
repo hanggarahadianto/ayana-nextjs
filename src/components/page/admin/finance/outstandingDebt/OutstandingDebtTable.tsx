@@ -50,8 +50,8 @@ export default function OutstandingDebtTable({ data, onRowClick, onDelete, refet
             const daysLeft = OutstandingDebt.due_date ? calculateDaysLeft(OutstandingDebt.due_date) : 0;
             const statusText = formatDaysToMonths(daysLeft);
 
-            const statusColor = daysLeft < 0 ? "red" : "green";
-
+            // Modifikasi logika statusColor
+            const statusColor = daysLeft < 0 ? "red" : daysLeft <= 15 ? "orange" : "green";
             return (
               <Table.Tr
                 key={OutstandingDebt.id}
@@ -75,7 +75,7 @@ export default function OutstandingDebtTable({ data, onRowClick, onDelete, refet
                 </Table.Td>
                 {/* <Table.Td>{dueDateFormatted}</Table.Td> */}
 
-                <Table.Td>{OutstandingDebt.description}</Table.Td>
+                <Table.Td>{OutstandingDebt.note}</Table.Td>
                 {/* <Table.Td style={{ textAlign: "center" }} onClick={(e) => e.stopPropagation()}>
                 <Group ml={4}>
                   <PayOutstandingDebtButton OutstandingDebt={OutstandingDebt} refetchOutstandingDebtData={refetchOutstandingDebtData} />
