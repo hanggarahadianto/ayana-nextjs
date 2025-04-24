@@ -1,16 +1,15 @@
 "use client";
+import { SimpleGrid, Stack, Table, Tabs } from "@mantine/core";
 
-import { SimpleGrid, Stack, Tabs, Grid } from "@mantine/core";
-import CreateJournalEntryModal from "@/components/page/admin/finance/journalEntry/CreateJournalEntryModal";
 import UseCompanyTabs from "@/components/common/tab/TabCompany";
-import { GetExpenseSummaryData } from "@/components/page/admin/finance/payout/GetExpenseSummayData";
-import { GetOutstandingDebtData } from "../outstandingDebt/GetOutstandingDebtData";
+import { GetCashSummaryData } from "../finance/cashIn/GetCashSummaryData";
 
-export default function PayoutComponent() {
+export default function PayinComponent() {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
 
   return (
     <SimpleGrid mt={10}>
+      {/* <LoadingGlobal visible={isLoadingPayoutData || isLoadingDeleteDataPayout} /> */}
       <Tabs
         value={activeTab?.company_code}
         onChange={(value: string | null) => {
@@ -35,26 +34,16 @@ export default function PayoutComponent() {
         ))}
       </Tabs>
       <SimpleGrid p={20}>
-        <Grid p={20} gutter="md">
-          <GetExpenseSummaryData companyId={activeTab?.id} companyName={activeTab?.title} />
-          <Stack mt={20}>
-            <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} />
-          </Stack>
-
-          {/* <Grid.Col span={7}>
-          </Grid.Col>
-          <Grid.Col span={5}>
-          </Grid.Col> */}
-        </Grid>
-
+        <GetCashSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} transactionType="payin" />
+        {/* <TableTransaction
+          data={payoutData?.data || []}
+          onRowClick={handleRowClick}
+          onDelete={handleDeletePayoutClick}
+          refetchPayoutData={refetchPayoutData}
+        /> */}
         {/* {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />} */}
       </SimpleGrid>
-      {/* <PayoutDetails
-        payout={selectedPayout}
-        opened={isDetailsModalOpen}
-        onClose={() => setIsDetailsModalOpen(false)}
-        // refetchPayoutData={refetchPayoutData}
-      /> */}
+      {/* <OutstandingDebtCard companyName={activeTab?.title} OutstandingDebtData={undefined} /> */}
     </SimpleGrid>
   );
 }

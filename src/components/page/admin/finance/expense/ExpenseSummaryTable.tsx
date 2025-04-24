@@ -6,9 +6,10 @@ interface ExpenseSummaryTableProps {
   data: IExpenseSummaryItem[];
   onRowClick?: (ExpenseSummary: IExpenseSummaryItem) => void;
   onDelete?: (id: string) => void;
+  startIndex?: number;
 }
 
-export default function ExpenseSummaryTable({ data }: ExpenseSummaryTableProps) {
+export default function ExpenseSummaryTable({ data, startIndex = 1 }: ExpenseSummaryTableProps) {
   // console.log("data ExpenseSummary table", data);
   return (
     <ScrollArea style={{ minHeight: 400 }} p={"xl"}>
@@ -25,6 +26,8 @@ export default function ExpenseSummaryTable({ data }: ExpenseSummaryTableProps) 
       >
         <Table.Thead>
           <Table.Tr>
+            <Table.Th style={{ textAlign: "center", width: 10, minWidth: 10 }}>No</Table.Th>
+
             <Table.Th style={{ textAlign: "center", width: 100, minWidth: 100 }}>Tanggal Pembayaran</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 100, minWidth: 100 }}>Nominal</Table.Th>
             {/* <Table.Th style={{ textAlign: "center", width: 140, minWidth: 140 }}>Kategori</Table.Th> */}
@@ -32,7 +35,7 @@ export default function ExpenseSummaryTable({ data }: ExpenseSummaryTableProps) 
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {data.map((expenseSummary: IExpenseSummaryItem) => (
+          {data.map((expenseSummary: IExpenseSummaryItem, index: number) => (
             <Table.Tr
               key={expenseSummary.id}
               // onClick={() => onRowClick(ExpenseSummary)}
@@ -42,6 +45,8 @@ export default function ExpenseSummaryTable({ data }: ExpenseSummaryTableProps) 
               <Table.Td>{ExpenseSummary.name}</Table.Td>
               {/* <Table.Td>{ExpenseSummary.type}</Table.Td> */}
               {/* <Table.Td>{ExpenseSummary.category}</Table.Td> */}
+              <Table.Td>{startIndex + index}</Table.Td>
+
               <Table.Td>{formatDateIndonesia(expenseSummary?.date)}</Table.Td>
               <Table.Td>{formatCurrency(expenseSummary?.amount)}</Table.Td>
               <Table.Td>{expenseSummary?.description}</Table.Td>

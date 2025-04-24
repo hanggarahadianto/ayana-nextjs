@@ -1,4 +1,4 @@
-import PayinComponent from "@/components/page/admin/finance/payin/PayinComponent";
+import PayinComponent from "@/components/page/admin/payin/PayinComponent";
 
 export default function PayintPage() {
   return (

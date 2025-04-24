@@ -1,4 +1,4 @@
-import PayoutComponent from "@/components/page/admin/finance/payout/PayoutComponent";
+import PayoutComponent from "@/components/page/admin/payout/PayoutComponent";
 
 export default function PayoutPage() {
   return (

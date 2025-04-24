@@ -94,7 +94,10 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
         >
           {/* Bagian Tabel */}
           <Box style={{ flex: 1 }}>
-            <AccountTable data={accountData?.data || []} />
+            <AccountTable
+              data={accountData?.data || []}
+              startIndex={startIndex} // Kirim ini agar nomor urut sesuai halaman
+            />
           </Box>
 
           {/* Bagian Paginasi */}

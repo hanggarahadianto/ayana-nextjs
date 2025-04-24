@@ -5,6 +5,7 @@ interface TransactionCategoryTableProps {
   onRowClick?: (TransactionCategory: ITransactionCategory) => void;
   onDelete?: (id: string) => void;
   refetchTransactionCategoryData?: () => void;
+  startIndex?: number;
 }
 
 export default function TransactionCategoryTable({
@@ -12,6 +13,7 @@ export default function TransactionCategoryTable({
   onRowClick,
   onDelete,
   refetchTransactionCategoryData,
+  startIndex = 1,
 }: TransactionCategoryTableProps) {
   // console.log("data TransactionCategory table", data);
   return (
@@ -29,6 +31,8 @@ export default function TransactionCategoryTable({
         <Table.Thead>
           <Table.Tr>
             {/* <Table.Th style={{ textAlign: "center", width: 80, minWidth: 80 }}>Code</Table.Th> */}
+            <Table.Th style={{ textAlign: "center", width: 10, minWidth: 10 }}>No</Table.Th>
+
             <Table.Th style={{ textAlign: "center", width: 120, minWidth: 120 }}>Nama</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 100, minWidth: 100 }}>Kategori</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 100, minWidth: 100 }}>Debit</Table.Th>
@@ -37,13 +41,14 @@ export default function TransactionCategoryTable({
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {data.map((TransactionCategory: ITransactionCategory) => (
+          {data.map((TransactionCategory: ITransactionCategory, index: number) => (
             <Table.Tr
               key={TransactionCategory.id}
               // onClick={() => onRowClick(TransactionCategory)}
               style={{ cursor: "pointer" }}
             >
               {/* <Table.Td>{TransactionCategory.code}</Table.Td> */}
+              <Table.Td>{startIndex + index}</Table.Td>
               <Table.Td>{TransactionCategory.name}</Table.Td>
               {/* <Table.Td>{TransactionCategory.type}</Table.Td> */}
               <Table.Td>{TransactionCategory.category}</Table.Td>

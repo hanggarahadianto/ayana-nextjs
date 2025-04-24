@@ -4,9 +4,10 @@ import { ScrollArea, Table } from "@mantine/core";
 
 interface CashSummaryTableProps {
   data: ICashSummaryItem[];
+  startIndex?: number;
 }
 
-export const CashSummaryTable = ({ data }: CashSummaryTableProps) => {
+export const CashSummaryTable = ({ data, startIndex = 1 }: CashSummaryTableProps) => {
   console.log("cash table", data);
   return (
     <ScrollArea style={{ minHeight: 400 }} p={"xl"}>
@@ -23,6 +24,8 @@ export const CashSummaryTable = ({ data }: CashSummaryTableProps) => {
       >
         <Table.Thead>
           <Table.Tr>
+            <Table.Th style={{ textAlign: "center", width: 10, minWidth: 10 }}>No</Table.Th>
+
             <Table.Th style={{ textAlign: "center", width: 100, minWidth: 100 }}>Tanggal Pembayaran</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 100, minWidth: 100 }}>Nominal</Table.Th>
             {/* <Table.Th style={{ textAlign: "center", width: 140, minWidth: 140 }}>Kategori</Table.Th> */}
@@ -30,7 +33,7 @@ export const CashSummaryTable = ({ data }: CashSummaryTableProps) => {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {data.map((cashSummary: ICashSummaryItem) => (
+          {data.map((cashSummary: ICashSummaryItem, index: number) => (
             <Table.Tr
               key={cashSummary.id}
               // onClick={() => onRowClick(cashSummary)}
@@ -40,6 +43,7 @@ export const CashSummaryTable = ({ data }: CashSummaryTableProps) => {
               <Table.Td>{cashSummary.name}</Table.Td>
               {/* <Table.Td>{cashSummary.type}</Table.Td> */}
               {/* <Table.Td>{cashSummary.category}</Table.Td> */}
+              <Table.Td>{startIndex + index}</Table.Td>
               <Table.Td>{formatDateIndonesia(cashSummary?.date)}</Table.Td>
               <Table.Td>{formatCurrency(cashSummary?.amount)}</Table.Td>
               <Table.Td>{cashSummary?.note}</Table.Td>

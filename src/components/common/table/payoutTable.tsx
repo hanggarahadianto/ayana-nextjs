@@ -1,6 +1,6 @@
 import { Group, ScrollArea, Table as MantineTable, ThemeIcon } from "@mantine/core";
 import ButtonDeleteWithConfirmation from "../button/buttonDeleteConfirmation";
-import EditPayoutModal from "@/components/page/admin/finance/payout/EditPayoutModal";
+import EditPayoutModal from "@/components/page/admin/payout/EditPayoutModal";
 
 // Import komponen aksi (pastikan tersedia)
 

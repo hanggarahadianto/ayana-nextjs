@@ -5,14 +5,14 @@ interface AccountTableProps {
   onRowClick?: (account: IAccount) => void;
   onDelete?: (id: string) => void;
   refetchAccountData?: () => void;
+  startIndex?: number;
 }
-
-export default function AccountTable({ data }: AccountTableProps) {
+export default function AccountTable({ data, onRowClick, refetchAccountData, onDelete, startIndex = 1 }: AccountTableProps) {
   // console.log("data account table", data);
+
   return (
     <ScrollArea style={{ minHeight: 400 }} p={"xl"}>
       <Table
-        // Menggunakan token ukuran Mantine (xs, sm, md, lg, xl)
         highlightOnHover
         withColumnBorders
         style={{
@@ -24,6 +24,8 @@ export default function AccountTable({ data }: AccountTableProps) {
       >
         <Table.Thead>
           <Table.Tr>
+            <Table.Th style={{ textAlign: "center", width: 10, minWidth: 10 }}>No</Table.Th>
+
             <Table.Th style={{ textAlign: "center", width: 30, minWidth: 30 }}>Code</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 160, minWidth: 1600 }}>Nama</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 140, minWidth: 140 }}>Kategori</Table.Th>
@@ -31,12 +33,13 @@ export default function AccountTable({ data }: AccountTableProps) {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {data.map((account: IAccount) => (
+          {data.map((account: IAccount, index: number) => (
             <Table.Tr
               key={account.id}
               // onClick={() => onRowClick(account)}
               style={{ cursor: "pointer" }}
             >
+              <Table.Td>{startIndex + index}</Table.Td>
               <Table.Td>{account.code}</Table.Td>
               <Table.Td>{account.name}</Table.Td>
               {/* <Table.Td>{account.type}</Table.Td> */}

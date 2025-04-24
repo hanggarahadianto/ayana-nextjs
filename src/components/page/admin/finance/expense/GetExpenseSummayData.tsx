@@ -119,7 +119,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: ExpenseSummary
         >
           {/* Bagian Tabel */}
           <Box style={{ flex: 1 }}>
-            <ExpenseSummaryTable data={expenseSummaryData?.data.expenseList || []} />
+            <ExpenseSummaryTable data={expenseSummaryData?.data.expenseList || []} startIndex={startIndex} />
           </Box>
 
           {totalPages > 0 && (

@@ -68,7 +68,7 @@ export const GetCashSummaryData = ({ companyId, companyName, transactionType }: 
               {formatCurrency(cashSummaryData?.data?.total_cashin ?? 0)}
             </Text>
           </Group>
-          <CashSummaryTable data={cashList ?? []} />
+          <CashSummaryTable data={cashList ?? []} startIndex={startIndex} />
           {/* <CashSummaryTable data={inflowList ?? []} /> */}
 
           <Group gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
