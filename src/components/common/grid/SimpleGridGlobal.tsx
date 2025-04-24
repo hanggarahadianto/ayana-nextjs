@@ -19,7 +19,7 @@ const SimpleGridGlobal = ({ children, spacing = "lg", ...props }: SimpleGridGlob
 
   return (
     <SimpleGrid
-      bg={"pink"}
+      // bg={"pink"}
       cols={cols} // Menggunakan cols yang ditentukan berdasarkan ukuran layar
       spacing={spacing}
       {...props}

@@ -3,7 +3,7 @@
 import { Tabs, Paper } from "@mantine/core";
 import { useState } from "react";
 
-import UseCompanyTabs from "@/components/common/tab/TabCompany";
+import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import { GetDashboardData } from "./CashSummaryCard";
 import { CashInStats } from "../../../common/stats/CashInStats";
 import { ExpenseStats } from "../../../common/stats/ExpenseStats";
@@ -11,6 +11,7 @@ import { AvaialbleCashStats } from "../../../common/stats/AvailableCashStats";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { OutstandingDebtStats } from "@/components/common/stats/OutstandingDebtStats";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
+import GlobalTab from "@/components/common/tab/TabGlobal";
 
 export const DashboardComponent = () => {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
@@ -32,23 +33,9 @@ export const DashboardComponent = () => {
     <SimpleGridGlobal cols={1}>
       <LoadingGlobal visible={isLoadingCompanies} />
 
-      <Tabs
-        value={activeTab?.company_code}
-        onChange={(value: string | null) => {
-          const selectedCompany = companies.find((c) => c.company_code === value);
-          if (selectedCompany) handleTabChange(selectedCompany);
-        }}
-      >
-        <Tabs.List>
-          {companies.map((company) => (
-            <Tabs.Tab key={company.company_code} value={company.company_code}>
-              {company.title}
-            </Tabs.Tab>
-          ))}
-        </Tabs.List>
-      </Tabs>
+      <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
 
-      <SimpleGridGlobal>
+      <SimpleGridGlobal p={40}>
         <Paper shadow="sm" radius="md" p="md" withBorder>
           <AvaialbleCashStats data={availableCash} />
         </Paper>

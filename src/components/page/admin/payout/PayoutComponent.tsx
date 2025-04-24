@@ -2,7 +2,7 @@
 
 import { SimpleGrid, Stack, Tabs, Grid } from "@mantine/core";
 import CreateJournalEntryModal from "@/components/page/admin/finance/journalEntry/CreateJournalEntryModal";
-import UseCompanyTabs from "@/components/common/tab/TabCompany";
+import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import { GetExpenseSummaryData } from "@/components/page/admin/finance/expense/GetExpenseSummayData";
 import { GetOutstandingDebtData } from "../finance/outstandingDebt/GetOutstandingDebtData";
 

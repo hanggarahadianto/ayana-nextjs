@@ -4,7 +4,7 @@ import { Grid, Paper, SimpleGrid, Stack, Tabs } from "@mantine/core";
 
 import { TransactionCategoryCard } from "@/components/page/admin/finance/transactionCategory/TransactionCategoryCard";
 import { AccountCard } from "@/components/page/admin/finance/account/GetAccountData";
-import UseCompanyTabs from "@/components/common/tab/TabCompany";
+import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import LoadingGlobal from "@/styles/loading/loading-global";
 
 export default function Finance() {
