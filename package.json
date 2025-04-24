@@ -53,6 +53,7 @@
     "@types/node": "^22.13.5",
     "@types/react": "^19",
     "@types/react-virtualized": "^9.22.2",
+    "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "postcss": "^8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

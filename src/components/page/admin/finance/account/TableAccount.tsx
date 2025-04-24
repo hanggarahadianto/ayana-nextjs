@@ -1,4 +1,4 @@
-import { Group, ScrollArea, Table, ThemeIcon } from "@mantine/core";
+import { ScrollArea, Table } from "@mantine/core";
 
 interface AccountTableProps {
   data: IAccount[];
@@ -7,7 +7,7 @@ interface AccountTableProps {
   refetchAccountData?: () => void;
 }
 
-export default function AccountTable({ data, onRowClick, onDelete, refetchAccountData }: AccountTableProps) {
+export default function AccountTable({ data }: AccountTableProps) {
   // console.log("data account table", data);
   return (
     <ScrollArea style={{ minHeight: 400 }} p={"xl"}>

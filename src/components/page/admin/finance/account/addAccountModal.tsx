@@ -14,12 +14,6 @@ interface AddAccountModalProps {
   companyId?: string;
 }
 
-// Account type options
-
-// Account category options
-
-// Initial values
-
 const AddAccountModal = ({ refetchAccountData, companyId }: AddAccountModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
 

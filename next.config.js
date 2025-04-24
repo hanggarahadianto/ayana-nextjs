@@ -1,6 +1,7 @@
+const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
+
 const nextConfig = {
   reactStrictMode: process.env.NODE_ENV === "production" ? false : true,
-  // trailingSlash: true,
 
   async headers() {
     return [
@@ -21,15 +22,22 @@ const nextConfig = {
       {
         source: "/",
         destination: "/home",
-        permanent: true, // Redirect 301 (SEO friendly)
+        permanent: true,
       },
     ];
   },
 
   images: {
-    domains: ["yourdomain.com"], // Sesuaikan dengan domain gambar Anda
+    domains: ["yourdomain.com"],
+  },
+
+  // ✅ Tambahkan ini
+  webpack: (config, { dev, isServer }) => {
+    if (dev && !isServer) {
+      config.plugins.push(new CaseSensitivePathsPlugin());
+    }
+    return config;
   },
 };
 
-// Hapus i18n agar tidak ada /en/
 module.exports = nextConfig;
