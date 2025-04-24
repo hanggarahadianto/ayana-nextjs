@@ -1,39 +1,41 @@
 import { APIAxiosInstance } from "@/lib";
 
-// Definisikan interface untuk parameter
 interface GetExpenseSummaryParams {
   companyId: string;
   page?: number;
   limit?: number;
-  type?: string | null;
+  transactionType?: string | null;
+  summaryOnly?: boolean; // ✅ dibuat optional
 }
 
 export const getExpenseSummary = async ({
   companyId,
   page = 1,
   limit = 10,
-  type = null,
+  transactionType = null,
+  summaryOnly,
 }: GetExpenseSummaryParams): Promise<IExpenseSummaryResponse> => {
-  // Validasi companyId
   if (!companyId) {
     throw new Error("Company ID is required");
   }
 
+  const queryParams = new URLSearchParams({
+    company_id: companyId,
+    page: page.toString(),
+    limit: limit.toString(),
+  });
+
+  if (transactionType) {
+    queryParams.append("type", transactionType);
+  }
+
+  if (summaryOnly) {
+    queryParams.append("summary_only", "true"); // ✅ hanya kirim jika true
+  }
+
+  const url = `finance/get-expense-summary?${queryParams.toString()}`;
+
   try {
-    // Bangun URL dengan query parameters
-    const queryParams = new URLSearchParams({
-      company_id: companyId,
-      page: page.toString(),
-      limit: limit.toString(),
-    });
-
-    // Tambahkan type jika ada
-    if (type) {
-      queryParams.append("type", type);
-    }
-
-    const url = `finance/get-expense-summary?${queryParams.toString()}`;
-
     const response = await APIAxiosInstance.get(url);
     return response.data as IExpenseSummaryResponse;
   } catch (error: any) {

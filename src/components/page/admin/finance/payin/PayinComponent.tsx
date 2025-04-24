@@ -1,7 +1,7 @@
 "use client";
 import { SimpleGrid, Stack, Table, Tabs } from "@mantine/core";
 
-import UseCompanyTabs from "@/components/common/tab/CompanyTab";
+import UseCompanyTabs from "@/components/common/tab/TabCompany";
 import { GetCashSummaryData } from "./GetCashSummaryData";
 
 export default function PayinComponent() {

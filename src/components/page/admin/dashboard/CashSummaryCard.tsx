@@ -22,19 +22,7 @@ export const GetDashboardData = ({ companyId, companyName }: CashSummaryCardProp
     refetchOnWindowFocus: false,
   });
 
-  console.log("CASH", CashSummaryData);
-
-  //   const totalPages = useMemo(() => {
-  //     return CashSummaryData?.total ? Math.ceil(CashSummaryData.total / limit) : 1;
-  //   }, [CashSummaryData]);
-
-  //   // Reset page when filter changes
-  //   useEffect(() => {
-  //     setPage(1);
-  //   }, [selectedType]);
-
-  //   const startIndex = (page - 1) * limit + 1;
-  //   const endIndex = Math.min(page * limit, CashSummaryData?.total || 0);
+  // console.log("CASH", CashSummaryData);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -42,9 +30,7 @@ export const GetDashboardData = ({ companyId, companyName }: CashSummaryCardProp
 
       <Card shadow="sm" padding="lg">
         <Title order={3}>Cash Summary</Title>
-        <Group mb="md">
-          <Text>Cash Tersedia: {formatCurrency(CashSummaryData?.data.available_cash ?? 0)}</Text>
-        </Group>
+        <Group mb="md">{/* <Text>Cash Tersedia: {formatCurrency(CashSummaryData?.data.available_cash ?? 0)}</Text> */}</Group>
         {/* <Text>{cashSummary?.message}</Text> */}
 
         <div>

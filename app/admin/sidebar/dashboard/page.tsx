@@ -1,11 +1,11 @@
-import { DashboardAdminComponent } from "@/components/page/admin/dashboard/DashboardAdminComponent";
+import { DashboardComponent } from "@/components/page/admin/dashboard/DashboardComponent";
 
 export default async function DashboardPage() {
   // const companies = await getCompanies();
 
   return (
     <>
-      <DashboardAdminComponent />
+      <DashboardComponent />
     </>
   );
 }
