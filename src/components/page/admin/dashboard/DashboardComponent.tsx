@@ -43,10 +43,10 @@ export const DashboardComponent = () => {
           <CashInStats companyId={activeTab?.id} onCashInChange={handleCashInChange} />
         </Paper>
         <Paper shadow="sm" radius="md" p="md" withBorder>
-          <ExpenseStats companyId={activeTab?.id} onExpenseChange={handleExpenseChange} />
+          <OutstandingDebtStats companyId={activeTab?.id} />
         </Paper>
         <Paper shadow="sm" radius="md" p="md" withBorder>
-          <OutstandingDebtStats companyId={activeTab?.id} />
+          <ExpenseStats companyId={activeTab?.id} onExpenseChange={handleExpenseChange} />
         </Paper>
       </SimpleGridGlobal>
 

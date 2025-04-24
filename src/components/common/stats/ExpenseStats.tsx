@@ -34,6 +34,7 @@ export const ExpenseStats = ({ companyId, onExpenseChange }: ExpenseStatsProps) 
       title: "Total Expense",
       icon: "receipt",
       value: totalExpense,
+      color: "red",
       diff: 12, // nanti bisa dihitung dari backend atau cache data lama
     },
   ];

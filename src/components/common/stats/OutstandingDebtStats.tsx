@@ -41,6 +41,7 @@ OutstandingDebtStatsProps) => {
       title: "Total Outstanding Debt",
       icon: "receipt",
       value: totalOutstandingDebt,
+      color: "orange",
       diff: 12, // nanti bisa dihitung dari backend atau cache data lama
     },
   ];

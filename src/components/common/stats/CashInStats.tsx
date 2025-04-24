@@ -26,6 +26,7 @@ export const CashInStats = ({ companyId, onCashInChange }: CashInStatsProps) => 
       title: "Total Cash In",
       icon: "receipt",
       value: totalCashIn,
+      color: "green",
       diff: 12, // nanti bisa dihitung dari backend atau cache data lama
     },
   ];

@@ -16,6 +16,7 @@ export type StatItem = {
   title: string;
   icon: keyof typeof icons;
   value: string | number;
+  color: string;
   diff: number;
 };
 
@@ -34,7 +35,9 @@ export const StatsGrid = ({ data }: StatsGridProps) => {
           {stat.title}
         </Text>
         <Group align="flex-end" gap="xs" mt={25}>
-          <Text style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1 }}>{formatCurrency(Number(stat.value))}</Text>
+          <Text c={stat.color} style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1 }}>
+            {formatCurrency(Number(stat.value))}
+          </Text>
         </Group>
         <Text fz="xs" c="dimmed" mt={7} w={200}>
           Compared to previous month
