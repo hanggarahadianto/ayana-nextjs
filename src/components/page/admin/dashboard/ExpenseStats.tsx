@@ -5,9 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 
 type ExpenseStatsProps = {
   companyId?: string;
+  onExpenseChange: (totalExpense: number) => void;
 };
 
-export const ExpenseStats = ({ companyId }: ExpenseStatsProps) => {
+export const ExpenseStats = ({ companyId, onExpenseChange }: ExpenseStatsProps) => {
   const { data: expenseSummaryOnlyData, isPending: isLoadingSummary } = useQuery({
     queryKey: ["getExpenseOnlyData", companyId],
     queryFn: () =>
@@ -25,8 +26,7 @@ export const ExpenseStats = ({ companyId }: ExpenseStatsProps) => {
   console.log("expenseSummaryOnlyData", expenseSummaryOnlyData);
 
   const totalExpense = expenseSummaryOnlyData?.data?.total_expense ?? 0;
-
-  console.log("totalExpense", totalExpense);
+  onExpenseChange(totalExpense);
 
   const statsData: StatItem[] = [
     {
