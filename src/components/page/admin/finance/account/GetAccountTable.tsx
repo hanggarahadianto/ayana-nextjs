@@ -5,7 +5,7 @@ import { getDataAccount } from "@/api/account/getDataAccount";
 import AccountTable from "@/components/page/admin/finance/account/TableAccount";
 import { useEffect, useMemo, useState } from "react";
 import { accountTypeOptions, typeOptions } from "@/constants/dictionary";
-// import AddAccountModal from "./AddAccountModal";
+import AddAccountModal from "./AddAccountModal";
 
 interface AccountCardProps {
   companyId: string;
@@ -82,7 +82,7 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
             /> */}
           </Stack>
 
-          {/* <AddAccountModal companyId={companyId} refetchAccountData={refetchAccountData} /> */}
+          <AddAccountModal companyId={companyId} refetchAccountData={refetchAccountData} />
         </Group>
         <Box
           style={{
