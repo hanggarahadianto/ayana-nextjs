@@ -10,7 +10,7 @@ interface CashSummaryCardProps {
   companyName?: string;
 }
 
-export const CashSummaryCard = ({ companyId, companyName }: CashSummaryCardProps) => {
+export const GetDashboardData = ({ companyId, companyName }: CashSummaryCardProps) => {
   const {
     data: CashSummaryData,
     isPending: isLoadingCashSummaryData,

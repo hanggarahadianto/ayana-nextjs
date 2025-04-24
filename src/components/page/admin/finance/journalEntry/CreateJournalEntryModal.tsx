@@ -33,8 +33,11 @@ const CreateJournalEntryModal = ({ transactionType, companyId }: CreateJournalEn
       postData(modifiedValues, {
         onSuccess: async () => {
           try {
-            // Global refetch langsung dari queryClient
             await Promise.all([
+              queryClient.refetchQueries({
+                queryKey: ["getCashSummaryData", companyId],
+                exact: false,
+              }),
               queryClient.refetchQueries({
                 queryKey: ["getExpenseSummaryData", companyId],
                 exact: false,
@@ -133,8 +136,12 @@ const CreateJournalEntryModal = ({ transactionType, companyId }: CreateJournalEn
                       label="Total Cicilan"
                       error={touched.installment && errors.installment ? errors.installment : undefined}
                       placeholder="Contoh : 3 X"
-                      value={values.installment || ""}
-                      onChange={(e) => setFieldValue("installment", e)}
+                      value={values.installment && values.installment !== 0 ? values.installment : ""}
+                      onChange={(val) => {
+                        // Pastikan nilai yang disimpan selalu number
+                        const numValue = Number(val);
+                        setFieldValue("installment", isNaN(numValue) ? "" : numValue);
+                      }}
                       suffix=" x"
                     />
 
@@ -177,6 +184,7 @@ const CreateJournalEntryModal = ({ transactionType, companyId }: CreateJournalEn
                         ]}
                         onChange={(value: any) => {
                           setFieldValue("status", value);
+                          setFieldValue("is_repaid", true);
                         }}
                         onBlur={handleBlur}
                         error={touched.status && errors.status}

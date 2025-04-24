@@ -5,10 +5,7 @@ import { Group, ScrollArea, Table, ThemeIcon, Text, Card, Badge } from "@mantine
 import { differenceInDays, format } from "date-fns";
 
 interface OutstandingDebtTableProps {
-  data: IJournalEntry[];
-  onRowClick?: (OutstandingDebt: IJournalEntry) => void;
-  onDelete?: (id: string) => void;
-  refetchOutstandingDebtData?: () => void;
+  data: IDebtSummaryItem[];
 }
 
 const calculateDaysLeft = (dueDate: string) => {
@@ -17,7 +14,7 @@ const calculateDaysLeft = (dueDate: string) => {
   return differenceInDays(due, today);
 };
 
-export default function OutstandingDebtTable({ data, onRowClick, onDelete, refetchOutstandingDebtData }: OutstandingDebtTableProps) {
+export default function OutstandingDebtTable({ data }: OutstandingDebtTableProps) {
   // console.log("data OutstandingDebt table", data);
 
   return (
@@ -38,15 +35,15 @@ export default function OutstandingDebtTable({ data, onRowClick, onDelete, refet
             <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Invoice</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 220, minWidth: 220 }}>Partner</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Amount</Table.Th>
-            <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Tanggal Masuk</Table.Th>
-            <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Tanggal Jatuh Tempo</Table.Th>
-            <Table.Th style={{ textAlign: "center", width: 220, minWidth: 220 }}>Status</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 160, minWidth: 160 }}>Tanggal Masuk</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 160, minWidth: 160 }}>Tanggal Jatuh Tempo</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 160, minWidth: 160 }}>Status</Table.Th>
 
-            <Table.Th style={{ textAlign: "center", width: 300, minWidth: 300 }}>Deskripsi</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 340, minWidth: 340 }}>Deskripsi</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {data.map((OutstandingDebt: IJournalEntry) => {
+          {data.map((OutstandingDebt: IDebtSummaryItem) => {
             const daysLeft = OutstandingDebt.due_date ? calculateDaysLeft(OutstandingDebt.due_date) : 0;
             const statusText = formatDaysToMonths(daysLeft);
 
@@ -75,7 +72,7 @@ export default function OutstandingDebtTable({ data, onRowClick, onDelete, refet
                 </Table.Td>
                 {/* <Table.Td>{dueDateFormatted}</Table.Td> */}
 
-                <Table.Td>{OutstandingDebt.note}</Table.Td>
+                <Table.Td>{OutstandingDebt.description}</Table.Td>
                 {/* <Table.Td style={{ textAlign: "center" }} onClick={(e) => e.stopPropagation()}>
                 <Group ml={4}>
                   <PayOutstandingDebtButton OutstandingDebt={OutstandingDebt} refetchOutstandingDebtData={refetchOutstandingDebtData} />

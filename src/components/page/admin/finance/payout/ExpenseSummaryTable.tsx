@@ -6,10 +6,9 @@ interface ExpenseSummaryTableProps {
   data: IExpenseSummaryItem[];
   onRowClick?: (ExpenseSummary: IExpenseSummaryItem) => void;
   onDelete?: (id: string) => void;
-  refetchExpenseSummaryData?: () => void;
 }
 
-export default function ExpenseSummaryTable({ data, onRowClick, onDelete, refetchExpenseSummaryData }: ExpenseSummaryTableProps) {
+export default function ExpenseSummaryTable({ data }: ExpenseSummaryTableProps) {
   // console.log("data ExpenseSummary table", data);
   return (
     <ScrollArea style={{ minHeight: 400 }} p={"xl"}>

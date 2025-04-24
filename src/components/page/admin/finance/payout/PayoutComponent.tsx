@@ -35,13 +35,16 @@ export default function PayoutComponent() {
         ))}
       </Tabs>
       <SimpleGrid p={20}>
-        <Grid p={20}>
-          <Grid.Col span={7}>
+        <Grid p={20} gutter="md">
+          <GetExpenseSummaryData companyId={activeTab?.id} companyName={activeTab?.title} />
+          <Stack mt={20}>
             <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} />
+          </Stack>
+
+          {/* <Grid.Col span={7}>
           </Grid.Col>
           <Grid.Col span={5}>
-            <GetExpenseSummaryData companyId={activeTab?.id} companyName={activeTab?.title} />
-          </Grid.Col>
+          </Grid.Col> */}
         </Grid>
 
         {/* {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />} */}

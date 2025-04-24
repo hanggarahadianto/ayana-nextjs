@@ -4,6 +4,7 @@ import { Card, Text, Group, Stack, Loader, Pagination, Select, Box } from "@mant
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useEffect, useMemo, useState } from "react";
 import OutstandingDebtTable from "./OutstandingDebtTable";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 interface GetOutStandingDebtDataProps {
   companyId?: string;
@@ -27,19 +28,21 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
     refetchOnWindowFocus: false,
   });
 
+  console.log("OUTSTANDING debt", outstandingDebtData);
+
   // Debug selectedType
   useEffect(() => {
     console.log("selectedType updated:", selectedType);
   }, [selectedType]);
 
   const totalPages = useMemo(() => {
-    return outstandingDebtData?.total ? Math.ceil(outstandingDebtData.total / limit) : 1;
+    return outstandingDebtData?.data?.total ? Math.ceil(outstandingDebtData.data.total / limit) : 1;
   }, [outstandingDebtData]);
 
   // Reset page when filter changes
 
   const startIndex = (pageOutstandingDebt - 1) * limit + 1;
-  const endIndex = Math.min(pageOutstandingDebt * limit, outstandingDebtData?.total || 0);
+  const endIndex = Math.min(pageOutstandingDebt * limit, outstandingDebtData?.data.total || 0);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -77,6 +80,11 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
               clearable
             /> */}
           </Stack>
+          <Group justify="space-between" p={20}>
+            <Text fw={800} size="xl">
+              {formatCurrency(outstandingDebtData?.data?.total_debt ?? 0)}
+            </Text>
+          </Group>
 
           {/* <AddOutstandingDebtModal companyId={companyId} refetchOutstandingDebtData={refetchOutstandingDebtData} /> */}
         </Group>
@@ -90,7 +98,10 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
         >
           {/* Bagian Tabel */}
           <Box style={{ flex: 1 }}>
-            <OutstandingDebtTable data={outstandingDebtData?.data || []} />
+            {" "}
+            <Box style={{ flex: 1 }}>
+              <OutstandingDebtTable data={outstandingDebtData?.data.debtList || []} />
+            </Box>
           </Box>
 
           {/* Bagian Paginasi */}
@@ -98,7 +109,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
             <Stack gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
               <Pagination total={totalPages} value={pageOutstandingDebt} onChange={setPageOutstandingDebt} />
               <Text size="sm" c="dimmed">
-                Menampilkan {startIndex} sampai {endIndex} dari {outstandingDebtData?.total} data
+                Menampilkan {startIndex} sampai {endIndex} dari {outstandingDebtData?.data.total} data
               </Text>
             </Stack>
           )}

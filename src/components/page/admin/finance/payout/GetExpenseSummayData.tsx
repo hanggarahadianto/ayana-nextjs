@@ -5,6 +5,7 @@ import ExpenseSummaryTable from "./ExpenseSummaryTable";
 import { getExpenseSummary } from "@/api/finance/getExpenseSummary";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import CreateJournalEntryModal from "../journalEntry/CreateJournalEntryModal";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 interface ExpenseSummaryCardProps {
   companyId?: string;
@@ -48,13 +49,20 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: ExpenseSummary
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingExpenseSummaryData} />
+      <Stack justify="flex-end" align="flex-end" p={40}>
+        <CreateJournalEntryModal companyId={companyId} transactionType="payout" />
+      </Stack>
 
       <Stack gap="md">
         <Group justify="space-between" align="space-between">
           <Text size="lg" fw={600}>
             Pengeluaran {companyName}
           </Text>
-          <CreateJournalEntryModal companyId={companyId} transactionType="payout" />
+          <Group justify="space-between" p={20}>
+            <Text fw={800} size="xl">
+              {formatCurrency(expenseSummaryData?.data?.total_expense ?? 0)}
+            </Text>
+          </Group>
         </Group>
 
         {/* <Group justify="space-between">

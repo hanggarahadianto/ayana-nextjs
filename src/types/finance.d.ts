@@ -11,7 +11,7 @@ interface ICashSummaryItem {
 
 interface ICashSummaryData {
   cashList: ICashSummaryItem[];
-  available_cash: number;
+  total_cashin: number;
   net_assets: number;
   page: number;
   limit: number;
@@ -42,6 +42,36 @@ interface IExpenseSummaryData {
 
 interface IExpenseSummaryResponse {
   data: IExpenseSummaryData;
+  message: string;
+  status: string;
+}
+
+interface IDebtSummaryItem {
+  id: string;
+  invoice: string;
+  description: string;
+  amount: number;
+  partner: string;
+  transaction_type: string;
+  status: string;
+  company_id: string;
+  date_inputed: string;
+  due_date: string;
+  is_repaid: boolean;
+  installment: number;
+  note: string;
+}
+
+interface IDebtSummaryData {
+  debtList: IDebtSummaryItem[];
+  total_debt: number;
+  page: number;
+  limit: number;
+  total: number;
+}
+
+interface IDebtSummaryResponse {
+  data: IDebtSummaryData;
   message: string;
   status: string;
 }

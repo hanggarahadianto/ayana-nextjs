@@ -22,7 +22,7 @@ export const GetCashSummaryData = ({ companyId, companyName, transactionType }: 
     isPending: isLoadingCashSummaryData,
     refetch: refetchCashSummaryData,
   } = useQuery({
-    queryKey: ["getCashSummaryByCompanyId", companyId, page],
+    queryKey: ["getCashSummaryData", companyId, page],
     queryFn: () => getCashSummary(companyId, page, limit, transactionType),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -48,7 +48,7 @@ export const GetCashSummaryData = ({ companyId, companyName, transactionType }: 
             Ringkasan Kas {companyName}
           </Text>
           <Stack p={20}>
-            {/* <CreateJournalEntryModal transactionType={"payin"} companyId={companyId} refetchData={refetchCashSummaryData} /> */}
+            <CreateJournalEntryModal transactionType={"payin"} companyId={companyId} />
           </Stack>
         </Group>
 
@@ -65,7 +65,7 @@ export const GetCashSummaryData = ({ companyId, companyName, transactionType }: 
               Cash In
             </Text>
             <Text fw={800} size="xl" c="green">
-              {formatCurrency(cashSummaryData?.data?.available_cash ?? 0)}
+              {formatCurrency(cashSummaryData?.data?.total_cashin ?? 0)}
             </Text>
           </Group>
           <CashSummaryTable data={cashList ?? []} />

@@ -7,7 +7,7 @@ export const getOutstandingDebt = async (
   transactionStatus: string,
   page = 1,
   limit = 10
-): Promise<IJournalEntryResponse | undefined> => {
+): Promise<IDebtSummaryResponse | undefined> => {
   if (!companyId) {
     console.error("Company ID tidak tersedia!");
     return;
@@ -24,7 +24,7 @@ export const getOutstandingDebt = async (
 
     const url = `/finance/get-outstanding-debt?${params.toString()}`;
     const response = await APIAxiosInstance.get(url);
-    return response.data as IJournalEntryResponse;
+    return response.data as IDebtSummaryResponse;
   } catch (error: any) {
     console.error("Gagal mengambil data outstanding debt:", error.message || error);
     throw error;

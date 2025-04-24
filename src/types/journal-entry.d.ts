@@ -4,13 +4,13 @@ interface IJournalEntry {
   description: string;
   transaction_category_id: string;
   amount: number;
+  installment: number;
   partner: string;
   transaction_type: "payin" | "payout"; // bisa disesuaikan kalau ada lebih dari dua tipe
   status: "draft" | "paid" | "unpaid" | "completed" | "cancelled"; // sesuaikan dengan status yang valid di sistem
 
   date_inputed: string | null;
   due_date: string | null;
-  installment: 0;
   status: string;
   is_repaid: boolean;
   note: string;
@@ -26,7 +26,7 @@ interface IJournalEntryCreate {
   status: "draft" | "paid" | "unpaid" | "completed" | "cancelled"; // sesuaikan dengan status yang valid di sistem
   date_inputed: string | null;
   due_date: string | null;
-  installment: 0;
+  installment: number;
   status: string;
   note: string;
   is_repaid: boolean;
