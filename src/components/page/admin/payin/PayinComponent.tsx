@@ -3,13 +3,15 @@ import { SimpleGrid, Stack, Table, Tabs } from "@mantine/core";
 
 import UseCompanyTabs from "@/components/common/tab/TabCompany";
 import { GetCashSummaryData } from "../finance/cashIn/GetCashSummaryData";
+import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 export default function PayinComponent() {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
 
   return (
-    <SimpleGrid mt={10}>
-      {/* <LoadingGlobal visible={isLoadingPayoutData || isLoadingDeleteDataPayout} /> */}
+    <SimpleGridGlobal cols={1} mt={10}>
+      <LoadingGlobal visible={isLoadingCompanies} />
       <Tabs
         value={activeTab?.company_code}
         onChange={(value: string | null) => {
@@ -33,7 +35,7 @@ export default function PayinComponent() {
           </Tabs.Panel>
         ))}
       </Tabs>
-      <SimpleGrid p={20}>
+      <SimpleGridGlobal cols={1} p={20}>
         <GetCashSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} transactionType="payin" />
         {/* <TableTransaction
           data={payoutData?.data || []}
@@ -42,8 +44,8 @@ export default function PayinComponent() {
           refetchPayoutData={refetchPayoutData}
         /> */}
         {/* {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />} */}
-      </SimpleGrid>
+      </SimpleGridGlobal>
       {/* <OutstandingDebtCard companyName={activeTab?.title} OutstandingDebtData={undefined} /> */}
-    </SimpleGrid>
+    </SimpleGridGlobal>
   );
 }

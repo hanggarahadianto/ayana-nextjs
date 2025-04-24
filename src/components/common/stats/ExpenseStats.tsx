@@ -2,6 +2,7 @@ import { getCashSummary } from "@/api/finance/getCashSummary";
 import { getExpenseSummary } from "@/api/finance/getExpenseSummary";
 import { StatItem, StatsGrid } from "@/components/common/stats/StatsGrid";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 type ExpenseStatsProps = {
   companyId?: string;
@@ -23,10 +24,10 @@ export const ExpenseStats = ({ companyId, onExpenseChange }: ExpenseStatsProps) 
     refetchOnWindowFocus: false,
   });
 
-  console.log("expenseSummaryOnlyData", expenseSummaryOnlyData);
-
   const totalExpense = expenseSummaryOnlyData?.data?.total_expense ?? 0;
-  onExpenseChange(totalExpense);
+  useEffect(() => {
+    onExpenseChange(totalExpense);
+  }, [totalExpense, onExpenseChange]);
 
   const statsData: StatItem[] = [
     {

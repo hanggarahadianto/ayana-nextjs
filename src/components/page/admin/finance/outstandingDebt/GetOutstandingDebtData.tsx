@@ -23,8 +23,19 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
     refetch: refetchOutstandingDebtData,
   } = useQuery({
     queryKey: ["getOutstandingDebtByCompanyId", companyId, pageOutstandingDebt, limit],
-    queryFn: () => (companyId ? getOutstandingDebt(companyId, "payin", "unpaid", pageOutstandingDebt, limit) : Promise.resolve(null)),
-    enabled: !!companyId,
+    queryFn: async () => {
+      if (!companyId) return null;
+
+      return await getOutstandingDebt({
+        companyId,
+        transactionType: "payin",
+        transactionStatus: "unpaid",
+        page: pageOutstandingDebt,
+        limit,
+        // ⛔️ Tidak perlu kirim summaryOnly karena default-nya false
+      });
+    },
+    enabled: Boolean(companyId),
     refetchOnWindowFocus: false,
   });
 
@@ -82,7 +93,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
           </Stack>
           <Group justify="space-between" p={20}>
             <Text fw={800} size="xl">
-              {formatCurrency(outstandingDebtData?.data?.total_debt ?? 0)}
+              {formatCurrency(outstandingDebtData?.data?.total_outstandingDebt ?? 0)}
             </Text>
           </Group>
 

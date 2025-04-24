@@ -6,6 +6,7 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 import { formatCurrency } from "@/utils/formatCurrency";
 import CreateJournalEntryModal from "../journalEntry/CreateJournalEntryModal";
 import { CashSummaryTable } from "./CashSummaryTable";
+import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -39,53 +40,55 @@ export const GetCashSummaryData = ({ companyId, companyName, transactionType }: 
   const endIndex = Math.min(page * limit, cashSummaryData?.data.total || 0);
 
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <LoadingGlobal visible={isLoadingCashSummaryData} />
+    <SimpleGridGlobal cols={1}>
+      <Card shadow="sm" padding="lg" radius="md" withBorder>
+        <LoadingGlobal visible={isLoadingCashSummaryData} />
 
-      <Stack gap="md">
-        <Group justify="space-between">
-          <Text size="lg" fw={600}>
-            Ringkasan Kas {companyName}
-          </Text>
-          <Stack p={20}>
-            <CreateJournalEntryModal transactionType={"payin"} companyId={companyId} />
-          </Stack>
-        </Group>
-
-        <Box
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            minHeight: "50vh", // Pastikan container mengisi tinggi layar
-            justifyContent: "space-between", // Paginasi akan tetap di bawah
-          }}
-        >
-          <Group justify="space-between" p={20}>
-            <Text fw={600} mb="xs" mt={20}>
-              Cash In
+        <Stack gap="md">
+          <Group justify="space-between">
+            <Text size="lg" fw={600}>
+              Ringkasan Kas {companyName}
             </Text>
-            <Text fw={800} size="xl" c="green">
-              {formatCurrency(cashSummaryData?.data?.total_cashin ?? 0)}
-            </Text>
+            <Stack p={20}>
+              <CreateJournalEntryModal transactionType={"payin"} companyId={companyId} />
+            </Stack>
           </Group>
-          <CashSummaryTable data={cashList ?? []} startIndex={startIndex} />
-          {/* <CashSummaryTable data={inflowList ?? []} /> */}
 
-          <Group gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
-            <Pagination total={totalPages} value={page} onChange={setPage} />
-            <Text size="sm" c="dimmed">
-              Menampilkan {startIndex} sampai {endIndex} dari {cashSummaryData?.data.total} data
-            </Text>
-          </Group>
-        </Box>
+          <Box
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              minHeight: "50vh", // Pastikan container mengisi tinggi layar
+              justifyContent: "space-between", // Paginasi akan tetap di bawah
+            }}
+          >
+            <Group justify="space-between" p={20}>
+              <Text fw={600} mb="xs" mt={20}>
+                Cash In
+              </Text>
+              <Text fw={800} size="xl" c="green">
+                {formatCurrency(cashSummaryData?.data?.total_cashin ?? 0)}
+              </Text>
+            </Group>
+            <CashSummaryTable data={cashList ?? []} startIndex={startIndex} />
+            {/* <CashSummaryTable data={inflowList ?? []} /> */}
 
-        {/* <Box>
+            <Group gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
+              <Pagination total={totalPages} value={page} onChange={setPage} />
+              <Text size="sm" c="dimmed">
+                Menampilkan {startIndex} sampai {endIndex} dari {cashSummaryData?.data.total} data
+              </Text>
+            </Group>
+          </Box>
+
+          {/* <Box>
           <Text fw={600} mt={20} mb="xs">
             Cash Out
           </Text>
           <CashSummaryTable data={cashOut} />
         </Box> */}
-      </Stack>
-    </Card>
+        </Stack>
+      </Card>
+    </SimpleGridGlobal>
   );
 };

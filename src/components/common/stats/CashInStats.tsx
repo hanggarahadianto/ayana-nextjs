@@ -1,6 +1,7 @@
 import { getCashSummary } from "@/api/finance/getCashSummary";
 import { StatItem, StatsGrid } from "@/components/common/stats/StatsGrid";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 type CashInStatsProps = {
   companyId?: string;
@@ -16,7 +17,9 @@ export const CashInStats = ({ companyId, onCashInChange }: CashInStatsProps) => 
   });
 
   const totalCashIn = cashSummaryOnlyData?.data?.total_cashin ?? 0;
-  onCashInChange(totalCashIn);
+  useEffect(() => {
+    onCashInChange(totalCashIn);
+  }, [totalCashIn, onCashInChange]);
 
   const statsData: StatItem[] = [
     {

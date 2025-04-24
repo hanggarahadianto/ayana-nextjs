@@ -64,7 +64,7 @@ interface IDebtSummaryItem {
 
 interface IDebtSummaryData {
   debtList: IDebtSummaryItem[];
-  total_debt: number;
+  total_outstandingDebt: number;
   page: number;
   limit: number;
   total: number;
