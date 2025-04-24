@@ -14,6 +14,7 @@ export const AvaialbleCashStats = ({ data }: AvailableCashStatsProps) => {
       title: "Total Available Cash",
       icon: "receipt",
       value: data,
+      color: "white",
       diff: 12, // nanti bisa dihitung dari backend atau cache data lama
     },
   ];
