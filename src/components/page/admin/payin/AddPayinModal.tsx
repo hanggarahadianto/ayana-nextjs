@@ -44,7 +44,7 @@ const AddPayinModal = ({ companyCode, companyId }: AddPayinModalProps) => {
     <>
       <ButtonAdd onClick={open} size={"3.5rem"} />
 
-      <Modal opened={opened} onClose={close} size="lg" yOffset="100px">
+      <Modal opened={opened} onClose={close} size="xl" yOffset="100px">
         <Formik
           initialValues={initialValuePayoutCreate}
           validateOnBlur={false}

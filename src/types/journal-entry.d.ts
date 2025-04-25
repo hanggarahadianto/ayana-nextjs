@@ -14,6 +14,7 @@ interface IJournalEntry {
   status: string;
   is_repaid: boolean;
   note: string;
+
   company_id: string;
 }
 interface IJournalEntryCreate {

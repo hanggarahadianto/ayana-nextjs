@@ -73,7 +73,7 @@ const CreateJournalEntryModal = ({ transactionType, companyId }: CreateJournalEn
     <>
       <ButtonAdd onClick={open} size={"3.5rem"} />
 
-      <Modal opened={opened} onClose={close} size="lg" yOffset="100px">
+      <Modal opened={opened} onClose={close} size="xl" yOffset="100px">
         <Formik
           initialValues={initialValuesJournalEntry(companyId, transactionType)}
           validationSchema={validationSchemaJournalEntry}
@@ -182,15 +182,22 @@ const CreateJournalEntryModal = ({ transactionType, companyId }: CreateJournalEn
                           { value: "paid", label: "Tunai" },
                           { value: "unpaid", label: "Tempo" },
                         ]}
-                        onChange={(value: any) => {
-                          setFieldValue("status", value);
-                          setFieldValue("is_repaid", true);
+                        onChange={(value: string | null) => {
+                          // Type guard untuk memastikan value valid
+                          if (value === "paid" || value === "unpaid") {
+                            setFieldValue("status", value);
+                            setFieldValue("is_repaid", value === "paid");
+                          } else if (value === null) {
+                            // Handle clearable case
+                            setFieldValue("status", null);
+                            setFieldValue("is_repaid", false); // atau null tergantung kebutuhan
+                          }
                         }}
                         onBlur={handleBlur}
                         error={touched.status && errors.status}
+                        value={values.status}
                       />
                     )}
-
                     <Textarea
                       label="Keterangan"
                       placeholder="Masukkan Keterangan"

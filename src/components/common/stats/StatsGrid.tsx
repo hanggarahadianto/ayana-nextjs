@@ -31,13 +31,15 @@ export const StatsGrid = ({ data }: StatsGridProps) => {
 
     return (
       <div key={index}>
-        <Text size="xs" c="dimmed" style={{ fontWeight: 700, textTransform: "uppercase" }} w={200}>
+        <Text size="xs" c="dimmed" style={{ fontWeight: 700, textTransform: "uppercase" }} w={400}>
           {stat.title}
         </Text>
         <Group align="flex-end" gap="xs" mt={25}>
-          <Text c={stat.color} style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1 }}>
-            {formatCurrency(Number(stat.value))}
-          </Text>
+          <Group align="flex-end" gap="xs" mt={25} ml={-12}>
+            <Text c={Number(stat.value) < 0 ? "red.7" : stat.color} style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1 }} w={300}>
+              {formatCurrency(Number(stat.value))}
+            </Text>
+          </Group>
         </Group>
         <Text fz="xs" c="dimmed" mt={7} w={200}>
           Compared to previous month
@@ -49,7 +51,7 @@ export const StatsGrid = ({ data }: StatsGridProps) => {
   return (
     <div style={{ padding: "calc(var(--mantine-spacing-xl) * 1.5)" }}>
       {/* Pass total number of items (data.length) to SimpleGridGlobal */}
-      <SimpleGridGlobal>{stats}</SimpleGridGlobal>
+      <SimpleGridGlobal w={400}>{stats}</SimpleGridGlobal>
     </div>
   );
 };

@@ -47,7 +47,7 @@ export default function ExpenseSummaryTable({ data, startIndex = 1 }: ExpenseSum
               {/* <Table.Td>{ExpenseSummary.category}</Table.Td> */}
               <Table.Td>{startIndex + index}</Table.Td>
 
-              <Table.Td>{formatDateIndonesia(expenseSummary?.date)}</Table.Td>
+              <Table.Td>{formatDateIndonesia(expenseSummary?.date_inputed)}</Table.Td>
               <Table.Td>{formatCurrency(expenseSummary?.amount)}</Table.Td>
               <Table.Td>{expenseSummary?.description}</Table.Td>
               {/* <Table.Td style={{ textAlign: "center" }} onClick={(e) => e.stopPropagation()}>

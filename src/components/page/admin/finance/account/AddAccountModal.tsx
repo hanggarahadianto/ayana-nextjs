@@ -6,8 +6,9 @@ import ButtonAdd from "@/components/common/button/buttonAdd";
 import { validationSchemaAccount } from "@/utils/validation/account-validation";
 import { initialAccountValues } from "@/utils/initialValues/initialValuesAccount";
 
-import { accountTypeOptions } from "@/constants/dictionary";
+// import { accountTypeOptions, ValidCategories } from "@/constants/dictionary";
 import { useSubmitAccount } from "@/api/account/postDataAccount";
+import { accountTypeOptions, ValidCategories } from "@/constants/dictionary";
 
 interface AddAccountModalProps {
   refetchAccountData: () => void;
@@ -43,6 +44,8 @@ const AddAccountModal = ({ refetchAccountData, companyId }: AddAccountModalProps
     [companyId]
   );
 
+  const getPureType = (label: string | null | undefined) => (label ? label.split(" ")[0] : "");
+
   return (
     <>
       <ButtonAdd onClick={open} size={"3.5rem"} />
@@ -77,7 +80,7 @@ const AddAccountModal = ({ refetchAccountData, companyId }: AddAccountModalProps
                       error={touched.name && errors.name}
                     />
 
-                    <Select
+                    {/* <Select
                       withAsterisk
                       label="Tipe Akun"
                       placeholder="Pilih tipe akun"
@@ -86,17 +89,44 @@ const AddAccountModal = ({ refetchAccountData, companyId }: AddAccountModalProps
                       onChange={(value) => setFieldValue("type", value || "")}
                       onBlur={handleBlur}
                       error={touched.type && errors.type}
+                    /> */}
+
+                    <Select
+                      withAsterisk
+                      label="Tipe Akun"
+                      placeholder="Pilih tipe akun"
+                      data={accountTypeOptions}
+                      value={values.type}
+                      onChange={(value) => {
+                        setFieldValue("type", value || "");
+                        if (value !== values.type) {
+                          setFieldValue("category", ""); // hanya reset kalau tipe benar-benar berubah
+                        }
+                      }}
+                      onBlur={handleBlur}
+                      error={touched.type && errors.type}
                     />
 
-                    <TextInput
-                      withAsterisk
-                      label="Kategori Akun"
-                      placeholder="Contoh: Operasional Kantor"
-                      value={values.category}
-                      onChange={(e) => setFieldValue("category", e.currentTarget.value)}
-                      onBlur={handleBlur}
-                      error={touched.name && errors.name}
-                    />
+                    {values.type && (
+                      <Select
+                        withAsterisk
+                        label="Kategori Akun"
+                        placeholder="Pilih kategori akun"
+                        value={values.category}
+                        onChange={(value) => setFieldValue("category", value || null)} // set null, jangan ""
+                        onBlur={handleBlur}
+                        error={touched.category && errors.category}
+                        data={
+                          Array.isArray(ValidCategories[getPureType(values.type)])
+                            ? ValidCategories[getPureType(values.type)].map((item) => ({
+                                value: item,
+                                label: item,
+                              }))
+                            : []
+                        }
+                        key={values.type} // paksa render ulang setiap kali 'type' berubah
+                      />
+                    )}
 
                     <Textarea
                       label="Deskripsi"

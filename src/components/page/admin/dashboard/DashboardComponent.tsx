@@ -27,7 +27,12 @@ export const DashboardComponent = () => {
     setExpenseTotal(newExpenseTotal ?? 0);
   };
 
+  console.log("Cash In Total:", cashInTotal);
+  console.log("Expense Total:", expenseTotal);
+
   const availableCash = cashInTotal - expenseTotal;
+
+  console.log("Available Cash:", availableCash);
 
   return (
     <SimpleGridGlobal cols={1}>

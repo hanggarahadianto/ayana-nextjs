@@ -31,8 +31,6 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
         company_id: companyId || "",
       };
 
-      console.log("Submitting TransactionCategory:", payload);
-
       postData(payload, {
         onSuccess: () => {
           refetchTransactionCategoryData();
@@ -53,7 +51,7 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
 
       <Modal opened={opened} onClose={close} size="lg" yOffset="100px" title="Tambah Kategori Transaksi Baru">
         <Formik
-          initialValues={initialValuesTransactionCategoryCreate}
+          initialValues={initialValuesTransactionCategoryCreate(companyId)}
           validationSchema={validationSchemaTransactionCategory}
           onSubmit={handleSubmit}
         >
@@ -74,21 +72,19 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
                       error={touched.name && errors.name}
                     />
                     <SelectFinanceAccount
-                      companyId={companyId ?? ""}
+                      companyId={companyId}
                       onSelect={(selected) => {
                         setFieldValue("debit_account_id", selected.id);
+                        setFieldValue("debit_account_type", selected.type);
                         setFieldValue("category", selected.category);
-                        // setFieldValue("debit_account_code", selected.code); // kalau ada field ini
-                        // setFieldValue("debit_account_type", selected.type); // atau bisa pakai useState tambahan
                       }}
                       label={"Tipe Akun Debit"}
                     />
                     <SelectFinanceAccount
-                      companyId={companyId ?? ""}
+                      companyId={companyId}
                       onSelect={(selected) => {
                         setFieldValue("credit_account_id", selected.id);
-                        // setFieldValue("debit_account_code", selected.code); // kalau ada field ini
-                        // setFieldValue("debit_account_type", selected.type); // atau bisa pakai useState tambahan
+                        setFieldValue("credit_account_type", selected.type);
                       }}
                       label={"Tipe Akun Kredit"}
                     />

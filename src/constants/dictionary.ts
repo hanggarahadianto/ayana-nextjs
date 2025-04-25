@@ -64,11 +64,11 @@ export const investmentOption = [
 ];
 
 export const accountTypeOptions = [
-  { value: "Asset (Aset)", label: "Asset (Aset)" },
-  { value: "Liability (Kewajiban)", label: "Liability (Kewajiban)" },
-  { value: "Equity (Ekuitas)", label: "Equity (Ekuitas)" },
-  { value: "Revenue (Pendapatan)", label: "Revenue (Pendapatan)" },
-  { value: "Expense (Beban)", label: "Expense (Beban)" },
+  { value: "Asset", label: "Asset (Aset)" },
+  { value: "Liability", label: "Liability (Kewajiban)" },
+  { value: "Equity", label: "Equity (Ekuitas)" },
+  { value: "Revenue", label: "Revenue (Pendapatan)" },
+  { value: "Expense", label: "Expense (Beban)" },
 ];
 
 export const transactionStatusOption = {
@@ -95,3 +95,11 @@ export const transactionStatusOption = {
 } as const;
 
 export type TransactionStatus = keyof typeof transactionStatusOption;
+
+export const ValidCategories: Record<string, string[]> = {
+  Asset: ["Kas & Bank", "Piutang", "Perlengkapan", "Aset Tetap"],
+  Liability: ["Utang Dagang", "Pinjaman", "Kewajiban Lancar", "Pajak", "Pembayaran Bagi Hasil", "Hutang Usaha"],
+  Equity: ["Modal", "Laba Ditahan"],
+  Revenue: ["Penjualan", "Jasa", "Pendapatan Dari Bunga"],
+  Expense: ["Operasional", "Utilitas", "Non Operasional"],
+};

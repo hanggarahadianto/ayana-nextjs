@@ -4,8 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 
 interface ISelectFinanceAccountProps {
-  companyId: string;
-  onSelect: (selected: { id: string; code: number; type: string; category: string }) => void;
+  companyId?: string;
+  onSelect: (selected: { id: string; code: number; type: string; category: string; name: string }) => void;
   label: string;
 }
 
@@ -13,7 +13,7 @@ export default function SelectFinanceAccount({ companyId, onSelect, label }: ISe
   //   console.log("company id", companyId);
   const { data: accountData, isLoading } = useQuery({
     queryKey: ["getAccountData", companyId],
-    queryFn: () => getDataAccount(companyId, 1, 1000),
+    queryFn: () => getDataAccount(companyId || "", 1, 1000),
     refetchOnWindowFocus: false,
     enabled: !!companyId,
   });
@@ -32,6 +32,7 @@ export default function SelectFinanceAccount({ companyId, onSelect, label }: ISe
         code: account.code,
         type: account.type,
         category: account.category,
+        name: account.name,
       });
     }
   };

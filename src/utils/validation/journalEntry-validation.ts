@@ -26,5 +26,12 @@ export const validationSchemaJournalEntry = yup.object().shape({
     .required("Tanggal input wajib diisi")
     .test("is-date", "Format tanggal tidak valid", (val) => !isNaN(Date.parse(val || ""))),
 
-  // company_id: yup.string().uuid("ID perusahaan tidak valid").required("Perusahaan wajib dipilih"),
+  due_date: yup.string().when("status", {
+    is: "unpaid",
+    then: (schema) =>
+      schema
+        .required("Jatuh tempo wajib diisi jika status pembayaran adalah tempo")
+        .test("is-date", "Format tanggal tidak valid", (val) => !isNaN(Date.parse(val || ""))),
+    otherwise: (schema) => schema.notRequired(),
+  }),
 });

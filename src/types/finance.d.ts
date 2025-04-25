@@ -28,7 +28,7 @@ interface IExpenseSummaryItem {
   id: number;
   description: string;
   amount: number;
-  date: string;
+  date_inputed: string;
   status: string;
 }
 
