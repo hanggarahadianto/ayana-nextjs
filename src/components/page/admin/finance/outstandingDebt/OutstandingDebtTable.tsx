@@ -35,8 +35,8 @@ export default function OutstandingDebtTable({ data, startIndex = 1 }: Outstandi
           <Table.Tr>
             <Table.Th style={{ textAlign: "center", width: 80, minWidth: 80 }}>No</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Invoice</Table.Th>
-            <Table.Th style={{ textAlign: "center", width: 300, minWidth: 300 }}>Partner</Table.Th>
-            <Table.Th style={{ textAlign: "center", width: 160, minWidth: 160 }}>Amount</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 280, minWidth: 280 }}>Partner</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 170, minWidth: 170 }}>Amount</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 200, minWidth: 200 }}>Tanggal Masuk</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 200, minWidth: 200 }}>Tanggal Jatuh Tempo</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 200, minWidth: 200 }}>Status</Table.Th>
