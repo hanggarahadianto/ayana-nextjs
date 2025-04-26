@@ -80,7 +80,7 @@ const CreateJournalEntryModal = ({ transactionType, companyId }: CreateJournalEn
       <Modal opened={opened} onClose={close} size="xl" yOffset="100px">
         <Formik
           initialValues={initialValuesJournalEntry(companyId, transactionType)}
-          validationSchema={validationSchemaJournalEntry}
+          validationSchema={validationSchemaJournalEntry(transactionType)}
           validateOnBlur={false}
           enableReinitialize
           validateOnChange

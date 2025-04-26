@@ -12,12 +12,14 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 import { OutstandingDebtStats } from "@/components/common/stats/OutstandingDebtStats";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import GlobalTab from "@/components/common/tab/TabGlobal";
+import { AssetStats } from "@/components/common/stats/AssetStats";
 
 export const DashboardComponent = () => {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
 
   const [cashInTotal, setCashInTotal] = useState(0);
   const [expenseTotal, setExpenseTotal] = useState(0);
+  const [assetTotal, setAssetTotal] = useState(0);
 
   const handleCashInChange = (newCashInTotal: number | null | undefined) => {
     setCashInTotal(newCashInTotal ?? 0);
@@ -26,11 +28,14 @@ export const DashboardComponent = () => {
   const handleExpenseChange = (newExpenseTotal: number | null | undefined) => {
     setExpenseTotal(newExpenseTotal ?? 0);
   };
+  const handleAssetChange = (newAssetTotal: number | null | undefined) => {
+    setAssetTotal(newAssetTotal ?? 0);
+  };
 
   console.log("Cash In Total:", cashInTotal);
   console.log("Expense Total:", expenseTotal);
 
-  const availableCash = cashInTotal - expenseTotal;
+  const availableCash = cashInTotal - expenseTotal - assetTotal;
 
   console.log("Available Cash:", availableCash);
 
@@ -46,6 +51,9 @@ export const DashboardComponent = () => {
         </Paper>
         <Paper shadow="sm" radius="md" p="md" withBorder>
           <CashInStats companyId={activeTab?.id} onCashInChange={handleCashInChange} />
+        </Paper>
+        <Paper shadow="sm" radius="md" p="md" withBorder>
+          <AssetStats companyId={activeTab?.id} onAssetChange={handleAssetChange} />
         </Paper>
         <Paper shadow="sm" radius="md" p="md" withBorder>
           <OutstandingDebtStats companyId={activeTab?.id} />
