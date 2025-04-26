@@ -1,7 +1,6 @@
 import { getDataTranasctionCategory } from "@/api/transaction-category/getDataTransactionCategory";
 import { Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
 
 interface ISelectFinanceTransactionCategoryProps {
   companyId?: string;
@@ -23,12 +22,6 @@ export default function SelectFinanceTransactionCategory({
     refetchOnWindowFocus: false,
     enabled: !!companyId,
   });
-
-  // const TransactionCategorys = useMemo(() => {
-  //   return Array.isArray(TransactionCategoryData?.data)
-  //     ? [...TransactionCategoryData.data].sort((a, b) => a.code - b.code) // sort descending by code
-  //     : [];
-  // }, [TransactionCategoryData]);
 
   const handleSelect = (value: string | null) => {
     const TransactionCategory = value ? TransactionCategoryData?.data.find((acc) => acc.id === value) : null;

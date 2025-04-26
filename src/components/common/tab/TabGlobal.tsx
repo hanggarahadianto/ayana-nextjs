@@ -13,8 +13,8 @@ interface GlobalTabProps {
 const GlobalTab = ({ data, activeTab, onTabChange }: GlobalTabProps) => {
   return (
     <Tabs
-      value={activeTab}
-      onChange={(value: string | null) => {
+      value={activeTab ?? ""}
+      onChange={(value) => {
         const selected = data.find((item) => item.company_code === value);
         if (selected) onTabChange(selected);
       }}

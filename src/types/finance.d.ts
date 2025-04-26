@@ -75,3 +75,33 @@ interface IDebtSummaryResponse {
   message: string;
   status: string;
 }
+
+interface IAssetSummaryItem {
+  id: string;
+  invoice: string;
+  description: string;
+  amount: number;
+  partner: string;
+  transaction_type: string;
+  status: string;
+  company_id: string;
+  date_inputed: string;
+  due_date: string;
+  is_repaid: boolean;
+  installment: number;
+  note: string;
+}
+
+interface IAssetSummaryData {
+  assetList: IAssetSummaryItem[];
+  total_asset: number;
+  page: number;
+  limit: number;
+  total: number;
+}
+
+interface IAssetSummaryResponse {
+  data: IAssetSummaryData;
+  message: string;
+  status: string;
+}

@@ -47,7 +47,7 @@ export const GetCashSummaryData = ({ companyId, companyName, transactionType }: 
         <Stack gap="md">
           <Group justify="space-between">
             <Text size="lg" fw={600}>
-              Ringkasan Kas {companyName}
+              Pemasukan {companyName}
             </Text>
             <Stack p={20}>
               <CreateJournalEntryModal transactionType={"payin"} companyId={companyId} />

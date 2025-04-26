@@ -6,6 +6,7 @@ import { GetCashSummaryData } from "../finance/cashIn/GetCashSummaryData";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import GlobalTab from "@/components/common/tab/TabGlobal";
+import { GetAssetSummaryData } from "../finance/asset/GetAssetSummaryData";
 
 export default function PayinComponent() {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
@@ -40,6 +41,9 @@ export default function PayinComponent() {
       </Tabs> */}
       <SimpleGridGlobal cols={1}>
         <GetCashSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} transactionType="payin" />
+        {/* <GetCashSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} transactionType="payin" /> */}
+        <GetAssetSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} transactionType="payin" />
+
         {/* <TableTransaction
           data={payoutData?.data || []}
           onRowClick={handleRowClick}

@@ -46,6 +46,10 @@ const CreateJournalEntryModal = ({ transactionType, companyId }: CreateJournalEn
                 queryKey: ["getOutstandingDebtByCompanyId", companyId],
                 exact: false,
               }),
+              queryClient.refetchQueries({
+                queryKey: ["getAssetSummaryData", companyId],
+                exact: false,
+              }),
             ]);
 
             close(); // Tutup modal setelah sukses
@@ -183,7 +187,6 @@ const CreateJournalEntryModal = ({ transactionType, companyId }: CreateJournalEn
                           { value: "unpaid", label: "Tempo" },
                         ]}
                         onChange={(value: string | null) => {
-                          // Type guard untuk memastikan value valid
                           if (value === "paid" || value === "unpaid") {
                             setFieldValue("status", value);
                             setFieldValue("is_repaid", value === "paid");
