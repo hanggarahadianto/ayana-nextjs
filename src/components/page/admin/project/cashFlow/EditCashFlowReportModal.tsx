@@ -176,6 +176,7 @@ const EditCashFlowReportModal = ({
 
             return (
               <SimpleGrid p={20}>
+                <LoadingGlobal visible={isLoadingUpdateDataCashFlow || isLoadingUpdateDataGoods} />
                 <Form>
                   <Grid>
                     <Grid.Col span={8}>
@@ -245,6 +246,8 @@ const EditCashFlowReportModal = ({
                     isCreateMode={false}
                     error={(errors.good as any) || []}
                     touched={(touched.good as any) || []}
+                    page={page}
+                    limit={limit}
                   />
 
                   {totalPages > 0 && (

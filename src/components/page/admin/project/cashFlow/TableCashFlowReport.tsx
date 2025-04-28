@@ -30,6 +30,8 @@ const CashFlowReportTable: React.FC<CashFlowReportTableProps> = ({ groupedByWeek
                       <Table highlightOnHover withTableBorder withColumnBorders>
                         <Table.Thead>
                           <Table.Tr>
+                            <Table.Th style={{ width: "4%" }}>No</Table.Th>
+
                             <Table.Th style={{ width: "25%" }}>PENGELUARAN</Table.Th>
                             <Table.Th style={{ width: "6%" }}>KUANTITAS</Table.Th>
                             <Table.Th style={{ width: "10%" }}>SATUAN</Table.Th>
@@ -49,6 +51,9 @@ const CashFlowReportTable: React.FC<CashFlowReportTableProps> = ({ groupedByWeek
                                   color: good.status === "tempo" ? "#fff" : undefined, // warna teks agar tetap kebaca
                                 }}
                               >
+                                <Table.Td>
+                                  <Text variant="outline">{index + 1}</Text>
+                                </Table.Td>
                                 <Table.Td>
                                   <Text variant="outline">{good.good_name}</Text>
                                 </Table.Td>

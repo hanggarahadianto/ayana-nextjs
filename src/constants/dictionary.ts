@@ -39,6 +39,7 @@ export const satuan: string[] = [
   "Liter",
   "Rol",
   "Batang",
+  "Kol",
   "M2",
   "Ton",
   "Pail",

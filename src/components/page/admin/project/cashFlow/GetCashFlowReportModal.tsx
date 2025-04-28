@@ -46,8 +46,8 @@ const GetCashFlowReportModal = ({
     isLoading: isLoadingGoodsdata,
     refetch: refetchGoodsData,
   } = useQuery({
-    queryKey: ["getGoodsData", cashFlowData], // Query key berubah agar refetch bekerja dengan baik
-    queryFn: () => getDataGoods(cashFlowData), // Kirim seluruh `cashFlowData` sebagai array
+    queryKey: ["getGoodsData", cashFlowData],
+    queryFn: () => getDataGoods(cashFlowData),
     enabled: cashFlowData.length > 0, // Hanya jalankan jika ada data
     refetchOnWindowFocus: false,
   });
