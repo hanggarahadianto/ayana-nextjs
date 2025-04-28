@@ -1,4 +1,4 @@
-import { getCashSummary } from "@/api/finance/getCashSummary";
+import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import { StatItem, StatsGrid } from "@/components/common/stats/StatsGrid";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
@@ -8,15 +8,22 @@ type CashInStatsProps = {
   onCashInChange: (totalCashIn: number) => void;
 };
 
-export const CashInStats = ({ companyId, onCashInChange }: CashInStatsProps) => {
-  const { data: cashSummaryOnlyData, isPending: isLoadingSummary } = useQuery({
-    queryKey: ["getSummaryOnlyData", companyId],
-    queryFn: () => getCashSummary(companyId || "", 1, 10, "", true),
+export const CashinStats = ({ companyId, onCashInChange }: CashInStatsProps) => {
+  const { data: cashinSummaryOnly, isPending: isLoadingSummary } = useQuery({
+    queryKey: ["getCashinAsset", companyId],
+    queryFn: () =>
+      getAssetSummary({
+        companyId: companyId || "",
+        page: 1,
+        limit: 10,
+        assetType: "cashin",
+        summaryOnly: true,
+      }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
 
-  const totalCashIn = cashSummaryOnlyData?.data?.total_cashin ?? 0;
+  const totalCashIn = cashinSummaryOnly?.data?.total_asset ?? 0;
   useEffect(() => {
     onCashInChange(totalCashIn);
   }, [totalCashIn, onCashInChange]);

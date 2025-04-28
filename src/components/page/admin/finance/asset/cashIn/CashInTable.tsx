@@ -1,16 +1,13 @@
 import { formatCurrency } from "@/utils/formatCurrency";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
-import { Group, ScrollArea, Table, ThemeIcon } from "@mantine/core";
+import { ScrollArea, Table } from "@mantine/core";
 
-interface AssetSummaryTableProps {
+interface CashSummaryTableProps {
   data: IAssetSummaryItem[];
-  onRowClick?: (AssetSummary: IAssetSummaryItem) => void;
-  onDelete?: (id: string) => void;
   startIndex?: number;
 }
 
-export default function AssetSummaryTable({ data, startIndex = 1 }: AssetSummaryTableProps) {
-  // console.log("data AssetSummary table", data);
+export const CashSummaryTable = ({ data, startIndex = 1 }: CashSummaryTableProps) => {
   return (
     <ScrollArea style={{ minHeight: 400 }} p={"xl"}>
       <Table
@@ -35,29 +32,28 @@ export default function AssetSummaryTable({ data, startIndex = 1 }: AssetSummary
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {data.map((AssetSummary: IAssetSummaryItem, index: number) => (
+          {data.map((cashSummary: IAssetSummaryItem, index: number) => (
             <Table.Tr
-              key={AssetSummary.id}
-              // onClick={() => onRowClick(AssetSummary)}
+              key={cashSummary.id}
+              // onClick={() => onRowClick(cashSummary)}
               style={{ cursor: "pointer" }}
             >
-              {/* <Table.Td>{AssetSummary.code}</Table.Td>
-              <Table.Td>{AssetSummary.name}</Table.Td>
-              {/* <Table.Td>{AssetSummary.type}</Table.Td> */}
-              {/* <Table.Td>{AssetSummary.category}</Table.Td> */}
+              {/* <Table.Td>{cashSummary.code}</Table.Td>
+              <Table.Td>{cashSummary.name}</Table.Td>
+              {/* <Table.Td>{cashSummary.type}</Table.Td> */}
+              {/* <Table.Td>{cashSummary.category}</Table.Td> */}
               <Table.Td>{startIndex + index}</Table.Td>
-
-              <Table.Td>{formatDateIndonesia(AssetSummary?.date_inputed)}</Table.Td>
-              <Table.Td>{formatCurrency(AssetSummary?.amount)}</Table.Td>
-              <Table.Td>{AssetSummary?.description}</Table.Td>
+              <Table.Td>{formatDateIndonesia(cashSummary?.date_inputed)}</Table.Td>
+              <Table.Td>{formatCurrency(cashSummary?.amount)}</Table.Td>
+              <Table.Td>{cashSummary?.note}</Table.Td>
               {/* <Table.Td style={{ textAlign: "center" }} onClick={(e) => e.stopPropagation()}>
                 <Group ml={4}>
-                  <PayAssetSummaryButton AssetSummary={AssetSummary} refetchAssetSummaryData={refetchAssetSummaryData} />
-                  <EditAssetSummaryModal AssetSummary={AssetSummary} refetchAssetSummaryData={refetchAssetSummaryData} />
+                  <PaycashSummaryButton cashSummary={cashSummary} refetchcashSummaryData={refetchcashSummaryData} />
+                  <EditcashSummaryModal cashSummary={cashSummary} refetchcashSummaryData={refetchcashSummaryData} />
                   <ButtonDeleteWithConfirmation
-                    id={AssetSummary.id}
+                    id={cashSummary.id}
                     onDelete={onDelete}
-                    description={`Apakah Anda yakin ingin menghapus invoice ${AssetSummary.invoice}?`}
+                    description={`Apakah Anda yakin ingin menghapus invoice ${cashSummary.invoice}?`}
                     size={2}
                   />
                 </Group>
@@ -68,4 +64,4 @@ export default function AssetSummaryTable({ data, startIndex = 1 }: AssetSummary
       </Table>
     </ScrollArea>
   );
-}
+};

@@ -15,9 +15,8 @@ export default function SelectFinanceTransactionCategory({
   label,
   transactionType,
 }: ISelectFinanceTransactionCategoryProps) {
-  //   console.log("company id", companyId);
   const { data: TransactionCategoryData, isLoading } = useQuery({
-    queryKey: ["getTransactionCategoryData", companyId],
+    queryKey: ["getTransactionCategoryData", companyId, transactionType],
     queryFn: () => getDataTranasctionCategory(companyId as string, 1, 1000, transactionType),
     refetchOnWindowFocus: false,
     enabled: !!companyId,

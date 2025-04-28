@@ -28,8 +28,6 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
 
       return await getOutstandingDebt({
         companyId,
-        transactionType: "payin",
-        transactionStatus: "unpaid",
         page: pageOutstandingDebt,
         limit,
         // ⛔️ Tidak perlu kirim summaryOnly karena default-nya false

@@ -3,8 +3,10 @@ interface ITransactionCategory {
   name: string;
   debit_account_id: string;
   debit_account_name: string;
+  debit_account_type: string;
   credit_account_id: string;
   credit_account_name: string;
+  credit_account_type: string;
   category: string;
   description: string;
   company_id: string;

@@ -1,5 +1,6 @@
 interface IJournalEntry {
   id: string;
+  transaction_id: string;
   invoice: string;
   description: string;
   transaction_category_id: string;
@@ -18,6 +19,7 @@ interface IJournalEntry {
   company_id: string;
 }
 interface IJournalEntryCreate {
+  transaction_id: string;
   invoice: string;
   description: string;
   transaction_category_id: string;
@@ -28,7 +30,7 @@ interface IJournalEntryCreate {
   date_inputed: string | null;
   due_date: string | null;
   installment: number;
-  status: string;
+
   note: string;
   is_repaid: boolean;
   company_id: string;

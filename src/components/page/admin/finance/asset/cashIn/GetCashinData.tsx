@@ -1,48 +1,47 @@
 import { Card, Text, Group, Stack, Loader, Box, Pagination } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
-import { getCashSummary } from "@/api/finance/getCashSummary";
+import { useState } from "react";
+
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { formatCurrency } from "@/utils/formatCurrency";
-import CreateJournalEntryModal from "../journalEntry/CreateJournalEntryModal";
-import { CashSummaryTable } from "./CashSummaryTable";
+import CreateJournalEntryModal from "../../journalEntry/CreateJournalEntryModal";
+import { CashSummaryTable } from "./CashInTable";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
+import { getAssetSummary } from "@/api/finance/getAssetSummary";
 
 interface CashSummaryCardProps {
   companyId: string;
   companyName?: string;
-  transactionType?: string;
+  assetType?: string;
 }
 
-export const GetCashSummaryData = ({ companyId, companyName, transactionType }: CashSummaryCardProps) => {
+export const GetCashinData = ({ companyId, companyName, assetType }: CashSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const limit = 10;
 
-  const {
-    data: cashSummaryData,
-    isPending: isLoadingCashSummaryData,
-    refetch: refetchCashSummaryData,
-  } = useQuery({
-    queryKey: ["getCashSummaryData", companyId, page],
-    queryFn: () => getCashSummary(companyId, page, limit, transactionType),
+  const { data: cashinSummaryData, isPending: isLoadingCashinData } = useQuery({
+    queryKey: ["getCashinData", companyId, page, assetType],
+    queryFn: () =>
+      getAssetSummary({
+        companyId,
+        page,
+        limit,
+        assetType,
+      }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
-  const cashList = cashSummaryData?.data.cashList;
+  const cashList = cashinSummaryData?.data.assetList;
 
-  // const inflowList = cashList?.filter((item) => item?.category === "inflow");
-  // const inflowList = cashList?.filter((item) => item?.category === "inflow");
-  const outflowList = cashList?.filter((item) => item?.category === "outflow");
-
-  const totalPages = Math.ceil((cashSummaryData?.data?.total ?? 0) / limit);
+  const totalPages = Math.ceil((cashinSummaryData?.data?.total ?? 0) / limit);
 
   const startIndex = (page - 1) * limit + 1;
-  const endIndex = Math.min(page * limit, cashSummaryData?.data.total || 0);
+  const endIndex = Math.min(page * limit, cashinSummaryData?.data.total || 0);
 
   return (
     <SimpleGridGlobal cols={1}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
-        <LoadingGlobal visible={isLoadingCashSummaryData} />
+        <LoadingGlobal visible={isLoadingCashinData} />
 
         <Stack gap="md">
           <Group justify="space-between">
@@ -67,7 +66,7 @@ export const GetCashSummaryData = ({ companyId, companyName, transactionType }: 
                 Cash In
               </Text>
               <Text fw={800} size="xl" c="green">
-                {formatCurrency(cashSummaryData?.data?.total_cashin ?? 0)}
+                {formatCurrency(cashinSummaryData?.data?.total_asset ?? 0)}
               </Text>
             </Group>
             <CashSummaryTable data={cashList ?? []} startIndex={startIndex} />
@@ -76,7 +75,7 @@ export const GetCashSummaryData = ({ companyId, companyName, transactionType }: 
             <Group gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
               <Pagination total={totalPages} value={page} onChange={setPage} />
               <Text size="sm" c="dimmed">
-                Menampilkan {startIndex} sampai {endIndex} dari {cashSummaryData?.data.total} data
+                Menampilkan {startIndex} sampai {endIndex} dari {cashinSummaryData?.data.total} data
               </Text>
             </Group>
           </Box>

@@ -1,16 +1,9 @@
 "use client";
 
-import { IconArrowDownRight, IconArrowUpRight, IconCoin, IconDiscount2, IconReceipt2, IconUserPlus } from "@tabler/icons-react";
+import { IconArrowDownRight, IconArrowUpRight, IconCoin, IconDiscount2, IconHome, IconReceipt2, IconUserPlus } from "@tabler/icons-react";
 import { Group, Paper, Text } from "@mantine/core";
 import { formatCurrency } from "@/utils/formatCurrency";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
-
-const icons = {
-  user: IconUserPlus,
-  discount: IconDiscount2,
-  receipt: IconReceipt2,
-  coin: IconCoin,
-};
 
 export type StatItem = {
   title: string;
@@ -24,32 +17,66 @@ type StatsGridProps = {
   data: StatItem[];
 };
 
+const icons = {
+  user: IconUserPlus,
+  discount: IconDiscount2,
+  receipt: IconReceipt2,
+  coin: IconCoin,
+  home: IconHome, // <-- tambahkan ini
+};
+
 export const StatsGrid = ({ data }: StatsGridProps) => {
   const stats = data.map((stat, index) => {
     const Icon = icons[stat.icon];
     const DiffIcon = stat.diff > 0 ? IconArrowUpRight : IconArrowDownRight;
 
     return (
-      <div key={index}>
-        <Text size="xs" c="dimmed" style={{ fontWeight: 700, textTransform: "uppercase" }} w={400}>
-          {stat.title}
-        </Text>
-        <Group align="flex-end" gap="xs" mt={25}>
-          <Group align="flex-end" gap="xs" mt={25} ml={-12}>
-            <Text c={Number(stat.value) < 0 ? "red.7" : stat.color} style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1 }} w={300}>
-              {formatCurrency(Number(stat.value))}
+      <div key={index} style={{ marginBottom: "20px" }}>
+        {/* Icon */}
+        <Group p="center" w={200}>
+          <Icon size={40} color={stat.color} />
+          <Group
+            w="100%"
+            justify="space-between"
+            align="center"
+            style={{ padding: "10px 15px", borderRadius: "8px", marginBottom: "15px" }}
+          >
+            <Text size="xs" c="dimmed" style={{ fontWeight: 700, textTransform: "uppercase" }}>
+              {stat.title}
             </Text>
           </Group>
         </Group>
-        <Text fz="xs" c="dimmed" mt={7} w={200}>
-          Compared to previous month
-        </Text>
+
+        {/* Title */}
+
+        {/* Value */}
+        <Group p="center" align="center" gap="xs" style={{ marginBottom: "10px" }}>
+          <Text
+            c={Number(stat.value) < 0 ? "red.7" : stat.color}
+            style={{
+              fontSize: "24px",
+              fontWeight: 700,
+              lineHeight: 1.2,
+              textAlign: "center",
+            }}
+          >
+            {formatCurrency(Number(stat.value))}
+          </Text>
+        </Group>
+
+        {/* Comparison Text */}
+        <Group w={200}>
+          <Text fz="xs" c="dimmed" style={{ marginTop: "5px" }}>
+            Compared to previous month
+          </Text>
+        </Group>
       </div>
     );
   });
 
   return (
-    <div style={{ padding: "calc(var(--mantine-spacing-xl) * 1.5)" }}>
+    <div>
+      {/* <div style={{ padding: "calc(var(--mantine-spacing-xl) * 1.5)" }}> */}
       {/* Pass total number of items (data.length) to SimpleGridGlobal */}
       <SimpleGridGlobal w={400}>{stats}</SimpleGridGlobal>
     </div>

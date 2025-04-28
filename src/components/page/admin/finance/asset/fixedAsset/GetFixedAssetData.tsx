@@ -1,31 +1,31 @@
 import { Card, Text, Group, Stack, Box, Pagination } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { formatCurrency } from "@/utils/formatCurrency";
-import CreateJournalEntryModal from "../journalEntry/CreateJournalEntryModal";
+import CreateJournalEntryModal from "../../journalEntry/CreateJournalEntryModal";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
-import AssetSummaryTable from "./AssetSummaryTable";
+import FixedAssetTable from "./FixedAssetTable";
 
 interface AssetSummaryCardProps {
   companyId: string;
   companyName?: string;
-  transactionType?: string;
+  assetType?: string;
 }
 
-export const GetAssetSummaryData = ({ companyId, companyName, transactionType }: AssetSummaryCardProps) => {
+export const GetFixedAssetData = ({ companyId, companyName, assetType }: AssetSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const limit = 10;
 
   const { data: assetSummaryData, isPending } = useQuery({
-    queryKey: ["getAssetSummaryData", companyId, page, transactionType],
+    queryKey: ["getFixedAssetData", companyId, page, assetType],
     queryFn: () =>
       getAssetSummary({
         companyId,
         page,
         limit,
-        transactionType,
+        assetType,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -64,15 +64,14 @@ export const GetAssetSummaryData = ({ companyId, companyName, transactionType }:
           >
             <Group justify="space-between" p={20}>
               <Text fw={600} mb="xs" mt={20}>
-                Asset In
+                Fixed Asset
               </Text>
               <Text fw={800} size="xl" c="green">
                 {formatCurrency(totalAssetIn)}
               </Text>
             </Group>
 
-            {/* Tempat untuk table */}
-            <AssetSummaryTable data={assetList} startIndex={startIndex} />
+            <FixedAssetTable data={assetList} startIndex={startIndex} />
 
             <Group gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
               <Pagination total={totalPages} value={page} onChange={setPage} />

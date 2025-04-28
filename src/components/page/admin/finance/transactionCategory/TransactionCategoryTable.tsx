@@ -52,8 +52,8 @@ export default function TransactionCategoryTable({
               <Table.Td>{TransactionCategory.name}</Table.Td>
               {/* <Table.Td>{TransactionCategory.type}</Table.Td> */}
               <Table.Td>{TransactionCategory.category}</Table.Td>
-              <Table.Td>{TransactionCategory.debit_account.name}</Table.Td>
-              <Table.Td>{TransactionCategory.credit_account.name}</Table.Td>
+              <Table.Td>{TransactionCategory.debit_account_type}</Table.Td>
+              <Table.Td>{TransactionCategory.credit_account.type}</Table.Td>
               <Table.Td>{TransactionCategory.description}</Table.Td>
               {/* <Table.Td style={{ textAlign: "center" }} onClick={(e) => e.stopPropagation()}>
                 <Group ml={4}>

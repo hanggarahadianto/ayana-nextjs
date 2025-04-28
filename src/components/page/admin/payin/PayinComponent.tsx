@@ -1,12 +1,11 @@
 "use client";
-import { SimpleGrid, Stack, Table, Tabs } from "@mantine/core";
 
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
-import { GetCashSummaryData } from "../finance/cashIn/GetCashSummaryData";
+import { GetCashinData } from "../finance/asset/cashIn/GetCashinData";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import GlobalTab from "@/components/common/tab/TabGlobal";
-import { GetAssetSummaryData } from "../finance/asset/GetAssetSummaryData";
+import { GetFixedAssetData } from "../finance/asset/fixedAsset/GetFixedAssetData";
 
 export default function PayinComponent() {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
@@ -16,43 +15,11 @@ export default function PayinComponent() {
       <LoadingGlobal visible={isLoadingCompanies} />
       <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
 
-      {/* <Tabs
-        value={activeTab?.company_code}
-        onChange={(value: string | null) => {
-          const selectedCompany = companies.find((company) => company.company_code === value);
-          if (selectedCompany) {
-            handleTabChange(selectedCompany);
-          }
-        }}
-      >
-        <Tabs.List>
-          {companies.map((company: ICompany) => (
-            <Tabs.Tab key={company.company_code} value={company.company_code}>
-              {company.title}
-            </Tabs.Tab>
-          ))}
-        </Tabs.List>
-
-        {companies.map((company: ICompany) => (
-          <Tabs.Panel key={company.company_code} value={company.company_code}>
-            <Stack p={12} justify="flex-end" align="flex-end" style={{ width: "100%" }}></Stack>
-          </Tabs.Panel>
-        ))}
-      </Tabs> */}
       <SimpleGridGlobal cols={1}>
-        <GetCashSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} transactionType="payin" />
-        {/* <GetCashSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} transactionType="payin" /> */}
-        <GetAssetSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} transactionType="payin" />
+        <GetCashinData companyId={activeTab?.id || ""} companyName={activeTab?.title} assetType="cashin" />
 
-        {/* <TableTransaction
-          data={payoutData?.data || []}
-          onRowClick={handleRowClick}
-          onDelete={handleDeletePayoutClick}
-          refetchPayoutData={refetchPayoutData}
-        /> */}
-        {/* {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />} */}
+        <GetFixedAssetData companyId={activeTab?.id || ""} companyName={activeTab?.title} assetType="fixed_asset" />
       </SimpleGridGlobal>
-      {/* <OutstandingDebtCard companyName={activeTab?.title} OutstandingDebtData={undefined} /> */}
     </SimpleGridGlobal>
   );
 }

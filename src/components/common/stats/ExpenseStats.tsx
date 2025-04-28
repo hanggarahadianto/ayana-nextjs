@@ -1,4 +1,3 @@
-import { getCashSummary } from "@/api/finance/getCashSummary";
 import { getExpenseSummary } from "@/api/finance/getExpenseSummary";
 import { StatItem, StatsGrid } from "@/components/common/stats/StatsGrid";
 import { useQuery } from "@tanstack/react-query";
@@ -17,7 +16,6 @@ export const ExpenseStats = ({ companyId, onExpenseChange }: ExpenseStatsProps) 
         companyId: companyId || "",
         page: 1,
         limit: 10,
-        transactionType: "",
         summaryOnly: true,
       }),
     enabled: !!companyId,

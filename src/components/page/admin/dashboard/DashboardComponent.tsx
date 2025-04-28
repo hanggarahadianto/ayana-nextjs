@@ -1,18 +1,17 @@
 "use client";
 
-import { Tabs, Paper } from "@mantine/core";
+import { Tabs, Paper, Card } from "@mantine/core";
 import { useState } from "react";
 
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
-import { GetDashboardData } from "./CashSummaryCard";
-import { CashInStats } from "../../../common/stats/CashInStats";
 import { ExpenseStats } from "../../../common/stats/ExpenseStats";
 import { AvaialbleCashStats } from "../../../common/stats/AvailableCashStats";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { OutstandingDebtStats } from "@/components/common/stats/OutstandingDebtStats";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import GlobalTab from "@/components/common/tab/TabGlobal";
-import { AssetStats } from "@/components/common/stats/AssetStats";
+import { FixedAssetStats } from "@/components/common/stats/FixedAssetStats";
+import { CashinStats } from "@/components/common/stats/CashInStats";
 
 export const DashboardComponent = () => {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
@@ -32,12 +31,7 @@ export const DashboardComponent = () => {
     setAssetTotal(newAssetTotal ?? 0);
   };
 
-  console.log("Cash In Total:", cashInTotal);
-  console.log("Expense Total:", expenseTotal);
-
   const availableCash = cashInTotal - expenseTotal - assetTotal;
-
-  console.log("Available Cash:", availableCash);
 
   return (
     <SimpleGridGlobal cols={1}>
@@ -46,15 +40,36 @@ export const DashboardComponent = () => {
       <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
 
       <SimpleGridGlobal p={40}>
-        <Paper shadow="sm" radius="md" p="md" withBorder>
+        {/* <Paper shadow="sm" radius="md" p="md" withBorder>
           <AvaialbleCashStats data={availableCash} />
         </Paper>
         <Paper shadow="sm" radius="md" p="md" withBorder>
-          <CashInStats companyId={activeTab?.id} onCashInChange={handleCashInChange} />
+          <FixedAssetStats companyId={activeTab?.id} onAssetChange={handleAssetChange} />
         </Paper>
         <Paper shadow="sm" radius="md" p="md" withBorder>
-          <AssetStats companyId={activeTab?.id} onAssetChange={handleAssetChange} />
-        </Paper>
+          <CashinStats companyId={activeTab?.id} onCashInChange={handleCashInChange} />
+        </Paper> */}
+
+        <Card shadow="sm" radius="md" p="md" withBorder>
+          <Card.Section>
+            <Paper shadow="sm" radius="md" p="md" withBorder>
+              <AvaialbleCashStats data={availableCash} />
+            </Paper>
+          </Card.Section>
+
+          <Card.Section mt="md">
+            <Paper shadow="sm" radius="md" p="md" withBorder>
+              <FixedAssetStats companyId={activeTab?.id} onAssetChange={handleAssetChange} />
+            </Paper>
+          </Card.Section>
+
+          <Card.Section mt="md">
+            <Paper shadow="sm" radius="md" p="md" withBorder>
+              <CashinStats companyId={activeTab?.id} onCashInChange={handleCashInChange} />
+            </Paper>
+          </Card.Section>
+        </Card>
+
         <Paper shadow="sm" radius="md" p="md" withBorder>
           <OutstandingDebtStats companyId={activeTab?.id} />
         </Paper>
@@ -63,9 +78,7 @@ export const DashboardComponent = () => {
         </Paper>
       </SimpleGridGlobal>
 
-      <Paper shadow="sm" radius="md" p="md" withBorder>
-        <GetDashboardData companyId={activeTab?.id ?? ""} />
-      </Paper>
+      <Paper shadow="sm" radius="md" p="md" withBorder></Paper>
     </SimpleGridGlobal>
   );
 };

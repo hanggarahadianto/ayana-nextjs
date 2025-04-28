@@ -1,4 +1,3 @@
-import { getCashSummary } from "@/api/finance/getCashSummary";
 import { getOutstandingDebt } from "@/api/finance/getOutstandingDebt";
 
 import { StatItem, StatsGrid } from "@/components/common/stats/StatsGrid";
@@ -23,8 +22,6 @@ OutstandingDebtStatsProps) => {
         companyId: companyId || "",
         page: 1,
         limit: 10,
-        transactionStatus: "unpaid",
-        // transactionType: "payin",
         summaryOnly: true,
       }),
     enabled: !!companyId,
