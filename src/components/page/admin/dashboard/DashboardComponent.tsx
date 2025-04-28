@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, Paper, Card } from "@mantine/core";
+import { Tabs, Paper, Card, Text, Group } from "@mantine/core";
 import { useState } from "react";
 
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
@@ -12,6 +12,7 @@ import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import GlobalTab from "@/components/common/tab/TabGlobal";
 import { FixedAssetStats } from "@/components/common/stats/FixedAssetStats";
 import { CashinStats } from "@/components/common/stats/CashInStats";
+import { IoCashOutline } from "react-icons/io5";
 
 export const DashboardComponent = () => {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
@@ -39,46 +40,36 @@ export const DashboardComponent = () => {
 
       <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
 
-      <SimpleGridGlobal p={40}>
-        {/* <Paper shadow="sm" radius="md" p="md" withBorder>
-          <AvaialbleCashStats data={availableCash} />
-        </Paper>
-        <Paper shadow="sm" radius="md" p="md" withBorder>
-          <FixedAssetStats companyId={activeTab?.id} onAssetChange={handleAssetChange} />
-        </Paper>
-        <Paper shadow="sm" radius="md" p="md" withBorder>
-          <CashinStats companyId={activeTab?.id} onCashInChange={handleCashInChange} />
-        </Paper> */}
+      <SimpleGridGlobal p={40} cols={2} mt={20}>
+        <Card shadow="sm" padding="lg" radius="md" withBorder style={{ width: "100%", gap: 20 }}>
+          <Group p={40}>
+            <IoCashOutline size={"40px"} />
+            <Text size="40px" fw={200}>
+              Asset
+            </Text>
+          </Group>
 
-        <Card shadow="sm" radius="md" p="md" withBorder>
-          <Card.Section>
-            <Paper shadow="sm" radius="md" p="md" withBorder>
-              <AvaialbleCashStats data={availableCash} />
-            </Paper>
-          </Card.Section>
+          <Paper shadow="sm" radius="md" p="md" withBorder>
+            <AvaialbleCashStats data={availableCash} />
+          </Paper>
 
-          <Card.Section mt="md">
-            <Paper shadow="sm" radius="md" p="md" withBorder>
-              <FixedAssetStats companyId={activeTab?.id} onAssetChange={handleAssetChange} />
-            </Paper>
-          </Card.Section>
-
-          <Card.Section mt="md">
-            <Paper shadow="sm" radius="md" p="md" withBorder>
-              <CashinStats companyId={activeTab?.id} onCashInChange={handleCashInChange} />
-            </Paper>
-          </Card.Section>
+          <Paper shadow="sm" radius="md" p="md" withBorder>
+            <CashinStats companyId={activeTab?.id} onCashInChange={handleCashInChange} />
+          </Paper>
+          <Paper shadow="sm" radius="md" p="md" withBorder>
+            <FixedAssetStats companyId={activeTab?.id} onAssetChange={handleAssetChange} />
+          </Paper>
         </Card>
 
         <Paper shadow="sm" radius="md" p="md" withBorder>
-          <OutstandingDebtStats companyId={activeTab?.id} />
-        </Paper>
-        <Paper shadow="sm" radius="md" p="md" withBorder>
-          <ExpenseStats companyId={activeTab?.id} onExpenseChange={handleExpenseChange} />
+          <Card>
+            <ExpenseStats companyId={activeTab?.id} onExpenseChange={handleExpenseChange} />
+          </Card>
+          <Card mt={20}>
+            <OutstandingDebtStats companyId={activeTab?.id} />
+          </Card>
         </Paper>
       </SimpleGridGlobal>
-
-      <Paper shadow="sm" radius="md" p="md" withBorder></Paper>
     </SimpleGridGlobal>
   );
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import { IconArrowDownRight, IconArrowUpRight, IconCoin, IconDiscount2, IconHome, IconReceipt2, IconUserPlus } from "@tabler/icons-react";
-import { Group, Paper, Text } from "@mantine/core";
+import { Flex, Group, Paper, Text } from "@mantine/core";
 import { formatCurrency } from "@/utils/formatCurrency";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 
@@ -33,7 +33,7 @@ export const StatsGrid = ({ data }: StatsGridProps) => {
     return (
       <div key={index} style={{ marginBottom: "20px" }}>
         {/* Icon */}
-        <Group p="center" w={200}>
+        <Flex p="center" w={400}>
           <Icon size={40} color={stat.color} />
           <Group
             w="100%"
@@ -41,11 +41,11 @@ export const StatsGrid = ({ data }: StatsGridProps) => {
             align="center"
             style={{ padding: "10px 15px", borderRadius: "8px", marginBottom: "15px" }}
           >
-            <Text size="xs" c="dimmed" style={{ fontWeight: 700, textTransform: "uppercase" }}>
+            <Text mt={4} size="xs" c="dimmed" style={{ fontWeight: 700, textTransform: "uppercase" }}>
               {stat.title}
             </Text>
           </Group>
-        </Group>
+        </Flex>
 
         {/* Title */}
 

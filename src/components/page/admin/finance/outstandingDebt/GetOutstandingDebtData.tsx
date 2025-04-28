@@ -74,28 +74,12 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
               clearable
               style={{ width: 250 }}
             />
-
-            {/* <Select
-              label="Test Select"
-              placeholder="Pilih Type"
-              data={[
-                { value: "test1", label: "Test 1" },
-                { value: "test2", label: "Test 2" },
-              ]}
-              onChange={(value) => {
-                console.log("TEST Select onChange:", value);
-                setSelectedType(value);
-              }}
-              clearable
-            /> */}
           </Stack>
           <Group justify="space-between" p={20}>
             <Text fw={800} size="xl">
               {formatCurrency(outstandingDebtData?.data?.total_outstandingDebt ?? 0)}
             </Text>
           </Group>
-
-          {/* <AddOutstandingDebtModal companyId={companyId} refetchOutstandingDebtData={refetchOutstandingDebtData} /> */}
         </Group>
         <Box
           style={{
