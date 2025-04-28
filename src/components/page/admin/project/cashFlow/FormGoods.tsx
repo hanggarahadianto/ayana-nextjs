@@ -132,6 +132,7 @@ const FormGoods = ({ goods, onGoodsChange, isCreateMode = false, error, touched 
               />
 
               <Select
+                searchable
                 error={touched?.[index]?.unit && error?.[index]?.unit}
                 w={100}
                 label="Satuan"

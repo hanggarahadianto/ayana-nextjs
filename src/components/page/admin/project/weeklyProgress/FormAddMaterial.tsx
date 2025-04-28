@@ -83,6 +83,7 @@ const FormAddMaterial: React.FC<FormAddMaterialProps> = React.memo(({ materials,
                 onChange={(value) => handleMaterialChange(index, "quantity", (value as number) || 0)}
               />
               <Select
+                searchable
                 error={touched?.[index]?.unit && errors?.[index]?.unit}
                 w={140}
                 label="Satuan"
