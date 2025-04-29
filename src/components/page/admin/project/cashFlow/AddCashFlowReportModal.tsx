@@ -24,7 +24,6 @@ const AddCashFlowReportModal = ({
   cashFlowData?: ICashFlowResponse[];
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [accountBalance, setAccountBalance] = useState(0);
 
   const { mutate: postDataCashFlow, isPending: isLoadingPostDataCashFlow } = useSubmitCashFlowForm();
   const { mutate: postDataGoods, isPending: isLoadingPostDataGoods } = useSubmitGoodForm();

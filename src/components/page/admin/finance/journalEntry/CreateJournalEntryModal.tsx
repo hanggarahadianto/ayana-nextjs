@@ -54,7 +54,6 @@ const CreateJournalEntryModal: React.FC<ICreateJournalEntryModalProps> = ({ tran
               <SimpleGrid p={20} cols={1}>
                 <Form onSubmit={handleSubmit}>
                   <Stack>
-                    {/* <SelectTransactionGoals value={transactionGoals} onChange={(val) => setTransactionGoals(val)} /> */}
                     <JournalEntryForm
                       companyId={companyId}
                       transactionType={transactionType}

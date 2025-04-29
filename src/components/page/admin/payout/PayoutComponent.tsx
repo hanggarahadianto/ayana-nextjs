@@ -41,21 +41,8 @@ export default function PayoutComponent() {
           <SimpleGrid mt={20}>
             <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} />
           </SimpleGrid>
-
-          {/* <Grid.Col span={7}>
-          </Grid.Col>
-          <Grid.Col span={5}>
-          </Grid.Col> */}
         </Grid>
-
-        {/* {totalPages > 1 && <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />} */}
       </SimpleGrid>
-      {/* <PayoutDetails
-        payout={selectedPayout}
-        opened={isDetailsModalOpen}
-        onClose={() => setIsDetailsModalOpen(false)}
-        // refetchPayoutData={refetchPayoutData}
-      /> */}
     </SimpleGrid>
   );
 }

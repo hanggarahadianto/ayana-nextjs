@@ -1,29 +1,3 @@
-// interface ICashSummaryItem {
-//   id: number;
-//   description: string;
-//   amount: number;
-//   date: string;
-//   status: string;
-//   note: string;
-//   cash_flow_type: string;
-//   category: string;
-// }
-
-// interface ICashSummaryData {
-//   cashList: ICashSummaryItem[];
-//   total_cashin: number;
-//   net_assets: number;
-//   page: number;
-//   limit: number;
-//   total: number;
-// }
-
-// interface ICashSummaryResponse {
-//   data: ICashSummaryData;
-//   message: string;
-//   status: string;
-// }
-
 interface IExpenseSummaryItem {
   id: number;
   description: string;
@@ -48,6 +22,7 @@ interface IExpenseSummaryResponse {
 
 interface IDebtSummaryItem {
   id: string;
+  transaction_id: string;
   invoice: string;
   description: string;
   amount: number;

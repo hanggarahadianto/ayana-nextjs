@@ -12,6 +12,7 @@ import {
   Select,
   Divider,
   Flex,
+  Text,
   InputWrapper,
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
@@ -35,9 +36,10 @@ interface JournalFormProps {
     total_cost?: string;
   }>;
   touched?: Array<boolean | any>;
+  selectedDebt: any;
 }
 
-const JournalEntryForm = ({ companyId, transactionType, error, touched }: JournalFormProps) => {
+const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, selectedDebt }: JournalFormProps) => {
   const { values, setFieldValue, handleBlur } = useFormikContext<{
     transactionType: "payin" | "payout";
     journalEntries: IJournalEntryCreate[];
@@ -120,6 +122,7 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
 
             return (
               <SimpleGrid key={index} p={20} spacing="md">
+                <Text>{selectedDebt.invoice}</Text>
                 <Stack gap="xl">
                   {index === 0 && (
                     <Stack align="flex-end" style={{ width: "100%" }}>
@@ -302,7 +305,7 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                         hideControls
                         w={200}
                         label="Cicilan"
-                        placeholder={entry.installment && entry.installment !== 0 ? "" : "Contoh: 3 Bulan Cicilan"}
+                        placeholder={entry.installment && entry.installment !== 0 ? "" : "Contoh: 3 X Cicilan"}
                         value={entry.installment && entry.installment !== 0 ? entry.installment : ""}
                         onChange={(val) => handleJournalChange(index, "installment", val || "")}
                         suffix=" bulan"
@@ -361,4 +364,4 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
   );
 };
 
-export default memo(JournalEntryForm);
+export default memo(ReversedJournalEntryForm);

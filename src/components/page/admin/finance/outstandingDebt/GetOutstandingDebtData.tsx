@@ -30,7 +30,6 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
         companyId,
         page: pageOutstandingDebt,
         limit,
-        // ⛔️ Tidak perlu kirim summaryOnly karena default-nya false
       });
     },
     enabled: Boolean(companyId),
@@ -48,8 +47,6 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
     return outstandingDebtData?.data?.total ? Math.ceil(outstandingDebtData.data.total / limit) : 1;
   }, [outstandingDebtData]);
 
-  // Reset page when filter changes
-
   const startIndex = (pageOutstandingDebt - 1) * limit + 1;
   const endIndex = Math.min(pageOutstandingDebt * limit, outstandingDebtData?.data.total || 0);
 
@@ -66,7 +63,6 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
             <Select
               label="Filter berdasarkan Type"
               placeholder="Pilih Type"
-              //   data={OutstandingDebtTypeOptions}
               value={selectedType}
               onChange={(value) => {
                 setSelectedType(value);
@@ -89,11 +85,9 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
             justifyContent: "space-between", // Paginasi akan tetap di bawah
           }}
         >
-          {/* Bagian Tabel */}
           <Box style={{ flex: 1 }}>
-            {" "}
             <Box style={{ flex: 1 }}>
-              <OutstandingDebtTable data={outstandingDebtData?.data.debtList || []} startIndex={startIndex} />
+              <OutstandingDebtTable data={outstandingDebtData?.data.debtList || []} startIndex={startIndex} companyId={companyId} />
             </Box>
           </Box>
 

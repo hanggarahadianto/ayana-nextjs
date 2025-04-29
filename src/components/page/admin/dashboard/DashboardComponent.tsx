@@ -5,7 +5,6 @@ import { useState } from "react";
 
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import { ExpenseStats } from "../../../common/stats/ExpenseStats";
-import { AvaialbleCashStats } from "../../../common/stats/AvailableCashStats";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { OutstandingDebtStats } from "@/components/common/stats/OutstandingDebtStats";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
@@ -13,6 +12,7 @@ import GlobalTab from "@/components/common/tab/TabGlobal";
 import { FixedAssetStats } from "@/components/common/stats/FixedAssetStats";
 import { CashinStats } from "@/components/common/stats/CashInStats";
 import { IoCashOutline } from "react-icons/io5";
+import { AvailableCashStats } from "@/components/common/stats/AvailableCashStats";
 
 export const DashboardComponent = () => {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
@@ -44,13 +44,13 @@ export const DashboardComponent = () => {
         <Card shadow="sm" padding="lg" radius="md" withBorder style={{ width: "100%", gap: 20 }}>
           <Group p={40}>
             <IoCashOutline size={"40px"} />
-            <Text size="40px" fw={200}>
+            <Text size="40px" fw={700}>
               Asset
             </Text>
           </Group>
 
           <Paper shadow="sm" radius="md" p="md" withBorder>
-            <AvaialbleCashStats data={availableCash} />
+            <AvailableCashStats companyId={activeTab?.id} onCashInChange={handleCashInChange} />
           </Paper>
 
           <Paper shadow="sm" radius="md" p="md" withBorder>

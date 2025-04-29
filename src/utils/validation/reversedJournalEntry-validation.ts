@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 // Fungsi validasi untuk setiap entry dalam array journalEntries
-export const validationSchemaJournalEntry = (transactionType?: string | null) => {
+export const reversedValidationSchemaJournalEntry = (transactionType?: string | null) => {
   return Yup.object().shape({
     journalEntries: Yup.array().of(
       Yup.object().shape({
