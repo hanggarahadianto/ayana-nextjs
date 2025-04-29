@@ -6,23 +6,22 @@ import { getDataProjectDetail } from "@/api/project/getDataProjectDetail";
 import { getDataWeeklyProgress } from "@/api/weekly-progress/getDataWeeklyProgress";
 import { getDataCashFlowListByProjectId } from "@/api/cash-flow/getCashFlowListProject";
 
-import { FC, use } from "react";
-import ProjectCardDetail from "@/components/page/admin/project/ProjectCardDetail";
+import { FC, use, useState } from "react";
+import ProjectCardDetail from "@/components/page/admin/project/projectDetail/ProjectCardDetail";
 import ProjectCardSummary from "@/components/page/admin/project/projectDetail/ProjectCardSummary";
 import WeeklyProgressMenu from "@/components/page/admin/project/weeklyProgress/WeeklyProgressMenu";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import ProgressBar from "@/components/page/admin/project/projectDetail/progressBar";
 import { progressProject, totalMaterialCost, totalWorkerCost } from "@/lib/projectProgressUtils";
+import { useRouter } from "next/router";
 
-interface ProjectProps {
-  params: Promise<{
-    projectId: string;
-  }>;
+interface ProjectDetailProps {
+  projectId: string;
+  initialData?: IProject; // Optional untuk data yang sudah di-fetch di server
 }
 
-const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
-  const unwrappedParams = use(params);
-  const projectId = unwrappedParams.projectId;
+const AdminProjectDetailComponent: FC<ProjectDetailProps> = ({ projectId, initialData }) => {
+  const router = useRouter();
 
   const {
     data: projectDataDetail,
@@ -67,9 +66,9 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   // console.log("CASHFLOW DATA", cashFlowData);
   return (
     <>
-      <Grid p={16}>
+      <Grid>
         <LoadingGlobal visible={isLoadingCashFlowData || isLoadingGetProjectData || isLoadingGetWeeklyProgressData} />
-        <Grid.Col span={{ base: 14, sm: 7, md: 7 }}>
+        <Grid.Col span={{ base: 10, sm: 5, md: 7 }}>
           <ProjectCardDetail
             projectDataDetail={projectDataDetail}
             cashFlowData={cashFlowData || undefined}
@@ -105,4 +104,4 @@ const ProjectDetailPage: FC<ProjectProps> = ({ params }) => {
   );
 };
 
-export default ProjectDetailPage;
+export default AdminProjectDetailComponent;

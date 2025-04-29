@@ -6,10 +6,10 @@ import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import { IconCalendar } from "@tabler/icons-react";
-import { getInitialValuesUpdateProject } from "../../../../utils/initialValues/initialValuesProject";
 import { FiSettings } from "react-icons/fi";
 import { useUpdateProjectForm } from "@/api/project/editDataProject";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
+import { getInitialValuesUpdateProject } from "@/utils/initialValues/initialValuesProject";
 
 const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: IProjectUpdate; refetchProjectData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);

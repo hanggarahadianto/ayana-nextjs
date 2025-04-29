@@ -180,8 +180,6 @@ const AddCashFlowReportModal = ({
                     isCreateMode={true} // Menandakan bahwa ini adalah mode create
                     error={(errors.good as any) || []} // Kirimkan array error ke FormGoods
                     touched={(touched.good as any) || []}
-                    page={0}
-                    limit={0}
                   />
                   <Stack justify="flex-start" align="start">
                     <Text

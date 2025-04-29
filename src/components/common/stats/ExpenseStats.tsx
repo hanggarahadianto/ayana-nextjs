@@ -9,7 +9,7 @@ type ExpenseStatsProps = {
 };
 
 export const ExpenseStats = ({ companyId, onExpenseChange }: ExpenseStatsProps) => {
-  const { data: expenseSummaryOnlyData, isPending: isLoadingSummary } = useQuery({
+  const { data: expenseSummaryOnlyData, isPending: isLoadingExpense } = useQuery({
     queryKey: ["getExpenseOnlyData", companyId],
     queryFn: () =>
       getExpenseSummary({
@@ -34,6 +34,7 @@ export const ExpenseStats = ({ companyId, onExpenseChange }: ExpenseStatsProps) 
       value: totalExpense,
       color: "red",
       diff: 12, // nanti bisa dihitung dari backend atau cache data lama
+      loading: isLoadingExpense,
     },
   ];
 

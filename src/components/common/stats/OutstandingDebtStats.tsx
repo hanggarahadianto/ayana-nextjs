@@ -15,7 +15,7 @@ export const OutstandingDebtStats = ({
 }: // onOutstandingDebtChange,
 // summaryOnly,
 OutstandingDebtStatsProps) => {
-  const { data: OutstandingDebtSummaryOnlyData, isPending: isLoadingSummary } = useQuery({
+  const { data: OutstandingDebtSummaryOnlyData, isPending: isLoadingDebt } = useQuery({
     queryKey: ["getOutstandingDebtOnlyData", companyId],
     queryFn: () =>
       getOutstandingDebt({
@@ -40,6 +40,7 @@ OutstandingDebtStatsProps) => {
       value: totalOutstandingDebt,
       color: "orange",
       diff: 12, // nanti bisa dihitung dari backend atau cache data lama
+      loading: isLoadingDebt,
     },
   ];
 

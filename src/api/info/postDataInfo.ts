@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query"; // Correct import from '@ta
 import { showNotification } from "@mantine/notifications";
 import { APIAxiosInstance } from "../../lib";
 
-const handleSubmitInfoPostForm = async (values: IPayoutCreate) => {
+const handleSubmitInfoPostForm = async (values: IInfoCreate) => {
   console.log("values on fetching", values);
   const response = await APIAxiosInstance.post("info/post", values);
   return response.data; // Return the response data

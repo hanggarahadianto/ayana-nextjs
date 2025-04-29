@@ -16,8 +16,8 @@ const ProjectCardSummary: React.FC<ProjectCardSummaryProps> = ({
   workerCost = 0,
 }) => {
   return (
-    <Card shadow="lg" padding="xs" radius="md" withBorder mt={10}>
-      <Card shadow="sm" padding="lg" radius="md" withBorder mt={10}>
+    <Card shadow="lg" padding="xs" radius="md" withBorder>
+      <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Stack gap="10">
           <Text size="lg" fw={900} c="cyan" ta="center">
             Ringkasan Keuangan
