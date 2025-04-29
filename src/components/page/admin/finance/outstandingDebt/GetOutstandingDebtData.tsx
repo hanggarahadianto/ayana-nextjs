@@ -72,7 +72,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
             />
           </Stack>
           <Group justify="space-between" p={20}>
-            <Text fw={800} size="xl">
+            <Text fw={800} size="xl" c={"red"}>
               {formatCurrency(outstandingDebtData?.data?.total_outstandingDebt ?? 0)}
             </Text>
           </Group>

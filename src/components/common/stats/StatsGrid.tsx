@@ -4,6 +4,7 @@ import { IconArrowDownRight, IconArrowUpRight, IconCoin, IconDiscount2, IconHome
 import { Flex, Group, Paper, Text } from "@mantine/core";
 import { formatCurrency } from "@/utils/formatCurrency";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 export type StatItem = {
   title: string;
@@ -11,6 +12,7 @@ export type StatItem = {
   value: string | number;
   color: string;
   diff: number;
+  loading: any;
 };
 
 type StatsGridProps = {
@@ -33,6 +35,7 @@ export const StatsGrid = ({ data }: StatsGridProps) => {
     return (
       <div key={index} style={{ marginBottom: "20px" }}>
         {/* Icon */}
+        <LoadingGlobal visible={stat.loading} />
         <Flex p="center" w={400}>
           <Icon size={40} color={stat.color} />
           <Group

@@ -59,55 +59,11 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: ExpenseSummary
             Pengeluaran {companyName}
           </Text>
           <Group justify="space-between" p={20}>
-            <Text fw={800} size="xl">
+            <Text fw={800} size="xl" c={"orange"}>
               {formatCurrency(expenseSummaryData?.data?.total_expense ?? 0)}
             </Text>
           </Group>
         </Group>
-
-        {/* <Group justify="space-between">
-              <Text size="lg" fw={600}>
-                Ringkasan Kas {companyName}
-              </Text>
-              <Stack p={20}>
-                <CreateJournalEntryModal
-                  transactionType={"payin"}
-                  companyId={companyId}
-                  refetchData={function (): void {
-                    throw new Error("Function not implemented.");
-                  }}
-                />
-              </Stack>
-            </Group> */}
-
-        {/* <Select
-              label="Filter berdasarkan Type"
-              placeholder="Pilih Type"
-              data={ExpenseSummaryTypeOptions}
-              value={selectedType}
-              onChange={(value) => {
-                console.log("Select onChange:", value); // Debug
-                setSelectedType(value);
-              }}
-              clearable
-              style={{ width: 250 }}
-            /> */}
-
-        {/* <Select
-              label="Test Select"
-              placeholder="Pilih Type"
-              data={[
-                { value: "test1", label: "Test 1" },
-                { value: "test2", label: "Test 2" },
-              ]}
-              onChange={(value) => {
-                console.log("TEST Select onChange:", value);
-                setSelectedType(value);
-              }}
-              clearable
-            /> */}
-
-        {/* <AddExpenseSummaryModal companyId={companyId} refetchExpenseSummaryData={refetchExpenseSummaryData} /> */}
 
         <Box
           style={{

@@ -50,7 +50,7 @@ export const DashboardComponent = () => {
           </Group>
 
           <Paper shadow="sm" radius="md" p="md" withBorder>
-            <AvailableCashStats companyId={activeTab?.id} onCashInChange={handleCashInChange} />
+            <AvailableCashStats companyId={activeTab?.id} />
           </Paper>
 
           <Paper shadow="sm" radius="md" p="md" withBorder>

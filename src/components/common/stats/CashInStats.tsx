@@ -9,7 +9,7 @@ type CashInStatsProps = {
 };
 
 export const CashinStats = ({ companyId, onCashInChange }: CashInStatsProps) => {
-  const { data: cashinSummaryOnly, isPending: isLoadingSummary } = useQuery({
+  const { data: cashinSummaryOnly, isPending: isLoadingCashin } = useQuery({
     queryKey: ["getCashinAsset", companyId],
     queryFn: () =>
       getAssetSummary({
@@ -35,6 +35,7 @@ export const CashinStats = ({ companyId, onCashInChange }: CashInStatsProps) => 
       value: totalCashIn,
       color: "green",
       diff: 12, // nanti bisa dihitung dari backend atau cache data lama
+      loading: isLoadingCashin,
     },
   ];
 

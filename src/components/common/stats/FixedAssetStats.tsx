@@ -9,7 +9,7 @@ type AssetStatsProps = {
 };
 
 export const FixedAssetStats = ({ companyId, onAssetChange }: AssetStatsProps) => {
-  const { data: fixedAssetSummaryOnly, isPending: isLoadingSummary } = useQuery({
+  const { data: fixedAssetSummaryOnly, isPending: isLoadingFixedAsset } = useQuery({
     queryKey: ["getFixedAsset", companyId],
     queryFn: () =>
       getAssetSummary({
@@ -35,6 +35,7 @@ export const FixedAssetStats = ({ companyId, onAssetChange }: AssetStatsProps) =
       value: totalAsset,
       color: "red",
       diff: 12, // nanti bisa dihitung dari backend atau cache data lama
+      loading: isLoadingFixedAsset,
     },
   ];
 

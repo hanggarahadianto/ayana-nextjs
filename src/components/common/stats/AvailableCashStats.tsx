@@ -5,10 +5,9 @@ import { useEffect } from "react";
 
 type AvailableCashStatsProps = {
   companyId?: string;
-  onCashInChange: (totalCashIn: number) => void;
 };
 
-export const AvailableCashStats = ({ companyId, onCashInChange }: AvailableCashStatsProps) => {
+export const AvailableCashStats = ({ companyId }: AvailableCashStatsProps) => {
   const { data: availableCash, isPending: isLoadingAvailableCash } = useQuery({
     queryKey: ["getAvailableCash", companyId],
     queryFn: () =>
@@ -20,9 +19,6 @@ export const AvailableCashStats = ({ companyId, onCashInChange }: AvailableCashS
   });
 
   const totalCashIn = availableCash?.data?.total_asset ?? 0;
-  useEffect(() => {
-    onCashInChange(totalCashIn);
-  }, [totalCashIn, onCashInChange]);
 
   const statsData: StatItem[] = [
     {
@@ -31,6 +27,7 @@ export const AvailableCashStats = ({ companyId, onCashInChange }: AvailableCashS
       value: totalCashIn,
       color: "white",
       diff: 12, // nanti bisa dihitung dari backend atau cache data lama
+      loading: isLoadingAvailableCash,
     },
   ];
 
