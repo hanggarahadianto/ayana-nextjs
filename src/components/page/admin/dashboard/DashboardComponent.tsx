@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, Paper, Card, Text, Group } from "@mantine/core";
+import { Tabs, Paper, Card, Text, Group, Flex } from "@mantine/core";
 import { useState } from "react";
 
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
@@ -13,6 +13,7 @@ import { FixedAssetStats } from "@/components/common/stats/FixedAssetStats";
 import { CashinStats } from "@/components/common/stats/CashInStats";
 import { IoCashOutline } from "react-icons/io5";
 import { AvailableCashStats } from "@/components/common/stats/AvailableCashStats";
+import { CashOutStats } from "@/components/common/stats/CashOutStats";
 
 export const DashboardComponent = () => {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
@@ -20,10 +21,6 @@ export const DashboardComponent = () => {
   const [cashInTotal, setCashInTotal] = useState(0);
   const [expenseTotal, setExpenseTotal] = useState(0);
   const [assetTotal, setAssetTotal] = useState(0);
-
-  const handleCashInChange = (newCashInTotal: number | null | undefined) => {
-    setCashInTotal(newCashInTotal ?? 0);
-  };
 
   const handleExpenseChange = (newExpenseTotal: number | null | undefined) => {
     setExpenseTotal(newExpenseTotal ?? 0);
@@ -53,9 +50,18 @@ export const DashboardComponent = () => {
             <AvailableCashStats companyId={activeTab?.id} />
           </Paper>
 
-          <Paper shadow="sm" radius="md" p="md" withBorder>
-            <CashinStats companyId={activeTab?.id} onCashInChange={handleCashInChange} />
-          </Paper>
+          <SimpleGridGlobal cols={1}>
+            <Flex>
+              <Paper shadow="sm" radius="md" p="md" withBorder w="100%">
+                <CashinStats companyId={activeTab?.id} />
+              </Paper>
+
+              <Paper shadow="sm" radius="md" p="md" withBorder w="100%">
+                <CashOutStats companyId={activeTab?.id} />
+              </Paper>
+            </Flex>
+          </SimpleGridGlobal>
+
           <Paper shadow="sm" radius="md" p="md" withBorder>
             <FixedAssetStats companyId={activeTab?.id} onAssetChange={handleAssetChange} />
           </Paper>

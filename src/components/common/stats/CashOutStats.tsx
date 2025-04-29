@@ -8,9 +8,9 @@ type CashInStatsProps = {
   companyId?: string;
 };
 
-export const CashinStats = ({ companyId }: CashInStatsProps) => {
-  const { data: cashinData, isPending: isLoadingCashin } = useQuery({
-    queryKey: ["getCashIn", companyId],
+export const CashOutStats = ({ companyId }: CashInStatsProps) => {
+  const { data: cashOutData, isPending: isLoadingCashout } = useQuery({
+    queryKey: ["getCashout", companyId],
     queryFn: () =>
       getAvailableCash({
         companyId: companyId || "",
@@ -19,16 +19,16 @@ export const CashinStats = ({ companyId }: CashInStatsProps) => {
     refetchOnWindowFocus: false,
   });
 
-  const totalCashIn = cashinData?.data?.total_cash_in ?? 0;
+  const totalCashOut = cashOutData?.data?.total_cash_out ?? 0;
 
   const statsData: StatItem[] = [
     {
-      title: "Total Cash In",
+      title: "Total Cash Out",
       icon: "receipt",
-      value: totalCashIn,
-      color: "green",
+      value: totalCashOut,
+      color: "red",
       diff: 12, // nanti bisa dihitung dari backend atau cache data lama
-      loading: isLoadingCashin,
+      loading: isLoadingCashout,
     },
   ];
 

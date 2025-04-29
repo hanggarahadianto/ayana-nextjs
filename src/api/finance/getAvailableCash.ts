@@ -8,7 +8,7 @@ interface GetAvailableCashParams {
   summaryOnly?: boolean;
 }
 
-export const getAvailableCash = async ({ companyId }: GetAvailableCashParams): Promise<IAssetSummaryResponse> => {
+export const getAvailableCash = async ({ companyId }: GetAvailableCashParams): Promise<ICashSummaryResponse> => {
   if (!companyId) throw new Error("Company ID is required");
 
   const queryParams = new URLSearchParams({
@@ -19,7 +19,7 @@ export const getAvailableCash = async ({ companyId }: GetAvailableCashParams): P
 
   try {
     const response = await APIAxiosInstance.get(url);
-    return response.data as IAssetSummaryResponse;
+    return response.data as ICashSummaryResponse;
   } catch (error: any) {
     console.error("Error fetching asset summary:", error.message || error);
     throw new Error(error.message || "Failed to fetch asset summary");

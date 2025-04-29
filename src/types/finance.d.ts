@@ -80,3 +80,12 @@ interface IAssetSummaryResponse {
   message: string;
   status: string;
 }
+interface ICashSummaryResponse {
+  data: {
+    available_cash: number;
+    total_cash_in: number;
+    total_cash_out: number;
+  };
+  message: string;
+  status: string;
+}

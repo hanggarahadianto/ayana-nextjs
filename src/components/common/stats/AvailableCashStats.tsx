@@ -18,7 +18,7 @@ export const AvailableCashStats = ({ companyId }: AvailableCashStatsProps) => {
     refetchOnWindowFocus: false,
   });
 
-  const totalCashIn = availableCash?.data?.total_asset ?? 0;
+  const totalCashIn = availableCash?.data?.available_cash ?? 0;
 
   const statsData: StatItem[] = [
     {

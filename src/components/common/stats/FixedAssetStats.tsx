@@ -33,7 +33,7 @@ export const FixedAssetStats = ({ companyId, onAssetChange }: AssetStatsProps) =
       title: "Fixed Asset",
       icon: "home", // <-- pakai string "home" sesuai dengan key di icons
       value: totalAsset,
-      color: "red",
+      color: "blue",
       diff: 12, // nanti bisa dihitung dari backend atau cache data lama
       loading: isLoadingFixedAsset,
     },
