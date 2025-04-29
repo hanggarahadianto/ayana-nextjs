@@ -14,9 +14,9 @@ import AddProjectModal from "@/components/page/admin/project/AddProjectModal";
 
 const AdminProjectPageComponent = () => {
   const isSmallScreen = useMediaQuery("(max-width: 767px)"); // Mobile
-  const isMediumScreen = useMediaQuery("(min-width: 768px) and (max-width: 1023px)"); // Tablet
-  const isLaptopScreen = useMediaQuery("(min-width: 1024px) and (max-width: 1439px)"); // Laptop 12-14 inch
-  const isWideScreen = useMediaQuery("(min-width: 1440px)"); // Laptop 15 inch ke atas
+  const isMediumScreen = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
+  const isLaptopScreen = useMediaQuery("(min-width: 1024px) and (max-width: 1439px)");
+  const isWideScreen = useMediaQuery("(min-width: 1440px)");
 
   const {
     data: projectData,
@@ -27,6 +27,8 @@ const AdminProjectPageComponent = () => {
     queryFn: () => getDataProject(),
     refetchOnWindowFocus: false,
   });
+
+  console.log("projectData", projectData);
 
   const { mutate: mutateDeleteDataProject, isPending: isLoadingDeleteDataProject } = useDeleteDataProject(refetchProjectData);
 

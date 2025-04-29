@@ -5,15 +5,13 @@ import { useQuery } from "@tanstack/react-query";
 import { getDataProjectDetail } from "@/api/project/getDataProjectDetail";
 import { getDataWeeklyProgress } from "@/api/weekly-progress/getDataWeeklyProgress";
 import { getDataCashFlowListByProjectId } from "@/api/cash-flow/getCashFlowListProject";
-
-import { FC, use, useState } from "react";
+import { FC } from "react";
 import ProjectCardDetail from "@/components/page/admin/project/projectDetail/ProjectCardDetail";
 import ProjectCardSummary from "@/components/page/admin/project/projectDetail/ProjectCardSummary";
 import WeeklyProgressMenu from "@/components/page/admin/project/weeklyProgress/WeeklyProgressMenu";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import ProgressBar from "@/components/page/admin/project/projectDetail/progressBar";
 import { progressProject, totalMaterialCost, totalWorkerCost } from "@/lib/projectProgressUtils";
-import { useRouter } from "next/router";
 
 interface ProjectDetailProps {
   projectId: string;
@@ -21,8 +19,7 @@ interface ProjectDetailProps {
 }
 
 const AdminProjectDetailComponent: FC<ProjectDetailProps> = ({ projectId, initialData }) => {
-  const router = useRouter();
-
+  console.log("project id", projectId);
   const {
     data: projectDataDetail,
     isLoading: isLoadingGetProjectData,
@@ -63,7 +60,6 @@ const AdminProjectDetailComponent: FC<ProjectDetailProps> = ({ projectId, initia
   const materialCost = totalMaterialCost(weeklyProgressData?.data || []);
   const workerCost = totalWorkerCost(weeklyProgressData?.data || []);
 
-  // console.log("CASHFLOW DATA", cashFlowData);
   return (
     <>
       <Grid>
