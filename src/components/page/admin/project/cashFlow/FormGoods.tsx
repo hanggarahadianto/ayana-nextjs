@@ -19,11 +19,9 @@ interface FormGoodsProps {
     total_cost?: string;
   }>;
   touched?: Array<boolean | any>;
-  page: number; // tambahkan
-  limit: number; // tambahkan
 }
 
-const FormGoods = ({ goods, onGoodsChange, isCreateMode = false, error, touched, page, limit }: FormGoodsProps) => {
+const FormGoods = ({ goods, onGoodsChange, isCreateMode = false, error, touched }: FormGoodsProps) => {
   const { setFieldValue } = useFormikContext<any>();
 
   const createNewGood = (): IGoodsCreate => ({
@@ -116,7 +114,7 @@ const FormGoods = ({ goods, onGoodsChange, isCreateMode = false, error, touched,
             <Group align="end" gap="md">
               <TextInput
                 error={touched?.[index]?.good_name && error?.[index]?.good_name}
-                label={`Nama Pengeluaran ${(page - 1) * limit + index + 1}`}
+                label={`Nama Pengeluaran ${index + 1}`}
                 placeholder="Masukkan Pengeluaran"
                 value={good.good_name.toUpperCase() || ""}
                 onChange={(e) => handleGoodChange(index, "good_name", e.currentTarget.value.toUpperCase())}

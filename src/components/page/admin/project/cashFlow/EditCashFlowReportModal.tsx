@@ -58,11 +58,6 @@ const EditCashFlowReportModal = ({
   };
 
   const [page, setPage] = useState(1);
-  useEffect(() => {
-    setPage(1);
-  }, [selectedCashFlowWeek]);
-
-  const limit = 10;
 
   const {
     data: goodsData,
@@ -74,7 +69,7 @@ const EditCashFlowReportModal = ({
       if (!selectedCashFlowWeek?.id) {
         throw new Error("No Cash Flow ID selected");
       }
-      return await getDataGoodsByCashFlowId(selectedCashFlowWeek.id, page, 10);
+      return await getDataGoodsByCashFlowId(selectedCashFlowWeek.id, page, 10000);
     },
     enabled: !!selectedCashFlowWeek?.id,
     refetchOnWindowFocus: false,
@@ -135,13 +130,6 @@ const EditCashFlowReportModal = ({
     console.log("Menghapus cashflow dengan ID:", idToDelete);
     mutateDeleteDataCashFlow(idToDelete);
   };
-
-  const totalPages = useMemo(() => {
-    return goodsData?.total ? Math.ceil(goodsData.total / limit) : 1;
-  }, [goodsData]);
-
-  const startIndex = (page - 1) * limit + 1;
-  const endIndex = Math.min(page * limit, goodsData?.total || 0);
 
   return (
     <>
@@ -246,18 +234,9 @@ const EditCashFlowReportModal = ({
                     isCreateMode={false}
                     error={(errors.good as any) || []}
                     touched={(touched.good as any) || []}
-                    page={page}
-                    limit={limit}
-                  />
 
-                  {totalPages > 0 && (
-                    <Stack justify="space-between" align="space-between" mt={20}>
-                      <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />
-                      <Text mt={8} size="sm" c="dimmed">
-                        Show from {startIndex} to {endIndex} of {goodsData?.total} data
-                      </Text>
-                    </Stack>
-                  )}
+                    // limit={limit}
+                  />
 
                   <Stack justify="flex-start" align="start">
                     <Text size="md" fw={500} c="blue" mt="md" variant="gradient" gradient={{ from: "blue", to: "cyan", deg: 90 }}>
