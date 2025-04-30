@@ -53,8 +53,8 @@ const EditWeeklyProgressModal = ({
           validateOnMount={false}
         >
           {({ values, errors, touched, setFieldValue, isSubmitting }) => {
-            console.log("valaues", values);
-            console.log("errors", errors);
+            // console.log("valaues", values);
+            // console.log("errors", errors);
 
             const handleInputChange = useCallback((setFieldValue: any, field: string, value: any) => {
               setFieldValue(field, value);

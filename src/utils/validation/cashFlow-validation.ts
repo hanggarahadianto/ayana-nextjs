@@ -16,18 +16,12 @@ export const validationSchemaCashFlowCreate = Yup.object({
   good: Yup.array()
     .of(
       Yup.object({
-        good_name: Yup.string().required("Nama barang harus diisi"),
-
-        status: Yup.string().required("Status harus diisi"),
-
         quantity: Yup.number().required("Kuantitas harus diisi"),
-        //   .min(1, "Kuantitas harus lebih besar dari 0")
-        //   .typeError("Kuantitas harus berupa angka"),
-
-        // total_cost: Yup.number()
-        //   .required("Total biaya harus diisi")
-        //   .min(0, "Total biaya tidak boleh negatif")
-        //   .typeError("Total biaya harus berupa angka"),
+        price: Yup.number().required("Harga harus diisi"),
+        good_name: Yup.string().required("Nama barang harus diisi"),
+        status: Yup.string().required("Status harus diisi"),
+        costs_due: Yup.number().required("Biaya jatuh tempo harus diisi"),
+        unit: Yup.string().required("Satuan harus diisi"), // <-- sesuai permintaan
       })
     )
     .min(1, "Harus ada minimal 1 barang"),

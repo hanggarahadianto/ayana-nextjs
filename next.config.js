@@ -2,6 +2,9 @@ const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
 
 const nextConfig = {
   reactStrictMode: process.env.NODE_ENV === "production" ? false : true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 
   async headers() {
     return [

@@ -1,5 +1,5 @@
 // src/constants/navigation.ts
-import { FaTasks, FaProjectDiagram, FaUser, FaCog, FaNewspaper, FaShoppingBag, FaIdeal, FaMoneyBill, FaWallet } from "react-icons/fa";
+import { FaProjectDiagram, FaUser, FaCog, FaNewspaper, FaShoppingBag, FaIdeal, FaMoneyBill, FaWallet } from "react-icons/fa";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { TbTransactionDollar } from "react-icons/tb";
 import { HiOutlineCash } from "react-icons/hi";
@@ -14,7 +14,6 @@ interface MenuItem {
 export const menuItems: MenuItem[] = [
   { label: "Dashboard", icon: <AiOutlineDashboard />, href: "/admin/sidebar/dashboard" },
   { label: "Feed", icon: <FaNewspaper />, href: "/admin/sidebar/feed" },
-  { label: "Task", icon: <FaTasks />, href: "/admin/sidebar/task" },
   { label: "Product", icon: <FaShoppingBag />, href: "/admin/sidebar/product" },
   { label: "Marketing", icon: <FaIdeal />, href: "/admin/sidebar/marketing" },
   { label: "Finance", icon: <FaWallet />, href: "/admin/sidebar/finance" },

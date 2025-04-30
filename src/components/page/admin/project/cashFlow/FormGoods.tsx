@@ -3,7 +3,8 @@ import ButtonDelete from "@/components/common/button/butttonDelete";
 import { paymentCategory, satuan } from "@/constants/dictionary";
 import { Card, Group, NumberInput, Select, Stack, Text, TextInput } from "@mantine/core";
 import { useFormikContext } from "formik";
-import { useCallback, useEffect } from "react";
+import React from "react";
+import { memo, useCallback, useEffect } from "react";
 
 interface FormGoodsProps {
   goods: IGoodsCreate[];
@@ -20,9 +21,8 @@ interface FormGoodsProps {
   }>;
   touched?: Array<boolean | any>;
 }
-
-const FormGoods = ({ goods, onGoodsChange, isCreateMode = false, error, touched }: FormGoodsProps) => {
-  const { setFieldValue } = useFormikContext<any>();
+const FormGoods: React.FC<FormGoodsProps> = React.memo(({ goods, onGoodsChange, isCreateMode = false, error, touched }) => {
+  const { setFieldValue } = useFormikContext<IGoodsCreate>();
 
   const createNewGood = (): IGoodsCreate => ({
     good_name: "",
@@ -134,7 +134,7 @@ const FormGoods = ({ goods, onGoodsChange, isCreateMode = false, error, touched 
               <Select
                 searchable
                 error={touched?.[index]?.unit && error?.[index]?.unit}
-                w={100}
+                w={130}
                 label="Satuan"
                 placeholder="Pilih Satuan"
                 value={good.unit}
@@ -186,6 +186,6 @@ const FormGoods = ({ goods, onGoodsChange, isCreateMode = false, error, touched 
       </Stack>
     </>
   );
-};
+});
 
-export default FormGoods;
+export default memo(FormGoods);

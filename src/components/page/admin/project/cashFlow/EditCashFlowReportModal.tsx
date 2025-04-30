@@ -141,15 +141,20 @@ const EditCashFlowReportModal = ({
       />
       <Modal opened={opened} onClose={close} size="100%" yOffset="100px">
         <Formik
-          enableReinitialize
+          validationSchema={validationSchemaCashFlowCreate}
           initialValues={{
             ...getInitialValuesCashFlow(selectedCashFlowWeek || earliestCashFlow),
             good: goodsData?.data || [],
           }}
-          validationSchema={validationSchemaCashFlowCreate}
           onSubmit={handleSubmit}
+          validateOnBlur={false}
+          enableReinitialize={true}
+          validateOnChange={true}
+          validateOnMount={false}
         >
           {({ values, errors, touched, setFieldValue }) => {
+            console.log("values", values);
+            console.log("ERROR", errors);
             const calculateCashOut = useCallback(() => {
               return (values.good || []).reduce((acc, good) => acc + (good.total_cost || 0), 0);
             }, [values.good]);
@@ -220,7 +225,7 @@ const EditCashFlowReportModal = ({
                           id={values?.id}
                           onDelete={handleDeleteCashFlow}
                           description={`Apakah anda ingin menghapus data minggu ke ${values?.week_number}`}
-                          size={2}
+                          size={2.5}
                         />
                       </Stack>
                     )}

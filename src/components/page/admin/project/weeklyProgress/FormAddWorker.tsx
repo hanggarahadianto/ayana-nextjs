@@ -8,12 +8,11 @@ import { debounce } from "lodash";
 interface FormAddWorkerProps {
   workers: IWorkerCreate[];
   setWorkers: (newWorkers: IWorkerCreate[]) => void; // ubah dari Dispatch
-  errors?: any; // ubah dari any[] ke any
+  errors?: any;
   touched?: any;
 }
 
 const FormAddWorker: React.FC<FormAddWorkerProps> = React.memo(({ workers, setWorkers, errors, touched }) => {
-  console.log("ERROR DI COMPONENT FORM ADD WORKER", errors);
   const { setFieldValue } = useFormikContext<IWeeklyProgressCreate>();
 
   const amountWorker = useMemo(() => {
