@@ -6,6 +6,7 @@ import { differenceInDays, format } from "date-fns";
 import { IoIosSend } from "react-icons/io";
 import ReversedJournalEntryModal from "../journalEntry/ReversedJournalEntryModal";
 import { useState } from "react";
+import { useDisclosure } from "@mantine/hooks";
 
 interface OutstandingDebtTableProps {
   data: IDebtSummaryItem[];
@@ -20,12 +21,12 @@ const calculateDaysLeft = (dueDate: string) => {
 };
 
 export default function OutstandingDebtTable({ data, startIndex = 1, companyId }: OutstandingDebtTableProps) {
-  const [selectedDebt, setSelectedDebt] = useState<IDebtSummaryItem | undefined>(undefined); // 1. Add selectedDebt state
-
-  // console.log("selected debt di table", selectedDebt);
+  const [selectedDebt, setSelectedDebt] = useState<IDebtSummaryItem | undefined>(undefined);
+  const [opened, { open, close }] = useDisclosure(false); // Use useDisclosure here
 
   const handleSendClick = (debt: IDebtSummaryItem) => {
-    setSelectedDebt(debt); // 2. Set selectedDebt on click
+    setSelectedDebt(debt);
+    open(); // Open modal when a debt is selected
   };
 
   return (
@@ -98,6 +99,8 @@ export default function OutstandingDebtTable({ data, startIndex = 1, companyId }
           companyId={companyId}
           transactionType="payout" // or "payout" depending on your use case
           selectedDebt={selectedDebt} // Pass selectedDebt as prop
+          opened={opened} // Pass opened state here
+          close={close} // Pass close function here
         />
       )}
     </>

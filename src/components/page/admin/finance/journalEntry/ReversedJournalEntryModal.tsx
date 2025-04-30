@@ -11,12 +11,19 @@ interface IReversedJournalEntryModalProps {
   companyId: string;
   transactionType: "payin" | "payout";
   selectedDebt?: IDebtSummaryItem;
+  opened: boolean;
+  close: () => void;
 }
 
-const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({ companyId, transactionType, selectedDebt }) => {
-  console.log(selectedDebt);
-  const [opened, { open, close }] = useDisclosure(false);
-
+const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
+  companyId,
+  transactionType,
+  selectedDebt,
+  opened,
+  close,
+}) => {
+  console.log("Modal opened:", opened); // Log when modal is opened or closed
+  console.log("Selected Debt:", selectedDebt);
   const { mutate: submitJournal, isPending: isLoadingSubmitJournalEntry } = useSubmitReservedJournalEntry(close, companyId);
 
   const handleSubmit = (values: any) => {
@@ -40,7 +47,14 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({ 
 
   return (
     <>
-      <Modal opened={opened || !!selectedDebt} onClose={close} size={"60%"}>
+      <Modal
+        onClose={() => {
+          console.log("Close button clicked");
+          close();
+        }}
+        size={"60%"}
+        opened={opened}
+      >
         <Formik
           initialValues={initialValuesJournalEntry(companyId, transactionType)}
           validationSchema={reversedValidationSchemaJournalEntry(transactionType)}
