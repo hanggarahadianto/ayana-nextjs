@@ -54,26 +54,47 @@ const FormGoods: React.FC<FormGoodsProps> = React.memo(({ goods, onGoodsChange, 
   }, [isCreateMode, goods, onGoodsChange, setFieldValue]);
 
   // Fungsi untuk mengubah nilai
-  const handleGoodChange = useCallback(
-    (index: number, field: string, value: any) => {
-      const updatedGoods = [...goods];
+  // const handleGoodChange = useCallback(
+  //   (index: number, field: string, value: any) => {
+  //     const updatedGoods = [...goods];
 
-      // If the status is "tempo", set price to 0
-      if (field === "status" && value === "tempo") {
-        updatedGoods[index].price = 0; // Set price to 0 when status is "tempo"
-      } else if (field === "price" && updatedGoods[index].status === "tempo") {
-        return; // Prevent price update if status is "tempo"
-      }
+  //     // If the status is "tempo", set price to 0
+  //     if (field === "status" && value === "tempo") {
+  //       updatedGoods[index].price = 0; // Set price to 0 when status is "tempo"
+  //     } else if (field === "price" && updatedGoods[index].status === "tempo") {
+  //       return; // Prevent price update if status is "tempo"
+  //     }
 
-      updatedGoods[index][field] = value;
+  //     updatedGoods[index][field] = value;
 
-      // Hanya update total_cost untuk item yang berubah
-      updatedGoods[index].total_cost = (updatedGoods[index].quantity || 0) * (updatedGoods[index].price || 0);
+  //     // Hanya update total_cost untuk item yang berubah
+  //     updatedGoods[index].total_cost = (updatedGoods[index].quantity || 0) * (updatedGoods[index].price || 0);
 
-      setFieldValue("good", updatedGoods);
-    },
-    [goods, setFieldValue]
-  );
+  //     setFieldValue("good", updatedGoods);
+  //   },
+  //   [goods, setFieldValue]
+  // );
+
+  const handleGoodChange = (index: number, field: keyof IGoodsCreate, value: any) => {
+    // Prevent price update if status is 'tempo'
+    if (field === "price" && goods[index].status === "tempo") return;
+
+    // Jika status diubah ke 'tempo', price dan total_cost jadi 0
+    if (field === "status" && value === "tempo") {
+      setFieldValue(`good[${index}].price`, 0);
+      setFieldValue(`good[${index}].total_cost`, 0);
+    }
+
+    // Set nilai field yang berubah
+    setFieldValue(`good[${index}].${field}`, value);
+
+    // Hitung ulang total_cost jika field price/quantity berubah
+    if (field === "price" || field === "quantity") {
+      const price = field === "price" ? value : goods[index].price || 0;
+      const quantity = field === "quantity" ? value : goods[index].quantity || 0;
+      setFieldValue(`good[${index}].total_cost`, price * quantity);
+    }
+  };
 
   // Fungsi hapus
   const deleteGoodField = useCallback(
@@ -109,80 +130,82 @@ const FormGoods: React.FC<FormGoodsProps> = React.memo(({ goods, onGoodsChange, 
       </Group>
 
       <Stack mt="md">
-        {goods.map((good, index) => (
-          <Card key={index} shadow="lg" padding="lg" radius="md">
-            <Group align="end" gap="md">
-              <TextInput
-                error={touched?.[index]?.good_name && error?.[index]?.good_name}
-                label={`Nama Pengeluaran ${index + 1}`}
-                placeholder="Masukkan Pengeluaran"
-                value={good.good_name.toUpperCase() || ""}
-                onChange={(e) => handleGoodChange(index, "good_name", e.currentTarget.value.toUpperCase())}
-                autoFocus={index === 0}
-              />
+        {goods.map((good, index) => {
+          return (
+            <Card key={index} shadow="lg" padding="lg" radius="md">
+              <Group align="end" gap="md">
+                <TextInput
+                  error={touched?.[index]?.good_name && error?.[index]?.good_name}
+                  label={`Nama Pengeluaran ${index + 1}`}
+                  placeholder="Masukkan Pengeluaran"
+                  value={good.good_name.toUpperCase() || ""}
+                  onChange={(e) => handleGoodChange(index, "good_name", e.currentTarget.value.toUpperCase())}
+                  autoFocus={index === 0}
+                />
 
-              <NumberInput
-                error={touched?.[index]?.quantity && error?.[index]?.quantity}
-                w={100}
-                hideControls
-                label="Kuantitas"
-                placeholder="Masukkan Kuantitas"
-                value={good.quantity || ""}
-                onChange={(val) => handleGoodChange(index, "quantity", val || 0)}
-              />
+                <NumberInput
+                  error={touched?.[index]?.quantity && error?.[index]?.quantity}
+                  w={100}
+                  hideControls
+                  label="Kuantitas"
+                  placeholder="Masukkan Kuantitas"
+                  value={good.quantity || ""}
+                  onChange={(val) => handleGoodChange(index, "quantity", val || 0)}
+                />
 
-              <Select
-                searchable
-                error={touched?.[index]?.unit && error?.[index]?.unit}
-                w={130}
-                label="Satuan"
-                placeholder="Pilih Satuan"
-                value={good.unit}
-                data={satuan}
-                onChange={(val) => handleGoodChange(index, "unit", val || "")}
-              />
-              <Select
-                error={touched?.[index]?.status && error?.[index]?.status}
-                w={100}
-                label="Pembayaran"
-                placeholder="Pilih Pembayaran"
-                value={good.status} // default-nya "tunai"
-                data={paymentCategory}
-                onChange={(val) => handleGoodChange(index, "status", val || "tunai")} // fallback juga aman
-              />
+                <Select
+                  searchable
+                  error={touched?.[index]?.unit && error?.[index]?.unit}
+                  w={130}
+                  label="Satuan"
+                  placeholder="Pilih Satuan"
+                  value={good.unit}
+                  data={satuan}
+                  onChange={(val) => handleGoodChange(index, "unit", val || "")}
+                />
+                <Select
+                  error={touched?.[index]?.status && error?.[index]?.status}
+                  w={100}
+                  label="Pembayaran"
+                  placeholder="Pilih Pembayaran"
+                  value={good.status} // default-nya "tunai"
+                  data={paymentCategory}
+                  onChange={(val) => handleGoodChange(index, "status", val || "tunai")} // fallback juga aman
+                />
 
-              <TextInput
-                error={touched?.[index]?.price && error?.[index]?.price}
-                w={140}
-                label="Harga"
-                placeholder="Masukkan Harga"
-                value={good.price ? `Rp. ${good.price.toLocaleString("id-ID")}` : ""}
-                onChange={(e) => {
-                  const raw = e.currentTarget.value.replace(/\D/g, "");
-                  const numeric = Number(raw) || 0;
-                  handleGoodChange(index, "price", numeric);
-                }}
-              />
+                <TextInput
+                  error={touched?.[index]?.price && error?.[index]?.price}
+                  w={140}
+                  label="Harga"
+                  placeholder="Masukkan Harga"
+                  value={good.price ? `Rp. ${good.price.toLocaleString("id-ID")}` : ""}
+                  onChange={(e) => {
+                    const raw = e.currentTarget.value.replace(/\D/g, "");
+                    const numeric = Number(raw) || 0;
+                    handleGoodChange(index, "price", numeric);
+                  }}
+                />
 
-              <TextInput
-                w={140}
-                label="Total"
-                value={good.total_cost?.toLocaleString("id-ID") || "0"}
-                readOnly
-                styles={{
-                  input: {
-                    fontWeight: "bold",
-                    cursor: "not-allowed",
-                  },
-                }}
-              />
+                <TextInput
+                  w={140}
+                  label="Total"
+                  value={good.total_cost?.toLocaleString("id-ID") || "0"}
+                  readOnly
+                  styles={{
+                    input: {
+                      fontWeight: "bold",
+                      cursor: "not-allowed",
+                    },
+                  }}
+                />
 
-              <Stack mt={20}>
-                <ButtonDelete onClick={() => deleteGoodField(index)} />
-              </Stack>
-            </Group>
-          </Card>
-        ))}
+                <Stack mt={20}>
+                  <ButtonDelete onClick={() => deleteGoodField(index)} />
+                </Stack>
+              </Group>
+            </Card>
+          );
+        })}
       </Stack>
     </>
   );

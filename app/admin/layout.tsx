@@ -72,8 +72,6 @@ export default function InternalLayout({ children }: { children: React.ReactNode
               <button
                 onClick={() => setIsCollapsed(!isCollapsed)}
                 style={{
-                  // marginBottom: rem(2),
-
                   cursor: "pointer",
                   background: "transparent",
                   border: "none",
@@ -81,7 +79,6 @@ export default function InternalLayout({ children }: { children: React.ReactNode
                 }}
               >
                 {isCollapsed ? <FaAngleDoubleRight /> : <FaAngleDoubleLeft />}
-                {/* {isCollapsed ? <FaAngleDoubleRight /> : <FaAngleDoubleLeft />} */}
               </button>
             </Stack>
 

@@ -20,7 +20,7 @@ export const menuItems: MenuItem[] = [
   { label: "Payin", icon: <HiOutlineCash />, href: "/admin/sidebar/payin" },
   { label: "Payout", icon: <FaMoneyBill />, href: "/admin/sidebar/payout" },
   { label: "Project", icon: <FaProjectDiagram />, href: "/admin/sidebar/project" },
-  { label: "Transaction", icon: <TbTransactionDollar />, href: "/admin/sidebar/transaaction" },
+  { label: "Transaction", icon: <TbTransactionDollar />, href: "/admin/sidebar/transaction" },
   { label: "Profile", icon: <FaUser />, href: "/admin/sidebar/profile" },
   { label: "Setting", icon: <FaCog />, href: "/admin/sidebar/setting" },
 ];

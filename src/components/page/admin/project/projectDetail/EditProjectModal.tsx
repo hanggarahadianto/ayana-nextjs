@@ -26,7 +26,6 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
 
   useEffect(() => {
     if (initialData) {
-      //   open();
     }
   }, [initialData]);
 

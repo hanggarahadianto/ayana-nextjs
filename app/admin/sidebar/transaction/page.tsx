@@ -1,3 +1,7 @@
 export default function TransactionPage() {
-  return <div>{/* <PayoutComponent /> */}</div>;
+  return (
+    <div>
+      <h1>Transaction Page</h1>
+    </div>
+  );
 }
