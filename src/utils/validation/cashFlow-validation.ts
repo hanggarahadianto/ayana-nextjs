@@ -16,9 +16,10 @@ export const validationSchemaCashFlowCreate = Yup.object({
   good: Yup.array()
     .of(
       Yup.object({
+        good_name: Yup.string().required("Nama barang harus diisi"),
+
         quantity: Yup.number().required("Kuantitas harus diisi"),
         price: Yup.number().required("Harga harus diisi"),
-        good_name: Yup.string().required("Nama barang harus diisi"),
         status: Yup.string().required("Status harus diisi"),
         costs_due: Yup.number().required("Biaya jatuh tempo harus diisi"),
         unit: Yup.string().required("Satuan harus diisi"), // <-- sesuai permintaan
