@@ -33,6 +33,11 @@ export const useSubmitJournalEntry = (closeModal: () => void, companyId?: string
               exact: false,
             }),
             queryClient.refetchQueries({
+              queryKey: ["getCashOutData", companyId],
+
+              exact: false,
+            }),
+            queryClient.refetchQueries({
               queryKey: ["getExpenseSummaryData", companyId],
               exact: false,
             }),

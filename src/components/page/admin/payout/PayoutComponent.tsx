@@ -6,6 +6,7 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 import GlobalTab from "@/components/common/tab/TabGlobal";
 import { GetExpenseSummaryData } from "../finance/expense/GetExpenseSummayData";
 import { GetOutstandingDebtData } from "../finance/outstandingDebt/GetOutstandingDebtData";
+import { GetCashOutData } from "../finance/asset/cashout/GetCashOutData";
 
 export default function PayoutComponent() {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
@@ -16,6 +17,8 @@ export default function PayoutComponent() {
       <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
 
       <SimpleGridGlobal cols={1}>
+        <GetCashOutData companyId={activeTab?.id || ""} companyName={activeTab?.title} assetType="cashout" />
+
         <GetExpenseSummaryData companyId={activeTab?.id} companyName={activeTab?.title} />
         {/* <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} status="going" />
         <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} status="done" /> */}

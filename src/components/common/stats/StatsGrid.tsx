@@ -24,7 +24,7 @@ const icons = {
   discount: IconDiscount2,
   receipt: IconReceipt2,
   coin: IconCoin,
-  home: IconHome, // <-- tambahkan ini
+  home: IconHome,
 };
 
 export const StatsGrid = ({ data }: StatsGridProps) => {
@@ -35,25 +35,21 @@ export const StatsGrid = ({ data }: StatsGridProps) => {
       <div key={index}>
         <SimpleGridGlobal cols={1} p={10}>
           <LoadingGlobal visible={stat.loading} />
-          <Flex w="100%">
+          <Flex w="100%" gap={20}>
             <Icon size={40} color={stat.color} />
             <Group>
-              <Text mt={4} size="xs" c="dimmed" style={{ fontWeight: 700, textTransform: "uppercase" }}>
+              <Text mt={4} size="lg" c="dimmed" style={{ fontWeight: 700, textTransform: "uppercase" }}>
                 {stat.title}
               </Text>
             </Group>
           </Flex>
 
-          {/* Title */}
-
-          {/* Value */}
           <Group gap="xs" mt={40}>
             <Text
               c={Number(stat.value) < 0 ? "red.7" : stat.color}
               style={{
                 fontSize: "24px",
                 fontWeight: 700,
-                // lineHeight: 1.2,
                 textAlign: "center",
               }}
             >

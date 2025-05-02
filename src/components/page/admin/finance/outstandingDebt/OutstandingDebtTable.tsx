@@ -1,7 +1,7 @@
 import { formatCurrency } from "@/utils/formatCurrency";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 import { formatDaysToMonths } from "@/utils/formatDaysToMonth";
-import { Group, ScrollArea, Table, ThemeIcon, Text, Card, Badge } from "@mantine/core";
+import { Group, ScrollArea, Table, Badge } from "@mantine/core";
 import { differenceInDays, format } from "date-fns";
 import { IoIosSend } from "react-icons/io";
 import ReversedJournalEntryModal from "../journalEntry/ReversedJournalEntryModal";

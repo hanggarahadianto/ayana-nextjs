@@ -79,7 +79,7 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
         <Stack>
           <AddTransactionCategoryModal companyId={companyId} refetchTransactionCategoryData={refetchTrabsactionCategoryData} />
         </Stack>
-        <TransactionCategoryTable data={transactionCategoryData?.data || []} />
+        <TransactionCategoryTable startIndex={startIndex} data={transactionCategoryData?.data || []} />
         {totalPages > 0 && (
           <>
             <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />

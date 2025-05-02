@@ -45,18 +45,6 @@ export default function AccountTable({ data, onRowClick, refetchAccountData, onD
               {/* <Table.Td>{account.type}</Table.Td> */}
               <Table.Td>{account.category}</Table.Td>
               <Table.Td>{account.description}</Table.Td>
-              {/* <Table.Td style={{ textAlign: "center" }} onClick={(e) => e.stopPropagation()}>
-                <Group ml={4}>
-                  <PayaccountButton account={account} refetchaccountData={refetchaccountData} />
-                  <EditaccountModal account={account} refetchaccountData={refetchaccountData} />
-                  <ButtonDeleteWithConfirmation
-                    id={account.id}
-                    onDelete={onDelete}
-                    description={`Apakah Anda yakin ingin menghapus invoice ${account.invoice}?`}
-                    size={2}
-                  />
-                </Group>
-              </Table.Td> */}
             </Table.Tr>
           ))}
         </Table.Tbody>

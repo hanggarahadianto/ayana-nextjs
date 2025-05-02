@@ -45,9 +45,9 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: ExpenseSummary
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingExpenseSummaryData} />
-      <Stack justify="flex-end" align="flex-end" p={40}>
+      {/* <Stack justify="flex-end" align="flex-end" p={40}>
         {companyId && <CreateJournalEntryModal companyId={companyId} transactionType="payout" />}
-      </Stack>
+      </Stack> */}
 
       <Stack gap="md">
         <Group justify="space-between" align="space-between">

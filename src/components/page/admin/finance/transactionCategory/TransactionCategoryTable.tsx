@@ -55,18 +55,6 @@ export default function TransactionCategoryTable({
               <Table.Td>{TransactionCategory.debit_account_type}</Table.Td>
               <Table.Td>{TransactionCategory.credit_account.type}</Table.Td>
               <Table.Td>{TransactionCategory.description}</Table.Td>
-              {/* <Table.Td style={{ textAlign: "center" }} onClick={(e) => e.stopPropagation()}>
-                <Group ml={4}>
-                  <PayTransactionCategoryButton TransactionCategory={TransactionCategory} refetchTransactionCategoryData={refetchTransactionCategoryData} />
-                  <EditTransactionCategoryModal TransactionCategory={TransactionCategory} refetchTransactionCategoryData={refetchTransactionCategoryData} />
-                  <ButtonDeleteWithConfirmation
-                    id={TransactionCategory.id}
-                    onDelete={onDelete}
-                    description={`Apakah Anda yakin ingin menghapus invoice ${TransactionCategory.invoice}?`}
-                    size={2}
-                  />
-                </Group>
-              </Table.Td> */}
             </Table.Tr>
           ))}
         </Table.Tbody>
