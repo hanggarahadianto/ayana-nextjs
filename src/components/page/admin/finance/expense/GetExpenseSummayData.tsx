@@ -17,14 +17,15 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: ExpenseSummary
   const [pageExpense, setPageExpense] = useState(1);
   const limit = 10;
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const status = "base";
 
   const {
     data: expenseSummaryData,
     isLoading: isLoadingExpenseSummaryData,
     refetch: refetchExpenseSummaryData,
   } = useQuery({
-    queryKey: ["getExpenseSummaryData", companyId, pageExpense, limit],
-    queryFn: () => (companyId ? getExpenseSummary({ companyId: companyId, page: pageExpense, limit }) : Promise.resolve(null)),
+    queryKey: ["getExpenseSummaryData", companyId, pageExpense, limit, status],
+    queryFn: () => (companyId ? getExpenseSummary({ companyId: companyId, page: pageExpense, limit, status }) : Promise.resolve(null)),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
@@ -37,11 +38,6 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: ExpenseSummary
   const totalPages = useMemo(() => {
     return expenseSummaryData?.data.total ? Math.ceil(expenseSummaryData?.data.total / limit) : 1;
   }, [expenseSummaryData]);
-
-  // Reset page when filter changes
-  // useEffect(() => {
-  //   setPage(1);
-  // }, [selectedType]);
 
   const startIndex = (pageExpense - 1) * limit + 1;
   const endIndex = Math.min(pageExpense * limit, expenseSummaryData?.data.total || 0);

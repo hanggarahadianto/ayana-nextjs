@@ -17,7 +17,11 @@ export default function PayoutComponent() {
 
       <SimpleGridGlobal cols={1}>
         <GetExpenseSummaryData companyId={activeTab?.id} companyName={activeTab?.title} />
-        <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} />
+        {/* <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} status="going" />
+        <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} status="done" /> */}
+
+        <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} title="Hutang Berjalan" status="going" />
+        <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} title="Hutang Lunas" status="done" />
       </SimpleGridGlobal>
     </SimpleGridGlobal>
   );

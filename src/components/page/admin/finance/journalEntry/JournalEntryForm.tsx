@@ -33,6 +33,8 @@ interface JournalFormProps {
     partner?: string;
     status?: string;
     total_cost?: string;
+    date_inputed: string;
+    due_date?: string;
   }>;
   touched?: Array<boolean | any>;
 }
@@ -227,8 +229,6 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                             }}
                           />
                           <Badge color={showProfit[index] ? "darkblue" : "red"} w={80} mt={4}>
-                            {/* {entry.transaction_type === "payin" ? "Pay In" : "Pay Out"} */}
-
                             {showProfit[index] ? "Profit" : "Non Profit"}
                           </Badge>
                         </Flex>
@@ -256,6 +256,7 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                     {entry.status && (
                       <Group grow mt={20}>
                         <DatePickerInput
+                          error={touched?.[index]?.date_inputed && error?.[index]?.date_inputed}
                           label="Tanggal Transaksi"
                           placeholder="Tanggal"
                           locale="id"
@@ -269,6 +270,7 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
 
                         {entry.status !== "paid" && (
                           <DatePickerInput
+                            error={touched?.[index]?.due_date && error?.[index]?.due_date}
                             label="Jatuh Tempo"
                             disabled={showInstallment[index]}
                             placeholder="Tanggal Jatuh Tempo"

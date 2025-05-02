@@ -2,6 +2,7 @@ interface IExpenseSummaryItem {
   id: number;
   description: string;
   amount: number;
+  partner: string;
   date_inputed: string;
   status: string;
 }
@@ -25,6 +26,7 @@ interface IDebtSummaryItem {
   transaction_id: string;
   invoice: string;
   description: string;
+  partner: string;
   amount: number;
   partner: string;
   transaction_type: string;
@@ -39,7 +41,7 @@ interface IDebtSummaryItem {
 
 interface IDebtSummaryData {
   debtList: IDebtSummaryItem[];
-  total_outstandingDebt: number;
+  total_debt: number;
   page: number;
   limit: number;
   total: number;

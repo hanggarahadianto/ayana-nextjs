@@ -1,6 +1,6 @@
 import { formatCurrency } from "@/utils/formatCurrency";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
-import { Group, ScrollArea, Table, ThemeIcon } from "@mantine/core";
+import { ScrollArea, Table } from "@mantine/core";
 
 interface ExpenseSummaryTableProps {
   data: IExpenseSummaryItem[];
@@ -10,11 +10,9 @@ interface ExpenseSummaryTableProps {
 }
 
 export default function ExpenseSummaryTable({ data, startIndex = 1 }: ExpenseSummaryTableProps) {
-  // console.log("data ExpenseSummary table", data);
   return (
     <ScrollArea style={{ minHeight: 400 }} p={"xl"}>
       <Table
-        // Menggunakan token ukuran Mantine (xs, sm, md, lg, xl)
         highlightOnHover
         withColumnBorders
         style={{
@@ -31,7 +29,8 @@ export default function ExpenseSummaryTable({ data, startIndex = 1 }: ExpenseSum
             <Table.Th style={{ textAlign: "center", width: 100, minWidth: 100 }}>Tanggal Pembayaran</Table.Th>
             <Table.Th style={{ textAlign: "center", width: 100, minWidth: 100 }}>Nominal</Table.Th>
             {/* <Table.Th style={{ textAlign: "center", width: 140, minWidth: 140 }}>Kategori</Table.Th> */}
-            <Table.Th style={{ textAlign: "center", width: 180, minWidth: 180 }}>Deskripsi</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 220, minWidth: 220 }}>Deskripsi</Table.Th>
+            <Table.Th style={{ textAlign: "center", width: 110, minWidth: 110 }}>Partner</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -50,6 +49,7 @@ export default function ExpenseSummaryTable({ data, startIndex = 1 }: ExpenseSum
               <Table.Td>{formatDateIndonesia(expenseSummary?.date_inputed)}</Table.Td>
               <Table.Td>{formatCurrency(expenseSummary?.amount)}</Table.Td>
               <Table.Td>{expenseSummary?.description}</Table.Td>
+              <Table.Td>{expenseSummary?.partner}</Table.Td>
               {/* <Table.Td style={{ textAlign: "center" }} onClick={(e) => e.stopPropagation()}>
                 <Group ml={4}>
                   <PayExpenseSummaryButton ExpenseSummary={ExpenseSummary} refetchExpenseSummaryData={refetchExpenseSummaryData} />

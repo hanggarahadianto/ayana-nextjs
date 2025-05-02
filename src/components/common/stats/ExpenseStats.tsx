@@ -17,6 +17,7 @@ export const ExpenseStats = ({ companyId, onExpenseChange }: ExpenseStatsProps) 
         page: 1,
         limit: 10,
         summaryOnly: true,
+        status: "base",
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,

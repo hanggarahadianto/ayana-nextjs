@@ -2,19 +2,12 @@ import { getOutstandingDebt } from "@/api/finance/getOutstandingDebt";
 
 import { StatItem, StatsGrid } from "@/components/common/stats/StatsGrid";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
 
 type OutstandingDebtStatsProps = {
   companyId?: string;
-  // onOutstandingDebtChange: (totalOutstandingDebt: number) => void;
-  // summaryOnly?: boolean; // ✅ dibuat optional
 };
 
-export const OutstandingDebtStats = ({
-  companyId,
-}: // onOutstandingDebtChange,
-// summaryOnly,
-OutstandingDebtStatsProps) => {
+export const OutstandingDebtStats = ({ companyId }: OutstandingDebtStatsProps) => {
   const { data: OutstandingDebtSummaryOnlyData, isPending: isLoadingDebt } = useQuery({
     queryKey: ["getOutstandingDebtOnlyData", companyId],
     queryFn: () =>
@@ -22,16 +15,14 @@ OutstandingDebtStatsProps) => {
         companyId: companyId || "",
         page: 1,
         limit: 10,
+        status: "going",
         summaryOnly: true,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
 
-  const totalOutstandingDebt = OutstandingDebtSummaryOnlyData?.data?.total_outstandingDebt ?? 0;
-  // useEffect(() => {
-  //   onOutstandingDebtChange(totalOutstandingDebt);
-  // }, [totalOutstandingDebt, onOutstandingDebtChange]);
+  const totalOutstandingDebt = OutstandingDebtSummaryOnlyData?.data?.total_debt ?? 0;
 
   const statsData: StatItem[] = [
     {

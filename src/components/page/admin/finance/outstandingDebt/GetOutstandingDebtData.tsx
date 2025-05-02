@@ -9,9 +9,11 @@ import { formatCurrency } from "@/utils/formatCurrency";
 interface GetOutStandingDebtDataProps {
   companyId?: string;
   companyName?: string;
+  title: string;
+  status: string;
 }
 
-export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandingDebtDataProps) => {
+export const GetOutstandingDebtData = ({ companyId, companyName, title, status }: GetOutStandingDebtDataProps) => {
   const limit = 10;
   const [pageOutstandingDebt, setPageOutstandingDebt] = useState(1);
 
@@ -22,13 +24,14 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
     isLoading: isLoadingOutstandingDebt,
     refetch: refetchOutstandingDebtData,
   } = useQuery({
-    queryKey: ["getOutstandingDebtByCompanyId", companyId, pageOutstandingDebt, limit],
+    queryKey: ["getOutstandingDebtByCompanyId", companyId, pageOutstandingDebt, limit, status],
     queryFn: async () => {
       if (!companyId) return null;
 
       return await getOutstandingDebt({
         companyId,
         page: pageOutstandingDebt,
+        status,
         limit,
       });
     },
@@ -58,7 +61,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
         <Group justify="space-between" align="flex-start">
           <Stack gap="xs">
             <Text size="lg" fw={600}>
-              Hutang Berjalan {companyName}
+              {title} {companyName}
             </Text>
             <Select
               label="Filter berdasarkan Type"
@@ -73,7 +76,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName }: GetOutStandin
           </Stack>
           <Group justify="space-between" p={20}>
             <Text fw={800} size="xl" c={"red"}>
-              {formatCurrency(outstandingDebtData?.data?.total_outstandingDebt ?? 0)}
+              {formatCurrency(outstandingDebtData?.data?.total_debt ?? 0)}
             </Text>
           </Group>
         </Group>

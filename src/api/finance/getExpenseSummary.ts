@@ -5,6 +5,7 @@ interface GetExpenseSummaryParams {
   page?: number;
   limit?: number;
   summaryOnly?: boolean; // ✅ dibuat optional
+  status: string;
 }
 
 export const getExpenseSummary = async ({
@@ -12,6 +13,7 @@ export const getExpenseSummary = async ({
   page = 1,
   limit = 10,
   summaryOnly,
+  status,
 }: GetExpenseSummaryParams): Promise<IExpenseSummaryResponse> => {
   if (!companyId) {
     throw new Error("Company ID is required");
@@ -25,6 +27,10 @@ export const getExpenseSummary = async ({
 
   if (summaryOnly) {
     queryParams.append("summary_only", "true"); // ✅ hanya kirim jika true
+  }
+
+  if (status) {
+    queryParams.append("status", status); // ✅ hanya kirim jika true
   }
 
   const url = `finance/get-expense-summary?${queryParams.toString()}`;
