@@ -14,6 +14,7 @@ import { CashinStats } from "@/components/common/stats/CashInStats";
 import { IoCashOutline } from "react-icons/io5";
 import { AvailableCashStats } from "@/components/common/stats/AvailableCashStats";
 import { CashOutStats } from "@/components/common/stats/CashOutStats";
+import { ReceivableAssetStats } from "@/components/common/stats/ReceivableAssetStats";
 
 export const DashboardComponent = () => {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
@@ -62,6 +63,9 @@ export const DashboardComponent = () => {
             </Flex>
           </SimpleGridGlobal>
 
+          <Paper shadow="sm" radius="md" p="md" withBorder>
+            <ReceivableAssetStats companyId={activeTab?.id} onAssetChange={handleAssetChange} />
+          </Paper>
           <Paper shadow="sm" radius="md" p="md" withBorder>
             <FixedAssetStats companyId={activeTab?.id} onAssetChange={handleAssetChange} />
           </Paper>

@@ -6,7 +6,9 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import CreateJournalEntryModal from "../../journalEntry/CreateJournalEntryModal";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
-import FixedAssetTable from "./FixedAssetTable";
+import TableComponent from "@/components/common/table/TableComponent";
+import { formatRupiah } from "@/utils/formatRupiah";
+import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -49,9 +51,6 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType }: AssetSu
             <Text size="lg" fw={600}>
               Asset {companyName}
             </Text>
-            <Stack p={20}>
-              <CreateJournalEntryModal transactionType="payin" companyId={companyId} />
-            </Stack>
           </Group>
 
           <Box
@@ -71,7 +70,33 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType }: AssetSu
               </Text>
             </Group>
 
-            <FixedAssetTable data={assetList} startIndex={startIndex} />
+            <Box style={{ flex: 1 }}>
+              <TableComponent
+                data={assetList || []}
+                columns={[
+                  { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
+                  { key: "partner", title: "Partner", width: 80, minWidth: 80 },
+
+                  {
+                    key: "amount",
+                    title: "Nominal",
+                    width: 120,
+                    minWidth: 120,
+                    render: (item) => formatRupiah(item.amount),
+                  },
+                  {
+                    key: "date_inputed",
+                    title: "Tanggal Transaksi",
+                    width: 120,
+                    minWidth: 120,
+                    render: (item) => formatDateIndonesia(item.date_inputed),
+                  },
+
+                  { key: "description", title: "Deskripsi", width: 220, minWidth: 220 },
+                ]}
+                startIndex={startIndex}
+              />
+            </Box>
 
             <Group gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
               <Pagination total={totalPages} value={page} onChange={setPage} />

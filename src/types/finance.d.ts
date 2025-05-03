@@ -1,5 +1,6 @@
 interface IExpenseSummaryItem {
   id: number;
+  invoice;
   description: string;
   amount: number;
   partner: string;

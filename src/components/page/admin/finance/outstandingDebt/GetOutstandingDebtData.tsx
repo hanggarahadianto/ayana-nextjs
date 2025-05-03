@@ -90,7 +90,12 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status }
         >
           <Box style={{ flex: 1 }}>
             <Box style={{ flex: 1 }}>
-              <OutstandingDebtTable data={outstandingDebtData?.data.debtList || []} startIndex={startIndex} companyId={companyId} />
+              <OutstandingDebtTable
+                data={outstandingDebtData?.data.debtList || []}
+                startIndex={startIndex}
+                companyId={companyId}
+                status={status}
+              />
             </Box>
           </Box>
 

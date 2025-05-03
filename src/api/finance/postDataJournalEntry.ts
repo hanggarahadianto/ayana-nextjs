@@ -49,6 +49,10 @@ export const useSubmitJournalEntry = (closeModal: () => void, companyId?: string
               queryKey: ["getFixedAssetData", companyId],
               exact: false,
             }),
+            queryClient.refetchQueries({
+              queryKey: ["getReceivableAssetData", companyId],
+              exact: false,
+            }),
           ]);
         }
 

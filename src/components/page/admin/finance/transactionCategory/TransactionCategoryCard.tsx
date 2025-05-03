@@ -1,13 +1,11 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Group, Stack, Loader, Pagination, Select } from "@mantine/core";
+import { Card, Text, Group, Stack, Pagination, Select, Box } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
-import { getDataAccount } from "@/api/account/getDataAccount";
-import AccountTable from "@/components/page/admin/finance/account/TableAccount";
-import { useEffect, useMemo, useState } from "react";
-import { accountTypeOptions, typeOptions } from "@/constants/dictionary";
+import { useMemo, useState } from "react";
+import { accountTypeOptions } from "@/constants/dictionary";
 import { getDataTranasctionCategory } from "@/api/transaction-category/getDataTransactionCategory";
-import TransactionCategoryTable from "./TransactionCategoryTable";
 import AddTransactionCategoryModal from "./AddTransactionCategoryModal";
+import TableComponent from "@/components/common/table/TableComponent";
 
 interface AccountCardProps {
   companyId: string;
@@ -16,7 +14,6 @@ interface AccountCardProps {
 
 export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardProps) => {
   const [page, setPage] = useState(1);
-  console.log("PAGE", page);
 
   const limit = 10;
 
@@ -38,23 +35,9 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
   const totalPages = useMemo(() => {
     return transactionCategoryData?.total ? Math.ceil(transactionCategoryData.total / limit) : 1;
   }, [transactionCategoryData]);
-  console.log("TOTAL PAGES", totalPages);
-
-  // const filteredData = useMemo(() => {
-  //   if (!accountData?.data) return [];
-  //   if (!selectedType) return accountData.data;
-
-  //   return accountData.data.filter((item) => item.type === selectedType);
-  // }, [accountData, selectedType]);
 
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, transactionCategoryData?.total || 0);
-
-  // useEffect(() => {
-  //   if (accountData?.total && accountData.total <= (page - 1) * limit) {
-  //     setPage(1); // Reset page to 1 if the page number exceeds available data
-  //   }
-  // }, [accountData, page]);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -79,15 +62,36 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
         <Stack>
           <AddTransactionCategoryModal companyId={companyId} refetchTransactionCategoryData={refetchTrabsactionCategoryData} />
         </Stack>
-        <TransactionCategoryTable startIndex={startIndex} data={transactionCategoryData?.data || []} />
-        {totalPages > 0 && (
-          <>
-            <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />
-            <Text mt={8} size="sm" c="dimmed">
-              Show from {startIndex} to {endIndex} of {transactionCategoryData?.total} data
-            </Text>
-          </>
-        )}
+        <Box
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "50vh",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box style={{ flex: 1 }}>
+            <TableComponent
+              data={transactionCategoryData?.data || []}
+              columns={[
+                { key: "name", title: "Nama", width: 100, minWidth: 100 },
+                { key: "category", title: "Kategori", width: 160, minWidth: 160 },
+                { key: "debit_account_type", title: "Debit", width: 140, minWidth: 140 },
+                { key: "credit_account_type", title: "Kredit", width: 180, minWidth: 180 },
+                { key: "description", title: "Deskripsi", width: 180, minWidth: 180 },
+              ]}
+              startIndex={startIndex}
+            />
+          </Box>
+          {totalPages > 0 && (
+            <>
+              <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />
+              <Text mt={8} size="sm" c="dimmed">
+                Show from {startIndex} to {endIndex} of {transactionCategoryData?.total} data
+              </Text>
+            </>
+          )}
+        </Box>
       </Group>
     </Card>
   );

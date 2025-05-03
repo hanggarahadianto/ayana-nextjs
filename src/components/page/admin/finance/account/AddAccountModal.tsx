@@ -5,8 +5,6 @@ import { Form, Formik } from "formik";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import { validationSchemaAccount } from "@/utils/validation/account-validation";
 import { initialAccountValues } from "@/utils/initialValues/initialValuesAccount";
-
-// import { accountTypeOptions, ValidCategories } from "@/constants/dictionary";
 import { useSubmitAccount } from "@/api/account/postDataAccount";
 import { accountTypeOptions, ValidCategories } from "@/constants/dictionary";
 
@@ -19,8 +17,6 @@ const AddAccountModal = ({ refetchAccountData, companyId }: AddAccountModalProps
   const [opened, { open, close }] = useDisclosure(false);
 
   const { mutate: postData, isPending: isLoadingSubmitAccountData } = useSubmitAccount(refetchAccountData, close);
-
-  // Mock submit function - replace with your actual API call
   const handleSubmit = useCallback(
     (values: IAccountCreate, { setSubmitting }: any) => {
       const payload = {
@@ -79,17 +75,6 @@ const AddAccountModal = ({ refetchAccountData, companyId }: AddAccountModalProps
                       onBlur={handleBlur}
                       error={touched.name && errors.name}
                     />
-
-                    {/* <Select
-                      withAsterisk
-                      label="Tipe Akun"
-                      placeholder="Pilih tipe akun"
-                      data={accountTypeOptions}
-                      value={values.type}
-                      onChange={(value) => setFieldValue("type", value || "")}
-                      onBlur={handleBlur}
-                      error={touched.type && errors.type}
-                    /> */}
 
                     <Select
                       withAsterisk

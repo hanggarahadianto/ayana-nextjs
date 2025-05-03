@@ -216,23 +216,23 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                     />
 
                     <Group gap="80px" mt={20}>
-                      {transactionType === "payin" && (
-                        <Flex gap={"10px"}>
-                          <Switch
-                            size="lg"
-                            //   label="Profit"
-                            checked={showProfit[index] ?? false}
-                            onChange={() => {
-                              const newShowProfit = [...showProfit];
-                              newShowProfit[index] = !newShowProfit[index];
-                              setShowProfit(newShowProfit);
-                            }}
-                          />
-                          <Badge color={showProfit[index] ? "darkblue" : "red"} w={80} mt={4}>
-                            {showProfit[index] ? "Profit" : "Non Profit"}
-                          </Badge>
-                        </Flex>
-                      )}
+                      {/* {transactionType === "payin" && ( */}
+                      <Flex gap={"10px"}>
+                        <Switch
+                          size="lg"
+                          //   label="Profit"
+                          checked={showProfit[index] ?? false}
+                          onChange={() => {
+                            const newShowProfit = [...showProfit];
+                            newShowProfit[index] = !newShowProfit[index];
+                            setShowProfit(newShowProfit);
+                          }}
+                        />
+                        <Badge color={showProfit[index] ? "darkblue" : "red"} w={80} mt={4}>
+                          {showProfit[index] ? "Profit" : "Non Profit"}
+                        </Badge>
+                      </Flex>
+                      {/* // )} */}
 
                       {entry.status !== "paid" && (
                         <Flex gap={"10px"}>

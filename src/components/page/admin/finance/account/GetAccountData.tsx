@@ -1,11 +1,11 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Group, Stack, Loader, Pagination, Select, Box } from "@mantine/core";
+import { Card, Text, Group, Stack, Pagination, Select, Box } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { getDataAccount } from "@/api/account/getDataAccount";
-import AccountTable from "@/components/page/admin/finance/account/TableAccount";
 import { useEffect, useMemo, useState } from "react";
 import { accountTypeOptions, typeOptions } from "@/constants/dictionary";
 import AddAccountModal from "./AddAccountModal";
+import TableComponent from "@/components/common/table/TableComponent";
 
 interface AccountCardProps {
   companyId: string;
@@ -17,7 +17,6 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
   const limit = 10;
   const [selectedType, setSelectedType] = useState<string | null>(null);
 
-  // Debug selectedType
   useEffect(() => {
     console.log("selectedType updated:", selectedType);
   }, [selectedType]);
@@ -66,20 +65,6 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
               clearable
               style={{ width: 250 }}
             />
-
-            {/* <Select
-              label="Test Select"
-              placeholder="Pilih Type"
-              data={[
-                { value: "test1", label: "Test 1" },
-                { value: "test2", label: "Test 2" },
-              ]}
-              onChange={(value) => {
-                console.log("TEST Select onChange:", value);
-                setSelectedType(value);
-              }}
-              clearable
-            /> */}
           </Stack>
 
           <AddAccountModal companyId={companyId} refetchAccountData={refetchAccountData} />
@@ -88,19 +73,23 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
           style={{
             display: "flex",
             flexDirection: "column",
-            minHeight: "50vh", // Pastikan container mengisi tinggi layar
-            justifyContent: "space-between", // Paginasi akan tetap di bawah
+            minHeight: "50vh",
+            justifyContent: "space-between",
           }}
         >
-          {/* Bagian Tabel */}
           <Box style={{ flex: 1 }}>
-            <AccountTable
+            <TableComponent
               data={accountData?.data || []}
-              startIndex={startIndex} // Kirim ini agar nomor urut sesuai halaman
+              columns={[
+                { key: "code", title: "Code", width: 100, minWidth: 100 },
+                { key: "name", title: "Nama", width: 160, minWidth: 160 },
+                { key: "category", title: "Kategori", width: 140, minWidth: 140 },
+                { key: "description", title: "Deskripsi", width: 180, minWidth: 180 },
+              ]}
+              startIndex={startIndex}
             />
           </Box>
 
-          {/* Bagian Paginasi */}
           {totalPages > 0 && (
             <Stack gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
               <Pagination total={totalPages} value={page} onChange={setPage} />
