@@ -3,11 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { formatCurrency } from "@/utils/formatCurrency";
-import CreateJournalEntryModal from "../../journalEntry/CreateJournalEntryModal";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
-import { formatRupiah } from "@/utils/formatRupiah";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 
 interface AssetSummaryCardProps {
@@ -82,7 +80,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType }: AssetSu
                     title: "Nominal",
                     width: 120,
                     minWidth: 120,
-                    render: (item) => formatRupiah(item.amount),
+                    render: (item) => formatCurrency(item.amount),
                   },
                   {
                     key: "date_inputed",

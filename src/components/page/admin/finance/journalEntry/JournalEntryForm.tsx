@@ -88,8 +88,8 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
   // Handle switch change for a specific journal entry
   const handleSwitchChange = (index: number, checked: boolean) => {
     const updatedJournalEntries = [...values.journalEntries];
-    updatedJournalEntries[index].transaction_type = checked ? "payin" : "payout"; // Update only the selected entry
-    setFieldValue("journalEntries", updatedJournalEntries); // Set the updated value for the journal entries
+    updatedJournalEntries[index].transaction_type = checked ? "payin" : "payout";
+    setFieldValue("journalEntries", updatedJournalEntries);
   };
   const [showProfit, setShowProfit] = useState<boolean[]>([]);
   const [showInstallment, setShowInstallment] = useState<boolean[]>([]);
@@ -100,7 +100,9 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
       {() => (
         <Stack gap="xl">
           {values?.journalEntries?.map((entry, index) => {
-            console.log("errors", error);
+            console.log("TRANSACTION TYPE", entry.transaction_type);
+            console.log("Status", entry.status);
+
             const calculateTotalBagiHasil = (entry: any, percentage: number) => {
               const startDate = new Date(entry.date_inputed);
               const endDate = new Date(entry.due_date);
@@ -144,7 +146,7 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
 
                 <Group justify="space-between" align="flex-start">
                   <Stack w="100%" gap="md">
-                    <InputWrapper error={touched?.[index]?.transaction_category_id && error?.[index]?.transaction_category_id}>
+                    {/* <InputWrapper error={touched?.[index]?.transaction_category_id && error?.[index]?.transaction_category_id}>
                       <SelectFinanceTransactionCategory
                         companyId={companyId}
                         transactionType={entry.transaction_type}
@@ -154,7 +156,7 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                           handleJournalChange(index, "transaction_category_id", selected.id);
                         }}
                       />
-                    </InputWrapper>
+                    </InputWrapper> */}
 
                     {entry.transaction_type !== "payin" && (
                       <Group w="100%" grow>
@@ -171,18 +173,29 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                             const isPaid = value === "paid";
                             const isUnpaid = value === "unpaid";
 
+                            // Tentukan transactionType berdasarkan status
+                            const transactionType = isUnpaid ? "payout" : isPaid ? "payin" : undefined;
+
                             handleJournalChange(index, "status", value);
                             handleJournalChange(index, "is_repaid", isPaid);
                             handleJournalChange(index, "invoice", isUnpaid ? "Tempo" : value === null ? null : "");
-                            // handleJournalChange(index, "transaction_type", isUnpaid ? "payout" : isPaid ? "payin" : null);
+                            // handleJournalChange(index, "transaction_type", transactionType);
                           }}
                           onBlur={handleBlur}
                           value={entry.status}
                         />
-
-                        <></>
                       </Group>
                     )}
+
+                    <SelectFinanceTransactionCategory
+                      companyId={companyId}
+                      transactionType={entry.transaction_type}
+                      label="Kategori Transaksi"
+                      onSelect={(selected) => {
+                        handleJournalChange(index, "description", selected.description);
+                        handleJournalChange(index, "transaction_category_id", selected.id);
+                      }}
+                    />
 
                     <Group w="100%" grow>
                       <TextInput

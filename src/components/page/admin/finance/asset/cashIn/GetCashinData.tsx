@@ -7,7 +7,6 @@ import CreateJournalEntryModal from "../../journalEntry/CreateJournalEntryModal"
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
-import { formatRupiah } from "@/utils/formatRupiah";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 
 interface CashSummaryCardProps {
@@ -76,14 +75,14 @@ export const GetCashinData = ({ companyId, companyName, assetType }: CashSummary
                 data={cashInList || []}
                 columns={[
                   { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
+                  { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
                   { key: "partner", title: "Partner", width: 80, minWidth: 80 },
-
                   {
                     key: "amount",
                     title: "Nominal",
                     width: 120,
                     minWidth: 120,
-                    render: (item) => formatRupiah(item.amount),
+                    render: (item) => formatCurrency(item.amount),
                   },
                   {
                     key: "date_inputed",

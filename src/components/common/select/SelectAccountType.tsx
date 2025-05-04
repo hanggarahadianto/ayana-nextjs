@@ -1,67 +1,86 @@
 import { getDataAccount } from "@/api/account/getDataAccount";
 import { Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 interface ISelectFinanceAccountProps {
   companyId?: string;
-  onSelect: (selected: { id: string; code: number; type: string; category: string; name: string }) => void;
+  category?: string;
+  category_only?: string;
+  onSelect: (selected: { id: string; category: string; code?: string; type?: string; name?: string } | null) => void;
   label: string;
 }
 
-export default function SelectFinanceAccount({ companyId, onSelect, label }: ISelectFinanceAccountProps) {
-  //   console.log("company id", companyId);
+export default function SelectFinanceAccount({ companyId, category, category_only, onSelect, label }: ISelectFinanceAccountProps) {
   const { data: accountData, isLoading } = useQuery({
-    queryKey: ["getAccountData", companyId],
-    queryFn: () => getDataAccount(companyId || "", 1, 1000),
-    refetchOnWindowFocus: false,
+    queryKey: ["getAccountData", companyId, category, category_only],
+    queryFn: () =>
+      getDataAccount({
+        companyId: companyId || "",
+        category,
+        category_only,
+      }),
     enabled: !!companyId,
+    refetchOnWindowFocus: false,
   });
 
   const accounts = useMemo(() => {
-    return Array.isArray(accountData?.data)
-      ? [...accountData.data].sort((a, b) => a.code - b.code) // sort descending by code
-      : [];
+    return Array.isArray(accountData?.data) ? accountData.data : [];
   }, [accountData]);
 
   const handleSelect = (value: string | null) => {
-    const account = value ? accounts.find((acc) => acc.id === value) : null;
-    if (account) {
-      onSelect({
-        id: account.id,
-        code: account.code,
-        type: account.type,
-        category: account.category,
-        name: account.name,
-      });
+    const selected = value ? accounts.find((acc) => acc.id === value) : null;
+
+    if (selected) {
+      if (category_only === "true") {
+        onSelect({ id: selected.id, category: selected.category });
+      } else {
+        onSelect({
+          id: selected.id,
+          code: selected.code,
+          type: selected.type,
+          category: selected.category,
+          name: selected.name,
+        });
+      }
+    } else {
+      onSelect(null);
     }
   };
 
-  // Create the options for the Select component
-  const accountOptions = accounts.map((account) => ({
-    value: account.id,
-    label: `${account.type} - ${account.description}`,
-  }));
+  const accountOptions = useMemo(() => {
+    if (category_only === "true") {
+      return accounts.map((acc: any) => ({
+        value: acc.id,
+        label: acc.category,
+      }));
+    } else {
+      return accounts.map((acc: any) => ({
+        value: acc.id,
+        label: `${acc.type} - ${acc.description}`,
+      }));
+    }
+  }, [accounts, category_only]);
 
   return (
-    <>
-      <Select
-        searchable
-        styles={{
-          option: {
-            fontSize: "14px",
-            padding: "6px 10px",
-          },
-          input: {
-            cursor: "pointer",
-          },
-        }}
-        clearable
-        label={label}
-        placeholder={`Pilih ${label ?? ""}`}
-        onChange={handleSelect}
-        data={accountOptions}
-      />
-    </>
+    <Select
+      w={400}
+      searchable
+      clearable
+      label={label}
+      placeholder={`Pilih ${label ?? ""}`}
+      onChange={handleSelect} // Handle change and reset to null
+      data={accountOptions}
+      disabled={isLoading}
+      styles={{
+        option: {
+          fontSize: "14px",
+          padding: "6px 10px",
+        },
+        input: {
+          cursor: "pointer",
+        },
+      }}
+    />
   );
 }

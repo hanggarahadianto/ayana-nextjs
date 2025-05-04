@@ -1,14 +1,13 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo } from "react";
 import { Modal, Button, Group, Stack, Alert, SimpleGrid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form } from "formik";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import { initialValuesJournalEntry } from "@/utils/initialValues/initialValuesJournalEntry";
 import { validationSchemaJournalEntry } from "@/utils/validation/journalEntry-validation";
-import { useQueryClient } from "@tanstack/react-query";
+
 import JournalEntryForm from "./JournalEntryForm";
 import { useSubmitJournalEntry } from "@/api/finance/postDataJournalEntry";
-import { SelectTransactionGoals } from "@/components/common/select/SelectTransactionGoal";
 
 interface ICreateJournalEntryModalProps {
   transactionType: "payin" | "payout";
@@ -43,7 +42,7 @@ const CreateJournalEntryModal: React.FC<ICreateJournalEntryModalProps> = ({ tran
           onSubmit={handleSubmit}
         >
           {({ handleSubmit, values, errors, touched }) => {
-            console.log("values", values);
+            // console.log("values", values);
             // console.log("errors", errors);
             return (
               <SimpleGrid p={20} cols={1}>

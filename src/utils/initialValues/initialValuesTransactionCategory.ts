@@ -4,6 +4,7 @@ export const initialValuesTransactionCategoryCreate = (companyId?: string): ITra
   debit_account_name: "",
   credit_account_name: "",
   credit_account_id: "",
+  transaction_type: "",
   category: "",
   description: "",
 

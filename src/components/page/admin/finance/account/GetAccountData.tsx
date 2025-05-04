@@ -26,8 +26,14 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
     isLoading,
     refetch: refetchAccountData,
   } = useQuery({
-    queryKey: ["getAccountByCompanyId", companyId, page, limit, selectedType],
-    queryFn: () => getDataAccount(companyId, page, limit, selectedType),
+    queryKey: ["getAccountData", companyId, page, limit, selectedType],
+    queryFn: () =>
+      getDataAccount({
+        companyId: companyId || "",
+        page,
+        limit,
+        selectedType,
+      }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
@@ -81,7 +87,7 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
             <TableComponent
               data={accountData?.data || []}
               columns={[
-                { key: "code", title: "Code", width: 100, minWidth: 100 },
+                { key: "code", title: "Code", width: 40, minWidth: 40 },
                 { key: "name", title: "Nama", width: 160, minWidth: 160 },
                 { key: "category", title: "Kategori", width: 140, minWidth: 140 },
                 { key: "description", title: "Deskripsi", width: 180, minWidth: 180 },

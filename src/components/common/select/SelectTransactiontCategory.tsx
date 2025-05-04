@@ -1,4 +1,5 @@
 import { getDataTranasctionCategory } from "@/api/transaction-category/getDataTransactionCategory";
+import LoadingGlobal from "@/styles/loading/loading-global";
 import { Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 
@@ -16,10 +17,10 @@ export default function SelectFinanceTransactionCategory({
   transactionType,
 }: ISelectFinanceTransactionCategoryProps) {
   const { data: TransactionCategoryData, isLoading } = useQuery({
-    queryKey: ["getTransactionCategoryData", companyId, transactionType],
-    queryFn: () => getDataTranasctionCategory(companyId as string, 1, 1000, transactionType),
+    queryKey: ["getTransactionCategoryData", companyId, transactionType, status],
+    queryFn: () => getDataTranasctionCategory(companyId as string, 1, 1000, transactionType), // Tambahkan status ke API call
     refetchOnWindowFocus: false,
-    enabled: !!companyId,
+    enabled: !!companyId && !!transactionType, // Query jalan jika semua tersedia
   });
 
   const handleSelect = (value: string | null) => {
@@ -35,14 +36,14 @@ export default function SelectFinanceTransactionCategory({
     }
   };
 
-  // Create the options for the Select component
-  const TransactionCategoryOptions = TransactionCategoryData?.data.map((TransactionCategory) => ({
+  const TransactionCategoryOptions = TransactionCategoryData?.data?.map((TransactionCategory) => ({
     value: TransactionCategory.id,
     label: `${TransactionCategory.name} - ${TransactionCategory.description}`,
   }));
 
   return (
     <>
+      {/* <LoadingGlobal visible={isLoading} /> */}
       <Select
         searchable
         styles={{

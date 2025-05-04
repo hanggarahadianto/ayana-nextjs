@@ -20,8 +20,6 @@ export default function PayoutComponent() {
         <GetCashOutData companyId={activeTab?.id || ""} companyName={activeTab?.title} assetType="cashout" />
 
         <GetExpenseSummaryData companyId={activeTab?.id} companyName={activeTab?.title} />
-        {/* <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} title="Hutang Berjalan" status="going" />
-         */}
 
         <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} title="Hutang Berjalan" status="going" />
         <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} title="Hutang Lunas" status="done" />

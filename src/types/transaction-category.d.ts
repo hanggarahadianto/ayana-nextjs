@@ -7,13 +7,12 @@ interface ITransactionCategory {
   credit_account_id: string;
   credit_account_name: string;
   credit_account_type: string;
+  transaction_type: string;
   category: string;
   description: string;
   company_id: string;
   created_at: string;
   updated_at: string;
-  debit_account: IAccount;
-  credit_account: IAccount;
 }
 
 interface ITransactionCategoryCreate {
@@ -22,6 +21,7 @@ interface ITransactionCategoryCreate {
   debit_account_name: string;
   credit_account_id: string;
   credit_account_name: string;
+  transaction_type: string;
   category: string;
   description: string;
   company_id: string;
@@ -35,12 +35,11 @@ interface ITransactionCategoryUpdate {
   credit_account_id: string;
   credit_account_name: string;
   category: string;
+  transaction_type: string;
   description: string;
   company_id: string;
   created_at: string;
   updated_at: string;
-  debit_account: IAccount;
-  credit_account: IAccount;
 }
 
 interface ITransactionCategoryResponse {

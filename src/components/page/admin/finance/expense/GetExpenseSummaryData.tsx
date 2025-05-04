@@ -1,11 +1,12 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Group, Stack, Loader, Pagination, Select, Box } from "@mantine/core";
+import { Card, Text, Group, Stack, Pagination, Select, Box } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useEffect, useMemo, useState } from "react";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { getExpenseSummary } from "@/api/finance/getExpenseSummary";
-import { ExpenseSummaryTable } from "./ExpenseSummaryTable";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
+import TableComponent from "@/components/common/table/TableComponent";
+import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 
 interface GetExpenseDataProps {
   companyId?: string;
@@ -38,6 +39,8 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
     enabled: Boolean(companyId),
     refetchOnWindowFocus: false,
   });
+
+  const expenseList = ExpenseData?.data.expenseList;
 
   useEffect(() => {
     console.log("selectedType updated:", selectedType);
@@ -90,9 +93,31 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
               </Text>
             </Group>
             <Box style={{ flex: 1 }}>
-              <Box style={{ flex: 1 }}>
-                <ExpenseSummaryTable data={ExpenseData?.data.expenseList || []} startIndex={startIndex} />
-              </Box>
+              <TableComponent
+                data={expenseList || []}
+                columns={[
+                  { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
+                  { key: "partner", title: "Partner", width: 80, minWidth: 80 },
+
+                  {
+                    key: "amount",
+                    title: "Nominal",
+                    width: 120,
+                    minWidth: 120,
+                    render: (item) => formatCurrency(item.amount),
+                  },
+                  {
+                    key: "date_inputed",
+                    title: "Tanggal Transaksi",
+                    width: 120,
+                    minWidth: 120,
+                    render: (item) => formatDateIndonesia(item.date_inputed),
+                  },
+
+                  { key: "description", title: "Deskripsi", width: 220, minWidth: 220 },
+                ]}
+                startIndex={startIndex}
+              />
             </Box>
 
             {/* Bagian Paginasi */}

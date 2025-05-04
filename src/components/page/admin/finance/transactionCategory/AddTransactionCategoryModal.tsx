@@ -56,8 +56,6 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
           onSubmit={handleSubmit}
         >
           {({ values, errors, touched, setFieldValue, handleBlur, isSubmitting }) => {
-            console.log("valus transaction cat", values);
-            console.log("err", errors);
             return (
               <Form>
                 <SimpleGrid p={20}>
@@ -71,20 +69,33 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
                       onBlur={handleBlur}
                       error={touched.name && errors.name}
                     />
+                    <Select
+                      withAsterisk
+                      label="Tipe Transaksi"
+                      placeholder="Pilih tipe transaksi"
+                      data={[
+                        { value: "payin", label: "Pay In (Pemasukan)" },
+                        { value: "payout", label: "Pay Out (Pengeluaran)" },
+                      ]}
+                      value={values.transaction_type}
+                      onChange={(value) => setFieldValue("transaction_type", value)}
+                      onBlur={handleBlur}
+                      error={touched.transaction_type && errors.transaction_type}
+                    />
                     <SelectFinanceAccount
                       companyId={companyId}
                       onSelect={(selected) => {
-                        setFieldValue("debit_account_id", selected.id);
-                        setFieldValue("debit_account_type", selected.type);
-                        setFieldValue("category", selected.category);
+                        setFieldValue("debit_account_id", selected?.id);
+                        setFieldValue("debit_account_type", selected?.type);
+                        setFieldValue("category", selected?.category);
                       }}
                       label={"Tipe Akun Debit"}
                     />
                     <SelectFinanceAccount
                       companyId={companyId}
                       onSelect={(selected) => {
-                        setFieldValue("credit_account_id", selected.id);
-                        setFieldValue("credit_account_type", selected.type);
+                        setFieldValue("credit_account_id", selected?.id);
+                        setFieldValue("credit_account_type", selected?.type);
                       }}
                       label={"Tipe Akun Kredit"}
                     />

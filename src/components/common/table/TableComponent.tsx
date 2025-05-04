@@ -1,11 +1,11 @@
-import { ScrollArea, Table } from "@mantine/core";
-import { ReactNode } from "react";
+import { Table } from "@mantine/core";
+import React, { ReactNode, JSX } from "react";
 
 interface Column<T> {
   key: string;
   title: string;
-  width?: number;
-  minWidth?: number;
+  width?: number | string;
+  minWidth?: number | string;
   render?: (item: T) => ReactNode;
 }
 
@@ -18,47 +18,60 @@ interface TableComponentProps<T> {
 
 export default function TableComponent<T>({ data, columns, startIndex = 1, onRowClick }: TableComponentProps<T>) {
   return (
-    <ScrollArea style={{ minHeight: 400 }} p="xl">
-      <Table
-        highlightOnHover
-        withColumnBorders
-        style={{
-          tableLayout: "fixed",
-          width: "100%",
-          minWidth: 700,
-          maxWidth: "100%",
-        }}
-      >
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th style={{ textAlign: "left", width: 50, minWidth: 50 }}>No</Table.Th>
-            {columns.map((column) => (
+    <div
+      style={{
+        overflowX: "scroll",
+        overflowY: "hidden",
+        width: "100%",
+        minHeight: "150px", // ⬅️ Tambahkan ini
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-end", // ⬅️ Pastikan scroll di bawah
+      }}
+    >
+      <div style={{ minWidth: `${columns.length * 200}px` }}>
+        <Table highlightOnHover withColumnBorders striped>
+          <Table.Thead>
+            <Table.Tr>
               <Table.Th
-                key={column.key}
                 style={{
                   textAlign: "left",
-                  width: column.width,
-                  minWidth: column.minWidth,
+                  width: 50,
+                  minWidth: 30,
+                  maxWidth: 60,
+                  padding: "0 8px",
                 }}
               >
-                {column.title}
+                No
               </Table.Th>
-            ))}
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {data.map((item, index) => (
-            <Table.Tr key={index} style={{ cursor: onRowClick ? "pointer" : "default" }} onClick={() => onRowClick && onRowClick(item)}>
-              <Table.Td style={{ textAlign: "left" }}>{startIndex + index}</Table.Td>
               {columns.map((column) => (
-                <Table.Td key={column.key} style={{ textAlign: "left" }}>
-                  {column.render ? column.render(item) : (item as any)[column.key]}
-                </Table.Td>
+                <Table.Th
+                  key={column.key}
+                  style={{
+                    textAlign: "left",
+                    width: column.width,
+                    minWidth: column.minWidth || 150,
+                  }}
+                >
+                  {column.title}
+                </Table.Th>
               ))}
             </Table.Tr>
-          ))}
-        </Table.Tbody>
-      </Table>
-    </ScrollArea>
+          </Table.Thead>
+          <Table.Tbody>
+            {data.map((item, index) => (
+              <Table.Tr key={index} style={{ cursor: onRowClick ? "pointer" : "default" }} onClick={() => onRowClick && onRowClick(item)}>
+                <Table.Td style={{ textAlign: "left", minWidth: 50 }}>{startIndex + index}</Table.Td>
+                {columns.map((column) => (
+                  <Table.Td key={column.key} style={{ textAlign: "left", minWidth: column.minWidth || 150 }}>
+                    {column.render ? column.render(item) : (item as any)[column.key]}
+                  </Table.Td>
+                ))}
+              </Table.Tr>
+            ))}
+          </Table.Tbody>
+        </Table>
+      </div>
+    </div>
   );
 }

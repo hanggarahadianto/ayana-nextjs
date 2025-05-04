@@ -6,7 +6,6 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
-import { formatRupiah } from "@/utils/formatRupiah";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 
 interface AssetSummaryCardProps {
@@ -81,7 +80,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType }: As
                     title: "Nominal",
                     width: 120,
                     minWidth: 120,
-                    render: (item) => formatRupiah(item.amount),
+                    render: (item) => formatCurrency(item.amount),
                   },
                   {
                     key: "date_inputed",
