@@ -146,18 +146,6 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
 
                 <Group justify="space-between" align="flex-start">
                   <Stack w="100%" gap="md">
-                    {/* <InputWrapper error={touched?.[index]?.transaction_category_id && error?.[index]?.transaction_category_id}>
-                      <SelectFinanceTransactionCategory
-                        companyId={companyId}
-                        transactionType={entry.transaction_type}
-                        label="Kategori Transaksi"
-                        onSelect={(selected) => {
-                          handleJournalChange(index, "description", selected.description);
-                          handleJournalChange(index, "transaction_category_id", selected.id);
-                        }}
-                      />
-                    </InputWrapper> */}
-
                     {entry.transaction_type !== "payin" && (
                       <Group w="100%" grow>
                         <Select
@@ -195,6 +183,7 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                         handleJournalChange(index, "description", selected.description);
                         handleJournalChange(index, "transaction_category_id", selected.id);
                       }}
+                      status={entry.status}
                     />
 
                     <Group w="100%" grow>

@@ -32,6 +32,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status }
   const [pageOutstandingDebt, setPageOutstandingDebt] = useState(1);
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [selectedDebt, setSelectedDebt] = useState<IDebtSummaryItem | null>(null);
+  console.log("selected debt", selectedDebt);
 
   const {
     data: outstandingDebtData,
@@ -66,9 +67,11 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status }
   const startIndex = (pageOutstandingDebt - 1) * limit + 1;
   const endIndex = Math.min(pageOutstandingDebt * limit, outstandingDebtData?.data.total || 0);
 
+  console.log("satart indec di data", startIndex);
+
   const handleSendClick = (debt: IDebtSummaryItem) => {
+    console.log("clicked debt", debt);
     setSelectedDebt(debt);
-    // open(); // Uncomment if using modal
   };
 
   return (
@@ -101,16 +104,20 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status }
           style={{
             display: "flex",
             flexDirection: "column",
-            minHeight: "50vh",
+            minHeight: "20vh",
+            maxHeight: "42vh",
             justifyContent: "space-between",
           }}
         >
           <Box style={{ flex: 1 }}>
             <TableComponent
+              startIndex={startIndex}
               data={debtList}
               columns={[
-                { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
-                { key: "partner", title: "Partner", width: 120, minWidth: 120 },
+                { key: "invoice", title: "Invoice", width: 160, minWidth: 160 },
+                { key: "transaction_id", title: "Transaction ID", width: 120, minWidth: 120 },
+
+                { key: "partner", title: "Partner", width: 160, minWidth: 160 },
                 {
                   key: "amount",
                   title: "Nominal",
@@ -130,7 +137,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status }
                   title: "Tanggal Jatuh Tempo",
                   width: 180,
                   minWidth: 180,
-                  render: (item) => formatDateIndonesia(item.date_inputed),
+                  render: (item) => formatDateIndonesia(item.due_date),
                 },
                 {
                   key: "status",
@@ -152,31 +159,34 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status }
                     );
                   },
                 },
-                {
-                  key: "action",
-                  title: "Aksi",
-                  width: 80,
-                  minWidth: 80,
-                  render: (item) =>
-                    item.status !== "done" && (
-                      <IoIosSend
-                        color="green"
-                        size="22px"
-                        style={{ cursor: "pointer" }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleSendClick(item);
-                        }}
-                      />
-                    ),
-                },
+                ...(status !== "done"
+                  ? [
+                      {
+                        key: "action",
+                        title: "Aksi",
+                        width: 80,
+                        minWidth: 80,
+                        render: (item: IDebtSummaryItem) => (
+                          <IoIosSend
+                            color="green"
+                            size="22px"
+                            style={{ cursor: "pointer" }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSendClick(item);
+                            }}
+                          />
+                        ),
+                      },
+                    ]
+                  : []),
                 { key: "description", title: "Deskripsi", width: 400, minWidth: 400 },
               ]}
             />
           </Box>
 
           {totalPages > 0 && (
-            <Stack gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
+            <Stack gap="xs" mt={"md"} style={{ paddingBottom: "16px" }}>
               <Pagination total={totalPages} value={pageOutstandingDebt} onChange={setPageOutstandingDebt} />
               <Text size="sm" c="dimmed">
                 Menampilkan {startIndex} sampai {endIndex} dari {outstandingDebtData?.data.total} data

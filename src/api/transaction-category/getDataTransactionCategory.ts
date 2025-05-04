@@ -5,12 +5,15 @@ export const getDataTranasctionCategory = async (
   page = 1,
   limit: number,
   type?: string | null,
-  category?: string | null
+  category?: string | null,
+  status?: string | null
 ) => {
   if (!companyId) {
     console.error("Company ID tidak ada!");
     return;
   }
+
+  console.log("kategori", category);
 
   try {
     let url = `transaction-category/get?company_id=${companyId}&page=${page}&limit=${limit}`;
@@ -21,6 +24,10 @@ export const getDataTranasctionCategory = async (
 
     if (category) {
       url += `&category=${encodeURIComponent(category)}`;
+    }
+
+    if (status) {
+      url += `&status=${encodeURIComponent(status)}`;
     }
 
     const response = await APIAxiosInstance.get(url);

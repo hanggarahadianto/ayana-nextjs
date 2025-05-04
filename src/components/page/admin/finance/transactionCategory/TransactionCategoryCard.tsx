@@ -70,6 +70,7 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
                   setSelectedCategory(selected.category);
                 }
               }}
+              all={false}
             />
           </Group>
 

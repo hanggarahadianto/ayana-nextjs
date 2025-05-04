@@ -89,6 +89,7 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
                         setFieldValue("debit_account_type", selected?.type);
                         setFieldValue("category", selected?.category);
                       }}
+                      all={true}
                       label={"Tipe Akun Debit"}
                     />
                     <SelectFinanceAccount
@@ -97,6 +98,7 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
                         setFieldValue("credit_account_id", selected?.id);
                         setFieldValue("credit_account_type", selected?.type);
                       }}
+                      all={true}
                       label={"Tipe Akun Kredit"}
                     />
 

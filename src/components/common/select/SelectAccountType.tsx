@@ -1,5 +1,5 @@
 import { getDataAccount } from "@/api/account/getDataAccount";
-import { Select } from "@mantine/core";
+import { LoadingOverlay, Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
@@ -7,18 +7,22 @@ interface ISelectFinanceAccountProps {
   companyId?: string;
   category?: string;
   category_only?: string;
+  all: boolean;
   onSelect: (selected: { id: string; category: string; code?: string; type?: string; name?: string } | null) => void;
   label: string;
 }
 
-export default function SelectFinanceAccount({ companyId, category, category_only, onSelect, label }: ISelectFinanceAccountProps) {
+export default function SelectFinanceAccount({ companyId, category, category_only, all, onSelect, label }: ISelectFinanceAccountProps) {
   const { data: accountData, isLoading } = useQuery({
     queryKey: ["getAccountData", companyId, category, category_only],
     queryFn: () =>
       getDataAccount({
         companyId: companyId || "",
+        page: 3,
+        limit: 10,
         category,
         category_only,
+        all,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -29,7 +33,7 @@ export default function SelectFinanceAccount({ companyId, category, category_onl
   }, [accountData]);
 
   const handleSelect = (value: string | null) => {
-    const selected = value ? accounts.find((acc) => acc.id === value) : null;
+    const selected = value ? accounts.find((acc: { id: string }) => acc.id === value) : null;
 
     if (selected) {
       if (category_only === "true") {
@@ -63,24 +67,27 @@ export default function SelectFinanceAccount({ companyId, category, category_onl
   }, [accounts, category_only]);
 
   return (
-    <Select
-      w={400}
-      searchable
-      clearable
-      label={label}
-      placeholder={`Pilih ${label ?? ""}`}
-      onChange={handleSelect} // Handle change and reset to null
-      data={accountOptions}
-      disabled={isLoading}
-      styles={{
-        option: {
-          fontSize: "14px",
-          padding: "6px 10px",
-        },
-        input: {
-          cursor: "pointer",
-        },
-      }}
-    />
+    <>
+      <LoadingOverlay visible={isLoading} />
+      <Select
+        w={400}
+        searchable
+        clearable
+        label={label}
+        placeholder={`Pilih ${label ?? ""}`}
+        onChange={handleSelect} // Handle change and reset to null
+        data={accountOptions}
+        disabled={isLoading}
+        styles={{
+          option: {
+            fontSize: "14px",
+            padding: "6px 10px",
+          },
+          input: {
+            cursor: "pointer",
+          },
+        }}
+      />
+    </>
   );
 }

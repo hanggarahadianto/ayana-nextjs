@@ -8,6 +8,7 @@ interface ISelectFinanceTransactionCategoryProps {
   onSelect: (selected: { id: string; debit_account_id: string; credit_account_id: string; name: string; description: string }) => void;
   label: string;
   transactionType?: string;
+  status?: string;
 }
 
 export default function SelectFinanceTransactionCategory({
@@ -15,10 +16,11 @@ export default function SelectFinanceTransactionCategory({
   onSelect,
   label,
   transactionType,
+  status,
 }: ISelectFinanceTransactionCategoryProps) {
   const { data: TransactionCategoryData, isLoading } = useQuery({
     queryKey: ["getTransactionCategoryData", companyId, transactionType, status],
-    queryFn: () => getDataTranasctionCategory(companyId as string, 1, 1000, transactionType), // Tambahkan status ke API call
+    queryFn: () => getDataTranasctionCategory(companyId as string, 1, 1000, transactionType, undefined, status), // Tambahkan status ke API call
     refetchOnWindowFocus: false,
     enabled: !!companyId && !!transactionType, // Query jalan jika semua tersedia
   });
