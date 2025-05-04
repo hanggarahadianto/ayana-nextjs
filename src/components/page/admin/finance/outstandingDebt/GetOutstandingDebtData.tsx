@@ -8,17 +8,22 @@ import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 import { IoIosSend } from "react-icons/io";
 import TableComponent from "@/components/common/table/TableComponent";
 import { calculateDaysLeft, formatDaysToMonths, getStatusColor } from "@/utils/debtStatus";
+import ReversedJournalEntryModal from "../journalEntry/ReversedJournalEntryModal";
 
-interface IDebtSummaryItem {
-  id: string;
-  invoice: string;
-  partner: string;
-  amount: number;
-  date_inputed: string;
-  description: string;
-  due_date: string;
-  status: string;
-}
+// interface IDebtSummaryItem {
+//   id: string;
+//   invoice: string;
+//   partner: string;
+//   amount: number;
+//   date_inputed: string;
+//   description: string;
+//   due_date: string;
+//   status: string;
+//   transaction_id: string;
+//   transaction_type: string;
+//   company_id: string;
+//   is_repaid: boolean;
+// }
 
 interface GetOutStandingDebtDataProps {
   companyId?: string;
@@ -32,7 +37,8 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status }
   const [pageOutstandingDebt, setPageOutstandingDebt] = useState(1);
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [selectedDebt, setSelectedDebt] = useState<IDebtSummaryItem | null>(null);
-  console.log("selected debt", selectedDebt);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     data: outstandingDebtData,
@@ -67,11 +73,9 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status }
   const startIndex = (pageOutstandingDebt - 1) * limit + 1;
   const endIndex = Math.min(pageOutstandingDebt * limit, outstandingDebtData?.data.total || 0);
 
-  console.log("satart indec di data", startIndex);
-
   const handleSendClick = (debt: IDebtSummaryItem) => {
-    console.log("clicked debt", debt);
     setSelectedDebt(debt);
+    setIsModalOpen(true);
   };
 
   return (
@@ -195,6 +199,15 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status }
           )}
         </Box>
       </Stack>
+      {selectedDebt && companyId && (
+        <ReversedJournalEntryModal
+          companyId={companyId}
+          transactionType="payout"
+          selectedDebt={selectedDebt}
+          opened={isModalOpen}
+          close={() => setIsModalOpen(false)}
+        />
+      )}
     </Card>
   );
 };

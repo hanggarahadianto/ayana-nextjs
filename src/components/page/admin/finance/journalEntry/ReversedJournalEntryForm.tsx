@@ -1,25 +1,9 @@
 import React, { memo, useCallback, useState } from "react";
-import {
-  Stack,
-  Group,
-  TextInput,
-  NumberInput,
-  Textarea,
-  Button,
-  SimpleGrid,
-  Badge,
-  Switch,
-  Select,
-  Divider,
-  Flex,
-  Text,
-  InputWrapper,
-} from "@mantine/core";
+import { Stack, Group, TextInput, Textarea, SimpleGrid, Badge, Switch, Divider, Text, InputWrapper } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
-import { IconCalendar, IconTrash } from "@tabler/icons-react";
+import { IconCalendar } from "@tabler/icons-react";
 import { useFormikContext, FieldArray } from "formik";
 import SelectFinanceTransactionCategory from "@/components/common/select/SelectTransactiontCategory";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import { differenceInMonths } from "date-fns";
 
 interface JournalFormProps {
@@ -53,46 +37,12 @@ const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, 
     [setFieldValue]
   );
 
-  // Add a new journal entry
-  const addJournalField = useCallback(() => {
-    setFieldValue("journalEntries", [
-      ...values.journalEntries,
-      {
-        traansaction_id: "",
-        amount: 0,
-        date_inputed: null,
-        description: "",
-        due_date: null,
-        installment: 0,
-        invoice: "",
-        is_repaid: false,
-        note: "",
-        partner: "",
-        status: null,
-        transaction_category_id: "",
-        transaction_type: transactionType === "payin" ? "payout" : "payin", // Set the opposite value
-        company_id: companyId || "",
-      },
-    ]);
-  }, [setFieldValue, values.journalEntries, values.transactionType, companyId]);
-
-  // Delete a journal entry by index
-  const deleteJournalField = useCallback(
-    (index: number) => {
-      const updated = values.journalEntries.filter((_, idx) => idx !== index);
-      setFieldValue("journalEntries", updated);
-    },
-    [setFieldValue, values.journalEntries]
-  );
-
   // Handle switch change for a specific journal entry
   const handleSwitchChange = (index: number, checked: boolean) => {
     const updatedJournalEntries = [...values.journalEntries];
     updatedJournalEntries[index].transaction_type = checked ? "payin" : "payout"; // Update only the selected entry
     setFieldValue("journalEntries", updatedJournalEntries); // Set the updated value for the journal entries
   };
-  const [showProfit, setShowProfit] = useState<boolean[]>([]);
-  const [showInstallment, setShowInstallment] = useState<boolean[]>([]);
 
   const [percentages, setPercentages] = useState<number[]>([]);
   return (
@@ -101,37 +51,14 @@ const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, 
         <Stack gap="xl">
           {values?.journalEntries?.map((entry, index) => {
             console.log("errors", error);
-            const calculateTotalBagiHasil = (entry: any, percentage: number) => {
-              const startDate = new Date(entry.date_inputed);
-              const endDate = new Date(entry.due_date);
-
-              let selisihBulan = 0;
-              if (startDate && endDate) {
-                selisihBulan = differenceInMonths(endDate, startDate);
-                if (selisihBulan < 1) selisihBulan = 1; // Minimal 1 bulan
-              }
-
-              const bagiHasilPerBulan = entry.amount * (percentage / 100);
-              const totalBagiHasil = bagiHasilPerBulan * selisihBulan;
-
-              return { totalBagiHasil, selisihBulan };
-            };
-
-            const percentage = percentages[index] ?? 1; // Default percentage 1%
-            const { totalBagiHasil, selisihBulan } = calculateTotalBagiHasil(entry, percentage);
 
             return (
               <SimpleGrid key={index} p={20} spacing="md">
                 <Text>{selectedDebt.invoice}</Text>
-                <Stack gap="xl">
-                  {index === 0 && (
-                    <Stack align="flex-end" style={{ width: "100%" }}>
-                      <ButtonAdd onClick={addJournalField} size="3.5rem" />
-                    </Stack>
-                  )}
-                </Stack>
+
                 <Group>
                   <Switch
+                    disabled
                     mr={16}
                     w={40}
                     checked={entry.transaction_type === "payin"}
@@ -154,36 +81,9 @@ const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, 
                           handleJournalChange(index, "description", selected.description);
                           handleJournalChange(index, "transaction_category_id", selected.id);
                         }}
+                        status="paid"
                       />
                     </InputWrapper>
-
-                    {entry.transaction_type !== "payin" && (
-                      <Group w="100%" grow>
-                        <Select
-                          clearable
-                          withAsterisk
-                          label="Status Pembayaran"
-                          placeholder="Pilih Status Pembayaran"
-                          data={[
-                            { value: "paid", label: "Tunai" },
-                            { value: "unpaid", label: "Tempo" },
-                          ]}
-                          onChange={(value: string | null) => {
-                            const isPaid = value === "paid";
-                            const isUnpaid = value === "unpaid";
-
-                            handleJournalChange(index, "status", value);
-                            handleJournalChange(index, "is_repaid", isPaid);
-                            handleJournalChange(index, "invoice", isUnpaid ? "Tempo" : value === null ? null : "");
-                            // handleJournalChange(index, "transaction_type", isUnpaid ? "payout" : isPaid ? "payin" : null);
-                          }}
-                          onBlur={handleBlur}
-                          value={entry.status}
-                        />
-
-                        <></>
-                      </Group>
-                    )}
 
                     <Group w="100%" grow>
                       <TextInput
@@ -216,45 +116,6 @@ const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, 
                       error={touched?.[index]?.partner && error?.[index]?.partner}
                     />
 
-                    <Group gap="80px" mt={20}>
-                      {transactionType === "payin" && (
-                        <Flex gap={"10px"}>
-                          <Switch
-                            size="lg"
-                            //   label="Profit"
-                            checked={showProfit[index] ?? false}
-                            onChange={() => {
-                              const newShowProfit = [...showProfit];
-                              newShowProfit[index] = !newShowProfit[index];
-                              setShowProfit(newShowProfit);
-                            }}
-                          />
-                          <Badge color={showProfit[index] ? "darkblue" : "red"} w={80} mt={4}>
-                            {/* {entry.transaction_type === "payin" ? "Pay In" : "Pay Out"} */}
-
-                            {showProfit[index] ? "Profit" : "Non Profit"}
-                          </Badge>
-                        </Flex>
-                      )}
-
-                      {entry.status !== "paid" && (
-                        <Flex gap={"10px"}>
-                          <Switch
-                            size="lg"
-                            checked={showInstallment[index] ?? false}
-                            onChange={() => {
-                              const newShowInstallment = [...showInstallment];
-                              newShowInstallment[index] = !newShowInstallment[index];
-                              setShowInstallment(newShowInstallment);
-                            }}
-                          />
-                          <Badge mt={4} w={120} color={showInstallment[index] ? "orange" : "red"}>
-                            {showInstallment[index] ? "Installment" : "Non Installment"}
-                          </Badge>
-                        </Flex>
-                      )}
-                    </Group>
-
                     <Divider my={20} />
                     {entry.status && (
                       <Group grow mt={20}>
@@ -273,7 +134,6 @@ const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, 
                         {entry.status !== "paid" && (
                           <DatePickerInput
                             label="Jatuh Tempo"
-                            disabled={showInstallment[index]}
                             placeholder="Tanggal Jatuh Tempo"
                             locale="id"
                             clearable
@@ -300,41 +160,6 @@ const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, 
                         }}
                       />
                     </Group>
-                    {showInstallment[index] && (
-                      <NumberInput
-                        hideControls
-                        w={200}
-                        label="Cicilan"
-                        placeholder={entry.installment && entry.installment !== 0 ? "" : "Contoh: 3 X Cicilan"}
-                        value={entry.installment && entry.installment !== 0 ? entry.installment : ""}
-                        onChange={(val) => handleJournalChange(index, "installment", val || "")}
-                        suffix=" bulan"
-                      />
-                    )}
-
-                    {showProfit[index] && (
-                      <Group>
-                        <NumberInput w={100} label="Cicilan (Bulan)" value={selisihBulan} disabled readOnly hideControls />
-
-                        <NumberInput
-                          w={100}
-                          label="Persentase(%)"
-                          placeholder="Masukkan Persentase"
-                          value={percentage}
-                          onChange={(val) => {
-                            const newPercentages = [...percentages];
-                            newPercentages[index] = typeof val === "number" ? val : 1;
-                            setPercentages(newPercentages);
-                          }}
-                          min={0}
-                          max={100}
-                          hideControls
-                          step={0.1}
-                        />
-
-                        <TextInput w={200} label="Total Bagi Hasil" value={`Rp ${totalBagiHasil.toLocaleString("id-ID")}`} readOnly />
-                      </Group>
-                    )}
 
                     <Textarea
                       error={touched?.[index]?.note && error?.[index]?.note}
@@ -344,16 +169,6 @@ const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, 
                       onChange={(e) => handleJournalChange(index, "note", e.currentTarget.value.toUpperCase())}
                     />
                   </Stack>
-
-                  <Button
-                    variant="light"
-                    color="red"
-                    mt="sm"
-                    onClick={() => deleteJournalField(index)}
-                    leftSection={<IconTrash size={18} />}
-                  >
-                    Hapus
-                  </Button>
                 </Group>
               </SimpleGrid>
             );
