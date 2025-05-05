@@ -88,7 +88,7 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
                 transaction_type: item.transaction_type?.toUpperCase() || "",
               }))}
               columns={[
-                { key: "name", title: "Nama", width: 160, minWidth: 160 },
+                { key: "name", title: "Nama", width: 240, minWidth: 240 },
                 { key: "category", title: "Kategori", width: 160, minWidth: 160 },
                 { key: "transaction_type", title: "Tipe Transaksi", width: 100, minWidth: 10 },
                 { key: "debit_account_type", title: "Debit", width: 100, minWidth: 100 },

@@ -96,8 +96,9 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
               <TableComponent
                 data={expenseList || []}
                 columns={[
-                  { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
-                  { key: "partner", title: "Partner", width: 80, minWidth: 80 },
+                  { key: "invoice", title: "Invoice", width: 100, minWidth: 100 },
+                  { key: "transaction_id", title: "Transaction ID", width: 40, minWidth: 40 },
+                  { key: "partner", title: "Partner", width: 120, minWidth: 120 },
 
                   {
                     key: "amount",
@@ -114,7 +115,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
                     render: (item) => formatDateIndonesia(item.date_inputed),
                   },
 
-                  { key: "description", title: "Deskripsi", width: 220, minWidth: 220 },
+                  { key: "description", title: "Deskripsi", width: 260, minWidth: 260 },
                 ]}
                 startIndex={startIndex}
               />

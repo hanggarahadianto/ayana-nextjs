@@ -18,14 +18,9 @@ export default function FinanceComponent() {
       <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
 
       <SimpleGridGlobal cols={1} mt={20}>
-        <Paper shadow="sm" radius="md" p="md" withBorder>
-          <Card>
-            <TransactionCategoryCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
-          </Card>
-          <Card mt={20}>
-            <AccountCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
-          </Card>
-        </Paper>
+        <TransactionCategoryCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
+
+        <AccountCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
       </SimpleGridGlobal>
     </SimpleGridGlobal>
   );
