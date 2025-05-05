@@ -1,6 +1,7 @@
 import { getDataAccount } from "@/api/account/getDataAccount";
 import { LoadingOverlay, Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
+import { error } from "console";
 import { useMemo } from "react";
 
 interface ISelectFinanceAccountProps {
@@ -10,9 +11,18 @@ interface ISelectFinanceAccountProps {
   all: boolean;
   onSelect: (selected: { id: string; category: string; code?: string; type?: string; name?: string } | null) => void;
   label: string;
+  error: any;
 }
 
-export default function SelectFinanceAccount({ companyId, category, category_only, all, onSelect, label }: ISelectFinanceAccountProps) {
+export default function SelectFinanceAccount({
+  companyId,
+  category,
+  category_only,
+  all,
+  onSelect,
+  label,
+  error,
+}: ISelectFinanceAccountProps) {
   const { data: accountData, isLoading } = useQuery({
     queryKey: ["getAccountData", companyId, category, category_only],
     queryFn: () =>
@@ -70,6 +80,7 @@ export default function SelectFinanceAccount({ companyId, category, category_onl
     <>
       <LoadingOverlay visible={isLoading} />
       <Select
+        error={error}
         w={400}
         searchable
         clearable

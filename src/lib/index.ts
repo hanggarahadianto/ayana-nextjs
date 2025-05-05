@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const baseURL = process.env.NODE_ENV === "development" ? "http://localhost:8080" : process.env.NEXT_PUBLIC_BACKEND_URL;
+const baseURL = process.env.NODE_ENV === "development" ? "http://localhost:8080" : "http://localhost:8080";
+// const baseURL = process.env.NODE_ENV === "development" ? "http://localhost:8080" : process.env.NEXT_PUBLIC_BACKEND_URL;
 
 if (!baseURL) {
   throw new Error("❌ BASE_URL is not defined in .env file");

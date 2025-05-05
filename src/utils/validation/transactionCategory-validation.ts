@@ -2,8 +2,13 @@ import * as yup from "yup";
 
 export const validationSchemaTransactionCategory = yup.object().shape({
   name: yup.string().required("Nama wajib diisi"),
+  status: yup.string().required("Status harus diisi"),
+
+  jenis_transaksi: yup.string().required("Jenis Transaksi harus diisi"),
+
   debit_account_id: yup.string().required("Akun debit wajib diisi"),
   credit_account_id: yup.string().required("Akun kredit wajib diisi"),
+  transaction_type: yup.string().required("Tipe Transaksi wajib diisi"),
   category: yup.string().required("Kategori wajib diisi"),
-  description: yup.string().nullable(),
+  description: yup.string().required("Deskripsi harus diisi"),
 });

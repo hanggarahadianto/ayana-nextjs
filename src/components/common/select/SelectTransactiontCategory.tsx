@@ -1,6 +1,6 @@
 import { getDataTranasctionCategory } from "@/api/transaction-category/getDataTransactionCategory";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Select } from "@mantine/core";
+import { Grid, GridCol, Group, Select, SimpleGrid, Stack, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 
 interface ISelectFinanceTransactionCategoryProps {
@@ -20,9 +20,9 @@ export default function SelectFinanceTransactionCategory({
 }: ISelectFinanceTransactionCategoryProps) {
   const { data: TransactionCategoryData, isLoading } = useQuery({
     queryKey: ["getTransactionCategoryData", companyId, transactionType, status],
-    queryFn: () => getDataTranasctionCategory(companyId as string, 1, 1000, transactionType, undefined, status), // Tambahkan status ke API call
+    queryFn: () => getDataTranasctionCategory(companyId as string, 1, 1000, transactionType, undefined, status),
     refetchOnWindowFocus: false,
-    enabled: !!companyId && !!transactionType, // Query jalan jika semua tersedia
+    enabled: !!companyId && !!transactionType,
   });
 
   const handleSelect = (value: string | null) => {
@@ -38,9 +38,9 @@ export default function SelectFinanceTransactionCategory({
     }
   };
 
-  const TransactionCategoryOptions = TransactionCategoryData?.data?.map((TransactionCategory) => ({
-    value: TransactionCategory.id,
-    label: `${TransactionCategory.name} - ${TransactionCategory.description}`,
+  const TransactionCategoryOptions = TransactionCategoryData?.data?.map((item) => ({
+    value: item.id,
+    label: `${item.name} ${item.description ? `(${item.description})` : ""}`, // Combine name & description
   }));
 
   return (
@@ -48,6 +48,11 @@ export default function SelectFinanceTransactionCategory({
       {/* <LoadingGlobal visible={isLoading} /> */}
       <Select
         searchable
+        clearable
+        label={label}
+        placeholder={`Pilih ${label ?? ""}`}
+        onChange={handleSelect}
+        data={TransactionCategoryOptions}
         styles={{
           option: {
             fontSize: "14px",
@@ -57,11 +62,45 @@ export default function SelectFinanceTransactionCategory({
             cursor: "pointer",
           },
         }}
-        clearable
-        label={label}
-        placeholder={`Pilih ${label ?? ""}`}
-        onChange={handleSelect}
-        data={TransactionCategoryOptions}
+        renderOption={({ option }) => {
+          console.log("options", option);
+
+          // Match label to separate parts and capture the status between parentheses
+          const match = option.label.match(/^(.*?)\s+(.*?)\s+\((.*?)\)$/);
+
+          // Bagian sebelum tanda kurung (misalnya Pengeluaran Wifi Internet)
+          const bagianAwal = match?.[1] ?? option.label;
+
+          // Bagian setelah bagian pertama dan sebelum tanda kurung (misalnya Wifi Internet)
+          const sisa = match?.[2] ?? "";
+
+          // Status yang ada di dalam tanda kurung (TUNAI, Tempo, etc.)
+          const statusMatch = match?.[3]?.toUpperCase() ?? "";
+
+          // Extracting the status between TUNAI and TEMPO
+          const status = statusMatch.match(/(TUNAI|TEMPO)/)?.[0] ?? "";
+
+          // Console log untuk memeriksa nilai status
+          console.log("Extracted Status:", status);
+
+          return (
+            <SimpleGrid h={22}>
+              <Group>
+                <Stack w={200} maw={200}>
+                  <Text>{bagianAwal}</Text>
+                </Stack>
+                <Stack w={400} maw={400}>
+                  <Text>{sisa}</Text>
+                </Stack>
+                <Stack w={100} maw={100}>
+                  <Text w={80} c="dimmed" ta="right">
+                    {status ? status : ""} {/* Menampilkan status dalam huruf besar */}
+                  </Text>
+                </Stack>
+              </Group>
+            </SimpleGrid>
+          );
+        }}
       />
     </>
   );

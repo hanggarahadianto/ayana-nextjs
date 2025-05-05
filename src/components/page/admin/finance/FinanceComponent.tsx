@@ -1,6 +1,5 @@
 "use client";
 
-import { Card, Grid, Paper, SimpleGrid, Tabs } from "@mantine/core";
 import { TransactionCategoryCard } from "@/components/page/admin/finance/transactionCategory/TransactionCategoryCard";
 import { AccountCard } from "@/components/page/admin/finance/account/GetAccountData";
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
