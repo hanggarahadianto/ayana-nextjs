@@ -1,6 +1,5 @@
 import { getDataTranasctionCategory } from "@/api/transaction-category/getDataTransactionCategory";
-import LoadingGlobal from "@/styles/loading/loading-global";
-import { Grid, GridCol, Group, Select, SimpleGrid, Stack, Text } from "@mantine/core";
+import { Group, Select, SimpleGrid, Stack, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 
 interface ISelectFinanceTransactionCategoryProps {

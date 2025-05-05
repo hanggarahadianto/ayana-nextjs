@@ -10,21 +10,6 @@ import TableComponent from "@/components/common/table/TableComponent";
 import { calculateDaysLeft, formatDaysToMonths, getStatusColor } from "@/utils/debtStatus";
 import ReversedJournalEntryModal from "../journalEntry/ReversedJournalEntryModal";
 
-// interface IDebtSummaryItem {
-//   id: string;
-//   invoice: string;
-//   partner: string;
-//   amount: number;
-//   date_inputed: string;
-//   description: string;
-//   due_date: string;
-//   status: string;
-//   transaction_id: string;
-//   transaction_type: string;
-//   company_id: string;
-//   is_repaid: boolean;
-// }
-
 interface GetOutStandingDebtDataProps {
   companyId?: string;
   companyName?: string;

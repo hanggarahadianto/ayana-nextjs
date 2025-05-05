@@ -69,6 +69,7 @@ export const accountTypeOptions = [
   { value: "Liability", label: "Liability (Kewajiban)" },
   { value: "Equity", label: "Equity (Ekuitas)" },
   { value: "Revenue", label: "Revenue (Pendapatan)" },
+  { value: "COGS", label: "Cost of Goods Sold (HPP)" },
   { value: "Expense", label: "Expense (Beban)" },
 ];
 
@@ -102,5 +103,6 @@ export const ValidCategories: Record<string, string[]> = {
   Liability: ["Utang Dagang", "Pinjaman", "Kewajiban Lancar", "Pajak", "Pembayaran Bagi Hasil", "Hutang Usaha"],
   Equity: ["Modal", "Laba Ditahan"],
   Revenue: ["Penjualan", "Jasa", "Pendapatan Dari Bunga"],
+  COGS: ["Persediaan", "Tenaga Kerja", "Biaya Lain"],
   Expense: ["Operasional", "Utilitas", "Non Operasional"],
 };

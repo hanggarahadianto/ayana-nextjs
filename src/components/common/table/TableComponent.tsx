@@ -40,7 +40,7 @@ interface TableComponentProps<T> {
 
 // Komponen Tabel utama
 export default function TableComponent<T>({ data, columns, startIndex = 1, onRowClick }: TableComponentProps<T>) {
-  console.log("start index di table", startIndex);
+  // console.log("start index di table", startIndex);
   return (
     <ScrollXWrapper minWidth={`${columns.length * 200}px`}>
       <Table highlightOnHover withColumnBorders striped>
