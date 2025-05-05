@@ -33,6 +33,7 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
         page,
         limit,
         selectedType,
+        all: false,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,

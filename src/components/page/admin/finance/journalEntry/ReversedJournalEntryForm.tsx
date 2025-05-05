@@ -1,10 +1,9 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback } from "react";
 import { Stack, Group, TextInput, Textarea, SimpleGrid, Badge, Switch, Divider, Text, InputWrapper } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar } from "@tabler/icons-react";
 import { useFormikContext, FieldArray } from "formik";
 import SelectFinanceTransactionCategory from "@/components/common/select/SelectTransactiontCategory";
-import { differenceInMonths } from "date-fns";
 
 interface JournalFormProps {
   companyId?: string;
@@ -23,7 +22,7 @@ interface JournalFormProps {
   selectedDebt: any;
 }
 
-const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, selectedDebt }: JournalFormProps) => {
+const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: JournalFormProps) => {
   const { values, setFieldValue, handleBlur } = useFormikContext<{
     transactionType: "payin" | "payout";
     journalEntries: IJournalEntryCreate[];
@@ -37,14 +36,6 @@ const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, 
     [setFieldValue]
   );
 
-  // Handle switch change for a specific journal entry
-  const handleSwitchChange = (index: number, checked: boolean) => {
-    const updatedJournalEntries = [...values.journalEntries];
-    updatedJournalEntries[index].transaction_type = checked ? "payin" : "payout"; // Update only the selected entry
-    setFieldValue("journalEntries", updatedJournalEntries); // Set the updated value for the journal entries
-  };
-
-  const [percentages, setPercentages] = useState<number[]>([]);
   return (
     <FieldArray name="journalEntries">
       {() => (
@@ -57,14 +48,7 @@ const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, 
                 <Text>{selectedDebt.invoice}</Text>
 
                 <Group>
-                  <Switch
-                    disabled
-                    mr={16}
-                    w={40}
-                    checked={entry.transaction_type === "payin"}
-                    onChange={(event) => handleSwitchChange(index, event.currentTarget.checked)} // Only changes the state on toggle
-                    size="lg"
-                  />
+                  <Switch disabled mr={16} w={40} checked={entry.transaction_type === "payin"} size="lg" />
                   <Badge color={entry.transaction_type === "payin" ? "green" : "red"} w={80}>
                     {entry.transaction_type === "payin" ? "Pay In" : "Pay Out"}
                   </Badge>

@@ -5,10 +5,9 @@ import { useEffect } from "react";
 
 type ExpenseStatsProps = {
   companyId?: string;
-  onExpenseChange: (totalExpense: number) => void;
 };
 
-export const ExpenseStats = ({ companyId, onExpenseChange }: ExpenseStatsProps) => {
+export const ExpenseStats = ({ companyId }: ExpenseStatsProps) => {
   const { data: expenseSummaryOnlyData, isPending: isLoadingExpense } = useQuery({
     queryKey: ["getExpenseOnlyData", companyId],
     queryFn: () =>
@@ -24,9 +23,6 @@ export const ExpenseStats = ({ companyId, onExpenseChange }: ExpenseStatsProps) 
   });
 
   const totalExpense = expenseSummaryOnlyData?.data?.total_expense ?? 0;
-  useEffect(() => {
-    onExpenseChange(totalExpense);
-  }, [totalExpense, onExpenseChange]);
 
   const statsData: StatItem[] = [
     {

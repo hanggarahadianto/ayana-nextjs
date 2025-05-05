@@ -1,12 +1,11 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Group, Stack, Pagination, Select, Box, InputWrapper } from "@mantine/core";
+import { Card, Text, Group, Stack, Pagination, Select, Box } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useMemo, useState } from "react";
 import { accountTypeOptions } from "@/constants/dictionary";
-import { getDataTranasctionCategory } from "@/api/transaction-category/getDataTransactionCategory";
-import AddTransactionCategoryModal from "./AddTransactionCategoryModal";
 import TableComponent from "@/components/common/table/TableComponent";
-import SelectFinanceAccount from "@/components/common/select/SelectAccountType";
+import AddTransactionCategoryModal from "./AddTransactionCategoryModal";
+import { getDataTranasctionCategory } from "@/api/transaction-category/getDataTransactionCategory";
 
 interface AccountCardProps {
   companyId: string;
@@ -18,14 +17,6 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
   const limit = 10;
   const [selectedType, setSelectedType] = useState<string | null>(null);
 
-  const [selectedAccount, setSelectedAccount] = useState<{
-    id: string;
-    code: number;
-    type: string;
-    category: string;
-    name: string;
-  } | null>(null);
-
   const [selectedCategory, setSelectedCategory] = useState<string | null>("");
   console.log("seected", selectedCategory);
 
@@ -34,8 +25,18 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
     isPending: isLoadingGetTransactionCategory,
     refetch: refetchTransactionCategoryData,
   } = useQuery({
-    queryKey: ["getTransactionCategory", companyId, page, selectedType, selectedCategory],
-    queryFn: () => getDataTranasctionCategory(companyId, page, limit, selectedType, selectedCategory),
+    queryKey: ["getTransactionCategory", companyId, page, selectedType, selectedCategory, true],
+    queryFn: () =>
+      getDataTranasctionCategory(
+        companyId,
+        page,
+        limit,
+        selectedType,
+        selectedCategory,
+        null, // status
+        true // all
+      ),
+
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
@@ -51,34 +52,27 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingGetTransactionCategory} />
 
-      <Group justify="space-between" p={20}>
-        <Stack>
-          <Text size="lg" fw={600}>
-            Kategori Transaksi {companyName}
-          </Text>
-          <Group>
-            <SelectFinanceAccount
-              companyId={companyId}
-              category_only="true"
-              label="Kategori Akun"
-              onSelect={(selected) => {
-                if (!selected) {
-                  setSelectedCategory(null);
-                  refetchTransactionCategoryData(); // Refetch data setelah kategori di-clear
-                } else {
-                  // Set kategori yang dipilih
-                  setSelectedCategory(selected.category);
-                }
+      <Stack gap="md">
+        <Group justify="space-between" align="flex-start">
+          <Stack gap="xs">
+            <Text size="lg" fw={600}>
+              Akun Keuangan {companyName}
+            </Text>
+            <Select
+              label="Filter berdasarkan Type"
+              placeholder="Pilih Type"
+              data={accountTypeOptions}
+              value={selectedType}
+              onChange={(value) => {
+                console.log("Select onChange:", value); // Debug
+                setSelectedType(value);
               }}
-              all={false}
+              clearable
+              style={{ width: 250 }}
             />
-          </Group>
-
-          <Group mt="md"></Group>
-        </Stack>
-        <Stack>
+          </Stack>
           <AddTransactionCategoryModal companyId={companyId} refetchTransactionCategoryData={refetchTransactionCategoryData} />
-        </Stack>
+        </Group>
         <Box
           style={{
             display: "flex",
@@ -99,11 +93,12 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
                 { key: "transaction_type", title: "Tipe Transaksi", width: 100, minWidth: 10 },
                 { key: "debit_account_type", title: "Debit", width: 100, minWidth: 100 },
                 { key: "credit_account_type", title: "Kredit", width: 100, minWidth: 100 },
-                { key: "description", title: "Deskripsi", width: 180, minWidth: 180 },
+                { key: "description", title: "Deskripsi", width: 420, minWidth: 420 },
               ]}
               startIndex={startIndex}
             />
           </Box>
+
           {totalPages > 0 && (
             <>
               <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />
@@ -113,7 +108,7 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
             </>
           )}
         </Box>
-      </Group>
+      </Stack>
     </Card>
   );
 };

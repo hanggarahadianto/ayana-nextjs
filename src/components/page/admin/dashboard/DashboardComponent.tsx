@@ -19,19 +19,6 @@ import { ReceivableAssetStats } from "@/components/common/stats/ReceivableAssetS
 export const DashboardComponent = () => {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
 
-  const [cashInTotal, setCashInTotal] = useState(0);
-  const [expenseTotal, setExpenseTotal] = useState(0);
-  const [assetTotal, setAssetTotal] = useState(0);
-
-  const handleExpenseChange = (newExpenseTotal: number | null | undefined) => {
-    setExpenseTotal(newExpenseTotal ?? 0);
-  };
-  const handleAssetChange = (newAssetTotal: number | null | undefined) => {
-    setAssetTotal(newAssetTotal ?? 0);
-  };
-
-  const availableCash = cashInTotal - expenseTotal - assetTotal;
-
   return (
     <SimpleGridGlobal cols={1}>
       <LoadingGlobal visible={isLoadingCompanies} />
@@ -64,16 +51,16 @@ export const DashboardComponent = () => {
           </SimpleGridGlobal>
 
           <Paper shadow="sm" radius="md" p="md" withBorder>
-            <ReceivableAssetStats companyId={activeTab?.id} onAssetChange={handleAssetChange} />
+            <ReceivableAssetStats companyId={activeTab?.id} />
           </Paper>
           <Paper shadow="sm" radius="md" p="md" withBorder>
-            <FixedAssetStats companyId={activeTab?.id} onAssetChange={handleAssetChange} />
+            <FixedAssetStats companyId={activeTab?.id} />
           </Paper>
         </Card>
 
         <Paper shadow="sm" radius="md" p="md" withBorder>
           <Card>
-            <ExpenseStats companyId={activeTab?.id} onExpenseChange={handleExpenseChange} />
+            <ExpenseStats companyId={activeTab?.id} />
           </Card>
           <Card mt={20}>
             <OutstandingDebtStats companyId={activeTab?.id} />

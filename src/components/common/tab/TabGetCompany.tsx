@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import useGetCompanies from "@/components/page/admin/company/GetCompanyTab";
+import useGetCompanies from "@/components/common/tab/GetCompanyTab";
 
 export default function UseCompanyTabs() {
   const { companies, isLoading: isLoadingCompanies } = useGetCompanies();

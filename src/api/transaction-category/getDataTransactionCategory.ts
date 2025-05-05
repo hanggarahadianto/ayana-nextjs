@@ -6,7 +6,8 @@ export const getDataTranasctionCategory = async (
   limit: number,
   type?: string | null,
   category?: string | null,
-  status?: string | null
+  status?: string | null,
+  all?: boolean | null
 ) => {
   if (!companyId) {
     console.error("Company ID tidak ada!");
@@ -17,6 +18,10 @@ export const getDataTranasctionCategory = async (
 
   try {
     let url = `transaction-category/get?company_id=${companyId}&page=${page}&limit=${limit}`;
+
+    if (all) {
+      url += `&all=true`;
+    }
 
     if (type) {
       url += `&transaction_type=${encodeURIComponent(type)}`;

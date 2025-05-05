@@ -1,14 +1,12 @@
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import { StatItem, StatsGrid } from "@/components/common/stats/StatsGrid";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
 
 type AssetStatsProps = {
   companyId?: string;
-  onAssetChange: (totalAsset: number) => void;
 };
 
-export const ReceivableAssetStats = ({ companyId, onAssetChange }: AssetStatsProps) => {
+export const ReceivableAssetStats = ({ companyId }: AssetStatsProps) => {
   const { data: receivableAssetSummaryOnly, isPending: isLoadingReceivableAsset } = useQuery({
     queryKey: ["getReceivableAsset", companyId],
     queryFn: () =>
@@ -24,9 +22,6 @@ export const ReceivableAssetStats = ({ companyId, onAssetChange }: AssetStatsPro
   });
 
   const totalAsset = receivableAssetSummaryOnly?.data.total_asset ?? 0;
-  useEffect(() => {
-    onAssetChange(totalAsset);
-  }, [totalAsset, onAssetChange]);
 
   const statsData: StatItem[] = [
     {

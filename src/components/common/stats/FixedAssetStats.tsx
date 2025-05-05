@@ -5,10 +5,9 @@ import { useEffect } from "react";
 
 type AssetStatsProps = {
   companyId?: string;
-  onAssetChange: (totalAsset: number) => void;
 };
 
-export const FixedAssetStats = ({ companyId, onAssetChange }: AssetStatsProps) => {
+export const FixedAssetStats = ({ companyId }: AssetStatsProps) => {
   const { data: fixedAssetSummaryOnly, isPending: isLoadingFixedAsset } = useQuery({
     queryKey: ["getFixedAsset", companyId],
     queryFn: () =>
@@ -24,9 +23,6 @@ export const FixedAssetStats = ({ companyId, onAssetChange }: AssetStatsProps) =
   });
 
   const totalAsset = fixedAssetSummaryOnly?.data.total_asset ?? 0;
-  useEffect(() => {
-    onAssetChange(totalAsset);
-  }, [totalAsset, onAssetChange]);
 
   const statsData: StatItem[] = [
     {

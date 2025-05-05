@@ -1,6 +1,6 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { Card, Text, Group, Stack, Pagination, Select, Box } from "@mantine/core";
-import { useQuery } from "@tanstack/react-query"; // assumed path
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { getExpenseSummary } from "@/api/finance/getExpenseSummary";
