@@ -42,5 +42,5 @@ export const getDataAccount = async ({
   console.log("URL request:", url);
 
   const response = await APIAxiosInstance.get(url);
-  return response.data;
+  return response.data as IAccountResponse;
 };

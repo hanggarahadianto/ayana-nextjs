@@ -18,7 +18,6 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
   const [selectedType, setSelectedType] = useState<string | null>(null);
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>("");
-  console.log("seected", selectedCategory);
 
   const {
     data: transactionCategoryData,
@@ -51,64 +50,36 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingGetTransactionCategory} />
-
-      <Stack gap="md">
-        <Group justify="space-between" align="flex-start">
-          <Stack gap="xs">
-            <Text size="lg" fw={600}>
-              Akun Keuangan {companyName}
-            </Text>
-            <Select
-              label="Filter berdasarkan Type"
-              placeholder="Pilih Type"
-              data={accountTypeOptions}
-              value={selectedType}
-              onChange={(value) => {
-                console.log("Select onChange:", value); // Debug
-                setSelectedType(value);
-              }}
-              clearable
-              style={{ width: 250 }}
-            />
-          </Stack>
-          <AddTransactionCategoryModal companyId={companyId} refetchTransactionCategoryData={refetchTransactionCategoryData} />
-        </Group>
-        <Box
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            minHeight: "50vh",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box style={{ flex: 1 }}>
-            <TableComponent
-              data={(transactionCategoryData?.data || []).map((item) => ({
-                ...item,
-                transaction_type: item.transaction_type?.toUpperCase() || "",
-              }))}
-              columns={[
-                { key: "name", title: "Nama", width: 240, minWidth: 240 },
-                { key: "category", title: "Kategori", width: 160, minWidth: 160 },
-                { key: "transaction_type", title: "Tipe Transaksi", width: 100, minWidth: 10 },
-                { key: "debit_account_type", title: "Debit", width: 100, minWidth: 100 },
-                { key: "credit_account_type", title: "Kredit", width: 100, minWidth: 100 },
-                { key: "description", title: "Deskripsi", width: 420, minWidth: 420 },
-              ]}
-              startIndex={startIndex}
-            />
-          </Box>
-
-          {totalPages > 0 && (
-            <>
-              <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />
-              <Text mt={8} size="sm" c="dimmed">
-                Show from {startIndex} to {endIndex} of {transactionCategoryData?.total} data
-              </Text>
-            </>
-          )}
-        </Box>
+      <Stack align="flex-end" mb={16}>
+        <AddTransactionCategoryModal companyId={companyId} refetchTransactionCategoryData={refetchTransactionCategoryData} />
       </Stack>
+
+      <TableComponent
+        companyName={companyName}
+        startIndex={startIndex}
+        data={(transactionCategoryData?.data || []).map((item) => ({
+          ...item,
+          transaction_type: item.transaction_type?.toUpperCase() || "",
+        }))}
+        title="Kategori Transaksi"
+        columns={[
+          { key: "name", title: "Nama", width: 240, minWidth: 240 },
+          { key: "category", title: "Kategori", width: 160, minWidth: 160 },
+          { key: "transaction_type", title: "Tipe Transaksi", width: 100, minWidth: 10 },
+          { key: "debit_account_type", title: "Debit", width: 100, minWidth: 100 },
+          { key: "credit_account_type", title: "Kredit", width: 100, minWidth: 100 },
+          { key: "description", title: "Deskripsi", width: 420, minWidth: 420 },
+        ]}
+      />
+
+      {totalPages > 0 && (
+        <>
+          <Pagination mt={10} total={totalPages} value={page} onChange={setPage} />
+          <Text mt={8} size="sm" c="dimmed">
+            Show from {startIndex} to {endIndex} of {transactionCategoryData?.total} data
+          </Text>
+        </>
+      )}
     </Card>
   );
 };

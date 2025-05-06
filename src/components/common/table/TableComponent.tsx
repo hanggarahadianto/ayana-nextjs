@@ -1,5 +1,6 @@
-import { Table } from "@mantine/core";
-import React, { ReactNode } from "react";
+import { formatCurrency } from "@/utils/formatCurrency";
+import { Table, Card, Select, Text, Group, Box, Stack, Divider } from "@mantine/core";
+import React, { ReactNode, useState } from "react";
 
 // Tipe untuk props ScrollXWrapper
 interface ScrollXWrapperProps {
@@ -32,64 +33,118 @@ interface Column<T> {
 
 // Props untuk komponen tabel
 interface TableComponentProps<T> {
+  companyName?: string;
   data: T[];
   columns: Column<T>[];
   startIndex?: number;
   onRowClick?: (item: T) => void;
+  totalAmount?: number; // Menambahkan properti untuk menampilkan total amount yang dapat disesuaikan
+  title?: string;
+  transactionType?: string;
 }
 
 // Komponen Tabel utama
-export default function TableComponent<T>({ data, columns, startIndex = 1, onRowClick }: TableComponentProps<T>) {
-  // console.log("start index di table", startIndex);
+export default function TableComponent<T>({
+  companyName,
+  data,
+  columns,
+  startIndex = 1,
+  onRowClick,
+  totalAmount = 0, // Menyediakan nilai default 0 untuk totalAmount
+  title,
+  transactionType,
+}: TableComponentProps<T>) {
+  const [selectedType, setSelectedType] = useState<string | null>(null);
+
   return (
-    <ScrollXWrapper minWidth={`${columns.length * 200}px`}>
-      <Table highlightOnHover withColumnBorders striped>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th
-              style={{
-                textAlign: "left",
-                width: 50,
-                minWidth: 30,
-                maxWidth: 60,
-                padding: "0 8px",
-              }}
-            >
-              No
-            </Table.Th>
-            {columns.map((column) => (
+    <div>
+      {/* Menambahkan Box dengan layout flex untuk menata tampilan */}
+      <Box
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "14vh",
+          maxHeight: "42vh",
+          justifyContent: "space-between",
+        }}
+      >
+        {/* Menambahkan Card untuk Select dan Title */}
+        <Card shadow="xl">
+          <Group justify="space-between">
+            <Stack>
+              <Text size="xl" fw={600}>
+                {title} {companyName}
+              </Text>
+              <Select
+                label="Pilih Tipe"
+                placeholder="Pilih"
+                value={selectedType}
+                onChange={setSelectedType}
+                data={["Tipe 1", "Tipe 2", "Tipe 3"]} // Data untuk Select, bisa diubah sesuai kebutuhan
+                style={{ width: 250 }}
+              />
+            </Stack>
+            {
+              (totalAmount = 0 && (
+                <Text fw={800} size="xl" c={transactionType === "payin" ? "green" : "red"}>
+                  {formatCurrency(totalAmount)}
+                </Text>
+              ))
+            }
+          </Group>
+        </Card>
+      </Box>
+
+      {/* Tabel dengan ScrollXWrapper */}
+      <ScrollXWrapper minWidth={`${columns.length * 200}px`}>
+        <Table highlightOnHover withColumnBorders striped>
+          <Table.Thead>
+            <Table.Tr>
               <Table.Th
-                key={column.key}
                 style={{
                   textAlign: "left",
-                  width: column.width,
-                  minWidth: column.minWidth || 150,
+                  width: 50,
+                  minWidth: 30,
+                  maxWidth: 60,
+                  padding: "0 8px",
                 }}
               >
-                {column.title}
+                No
               </Table.Th>
-            ))}
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {data.map((item, index) => (
-            <Table.Tr key={index} style={{ cursor: onRowClick ? "pointer" : "default" }} onClick={() => onRowClick && onRowClick(item)}>
-              <Table.Td style={{ textAlign: "left", minWidth: 50 }}>{startIndex + index}</Table.Td>
               {columns.map((column) => (
-                <Table.Td
+                <Table.Th
                   key={column.key}
                   style={{
                     textAlign: "left",
+                    width: column.width,
                     minWidth: column.minWidth || 150,
                   }}
                 >
-                  {column.render ? column.render(item) : (item as any)[column.key]}
-                </Table.Td>
+                  {column.title}
+                </Table.Th>
               ))}
             </Table.Tr>
-          ))}
-        </Table.Tbody>
-      </Table>
-    </ScrollXWrapper>
+          </Table.Thead>
+          <Table.Tbody>
+            {data.map((item, index) => (
+              <Table.Tr key={index} style={{ cursor: onRowClick ? "pointer" : "default" }} onClick={() => onRowClick && onRowClick(item)}>
+                <Table.Td style={{ textAlign: "left", minWidth: 50 }}>{startIndex + index}</Table.Td>
+                {columns.map((column) => (
+                  <Table.Td
+                    key={column.key}
+                    style={{
+                      textAlign: "left",
+                      minWidth: column.minWidth || 150,
+                    }}
+                  >
+                    {column.render ? column.render(item) : (item as any)[column.key]}
+                  </Table.Td>
+                ))}
+              </Table.Tr>
+            ))}
+          </Table.Tbody>
+        </Table>
+      </ScrollXWrapper>
+    </div>
   );
 }

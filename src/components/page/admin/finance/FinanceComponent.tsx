@@ -16,7 +16,7 @@ export default function FinanceComponent() {
 
       <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
 
-      <SimpleGridGlobal cols={1} mt={20}>
+      <SimpleGridGlobal cols={1}>
         <TransactionCategoryCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
 
         <AccountCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />

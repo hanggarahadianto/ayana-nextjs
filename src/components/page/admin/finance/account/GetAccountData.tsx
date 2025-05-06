@@ -40,6 +40,8 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
     refetchOnWindowFocus: false,
   });
 
+  const accountList = accountData?.data ?? [];
+
   const totalPages = useMemo(() => {
     return accountData?.total ? Math.ceil(accountData.total / limit) : 1;
   }, [accountData]);
@@ -55,60 +57,45 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
     <SimpleGridGlobal cols={1}>
       <Card shadow="sm" padding="lg">
         <LoadingGlobal visible={isLoading} />
-
-        <Stack gap="md">
-          <Group justify="space-between" align="flex-start">
-            <Stack gap="xs">
-              <Text size="lg" fw={600}>
-                Akun Keuangan {companyName}
-              </Text>
-              <Select
-                label="Filter berdasarkan Type"
-                placeholder="Pilih Type"
-                data={accountTypeOptions}
-                value={selectedType}
-                onChange={(value) => {
-                  console.log("Select onChange:", value); // Debug
-                  setSelectedType(value);
-                }}
-                clearable
-                style={{ width: 250 }}
-              />
-            </Stack>
-
-            <AddAccountModal companyId={companyId} refetchAccountData={refetchAccountData} />
-          </Group>
-          <Box
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              minHeight: "50vh",
-              justifyContent: "space-between",
-            }}
-          >
-            <Box style={{ flex: 1 }}>
-              <TableComponent
-                data={accountData?.data || []}
-                columns={[
-                  { key: "code", title: "Code", width: 40, minWidth: 40 },
-                  { key: "name", title: "Nama", width: 160, minWidth: 160 },
-                  { key: "category", title: "Kategori", width: 140, minWidth: 140 },
-                  { key: "description", title: "Deskripsi", width: 180, minWidth: 180 },
-                ]}
-                startIndex={startIndex}
-              />
-            </Box>
-
-            {totalPages > 0 && (
-              <Stack gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
-                <Pagination total={totalPages} value={page} onChange={setPage} />
-                <Text size="sm" c="dimmed">
-                  Menampilkan {startIndex} sampai {endIndex} dari {accountData?.total} data
-                </Text>
-              </Stack>
-            )}
-          </Box>
+        <Stack align="flex-end" mb={16}>
+          <AddAccountModal companyId={companyId} refetchAccountData={refetchAccountData} />
         </Stack>
+
+        {/* <Select
+          label="Filter berdasarkan Type"
+          placeholder="Pilih Type"
+          data={accountTypeOptions}
+          value={selectedType}
+          onChange={(value) => {
+            console.log("Select onChange:", value); // Debug
+            setSelectedType(value);
+          }}
+          clearable
+          style={{ width: 250 }}
+        /> */}
+
+        <TableComponent
+          companyName={companyName}
+          startIndex={startIndex}
+          data={accountList}
+          totalAmount={accountData?.total}
+          title="Akun Keuangan"
+          columns={[
+            { key: "code", title: "Code", width: 40, minWidth: 40 },
+            { key: "name", title: "Nama", width: 160, minWidth: 160 },
+            { key: "category", title: "Kategori", width: 140, minWidth: 140 },
+            { key: "description", title: "Deskripsi", width: 180, minWidth: 180 },
+          ]}
+        />
+
+        {totalPages > 0 && (
+          <Stack gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
+            <Pagination total={totalPages} value={page} onChange={setPage} />
+            <Text size="sm" c="dimmed">
+              Menampilkan {startIndex} sampai {endIndex} dari {accountData?.total} data
+            </Text>
+          </Stack>
+        )}
       </Card>
     </SimpleGridGlobal>
   );

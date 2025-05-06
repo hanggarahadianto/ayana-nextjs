@@ -10,6 +10,7 @@ import { GetExpenseSummaryData } from "../finance/expense/GetExpenseSummaryData"
 
 export default function PayoutComponent() {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
+  const transactionType = "payout";
 
   return (
     <SimpleGridGlobal cols={1}>
@@ -17,12 +18,29 @@ export default function PayoutComponent() {
       <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
 
       <SimpleGridGlobal cols={1}>
-        <GetCashOutData companyId={activeTab?.id || ""} companyName={activeTab?.title} assetType="cashout" />
+        <GetCashOutData
+          companyId={activeTab?.id || ""}
+          companyName={activeTab?.title}
+          assetType="cashout"
+          transactionType={transactionType}
+        />
 
         <GetExpenseSummaryData companyId={activeTab?.id} companyName={activeTab?.title} />
 
-        <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} title="Hutang Berjalan" status="going" />
-        <GetOutstandingDebtData companyId={activeTab?.id} companyName={activeTab?.title} title="Hutang Lunas" status="done" />
+        <GetOutstandingDebtData
+          companyId={activeTab?.id}
+          companyName={activeTab?.title}
+          title="Hutang Berjalan"
+          status="going"
+          transactionType={transactionType}
+        />
+        <GetOutstandingDebtData
+          companyId={activeTab?.id}
+          companyName={activeTab?.title}
+          title="Hutang Lunas"
+          status="done"
+          transactionType={transactionType}
+        />
       </SimpleGridGlobal>
     </SimpleGridGlobal>
   );
