@@ -4,19 +4,17 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconEdit } from "@tabler/icons-react";
 
 import BreathingActionIcon from "@/components/common/button/buttonAction";
-import EditProductForm from "./FormEditProduct";
-import FormEditInfo from "./FormEditInfo";
 
 interface EditProductModalProps {
   initialProductData: IProductUpdate | undefined;
-  initialInfoData: IInfoCreate | undefined;
+
   refetchProductData: () => void;
 }
 
-const EditProductModal: React.FC<EditProductModalProps> = ({ initialProductData, initialInfoData, refetchProductData }) => {
+const EditProductModal: React.FC<EditProductModalProps> = ({ initialProductData, refetchProductData }) => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  console.log("INITIAL INFO DATA", initialInfoData);
+  // console.log("INITIAL INFO DATA", initialInfoData);
 
   useEffect(() => {
     if (initialProductData) {
@@ -43,13 +41,13 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ initialProductData,
             <Tabs.Tab value="upload-gambar">Upload Gambar</Tabs.Tab>
           </Tabs.List>
 
-          <Tabs.Panel value="edit-product" pt="md">
+          {/* <Tabs.Panel value="edit-product" pt="md">
             <EditProductForm initialData={initialProductData} refetchProductData={refetchProductData} />
-          </Tabs.Panel>
+          </Tabs.Panel> */}
 
-          <Tabs.Panel value="edit-info" pt="md">
+          {/* <Tabs.Panel value="edit-info" pt="md">
             <FormEditInfo initialData={initialInfoData || undefined} />
-          </Tabs.Panel>
+          </Tabs.Panel> */}
 
           {/* <Tabs.Panel value="upload-gambar" pt="md">
             <UploadGambar />

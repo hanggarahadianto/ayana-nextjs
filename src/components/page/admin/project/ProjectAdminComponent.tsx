@@ -13,7 +13,7 @@ import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 import AddProjectModal from "@/components/page/admin/project/AddProjectModal";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 
-const AdminProjectPageComponent = () => {
+const ProjectAdminComponent = () => {
   const isSmallScreen = useMediaQuery("(max-width: 767px)"); // Mobile
   const isMediumScreen = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
   const isLaptopScreen = useMediaQuery("(min-width: 1024px) and (max-width: 1439px)");
@@ -29,7 +29,7 @@ const AdminProjectPageComponent = () => {
     refetchOnWindowFocus: false,
   });
 
-  console.log("projectData", projectData);
+  // console.log("projectData", projectData);
 
   const { mutate: mutateDeleteDataProject, isPending: isLoadingDeleteDataProject } = useDeleteDataProject(refetchProjectData);
 
@@ -159,4 +159,4 @@ const AdminProjectPageComponent = () => {
   );
 };
 
-export default AdminProjectPageComponent;
+export default ProjectAdminComponent;

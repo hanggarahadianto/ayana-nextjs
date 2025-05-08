@@ -9,7 +9,6 @@ import { getDataProductDetail } from "@/api/products/getDataProductDetail";
 import MyGallery from "./ImageGallery";
 import AdditionalInfoProduct from "./AdditionalInfo";
 import ReservationForm from "../reservation/ReservationForm";
-import { getDataInfo } from "@/api/info/getDataInfo";
 import AdditionalInfoMaps from "./AdditionalMaps";
 
 interface ProductDetailProps {
@@ -18,22 +17,11 @@ interface ProductDetailProps {
 
 const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
-
-  // console.log("PRODUCT DETAIL ID", productId);
-
-  // Jika productId belum tersedia, tampilkan loading
   if (!productId) return <p>Loading...</p>;
 
   const { data: productDataDetail } = useQuery({
     queryKey: ["getProductDetailData", productId],
     queryFn: () => getDataProductDetail(productId),
-    enabled: !!productId,
-    refetchOnWindowFocus: false,
-  });
-
-  const { data: additionalInfo } = useQuery({
-    queryKey: ["getAdditionalInfoData", productId],
-    queryFn: () => getDataInfo(productId),
     enabled: !!productId,
     refetchOnWindowFocus: false,
   });
@@ -103,16 +91,16 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
                     </Stack>
                   </Grid.Col>
                 </Grid>
-                <AdditionalInfoProduct maps={additionalInfo?.maps} nearBy={additionalInfo?.near_by || []} />
+                {/* <AdditionalInfoProduct maps={additionalInfo?.maps} nearBy={additionalInfo?.near_by || []} /> */}
                 <Divider mt={20} />
               </Stack>
             </Grid.Col>
-            <Grid.Col span={6}>
+            {/* <Grid.Col span={6}>
               <Stack mt={20}>
                 <ReservationForm id={productId} start_price={additionalInfo?.start_price} />
               </Stack>
             </Grid.Col>
-            {additionalInfo?.maps && <AdditionalInfoMaps mapsUrl={additionalInfo.maps} />}
+            {additionalInfo?.maps && <AdditionalInfoMaps mapsUrl={additionalInfo.maps} />} */}
           </Grid>
         )}
 
@@ -144,13 +132,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
                 </Stack>
               </Grid.Col>
               <Grid.Col span={12}>
-                <AdditionalInfoProduct maps={additionalInfo?.maps} nearBy={additionalInfo?.near_by || []} />
+                {/* <AdditionalInfoProduct maps={additionalInfo?.maps} nearBy={additionalInfo?.near_by || []} /> */}
               </Grid.Col>
             </Grid>
             <Divider mt={20} />
-            <Stack mt={20}>
-              <ReservationForm id={productId} start_price={additionalInfo?.start_price} />
-            </Stack>
+            <Stack mt={20}>{/* <ReservationForm id={productId} start_price={additionalInfo?.start_price} /> */}</Stack>
           </Stack>
         )}
 

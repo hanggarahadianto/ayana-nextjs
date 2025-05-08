@@ -1,5 +1,5 @@
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
-import AdminProjectPageComponent from "@/components/page/admin/project/AdminProjectPageComponent";
+import AdminProjectPageComponent from "@/components/page/admin/project/ProjectAdminComponent";
 import { getDataProject } from "@/api/project/getDataProject";
 
 export default async function AdminProjectPage() {

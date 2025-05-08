@@ -51,7 +51,7 @@ export default function SelectFinanceAccount({
       } else {
         onSelect({
           id: selected.id,
-          code: selected.code,
+
           type: selected.type,
           category: selected.category,
           name: selected.name,

@@ -12,7 +12,9 @@ interface IProduct {
   price: number;
   quantity: number;
   sequence: number;
-  file: string;
+  maps: string;
+  start_price: string;
+  near_by: INearBy[];
   created_at: string;
   updated_at: string;
 }
@@ -30,7 +32,9 @@ interface IProductCreate {
   price: number;
   sequence: number;
   quantity: number;
-  file: string;
+  maps: string;
+  start_price: string;
+  near_by: INearBy[];
 }
 
 interface IProductUpdate {
@@ -44,13 +48,19 @@ interface IProductUpdate {
   square: string;
   status: string;
   sequence: number;
-
   price: number;
   quantity: number;
-  file: string;
+  maps: string;
+  start_price: string;
+  near_by: INearBy[];
 }
 
 interface IProductResponse {
   data: IProduct[];
   status: string;
+}
+interface INearBy {
+  id: string;
+  name: string;
+  distance: string;
 }

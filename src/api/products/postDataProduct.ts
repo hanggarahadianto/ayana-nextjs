@@ -2,25 +2,20 @@ import { useMutation } from "@tanstack/react-query"; // Correct import from '@ta
 import { showNotification } from "@mantine/notifications";
 import { APIAxiosInstance } from "../../lib";
 
-const handleSubmitProductForm = async (values: IProjectCreate) => {
+const handleSubmitProductForm = async (values: IProductCreate) => {
   console.log("values on fetching", values);
   const response = await APIAxiosInstance.post(`home/post`, values);
-  return response.data; // Return the response data
+  return response.data;
 };
 
 // Custom hook for the mutation
 export const useSubmitProductForm = (refetchProductData: () => void, closeModal: () => void) => {
   return useMutation({
-    mutationFn: (values: any) => handleSubmitProductForm(values),
+    mutationFn: (values: IProductCreate) => handleSubmitProductForm(values),
     onSuccess: (data: any) => {
       console.log("pesan sukses terkirim");
       refetchProductData();
       closeModal();
-      // showNotification({
-      //   title: "Data Berhasil Dikirim",
-      //   message: "",
-      //   color: "green",
-      // });
     },
     onError: (data: any) => {
       showNotification({

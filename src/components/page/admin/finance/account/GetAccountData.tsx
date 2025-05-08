@@ -1,9 +1,8 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Group, Stack, Pagination, Select, Box } from "@mantine/core";
+import { Card, Text, Stack, Pagination } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { getDataAccount } from "@/api/account/getDataAccount";
 import { useEffect, useMemo, useState } from "react";
-import { accountTypeOptions, typeOptions } from "@/constants/dictionary";
 import AddAccountModal from "./AddAccountModal";
 import TableComponent from "@/components/common/table/TableComponent";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";

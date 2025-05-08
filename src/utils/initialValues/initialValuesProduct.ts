@@ -1,9 +1,6 @@
-import * as Yup from "yup";
-
 export const initialValueProductCreate: IProductCreate = {
   title: "",
   location: "",
-
   type: "",
   content: "",
   address: "",
@@ -14,12 +11,13 @@ export const initialValueProductCreate: IProductCreate = {
   price: 0,
   sequence: 0,
   quantity: 0,
-  file: "",
-  // Assuming reservation can be any type
+  maps: "",
+  start_price: "",
+  near_by: [],
 };
 
 export const getInitialValuesUpdateProduct = (initialData?: IProductUpdate) => ({
-  id: initialData?.id || "",
+  id: initialData?.id || "", // <-- tambahkan ini
   title: initialData?.title || "",
   location: initialData?.location || "",
   content: initialData?.content || "",
@@ -28,8 +26,10 @@ export const getInitialValuesUpdateProduct = (initialData?: IProductUpdate) => (
   bedroom: initialData?.bedroom || "",
   square: initialData?.square || "",
   status: initialData?.status || "available",
-  price: initialData?.price ?? 0, // Ensures price is a number
-  quantity: initialData?.quantity ?? 1, // Ensures quantity is at least 1
-  sequence: initialData?.sequence ?? 0, // Ensures sequcence is a number
-  file: initialData?.file || "",
+  price: initialData?.price ?? 0,
+  quantity: initialData?.quantity ?? 1,
+  sequence: initialData?.sequence ?? 0,
+  map: initialData?.maps || "",
+  start_price: initialData?.start_price || "",
+  near_by: [],
 });

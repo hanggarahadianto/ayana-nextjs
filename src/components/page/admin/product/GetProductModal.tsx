@@ -4,6 +4,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconEye } from "@tabler/icons-react";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import LoadingGlobal from "@/styles/loading/loading-global";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 const GetProductModal = ({ productData }: { productData?: IProduct }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -20,6 +21,8 @@ const GetProductModal = ({ productData }: { productData?: IProduct }) => {
       return () => clearTimeout(timer);
     }
   }, [opened]);
+
+  console.log("info data");
 
   return (
     <>
@@ -50,20 +53,23 @@ const GetProductModal = ({ productData }: { productData?: IProduct }) => {
               <Divider />
               <Grid>
                 <Grid.Col span={6}>
-                  <TextInput label="Urutan" value={productData?.sequence} disabled />
+                  <TextInput label="Urutan" value={productData?.sequence} readOnly />
 
-                  <TextInput label="Address" value={productData?.address} disabled />
-                  <TextInput label="Location" value={productData?.location} disabled />
-                  <TextInput label="Price" value={`Rp ${productData?.price.toLocaleString()}`} disabled />
+                  <TextInput label="Address" value={productData?.address} readOnly />
+                  <TextInput label="Location" value={productData?.location} readOnly />
+                  <TextInput label="Price" value={`Rp ${productData?.price.toLocaleString()}`} readOnly />
                 </Grid.Col>
                 <Grid.Col span={6}>
-                  <TextInput label="Bedrooms" value={productData?.bedroom} disabled />
-                  <TextInput label="Bathrooms" value={productData?.bathroom} disabled />
-                  <TextInput label="Square Meters" value={productData?.square} disabled />
+                  <TextInput label="Bedrooms" value={productData?.bedroom} readOnly />
+                  <TextInput label="Bathrooms" value={productData?.bathroom} readOnly />
+                  <TextInput label="Square Meters" value={productData?.square} readOnly />
                 </Grid.Col>
               </Grid>
-              <TextInput label="Status" value={productData?.status} disabled />
-              <TextInput label="Quantity" value={productData?.quantity} disabled />
+              <TextInput label="Status" value={productData?.status} readOnly />
+              <TextInput label="Quantity" value={productData?.quantity} readOnly />
+              <Divider />
+              {/* <TextInput label="Harga Awal" value={formatCurrency(infoData?.start_price ?? 0)} readOnly /> */}
+              <TextInput label="Quantity" value={productData?.quantity} readOnly />
             </Stack>
           </Paper>
         </ScrollArea>
