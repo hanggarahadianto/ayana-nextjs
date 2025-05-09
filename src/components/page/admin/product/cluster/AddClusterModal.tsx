@@ -4,32 +4,26 @@ import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleG
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
-import { useSubmitProductForm } from "@/api/products/postDataProduct";
-import { useUploadImageProduct } from "@/api/products/uploadImageProduct";
-import { availabilityOptions, locationOptions, typeOptions } from "@/constants/dictionary";
-import { validationSchemaProduct } from "@/utils/validation/product-validation";
-import { initialValueProductCreate } from "@/utils/initialValues/initialValuesProduct";
+
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
+import { availabilityOptions, typeOptions } from "@/constants/dictionary";
+import { initialValuesClusterCreate } from "@/utils/initialValues/initialValuesCluster";
+import { validationSchemaClusterCreate } from "@/utils/validation/cluster-validation";
 
-type Props = {
-  refetchProductData: () => void;
-};
-
-const handleChangeProduct = (field: keyof IProductCreate, value: any, setFieldValue: (field: string, value: any) => void) => {
+const handleChangeCluster = (field: keyof IClusterCreate, value: any, setFieldValue: (field: string, value: any) => void) => {
   setFieldValue(field, value);
 };
 
-const AddClusterModal: React.FC<Props> = ({ refetchProductData }) => {
+const AddClusterModal: React.FC<{}> = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const { mutate: postDataProduct, isPending: isLoadingSubmitProductData } = useSubmitProductForm(refetchProductData, close);
-  const { mutate: uploadImageProduct, isPending: isUploadingImage } = useUploadImageProduct(refetchProductData, close);
+  const { mutate: postDataCluster, isPending: isLoadingSubmitClusterData } = useSubmitClusterForm(close);
 
   const handleSubmit = useCallback(
-    async (values: IProductCreate, { resetForm }: FormikHelpers<IProductCreate>) => {
+    async (values: IClusterCreate, { resetForm }: FormikHelpers<IClusterCreate>) => {
       try {
-        postDataProduct(values, {
+        postDataCluster(values, {
           onSuccess: () => {
             showNotification({
               title: "Berhasil",
@@ -51,14 +45,14 @@ const AddClusterModal: React.FC<Props> = ({ refetchProductData }) => {
         console.error("Submit Error:", error);
       }
     },
-    [postDataProduct, close]
+    [postDataCluster, close]
   );
 
   return (
     <SimpleGridGlobal cols={1}>
       <ButtonAdd onClick={open} size="3.5rem" />
       <Modal opened={opened} onClose={close} size={"100%"} yOffset="100px">
-        <Formik initialValues={initialValueProductCreate} validationSchema={validationSchemaProduct} onSubmit={handleSubmit}>
+        <Formik initialValues={initialValuesClusterCreate} validationSchema={validationSchemaClusterCreate} onSubmit={handleSubmit}>
           {({ values, errors, setFieldValue }) => {
             console.log("values", values);
             console.log("error", errors);
@@ -67,40 +61,16 @@ const AddClusterModal: React.FC<Props> = ({ refetchProductData }) => {
                 <SimpleGrid p="40px" spacing="md">
                   <Group grow>
                     <TextInput
-                      label="Nama Produk"
-                      placeholder="Masukkan nama produk"
-                      onChange={(e) => handleChangeProduct("title", e.currentTarget.value, setFieldValue)}
-                      required
-                    />
-                    <Select
-                      label="Nama Lokasi"
-                      data={locationOptions}
-                      placeholder="Pilih lokasi"
-                      clearable
-                      onChange={(value) => handleChangeProduct("location", value || "", setFieldValue)}
-                    />
-                    <Select
-                      label="Tipe"
-                      data={typeOptions}
-                      placeholder="Pilih tipe"
-                      clearable
-                      onChange={(value) => handleChangeProduct("type", value || "", setFieldValue)}
-                      required
+                      label="Nama Cluster"
+                      placeholder="Masukkan Nama Custer"
+                      onChange={(e) => handleChangeCluster("name", e.currentTarget.value, setFieldValue)}
                     />
                   </Group>
 
                   <TextInput
                     label="Alamat"
                     placeholder="Masukkan alamat"
-                    onChange={(e) => handleChangeProduct("address", e.currentTarget.value, setFieldValue)}
-                    required
-                  />
-
-                  <Textarea
-                    label="Deskripsi"
-                    placeholder="Masukkan deskripsi"
-                    onChange={(e) => handleChangeProduct("content", e.currentTarget.value, setFieldValue)}
-                    required
+                    onChange={(e) => handleChangeCluster("location", e.currentTarget.value, setFieldValue)}
                   />
 
                   <Group grow>
@@ -108,22 +78,13 @@ const AddClusterModal: React.FC<Props> = ({ refetchProductData }) => {
                       label="Kamar Mandi"
                       hideControls
                       placeholder="Masukkan jumlah kamar mandi"
-                      onChange={(val) => handleChangeProduct("bathroom", val || 0, setFieldValue)}
-                      required
+                      onChange={(val) => handleChangeCluster("square", val || 0, setFieldValue)}
                     />
                     <NumberInput
                       label="Kamar Tidur"
                       hideControls
                       placeholder="Masukkan jumlah kamar tidur"
-                      onChange={(val) => handleChangeProduct("bedroom", val || 0, setFieldValue)}
-                      required
-                    />
-                    <NumberInput
-                      label="Luas Tanah"
-                      hideControls
-                      placeholder="Masukkan luas tanah"
-                      onChange={(val) => handleChangeProduct("square", val || 0, setFieldValue)}
-                      required
+                      onChange={(val) => handleChangeCluster("price", val || 0, setFieldValue)}
                     />
                   </Group>
 
@@ -133,28 +94,28 @@ const AddClusterModal: React.FC<Props> = ({ refetchProductData }) => {
                       data={availabilityOptions}
                       placeholder="Pilih status"
                       clearable
-                      onChange={(val) => handleChangeProduct("status", val || "", setFieldValue)}
+                      onChange={(val) => handleChangeCluster("status", val || "", setFieldValue)}
                       required
                     />
                     <NumberInput
                       label="Kuantitas"
                       hideControls
                       placeholder="Masukkan kuantitas"
-                      onChange={(val) => handleChangeProduct("quantity", val || 0, setFieldValue)}
+                      onChange={(val) => handleChangeCluster("quantity", val || 0, setFieldValue)}
                       required
                     />
                     <NumberInput
                       label="Harga Unit"
                       hideControls
                       placeholder="Masukkan harga unit"
-                      onChange={(val) => handleChangeProduct("price", val || 0, setFieldValue)}
+                      onChange={(val) => handleChangeCluster("price", val || 0, setFieldValue)}
                       required
                     />
                   </Group>
                   <Textarea
                     label="Maps"
                     placeholder="Masukkan maps"
-                    onChange={(e) => handleChangeProduct("maps", e.currentTarget.value, setFieldValue)}
+                    onChange={(e) => handleChangeCluster("maps", e.currentTarget.value, setFieldValue)}
                     required
                   />
 
@@ -169,7 +130,7 @@ const AddClusterModal: React.FC<Props> = ({ refetchProductData }) => {
                       label="Urutan"
                       hideControls
                       placeholder="Masukkan urutan"
-                      onChange={(val) => handleChangeProduct("sequence", val || 0, setFieldValue)}
+                      onChange={(val) => handleChangeCluster("sequence", val || 0, setFieldValue)}
                       required
                     />
                     {/* <FileInput
@@ -186,9 +147,9 @@ const AddClusterModal: React.FC<Props> = ({ refetchProductData }) => {
                     <Button onClick={close} variant="default">
                       Batal
                     </Button>
-                    <Button type="submit" loading={isLoadingSubmitProductData || isUploadingImage}>
+                    {/* <Button type="submit" loading={isLoadingSubmitClusterData}>
                       Simpan
-                    </Button>
+                    </Button> */}
                   </Group>
                 </SimpleGrid>
               </Form>

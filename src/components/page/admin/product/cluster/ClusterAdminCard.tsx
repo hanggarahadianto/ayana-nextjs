@@ -40,57 +40,46 @@ const ClusterAdminCard = ({ setSelectedClusterId, selectedClusterId }: Props) =>
   return (
     <>
       <SimpleGridGlobal cols={1}>
-        <Group justify="space-between" mb="lg">
-          <Text fw={700} size="2rem">
-            Daftar Produk
+        {/* <Card p="md" radius="md" shadow="sm" withBorder> */}
+        <Flex w="100%" gap="40px">
+          <Stack w="400px">
+            <SelectCluster
+              value={selectedClusterId || null}
+              onChange={(value: string | null) => {
+                console.log("Cluster selected:", value);
+                setSelectedClusterId(value);
+              }}
+              placeholder="Pilih Cluster"
+            />
+          </Stack>
+
+          <Stack mt={20}>
+            <ButtonDeleteWithConfirmation
+              id={""}
+              onDelete={function (id: string): void {
+                throw new Error("Function not implemented.");
+              }}
+              description={"Hapus"}
+              size={2.5}
+            />
+          </Stack>
+
+          <Stack justify="flex-end" ml="auto">
+            <AddClusterModal />
+          </Stack>
+        </Flex>
+        <LoadingGlobal visible={isLoadingClusterData || isLoadingDeleteProduct} />
+
+        <Card p="sm" radius="sm" shadow="xs" withBorder mt={"40px"}>
+          <Text fw={600} size="lg">
+            {clusterData?.name}
           </Text>
-          <Stack gap={0}>{/* <AddProductModal refetchProductData={refetchClusterData} /> */}</Stack>
-        </Group>
 
-        <Card p="md" radius="md" shadow="sm" withBorder>
-          <Flex w="100%" gap="40px">
-            <Stack w="400px">
-              <SelectCluster
-                value={selectedClusterId || null}
-                onChange={(value: string | null) => {
-                  console.log("Cluster selected:", value);
-                  setSelectedClusterId(value);
-                }}
-                placeholder="Pilih Cluster"
-              />
-            </Stack>
-
-            <Stack mt={20}>
-              <ButtonDeleteWithConfirmation
-                id={""}
-                onDelete={function (id: string): void {
-                  throw new Error("Function not implemented.");
-                }}
-                description={"Hapus"}
-                size={2.5}
-              />
-            </Stack>
-
-            <Stack justify="flex-end" ml="auto">
-              <AddClusterModal
-                refetchProductData={function (): void {
-                  throw new Error("Function not implemented.");
-                }}
-              />
-            </Stack>
-          </Flex>
-          <LoadingGlobal visible={isLoadingClusterData || isLoadingDeleteProduct} />
-
-          <Card p="sm" radius="sm" shadow="xs" withBorder mt={"40px"}>
-            <Text fw={600} size="lg">
-              {clusterData?.name}
-            </Text>
-
-            <Text size="sm" c="dimmed">
-              Lokasi: {clusterData?.location}
-            </Text>
-          </Card>
+          <Text size="sm" c="dimmed">
+            Lokasi: {clusterData?.location}
+          </Text>
         </Card>
+        {/* </Card> */}
       </SimpleGridGlobal>
     </>
   );

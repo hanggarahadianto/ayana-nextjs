@@ -1,6 +1,6 @@
 "use client";
 
-import { SimpleGrid, SimpleGridProps } from "@mantine/core";
+import { Card, SimpleGrid, SimpleGridProps } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 
 interface SimpleGridGlobalProps extends SimpleGridProps {
@@ -24,7 +24,9 @@ const SimpleGridGlobal = ({ children, spacing = "lg", ...props }: SimpleGridGlob
       spacing={spacing}
       {...props}
     >
-      {children}
+      <Card p="md" radius="md" shadow="sm" bg={"#1a1a1a"}>
+        {children}
+      </Card>
     </SimpleGrid>
   );
 };

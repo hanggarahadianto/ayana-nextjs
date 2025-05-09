@@ -12,19 +12,15 @@ import { initialValueProductCreate } from "@/utils/initialValues/initialValuesPr
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 
-type Props = {
-  refetchProductData: () => void;
-};
-
 const handleChangeProduct = (field: keyof IProductCreate, value: any, setFieldValue: (field: string, value: any) => void) => {
   setFieldValue(field, value);
 };
 
-const AddProductModal: React.FC<Props> = ({ refetchProductData }) => {
+const AddProductModal: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const { mutate: postDataProduct, isPending: isLoadingSubmitProductData } = useSubmitProductForm(refetchProductData, close);
-  const { mutate: uploadImageProduct, isPending: isUploadingImage } = useUploadImageProduct(refetchProductData, close);
+  const { mutate: postDataProduct, isPending: isLoadingSubmitProductData } = useSubmitProductForm(close);
+  const { mutate: uploadImageProduct, isPending: isUploadingImage } = useUploadImageProduct(close);
 
   const handleSubmit = useCallback(
     async (values: IProductCreate, { resetForm }: FormikHelpers<IProductCreate>) => {

@@ -55,7 +55,7 @@ const GetProductModal = ({ productData }: { productData?: IProduct }) => {
                 <Grid.Col span={6}>
                   <TextInput label="Urutan" value={productData?.sequence} readOnly />
 
-                  <TextInput label="Address" value={productData?.address} readOnly />
+                  {/* <TextInput label="Address" value={productData?.address} readOnly /> */}
                   <TextInput label="Location" value={productData?.location} readOnly />
                   <TextInput label="Price" value={`Rp ${productData?.price.toLocaleString()}`} readOnly />
                 </Grid.Col>

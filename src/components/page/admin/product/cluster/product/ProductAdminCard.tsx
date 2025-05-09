@@ -7,6 +7,7 @@ import { useDeleteDataProduct } from "@/api/products/deleteDataProduct";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import CardComponentResponsive from "@/components/common/card/CardComponentResponsive";
+import AddProductModal from "./AddProductModal";
 
 interface Props {
   selectedClusterId: string | null;
@@ -42,6 +43,14 @@ const ProductAdminCard = ({ selectedClusterId }: Props) => {
     <>
       <SimpleGridGlobal cols={1}>
         <LoadingGlobal visible={isLoadingProductData || isLoadingDeleteProduct} />
+        <Group justify="space-between" mb="lg">
+          <Text fw={700} size="2rem">
+            Daftar Produk
+          </Text>
+          <Stack gap={0}>
+            <AddProductModal />
+          </Stack>
+        </Group>
 
         <SimpleGrid
           style={{ gap: "24px" }}

@@ -15,6 +15,18 @@ interface ICluster {
   homes: any | null; // sesuaikan jika struktur homes sudah diketahui
 }
 
+interface IClusterCreate {
+  name: string;
+  location: string;
+  square: number;
+  price: number;
+  quantity: number;
+  status: "available" | "sold" | "booked" | string; // tambahkan opsi lain jika perlu
+  sequence: number;
+  maps: string;
+  homes: any | null; // sesuaikan jika struktur homes sudah diketahui
+}
+
 interface IClusterResponse {
   data: ICluster[];
   status: string;

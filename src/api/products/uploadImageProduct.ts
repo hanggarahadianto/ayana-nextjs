@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
-export const useUploadImageProduct = (refetch: () => void, onClose: () => void) => {
+export const useUploadImageProduct = (onClose: () => void) => {
   return useMutation({
     mutationFn: async (formData: FormData) => {
       const response = await axios.post("/api/products/upload-image", formData, {
@@ -12,7 +12,6 @@ export const useUploadImageProduct = (refetch: () => void, onClose: () => void) 
       return response.data;
     },
     onSuccess: () => {
-      refetch();
       onClose();
     },
     onError: (error: any) => {

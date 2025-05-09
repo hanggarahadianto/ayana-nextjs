@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
+
 import ClusterAdminCard from "./cluster/ClusterAdminCard";
 import ProductAdminCard from "./cluster/product/ProductAdminCard";
+import { Divider, SimpleGrid } from "@mantine/core";
 
 const ProductAdminComponent = () => {
   const [selectedClusterId, setSelectedClusterId] = useState<string | null>(null);
@@ -11,10 +12,11 @@ const ProductAdminComponent = () => {
   console.log("cluster id", selectedClusterId);
 
   return (
-    <SimpleGridGlobal cols={1}>
+    <SimpleGrid cols={1}>
       <ClusterAdminCard setSelectedClusterId={setSelectedClusterId} selectedClusterId={selectedClusterId ?? ""} />
+      <Divider mt={"40"} />
       <ProductAdminCard selectedClusterId={selectedClusterId} />
-    </SimpleGridGlobal>
+    </SimpleGrid>
   );
 };
 
