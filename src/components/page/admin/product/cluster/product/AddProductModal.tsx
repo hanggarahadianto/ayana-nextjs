@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback } from "react";
-import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleGrid, FileInput, Divider } from "@mantine/core";
+import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleGrid, Divider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
@@ -10,7 +10,6 @@ import { availabilityOptions, locationOptions, typeOptions } from "@/constants/d
 import { validationSchemaProduct } from "@/utils/validation/product-validation";
 import { initialValueProductCreate } from "@/utils/initialValues/initialValuesProduct";
 import ButtonAdd from "@/components/common/button/buttonAdd";
-import NearByForm from "./NearByForm";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 
 type Props = {
@@ -162,7 +161,7 @@ const AddProductModal: React.FC<Props> = ({ refetchProductData }) => {
                   <Divider p={12} mt={16} />
 
                   {/* Komponen untuk near_bies */}
-                  <NearByForm setFieldValue={setFieldValue} />
+                  {/* <NearByForm setFieldValue={setFieldValue} /> */}
 
                   <Group grow>
                     <NumberInput

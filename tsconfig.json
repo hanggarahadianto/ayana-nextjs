@@ -25,6 +25,12 @@
     }
   },
   "extends": "./tsconfig.base.json",
-  "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", ".next/types/**/*.ts", "src/components/page/admin/product/NearByForm.tsx"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "src/components/page/admin/product/cluster/product/NearByForm.tsx"
+  ],
   "exclude": ["node_modules", ".next"]
 }

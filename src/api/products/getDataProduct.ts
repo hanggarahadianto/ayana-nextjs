@@ -1,17 +1,21 @@
-import { APIAxiosInstance, APIAxiosInstanceWithoutCredential } from "../../lib";
+import { APIAxiosInstanceWithoutCredential } from "../../lib";
 
-export const getDataProduct = async () => {
+interface GetDataProductParams {
+  clusterId: string;
+  page?: number;
+  limit?: number;
+}
+
+export const getDataProductByClusterId = async ({ clusterId, page = 1, limit = 10 }: GetDataProductParams) => {
   try {
-    const url = "home/get";
+    const url = `home/getByClusterId/${clusterId}?page=${page}&limit=${limit}`;
 
-    // ✅ Panggil fungsi dengan ()
-    const response = await APIAxiosInstanceWithoutCredential.get(url); // ⬅️ Tanpa header
-    // const response = await APIAxiosInstance.get(url); // ⬅️ Tanpa header
+    const response = await APIAxiosInstanceWithoutCredential.get(url);
 
-    console.log("Response:", response.data.data);
+    console.log("Response:", response.data);
     return response.data;
   } catch (error: any) {
-    console.error("Error fetching data:", error.message || error);
+    console.error("Error fetching homes by cluster ID:", error.message || error);
     throw error;
   }
 };
