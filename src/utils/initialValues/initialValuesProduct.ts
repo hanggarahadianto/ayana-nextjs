@@ -11,9 +11,10 @@ export const initialValueProductCreate: IProductCreate = {
   price: 0,
   sequence: 0,
   quantity: 0,
-  maps: "",
-  start_price: "",
+
+  start_price: 0,
   near_by: [],
+  cluster_id: "",
 };
 
 export const getInitialValuesUpdateProduct = (initialData?: IProductUpdate) => ({
@@ -30,6 +31,6 @@ export const getInitialValuesUpdateProduct = (initialData?: IProductUpdate) => (
   quantity: initialData?.quantity ?? 1,
   sequence: initialData?.sequence ?? 0,
   map: initialData?.maps || "",
-  start_price: initialData?.start_price || "",
+  start_price: Number(initialData?.start_price) || 0,
   near_by: [],
 });

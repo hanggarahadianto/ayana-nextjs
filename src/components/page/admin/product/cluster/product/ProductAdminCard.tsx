@@ -1,40 +1,37 @@
 "use client";
 import { Card, Group, SimpleGrid, Text, Stack } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { getDataProductByClusterId } from "@/api/products/getDataProduct";
+
 import { useDeleteDataProduct } from "@/api/products/deleteDataProduct";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import CardComponentResponsive from "@/components/common/card/CardComponentResponsive";
 import AddProductModal from "./AddProductModal";
+import GetProductModal from "./GetProductModal";
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import { getDataProductByClusterId } from "@/api/products/getProductByClusterId";
 
 interface Props {
-  selectedClusterId: string | null;
+  clusterId: string | null;
 }
 
-const ProductAdminCard = ({ selectedClusterId }: Props) => {
+const ProductAdminCard = ({ clusterId }: Props) => {
+  console.log("selectd cluster", clusterId);
   const {
     data: productDataByClusterId,
     refetch: refetchProductData,
     isLoading: isLoadingProductData,
   } = useQuery({
-    queryKey: ["getProductDataByClusterId", selectedClusterId],
+    queryKey: ["getProductDataByClusterId", clusterId],
     queryFn: () => {
-      if (!selectedClusterId) return Promise.resolve(null);
-      return getDataProductByClusterId({ clusterId: selectedClusterId });
+      if (!clusterId) return Promise.resolve(null);
+      return getDataProductByClusterId({ clusterId: clusterId });
     },
-    enabled: !!selectedClusterId, // hanya fetch jika ada clusterId
+    enabled: !!clusterId,
     refetchOnWindowFocus: false,
   });
 
   const { mutate: mutateDeleteDataProduct, isPending: isLoadingDeleteProduct } = useDeleteDataProduct(refetchProductData);
-  const [selectedProduct, setSelectedProduct] = useState<IProduct | undefined>(undefined);
-
-  const handleSelectProduct = (product: IProduct) => {
-    setSelectedProduct(product);
-  };
-
   const handleDeleteProduct = (idToDelete: string) => {
     mutateDeleteDataProduct(idToDelete);
   };
@@ -48,24 +45,26 @@ const ProductAdminCard = ({ selectedClusterId }: Props) => {
             Daftar Produk
           </Text>
           <Stack gap={0}>
-            <AddProductModal />
+            <AddProductModal clusterId={clusterId} />
           </Stack>
         </Group>
 
-        <SimpleGrid
-          style={{ gap: "24px" }}
-          spacing="lg"
-          cols={4} // Atur jumlah kolom tetap di sini
-        >
+        <SimpleGrid style={{ gap: "24px" }} spacing="lg" cols={4}>
           {productDataByClusterId?.data.map((product: IProduct) => (
-            <CardComponentResponsive
-              key={product?.id}
-              id={product?.id}
-              title={product?.title}
-              status={product?.status}
-              onDelete={(id) => handleDeleteProduct(id)}
-              onSelect={() => handleSelectProduct(product)}
-            />
+            <SimpleGrid key={product.id}>
+              <CardComponentResponsive title={product.title} status={product.status}>
+                <Group justify="flex-end" wrap="nowrap">
+                  <GetProductModal productData={product} />
+
+                  <ButtonDeleteWithConfirmation
+                    id={product.id}
+                    onDelete={handleDeleteProduct}
+                    description={`Apakah anda ingin menghapus ${product.title}?`}
+                    size={2.5}
+                  />
+                </Group>
+              </CardComponentResponsive>
+            </SimpleGrid>
           ))}
         </SimpleGrid>
       </SimpleGridGlobal>

@@ -1,22 +1,41 @@
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { showNotification } from "@mantine/notifications";
+import { APIAxiosInstanceMultipart } from "../../lib";
 
-export const useUploadImageProduct = (onClose: () => void) => {
+interface UploadImageParams {
+  productId: string;
+  formData: FormData;
+}
+
+const uploadImagesRequest = async ({ productId, formData }: UploadImageParams) => {
+  const response = await APIAxiosInstanceMultipart.post(`/home/${productId}/images`, formData);
+  return response.data;
+};
+
+export const useUploadImages = (onClose: () => void, clusterId: string) => {
+  const queryClient = useQueryClient(); // ✅ gunakan ini
+
   return useMutation({
-    mutationFn: async (formData: FormData) => {
-      const response = await axios.post("/api/products/upload-image", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+    mutationFn: uploadImagesRequest,
+    onSuccess: async () => {
+      await queryClient.refetchQueries({
+        queryKey: ["getProductDataByClusterId", clusterId],
       });
-      return response.data;
-    },
-    onSuccess: () => {
+
+      showNotification({
+        title: "Upload selesai",
+        message: "Gambar berhasil diunggah",
+        color: "green",
+      });
+
       onClose();
     },
     onError: (error: any) => {
-      console.error("Upload gambar gagal:", error);
-      throw error;
+      showNotification({
+        title: "Upload gagal",
+        message: error.message || "Terjadi kesalahan saat mengunggah gambar",
+        color: "red",
+      });
     },
   });
 };

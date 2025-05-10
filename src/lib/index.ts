@@ -19,6 +19,12 @@ export const APIAxiosInstanceWithoutCredential = axios.create({
   withCredentials: false,
 });
 
+export const APIAxiosInstanceMultipart = axios.create({
+  baseURL,
+  timeout: 1000 * 60,
+  withCredentials: true, // set sesuai kebutuhan
+});
+
 export const httpHeader = (token?: string, isMultipart = false) => {
   const headers: Record<string, string> = {};
 

@@ -22,7 +22,7 @@ const GetProductModal = ({ productData }: { productData?: IProduct }) => {
     }
   }, [opened]);
 
-  console.log("info data");
+  console.log("product data", productData);
 
   return (
     <>
@@ -39,13 +39,13 @@ const GetProductModal = ({ productData }: { productData?: IProduct }) => {
         <ScrollArea>
           <Paper p="md" shadow="sm">
             <Stack gap="md">
-              <Image
+              {/* <Image
                 src={productData?.image}
                 alt={productData?.title}
                 radius="md"
                 height={productData?.image ? 400 : "auto"} // Ensures height is 200px if an image exists
                 style={{ maxHeight: 400, objectFit: "cover" }} // Prevents stretching beyond 200px
-              />
+              /> */}
 
               <Text size="lg" fw={500}>
                 {productData?.title}
@@ -55,7 +55,6 @@ const GetProductModal = ({ productData }: { productData?: IProduct }) => {
                 <Grid.Col span={6}>
                   <TextInput label="Urutan" value={productData?.sequence} readOnly />
 
-                  {/* <TextInput label="Address" value={productData?.address} readOnly /> */}
                   <TextInput label="Location" value={productData?.location} readOnly />
                   <TextInput label="Price" value={`Rp ${productData?.price.toLocaleString()}`} readOnly />
                 </Grid.Col>

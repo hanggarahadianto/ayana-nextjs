@@ -29,8 +29,6 @@ const ProjectAdminComponent = () => {
     refetchOnWindowFocus: false,
   });
 
-  // console.log("projectData", projectData);
-
   const { mutate: mutateDeleteDataProject, isPending: isLoadingDeleteDataProject } = useDeleteDataProject(refetchProjectData);
 
   const handleDeleteProject = (idToDelete: string) => {

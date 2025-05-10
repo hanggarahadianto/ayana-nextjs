@@ -4,8 +4,8 @@ export const initialValuesClusterCreate: IClusterCreate = {
   square: 0,
   price: 0,
   quantity: 0,
-  status: "available", // default status
-  sequence: 1,
+  status: "", // default status
+  sequence: 0,
   maps: "",
 
   homes: null, // atau [] jika kamu pakai array

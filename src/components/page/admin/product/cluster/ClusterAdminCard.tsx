@@ -1,41 +1,38 @@
 "use client";
-import { Card, Group, SimpleGrid, Text, Stack, Flex } from "@mantine/core";
+import { Card, Text, Stack, Flex } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { useDeleteDataProduct } from "@/api/products/deleteDataProduct";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
-import { getDataCluster } from "@/api/cluster/getCluster";
 import SelectCluster from "@/components/common/select/SelectCluster";
 import { getDataClusterById } from "@/api/cluster/getClusterById";
 import AddClusterModal from "./AddClusterModal";
+import { useDeleteDataCluster } from "@/api/cluster/deleteCluster";
 
 interface Props {
   setSelectedClusterId: (id: string | null) => void;
+  setSelectedClusterName?: (name: string) => void;
   selectedClusterId: string;
+  selectedClusterName: string;
 }
 
-const ClusterAdminCard = ({ setSelectedClusterId, selectedClusterId }: Props) => {
+const ClusterAdminCard = ({ setSelectedClusterId, setSelectedClusterName, selectedClusterId, selectedClusterName }: Props) => {
   const {
     data: clusterData,
     refetch: refetchClusterData,
     isLoading: isLoadingClusterData,
-    error,
   } = useQuery({
     queryKey: ["getClusterById", selectedClusterId],
     queryFn: () => getDataClusterById(selectedClusterId),
     enabled: !!selectedClusterId, // hanya fetch jika ada ID
   });
 
-  const { mutate: mutateDeleteDataCluster, isPending: isLoadingDeleteProduct } = useDeleteDataProduct(refetchClusterData);
-  const [selectedProduct, setSelectedProduct] = useState<ICluster | undefined>(undefined);
+  const { mutate: mutateDeleteDataCluster, isPending: isLoadingDeleteProduct } = useDeleteDataCluster(refetchClusterData);
 
   const handleDeleteCluster = (idToDelete: string) => {
     mutateDeleteDataCluster(idToDelete);
   };
-
-  console.log("data cluster", clusterData);
 
   return (
     <>
@@ -44,24 +41,25 @@ const ClusterAdminCard = ({ setSelectedClusterId, selectedClusterId }: Props) =>
         <Flex w="100%" gap="40px">
           <Stack w="400px">
             <SelectCluster
-              value={selectedClusterId || null}
-              onChange={(value: string | null) => {
-                console.log("Cluster selected:", value);
-                setSelectedClusterId(value);
+              value={selectedClusterId ? { id: selectedClusterId, name: selectedClusterName } : null}
+              onChange={(value) => {
+                setSelectedClusterId(value?.id || null);
+                if (setSelectedClusterName) {
+                  setSelectedClusterName(value?.name || "");
+                }
               }}
               placeholder="Pilih Cluster"
             />
           </Stack>
-
-          <Stack mt={20}>
-            <ButtonDeleteWithConfirmation
-              id={""}
-              onDelete={function (id: string): void {
-                throw new Error("Function not implemented.");
-              }}
-              description={"Hapus"}
-              size={2.5}
-            />
+          <Stack mt={22}>
+            {selectedClusterId && (
+              <ButtonDeleteWithConfirmation
+                id={selectedClusterId}
+                onDelete={handleDeleteCluster}
+                description={`Hapus ${selectedClusterName}`}
+                size={2.5}
+              />
+            )}
           </Stack>
 
           <Stack justify="flex-end" ml="auto">

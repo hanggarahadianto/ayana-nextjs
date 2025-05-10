@@ -11,10 +11,11 @@ interface IProduct {
   price: number;
   quantity: number;
   sequence: number;
-  maps: string;
-  start_price: string;
+
+  start_price: number;
   near_by: INearBy[];
   created_at: string;
+  cluster_id: string | null;
   updated_at: string;
 }
 
@@ -31,8 +32,8 @@ interface IProductCreate {
   price: number;
   sequence: number;
   quantity: number;
-  maps: string;
-  start_price: string;
+  start_price: number;
+  cluster_id: string | null;
   near_by: INearBy[];
 }
 

@@ -4,9 +4,14 @@ import { getDataCluster } from "@/api/cluster/getCluster";
 import { Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 
+interface ClusterOption {
+  id: string;
+  name: string;
+}
+
 interface SelectClusterProps {
-  value: string | null;
-  onChange: (value: string | null) => void;
+  value: ClusterOption | null;
+  onChange: (value: ClusterOption | null) => void;
   label?: string;
   placeholder?: string;
   required?: boolean;
@@ -26,14 +31,16 @@ const SelectCluster = ({
   });
 
   const options =
-    clusterData?.data?.map((cluster: ICluster) => ({
+    clusterData?.data?.map((cluster: ClusterOption) => ({
       value: cluster.id,
-      label: cluster.name, // perbaikan di sini
+      label: cluster.name,
     })) ?? [];
+
+  const selected = clusterData?.data?.find((c: ClusterOption) => c.id === value?.id);
 
   return (
     <Select
-      w="100%" // atau style={{ flex: 1 }}
+      w="100%"
       styles={{
         option: {
           fontSize: "14px",
@@ -46,8 +53,11 @@ const SelectCluster = ({
       label={label}
       placeholder={placeholder}
       data={options}
-      value={value}
-      onChange={onChange}
+      value={selected?.id ?? null}
+      onChange={(selectedId) => {
+        const selectedCluster = clusterData?.data?.find((cluster: ClusterOption) => cluster.id === selectedId);
+        onChange(selectedCluster ?? null);
+      }}
       required={required}
       searchable
       clearable

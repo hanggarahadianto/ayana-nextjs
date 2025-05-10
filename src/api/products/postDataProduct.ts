@@ -9,13 +9,11 @@ const handleSubmitProductForm = async (values: IProductCreate) => {
 };
 
 // Custom hook for the mutation
-export const useSubmitProductForm = (closeModal: () => void) => {
+export const useSubmitProductForm = () => {
   return useMutation({
     mutationFn: (values: IProductCreate) => handleSubmitProductForm(values),
     onSuccess: (data: any) => {
       console.log("pesan sukses terkirim");
-
-      closeModal();
     },
     onError: (data: any) => {
       showNotification({
