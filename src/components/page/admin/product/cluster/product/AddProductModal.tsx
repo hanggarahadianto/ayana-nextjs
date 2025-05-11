@@ -5,13 +5,14 @@ import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
 import { useSubmitProductForm } from "@/api/products/postDataProduct";
-import { availabilityOptions, locationOptions, typeOptions } from "@/constants/dictionary";
+import { availabilityOptions, typeOptions } from "@/constants/dictionary";
 import { validationSchemaProduct } from "@/utils/validation/product-validation";
 import { initialValueProductCreate } from "@/utils/initialValues/initialValuesProduct";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import UploadImageField from "./UploadProductImageForm";
 import { useUploadImages } from "@/api/products/uploadImageProduct";
+import NearByForm from "./NearByForm";
 
 const handleChangeProduct = (field: keyof IProductCreate, value: any, setFieldValue: (field: string, value: any) => void) => {
   setFieldValue(field, value);
@@ -115,9 +116,9 @@ const AddProductModal = ({ clusterId }: Props) => {
 
       <Modal opened={opened} onClose={close} size={"100%"} yOffset="100px">
         <Formik initialValues={initialValueProductCreate} validationSchema={validationSchemaProduct} onSubmit={handleSubmit}>
-          {({ values, errors, setFieldValue }) => {
-            // console.log("values", values);
-            // console.log("error", errors);
+          {({ values, errors, touched, setFieldValue }) => {
+            console.log("values", values);
+            console.log("error", errors);
             return (
               <SimpleGrid>
                 <Form>
@@ -130,112 +131,98 @@ const AddProductModal = ({ clusterId }: Props) => {
 
                     <Group grow>
                       <TextInput
+                        error={touched.title && errors.title ? errors.title : undefined}
                         label="Nama Produk"
                         placeholder="Masukkan nama produk"
                         onChange={(e) => handleChangeProduct("title", e.currentTarget.value, setFieldValue)}
-                        required
                       />
+
                       <Select
-                        label="Nama Lokasi"
-                        data={locationOptions}
-                        placeholder="Pilih lokasi"
-                        clearable
-                        onChange={(value) => handleChangeProduct("location", value || "", setFieldValue)}
-                      />
-                      <Select
+                        error={touched.type && errors.type ? errors.type : undefined}
                         label="Tipe"
                         data={typeOptions}
                         placeholder="Pilih tipe"
                         clearable
                         onChange={(value) => handleChangeProduct("type", value || "", setFieldValue)}
-                        required
                       />
                     </Group>
 
-                    <TextInput
-                      label="Alamat"
-                      placeholder="Masukkan alamat"
-                      onChange={(e) => handleChangeProduct("address", e.currentTarget.value, setFieldValue)}
-                      required
-                    />
-
                     <Textarea
+                      error={touched.content && errors.content ? errors.content : undefined}
                       label="Deskripsi"
                       placeholder="Masukkan deskripsi"
                       onChange={(e) => handleChangeProduct("content", e.currentTarget.value, setFieldValue)}
-                      required
                     />
                     <Divider mt={20} />
 
                     <Group grow>
                       <NumberInput
+                        error={touched.bathroom && errors.bathroom ? errors.bathroom : undefined}
                         label="Kamar Mandi"
                         hideControls
                         placeholder="Masukkan jumlah kamar mandi"
                         onChange={(val) => handleChangeProduct("bathroom", val || 0, setFieldValue)}
-                        required
                       />
                       <NumberInput
+                        error={touched.bedroom && errors.bedroom ? errors.bedroom : undefined}
                         label="Kamar Tidur"
                         hideControls
                         placeholder="Masukkan jumlah kamar tidur"
                         onChange={(val) => handleChangeProduct("bedroom", val || 0, setFieldValue)}
-                        required
                       />
                       <NumberInput
+                        error={touched.square && errors.square ? errors.square : undefined}
                         label="Luas Tanah"
                         hideControls
                         placeholder="Masukkan luas tanah"
                         onChange={(val) => handleChangeProduct("square", val || 0, setFieldValue)}
-                        required
                       />
                       <NumberInput
+                        error={touched.quantity && errors.quantity ? errors.quantity : undefined}
                         label="Kuantitas"
                         hideControls
                         placeholder="Masukkan kuantitas"
                         onChange={(val) => handleChangeProduct("quantity", val || 0, setFieldValue)}
-                        required
                       />
                     </Group>
 
                     <Group grow>
                       <NumberInput
+                        error={touched.price && errors.price ? errors.price : undefined}
                         label="Harga Unit"
                         hideControls
                         placeholder="Masukkan harga unit"
                         onChange={(val) => handleChangeProduct("price", val || 0, setFieldValue)}
-                        required
                       />
                       <NumberInput
+                        error={touched.start_price && errors.start_price ? errors.start_price : undefined}
                         label="Harga Awal"
                         hideControls
                         placeholder="Masukkan Harga Awal"
                         onChange={(val) => handleChangeProduct("start_price", val || 0, setFieldValue)}
-                        required
                       />
                     </Group>
                     <Group>
                       <Select
+                        error={touched.status && errors.status ? errors.status : undefined}
                         label="Status"
                         data={availabilityOptions}
                         placeholder="Pilih status"
                         clearable
                         onChange={(val) => handleChangeProduct("status", val || "", setFieldValue)}
-                        required
                       />
                       <NumberInput
+                        error={touched.sequence && errors.sequence ? errors.sequence : undefined}
                         label="Urutan"
                         hideControls
                         placeholder="Masukkan Urutan"
                         onChange={(val) => handleChangeProduct("sequence", val || 0, setFieldValue)}
-                        required
                       />
                     </Group>
 
                     <Divider p={12} mt={16} />
 
-                    {/* Komponen untuk near_bies */}
-                    {/* <NearByForm setFieldValue={setFieldValue} /> */}
+                    <NearByForm setFieldValue={setFieldValue} values={values} />
 
                     <Group grow>
                       <UploadImageField onFilesChange={handleFilesChange} />

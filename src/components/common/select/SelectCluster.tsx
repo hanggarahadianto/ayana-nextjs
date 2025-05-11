@@ -10,13 +10,18 @@ interface ClusterOption {
 }
 
 interface SelectClusterProps {
-  value: ClusterOption | null;
+  value?: ClusterOption | null;
+}
+
+interface SelectClusterProps {
+  value?: ClusterOption | null;
   onChange: (value: ClusterOption | null) => void;
   label?: string;
   placeholder?: string;
   required?: boolean;
 }
 
+import { useEffect } from "react"; // pastikan ini di-import
 const SelectCluster = ({
   value,
   onChange,
@@ -30,13 +35,23 @@ const SelectCluster = ({
     refetchOnWindowFocus: false,
   });
 
+  // Memastikan clusterData dan clusterData.data ada
   const options =
     clusterData?.data?.map((cluster: ClusterOption) => ({
       value: cluster.id,
       label: cluster.name,
     })) ?? [];
 
+  // Menangani kemungkinan clusterData.data undefined
   const selected = clusterData?.data?.find((c: ClusterOption) => c.id === value?.id);
+
+  useEffect(() => {
+    // Memastikan clusterData dan clusterData.data ada sebelum mengambil default
+    if (!value && clusterData?.data?.length) {
+      const firstCluster = clusterData.data[0];
+      onChange(firstCluster);
+    }
+  }, [value, clusterData, onChange]);
 
   return (
     <Select

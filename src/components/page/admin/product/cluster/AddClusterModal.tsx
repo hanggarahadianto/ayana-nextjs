@@ -62,7 +62,7 @@ const AddClusterModal: React.FC<{}> = () => {
                 <Form>
                   <SimpleGrid p="40px" spacing="md">
                     <Stack>
-                      <Text fw={700} mb={40}>
+                      <Text fw={700} mb={10}>
                         Tambah Cluster
                       </Text>
                     </Stack>
@@ -83,12 +83,16 @@ const AddClusterModal: React.FC<{}> = () => {
                     />
 
                     <Group grow>
-                      <NumberInput
+                      <TextInput
                         error={touched.price && errors.price ? errors.price : undefined}
                         label="Harga Cluster"
-                        hideControls
                         placeholder="Masukkan Harga Cluster"
-                        onChange={(val) => handleChangeCluster("price", val || 0, setFieldValue)}
+                        value={values.price ? `Rp. ${values.price.toLocaleString("id-ID")}` : ""}
+                        onChange={(e) => {
+                          const raw = e.currentTarget.value.replace(/\D/g, "");
+                          const numeric = Number(raw) || 0;
+                          handleChangeCluster("price", numeric, setFieldValue);
+                        }}
                       />
                       <NumberInput
                         error={touched.square && errors.square ? errors.square : undefined}

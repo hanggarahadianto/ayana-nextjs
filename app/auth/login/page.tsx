@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TextInput, Button, Card, Container, Title, Group, Loader, Center, Stack, InputWrapper } from "@mantine/core";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import { Formik, Field, Form } from "formik";
@@ -16,14 +16,6 @@ export default function LoginPage() {
   const { mutate } = useLoginMutation();
   const router = useRouter();
 
-  useEffect(() => {
-    if (Cookies.get("token")) {
-      router.push("/admin/sidebar/product");
-    } else {
-      setLoading(false);
-    }
-  }, [router]);
-
   if (loading) {
     return (
       <Center style={{ height: "100vh", background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}>
@@ -31,16 +23,22 @@ export default function LoginPage() {
       </Center>
     );
   }
-
   const handleSubmit = (values: { username: string; password: string }) => {
     mutate(values, {
       onSuccess: (response: any) => {
-        if (response) {
+        if (response?.data?.token) {
+          const token = response.data.token;
+          Cookies.set("token", token); // simpan token di cookie
+
+          console.log("✅ Login berhasil");
+          console.log("🧁 Token disimpan di cookies:", token);
+          console.log("📦 Semua cookies:", Cookies.get()); // log semua cookies
+
           router.push("/admin/sidebar/product");
         }
       },
       onError: (response: any) => {
-        console.log("response error", response);
+        console.error("❌ Login gagal", response);
       },
     });
   };

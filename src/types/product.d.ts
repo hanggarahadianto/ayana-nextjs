@@ -1,7 +1,6 @@
 interface IProduct {
   id: string;
   title: string;
-  location: string;
   content: string;
   image: string;
   bathroom: string;
@@ -21,7 +20,6 @@ interface IProduct {
 
 interface IProductCreate {
   title: string;
-  location: string;
   type: string;
   content: string;
   address: string;

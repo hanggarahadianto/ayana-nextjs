@@ -5,7 +5,7 @@ import { AspectRatio, Badge, Card, Container, Flex, Grid, Group, SimpleGrid, Sta
 import Image from "next/image";
 import FloatingWhatsApp from "../product/FloatingWhatsapp";
 import { useMediaQuery } from "@mantine/hooks";
-import ProductPage from "app/product/page";
+// import ProductPage from "app/product/page";
 import Testimony from "./testimony";
 import Footer from "./footer";
 
@@ -170,7 +170,7 @@ const LandingPage = () => {
           </Flex>
         </Stack>
       </Container>
-      <ProductPage />
+      {/* <ProductPage /> */}
 
       <Testimony />
 

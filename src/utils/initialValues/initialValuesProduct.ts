@@ -1,6 +1,5 @@
 export const initialValueProductCreate: IProductCreate = {
   title: "",
-  location: "",
   type: "",
   content: "",
   address: "",
@@ -13,14 +12,19 @@ export const initialValueProductCreate: IProductCreate = {
   quantity: 0,
 
   start_price: 0,
-  near_by: [],
+  near_by: [
+    {
+      id: "",
+      name: "",
+      distance: "",
+    },
+  ],
   cluster_id: "",
 };
 
 export const getInitialValuesUpdateProduct = (initialData?: IProductUpdate) => ({
   id: initialData?.id || "", // <-- tambahkan ini
   title: initialData?.title || "",
-  location: initialData?.location || "",
   content: initialData?.content || "",
   address: initialData?.address || "",
   bathroom: initialData?.bathroom || "",

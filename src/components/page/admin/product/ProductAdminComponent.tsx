@@ -17,7 +17,7 @@ const ProductAdminComponent = () => {
         setSelectedClusterId={setSelectedClusterId}
         setSelectedClusterName={setSelectedClusterName}
         selectedClusterId={selectedClusterId ?? ""}
-        selectedClusterName={selectedClusterName} // clusterName={selectedClusterId.name}
+        selectedClusterName={selectedClusterName}
       />
       <Divider mt={"40"} />
       <ProductAdminCard clusterId={selectedClusterId} />

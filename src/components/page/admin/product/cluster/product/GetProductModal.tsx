@@ -53,9 +53,6 @@ const GetProductModal = ({ productData }: { productData?: IProduct }) => {
               <Divider />
               <Grid>
                 <Grid.Col span={6}>
-                  <TextInput label="Urutan" value={productData?.sequence} readOnly />
-
-                  <TextInput label="Location" value={productData?.location} readOnly />
                   <TextInput label="Price" value={`Rp ${productData?.price.toLocaleString()}`} readOnly />
                 </Grid.Col>
                 <Grid.Col span={6}>
@@ -69,6 +66,7 @@ const GetProductModal = ({ productData }: { productData?: IProduct }) => {
               <Divider />
               {/* <TextInput label="Harga Awal" value={formatCurrency(infoData?.start_price ?? 0)} readOnly /> */}
               <TextInput label="Quantity" value={productData?.quantity} readOnly />
+              <TextInput label="Urutan" value={productData?.sequence} readOnly />
             </Stack>
           </Paper>
         </ScrollArea>

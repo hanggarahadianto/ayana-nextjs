@@ -218,7 +218,6 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                     />
 
                     <Group gap="80px" mt={20}>
-                      {/* {transactionType === "payin" && ( */}
                       <Flex gap={"10px"}>
                         <Switch
                           size="lg"
