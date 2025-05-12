@@ -8,21 +8,14 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { initialValuesUser, validationSchemaUser } from "./initialValuesUser";
 import { useLoginMutation } from "@/api/auth/login";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(true);
 
-  const { mutate } = useLoginMutation();
+  const { mutate, isPending: isLoadingLogin } = useLoginMutation();
   const router = useRouter();
 
-  if (loading) {
-    return (
-      <Center style={{ height: "100vh", background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}>
-        <Loader size="xl" color="white" />
-      </Center>
-    );
-  }
   const handleSubmit = (values: { username: string; password: string }) => {
     mutate(values, {
       onSuccess: (response: any) => {
@@ -71,6 +64,7 @@ export default function LoginPage() {
         <Title order={2} style={{ fontWeight: 700, textAlign: "center" }}>
           Welcome Back
         </Title>
+        <LoadingGlobal visible={isLoadingLogin} />
 
         <Formik initialValues={initialValuesUser} onSubmit={handleSubmit} validationSchema={validationSchemaUser}>
           {({ values, handleChange, errors, touched }) => (

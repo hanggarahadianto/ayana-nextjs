@@ -117,8 +117,8 @@ const AddProductModal = ({ clusterId }: Props) => {
       <Modal opened={opened} onClose={close} size={"100%"} yOffset="100px">
         <Formik initialValues={initialValueProductCreate} validationSchema={validationSchemaProduct} onSubmit={handleSubmit}>
           {({ values, errors, touched, setFieldValue }) => {
-            console.log("values", values);
-            console.log("error", errors);
+            // console.log("values", values);
+            // console.log("error", errors);
             return (
               <SimpleGrid>
                 <Form>
@@ -187,19 +187,27 @@ const AddProductModal = ({ clusterId }: Props) => {
                     </Group>
 
                     <Group grow>
-                      <NumberInput
+                      <TextInput
                         error={touched.price && errors.price ? errors.price : undefined}
-                        label="Harga Unit"
-                        hideControls
-                        placeholder="Masukkan harga unit"
-                        onChange={(val) => handleChangeProduct("price", val || 0, setFieldValue)}
+                        label="Harga Produk"
+                        placeholder="Masukkan Harga Produk"
+                        value={values.price ? `Rp. ${values.price.toLocaleString("id-ID")}` : ""}
+                        onChange={(e) => {
+                          const raw = e.currentTarget.value.replace(/\D/g, "");
+                          const numeric = Number(raw) || 0;
+                          handleChangeProduct("price", numeric, setFieldValue);
+                        }}
                       />
-                      <NumberInput
+                      <TextInput
                         error={touched.start_price && errors.start_price ? errors.start_price : undefined}
                         label="Harga Awal"
-                        hideControls
                         placeholder="Masukkan Harga Awal"
-                        onChange={(val) => handleChangeProduct("start_price", val || 0, setFieldValue)}
+                        value={values.start_price ? `Rp. ${values.start_price.toLocaleString("id-ID")}` : ""}
+                        onChange={(e) => {
+                          const raw = e.currentTarget.value.replace(/\D/g, "");
+                          const numeric = Number(raw) || 0;
+                          handleChangeProduct("start_price", numeric, setFieldValue);
+                        }}
                       />
                     </Group>
                     <Group>

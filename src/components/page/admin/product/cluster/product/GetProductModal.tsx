@@ -1,72 +1,103 @@
-import React, { useEffect, useState } from "react";
-import { Modal, Paper, Text, ScrollArea, Flex, Group, Badge, Stack, Grid, Image, TextInput, Divider, LoadingOverlay } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { IconEye } from "@tabler/icons-react";
+import React, { useEffect } from "react";
+import { Modal, Paper, Text, ScrollArea, Flex, Group, Badge, Stack, Grid, Image, TextInput, Divider, Card } from "@mantine/core";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { formatCurrency } from "@/utils/formatCurrency";
 
-const GetProductModal = ({ productData }: { productData?: IProduct }) => {
-  const [opened, { open, close }] = useDisclosure(false);
+import { useQuery } from "@tanstack/react-query";
+import { getImages } from "@/api/products/getImagesProduct";
 
-  const [showLoading, setShowLoading] = useState(false);
+const GetProductModal = ({
+  opened,
+  onClose,
+  productData,
+  isLoadingDetail,
+}: {
+  opened: boolean;
+  onClose: () => void;
+  productData?: IProduct;
+  isLoadingDetail: boolean;
+}) => {
+  const productId = productData?.id;
 
-  useEffect(() => {
-    if (opened) {
-      setShowLoading(true);
-      const timer = setTimeout(() => {
-        setShowLoading(false);
-      }, 700); // 2 detik
-
-      return () => clearTimeout(timer);
-    }
-  }, [opened]);
-
-  console.log("product data", productData);
+  const {
+    data: dataImages,
+    isLoading: isLoadingImageData,
+    isPending: isPendngImageData,
+  } = useQuery({
+    queryKey: ["getImagesByProductId", productId],
+    queryFn: () => getImages(productId),
+    enabled: !!productId,
+  });
 
   return (
     <>
-      <BreathingActionIcon
-        onClick={open}
-        size="2.5rem"
-        icon={<IconEye size="1rem" />}
-        gradient="linear-gradient(135deg, #D8B4FE, #E9D5FF)"
-      />
-
-      <Modal opened={opened} onClose={close} size={"60rem"} title="Product Details" yOffset="100px">
-        <LoadingGlobal visible={showLoading} />
+      <Modal opened={opened} onClose={onClose} size={"60rem"} yOffset="100px">
+        <LoadingGlobal visible={isLoadingDetail} />
 
         <ScrollArea>
           <Paper p="md" shadow="sm">
             <Stack gap="md">
-              {/* <Image
-                src={productData?.image}
-                alt={productData?.title}
-                radius="md"
-                height={productData?.image ? 400 : "auto"} // Ensures height is 200px if an image exists
-                style={{ maxHeight: 400, objectFit: "cover" }} // Prevents stretching beyond 200px
-              /> */}
-
               <Text size="lg" fw={500}>
                 {productData?.title}
               </Text>
               <Divider />
-              <Grid>
+              <Grid mt={"10px"}>
                 <Grid.Col span={6}>
+                  <TextInput label="Deskripsi" value={productData?.content ?? ""} readOnly />
+
                   <TextInput label="Price" value={`Rp ${productData?.price.toLocaleString()}`} readOnly />
+                  <TextInput label="Quantity" value={productData?.quantity ?? ""} readOnly />
                 </Grid.Col>
                 <Grid.Col span={6}>
-                  <TextInput label="Bedrooms" value={productData?.bedroom} readOnly />
-                  <TextInput label="Bathrooms" value={productData?.bathroom} readOnly />
-                  <TextInput label="Square Meters" value={productData?.square} readOnly />
+                  <TextInput label="Bedrooms" value={productData?.bedroom ?? ""} readOnly />
+                  <TextInput label="Bathrooms" value={productData?.bathroom ?? ""} readOnly />
+                  <TextInput label="Square Meters" value={productData?.square ?? ""} readOnly />
                 </Grid.Col>
               </Grid>
-              <TextInput label="Status" value={productData?.status} readOnly />
-              <TextInput label="Quantity" value={productData?.quantity} readOnly />
+              <Group>
+                <TextInput label="Status" value={productData?.status ?? ""} readOnly />
+                <TextInput label="Urutan" value={productData?.sequence ?? ""} readOnly />
+              </Group>
+
               <Divider />
-              {/* <TextInput label="Harga Awal" value={formatCurrency(infoData?.start_price ?? 0)} readOnly /> */}
-              <TextInput label="Quantity" value={productData?.quantity} readOnly />
-              <TextInput label="Urutan" value={productData?.sequence} readOnly />
+              {(productData?.near_bies || []).length > 0 && (
+                <>
+                  <Text size="md" fw={500}>
+                    Lokasi Terdekat
+                  </Text>
+                  <Grid>
+                    {(productData?.near_bies || []).map((nearby, idx) => (
+                      <Grid.Col key={nearby.id} span={{ base: 12, sm: 6 }}>
+                        <Card shadow="xs" radius="md" withBorder>
+                          <Text fw={500}>{nearby.name}</Text>
+                          <Text size="sm" c="dimmed">
+                            {nearby.distance} menit
+                          </Text>
+                        </Card>
+                      </Grid.Col>
+                    ))}
+                  </Grid>
+                </>
+              )}
+
+              <Divider mt={"40px"} />
+
+              <Grid mt={"20px"}>
+                {dataImages?.images?.map((img, idx) => (
+                  <Grid.Col key={idx} span={{ base: 12, sm: 6, md: 4, lg: 3 }}>
+                    <LoadingGlobal visible={isLoadingImageData || isPendngImageData} />
+
+                    <Card shadow="sm" padding="sm" radius="md" withBorder>
+                      <Card.Section>
+                        <Image src={img} alt={`Image ${idx}`} height={150} fit="cover" radius="md" />
+                      </Card.Section>
+                      <Text size="sm" mt="xs" ta="center" c="dimmed">
+                        Gambar {idx + 1}
+                      </Text>
+                    </Card>
+                  </Grid.Col>
+                ))}
+              </Grid>
             </Stack>
           </Paper>
         </ScrollArea>

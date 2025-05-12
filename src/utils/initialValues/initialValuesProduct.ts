@@ -12,9 +12,8 @@ export const initialValueProductCreate: IProductCreate = {
   quantity: 0,
 
   start_price: 0,
-  near_by: [
+  near_bies: [
     {
-      id: "",
       name: "",
       distance: "",
     },

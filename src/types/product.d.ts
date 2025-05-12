@@ -12,7 +12,7 @@ interface IProduct {
   sequence: number;
 
   start_price: number;
-  near_by: INearBy[];
+  near_bies: INearBy[];
   created_at: string;
   cluster_id: string | null;
   updated_at: string;
@@ -32,7 +32,7 @@ interface IProductCreate {
   quantity: number;
   start_price: number;
   cluster_id: string | null;
-  near_by: INearBy[];
+  near_bies: INearByCreate[];
 }
 
 interface IProductUpdate {
@@ -50,7 +50,7 @@ interface IProductUpdate {
   quantity: number;
   maps: string;
   start_price: string;
-  near_by: INearBy[];
+  near_bies: INearBy[];
 }
 
 interface IProductResponse {
@@ -59,6 +59,10 @@ interface IProductResponse {
 }
 interface INearBy {
   id: string;
+  name: string;
+  distance: string;
+}
+interface INearByCreate {
   name: string;
   distance: string;
 }

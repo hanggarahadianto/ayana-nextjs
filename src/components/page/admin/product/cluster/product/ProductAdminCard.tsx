@@ -1,7 +1,7 @@
 "use client";
-import { Card, Group, SimpleGrid, Text, Stack } from "@mantine/core";
-import { useQuery } from "@tanstack/react-query";
 
+import { Group, SimpleGrid, Text, Stack, Pagination } from "@mantine/core";
+import { useQuery } from "@tanstack/react-query";
 import { useDeleteDataProduct } from "@/api/products/deleteDataProduct";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
@@ -10,13 +10,23 @@ import AddProductModal from "./AddProductModal";
 import GetProductModal from "./GetProductModal";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { getDataProductByClusterId } from "@/api/products/getProductByClusterId";
+import { useState } from "react";
+import { getDataProductDetail } from "@/api/products/getDataProductDetail";
+import BreathingActionIcon from "@/components/common/button/buttonAction";
+import { IconEye } from "@tabler/icons-react";
 
 interface Props {
   clusterId: string | null;
 }
 
 const ProductAdminCard = ({ clusterId }: Props) => {
-  console.log("selectd cluster", clusterId);
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const offset = (page - 1) * limit;
+
+  const [openedModal, setOpenedModal] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+
   const {
     data: productDataByClusterId,
     refetch: refetchProductData,
@@ -36,10 +46,18 @@ const ProductAdminCard = ({ clusterId }: Props) => {
     mutateDeleteDataProduct(idToDelete);
   };
 
+  const { data: selectedProductDetail, isLoading: isLoadingDetail } = useQuery({
+    queryKey: ["getProductDetailById", selectedProductId],
+    queryFn: () => (selectedProductId ? getDataProductDetail(selectedProductId) : null),
+    enabled: !!selectedProductId && openedModal,
+  });
+
   return (
     <>
       <SimpleGridGlobal cols={1}>
-        <LoadingGlobal visible={isLoadingProductData || isLoadingDeleteProduct} />
+        <LoadingGlobal visible={isLoadingProductData} />
+        <LoadingGlobal visible={isLoadingDeleteProduct} />
+
         <Group justify="space-between" mb="lg">
           <Text fw={700} size="2rem">
             Daftar Produk
@@ -54,7 +72,17 @@ const ProductAdminCard = ({ clusterId }: Props) => {
             <SimpleGrid key={product.id}>
               <CardComponentResponsive title={product.title} status={product.status}>
                 <Group justify="flex-end" wrap="nowrap">
-                  <GetProductModal productData={product} />
+                  {/* <LoadingGlobal visible={isLoadingDeleteProduct} /> */}
+
+                  <BreathingActionIcon
+                    onClick={() => {
+                      setSelectedProductId(product.id);
+                      setOpenedModal(true);
+                    }}
+                    size="2.5rem"
+                    icon={<IconEye size="1rem" />}
+                    gradient="linear-gradient(135deg, #D8B4FE, #E9D5FF)"
+                  />
 
                   <ButtonDeleteWithConfirmation
                     id={product.id}
@@ -68,6 +96,20 @@ const ProductAdminCard = ({ clusterId }: Props) => {
           ))}
         </SimpleGrid>
       </SimpleGridGlobal>
+      {productDataByClusterId?.total > limit && (
+        <Group justify="center" mt="xl">
+          <Pagination value={page} onChange={setPage} total={Math.ceil(productDataByClusterId.total / limit)} />
+        </Group>
+      )}
+      <GetProductModal
+        opened={openedModal}
+        onClose={() => {
+          setOpenedModal(false);
+          setSelectedProductId(null);
+        }}
+        productData={selectedProductDetail ?? undefined}
+        isLoadingDetail={isLoadingDetail}
+      />
     </>
   );
 };

@@ -40,11 +40,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
         </Text>
 
         <Flex justify={"space-between"}>
-          <Stack gap={4} align="start" mt={8}>
-            <Text size={isMobile ? "sm" : "1.5rem"} fw={isMobile ? 500 : 12}>
-              {productDataDetail?.address}
-            </Text>
-          </Stack>
+          <Stack gap={4} align="start" mt={8}></Stack>
 
           {productDataDetail?.status !== "sold" && (
             <Stack>
