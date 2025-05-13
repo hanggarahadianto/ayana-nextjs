@@ -1,16 +1,17 @@
 "use client";
 
-import { Card, Stack, Text } from "@mantine/core";
+import { Badge, Card, Stack, Text } from "@mantine/core";
 import useScreenSize from "@/lib/hook/useScreenSize";
-import { ReactNode } from "react";
 
+import { ReactNode } from "react";
 interface CardComponentUIProps {
   title: string;
   status?: string;
+  badgeColor?: string;
   children?: ReactNode;
 }
 
-const CardComponentResponsive = ({ title, status, children }: CardComponentUIProps) => {
+const CardComponentResponsive = ({ title, status, badgeColor, children }: CardComponentUIProps) => {
   const { screenType } = useScreenSize();
   const fontSize = screenType === "small" ? "lg" : "xl";
   const cardPadding = screenType === "small" ? "16px" : "20px";
@@ -40,14 +41,22 @@ const CardComponentResponsive = ({ title, status, children }: CardComponentUIPro
         <Text fw={900} size={fontSize} style={{ color: "#ffffff" }}>
           {title}
         </Text>
+
         {status && (
-          <Text fw={200} mt={0} size="sm" style={{ color: "#ffffff" }}>
-            {status}
-          </Text>
+          <Badge
+            style={{
+              backgroundColor: badgeColor ?? "#718096",
+              color: "white",
+              alignSelf: "flex-start",
+            }}
+            radius="sm"
+            size="sm"
+          >
+            {status.toUpperCase()}
+          </Badge>
         )}
       </Stack>
 
-      {/* Tempat isi tambahan dari parent */}
       {children && <div style={{ marginTop: 12 }}>{children}</div>}
     </Card>
   );

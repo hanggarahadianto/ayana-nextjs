@@ -12,8 +12,7 @@ export const getDataProductByClusterId = async ({ clusterId, page = 1, limit = 1
 
     const response = await APIAxiosInstanceWithoutCredential.get(url);
 
-    console.log("Response:", response.data);
-    return response.data;
+    return response.data as IProductResponse;
   } catch (error: any) {
     console.error("Error fetching homes by cluster ID:", error.message || error);
     throw error;

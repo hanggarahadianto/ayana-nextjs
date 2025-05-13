@@ -1,6 +1,6 @@
 "use client"; // ✅ Ensure it's a client component
 
-import { useParams, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Footer from "@/components/page/landing/footer";
 import Navbar from "@/components/page/landing/navbar";
 import FloatingWhatsApp from "@/components/page/product/FloatingWhatsapp";

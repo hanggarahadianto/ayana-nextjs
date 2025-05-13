@@ -13,7 +13,8 @@ import { getDataProductByClusterId } from "@/api/products/getProductByClusterId"
 import { useState } from "react";
 import { getDataProductDetail } from "@/api/products/getDataProductDetail";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
-import { IconEye } from "@tabler/icons-react";
+import { IconEye, IconPencil } from "@tabler/icons-react";
+import UpdateProductModal from "./EditProductModal";
 
 interface Props {
   clusterId: string | null;
@@ -26,6 +27,13 @@ const ProductAdminCard = ({ clusterId }: Props) => {
 
   const [openedModal, setOpenedModal] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [modalType, setModalType] = useState<"view" | "edit" | null>(null);
+
+  const handleClickProductAction = (id: string, type: "view" | "edit") => {
+    setSelectedProductId(id);
+    setModalType(type);
+    setOpenedModal(true);
+  };
 
   const {
     data: productDataByClusterId,
@@ -55,8 +63,7 @@ const ProductAdminCard = ({ clusterId }: Props) => {
   return (
     <>
       <SimpleGridGlobal cols={1}>
-        <LoadingGlobal visible={isLoadingProductData} />
-        <LoadingGlobal visible={isLoadingDeleteProduct} />
+        <LoadingGlobal visible={isLoadingProductData || isLoadingDeleteProduct} />
 
         <Group justify="space-between" mb="lg">
           <Text fw={700} size="2rem">
@@ -68,48 +75,82 @@ const ProductAdminCard = ({ clusterId }: Props) => {
         </Group>
 
         <SimpleGrid style={{ gap: "24px" }} spacing="lg" cols={4}>
-          {productDataByClusterId?.data.map((product: IProduct) => (
-            <SimpleGrid key={product.id}>
-              <CardComponentResponsive title={product.title} status={product.status}>
-                <Group justify="flex-end" wrap="nowrap">
-                  {/* <LoadingGlobal visible={isLoadingDeleteProduct} /> */}
+          {productDataByClusterId?.data?.map((product: IProduct) => {
+            const getBadgeBg = (status?: string) => {
+              switch ((status || "").toLowerCase()) {
+                case "available":
+                  return "#38A169"; // green.500
+                case "booked":
+                  return "#D69E2E"; // yellow.500
+                case "sold":
+                  return "#E53E3E"; // red.500
+                default:
+                  return "#718096"; // gray.500
+              }
+            };
+            return (
+              <SimpleGrid key={product.id}>
+                <CardComponentResponsive title={product.title} status={product.status} badgeColor={getBadgeBg(product.status)}>
+                  <Group justify="flex-end" wrap="nowrap">
+                    <BreathingActionIcon
+                      onClick={() => handleClickProductAction(product.id, "view")}
+                      size="2.5rem"
+                      icon={<IconEye size="1rem" />}
+                      gradient="linear-gradient(135deg, #D8B4FE, #E9D5FF)"
+                    />
 
-                  <BreathingActionIcon
-                    onClick={() => {
-                      setSelectedProductId(product.id);
-                      setOpenedModal(true);
-                    }}
-                    size="2.5rem"
-                    icon={<IconEye size="1rem" />}
-                    gradient="linear-gradient(135deg, #D8B4FE, #E9D5FF)"
-                  />
+                    <BreathingActionIcon
+                      onClick={() => handleClickProductAction(product.id, "edit")}
+                      size="2.5rem"
+                      icon={<IconPencil size="1rem" />}
+                      gradient="linear-gradient(135deg, #60A5FA, #3B82F6)"
+                    />
 
-                  <ButtonDeleteWithConfirmation
-                    id={product.id}
-                    onDelete={handleDeleteProduct}
-                    description={`Apakah anda ingin menghapus ${product.title}?`}
-                    size={2.5}
-                  />
-                </Group>
-              </CardComponentResponsive>
-            </SimpleGrid>
-          ))}
+                    <ButtonDeleteWithConfirmation
+                      id={product.id}
+                      onDelete={handleDeleteProduct}
+                      description={`Apakah anda ingin menghapus ${product.title}?`}
+                      size={2.5}
+                    />
+                  </Group>
+                </CardComponentResponsive>
+              </SimpleGrid>
+            );
+          })}
         </SimpleGrid>
       </SimpleGridGlobal>
-      {productDataByClusterId?.total > limit && (
+      {(productDataByClusterId?.total ?? 0) > limit && (
         <Group justify="center" mt="xl">
-          <Pagination value={page} onChange={setPage} total={Math.ceil(productDataByClusterId.total / limit)} />
+          <Pagination value={page} onChange={setPage} total={Math.ceil((productDataByClusterId?.total ?? 0) / limit)} />
         </Group>
       )}
-      <GetProductModal
-        opened={openedModal}
-        onClose={() => {
-          setOpenedModal(false);
-          setSelectedProductId(null);
-        }}
-        productData={selectedProductDetail ?? undefined}
-        isLoadingDetail={isLoadingDetail}
-      />
+
+      {modalType === "view" && (
+        <GetProductModal
+          opened={openedModal}
+          onClose={() => {
+            setOpenedModal(false);
+            setSelectedProductId(null);
+            setModalType(null);
+          }}
+          productData={selectedProductDetail ?? undefined}
+          isLoadingDetail={isLoadingDetail}
+        />
+      )}
+
+      {modalType === "edit" && (
+        <UpdateProductModal
+          clusterId={clusterId ?? undefined}
+          refetchProductDataByCluster={refetchProductData}
+          opened={openedModal}
+          onClose={() => {
+            setOpenedModal(false);
+            setSelectedProductId(null);
+            setModalType(null);
+          }}
+          productData={selectedProductDetail ?? undefined}
+        />
+      )}
     </>
   );
 };

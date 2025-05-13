@@ -54,12 +54,6 @@ const AddProductModal = ({ clusterId }: Props) => {
               return;
             }
 
-            showNotification({
-              title: "Berhasil",
-              message: "Data berhasil disimpan. Mengunggah gambar...",
-              color: "green",
-            });
-
             console.log(selectedFiles);
             if (selectedFiles.length > 0) {
               console.log("📦 selectedFiles to upload:", selectedFiles);
@@ -77,11 +71,6 @@ const AddProductModal = ({ clusterId }: Props) => {
 
               try {
                 await uploadImage({ productId, formData });
-                showNotification({
-                  title: "Upload selesai",
-                  message: "Gambar berhasil diunggah",
-                  color: "green",
-                });
               } catch {
                 showNotification({
                   title: "Upload gagal",

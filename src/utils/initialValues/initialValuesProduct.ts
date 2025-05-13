@@ -21,8 +21,8 @@ export const initialValueProductCreate: IProductCreate = {
   cluster_id: "",
 };
 
-export const getInitialValuesUpdateProduct = (initialData?: IProductUpdate) => ({
-  id: initialData?.id || "", // <-- tambahkan ini
+export const getInitialValuesUpdateProduct = (initialData?: Partial<IProductUpdate>): IProductUpdate => ({
+  id: initialData?.id || "",
   title: initialData?.title || "",
   content: initialData?.content || "",
   address: initialData?.address || "",
@@ -33,7 +33,8 @@ export const getInitialValuesUpdateProduct = (initialData?: IProductUpdate) => (
   price: initialData?.price ?? 0,
   quantity: initialData?.quantity ?? 1,
   sequence: initialData?.sequence ?? 0,
-  map: initialData?.maps || "",
   start_price: Number(initialData?.start_price) || 0,
-  near_by: [],
+  type: initialData?.type || "",
+  cluster_id: initialData?.cluster_id || "",
+  near_bies: initialData?.near_bies || [],
 });

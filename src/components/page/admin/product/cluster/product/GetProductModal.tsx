@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Modal, Paper, Text, ScrollArea, Flex, Group, Badge, Stack, Grid, Image, TextInput, Divider, Card } from "@mantine/core";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
 import LoadingGlobal from "@/styles/loading/loading-global";
 
 import { useQuery } from "@tanstack/react-query";
@@ -28,6 +27,8 @@ const GetProductModal = ({
     queryFn: () => getImages(productId),
     enabled: !!productId,
   });
+
+  console.log("productData", productData);
 
   return (
     <>
@@ -60,14 +61,14 @@ const GetProductModal = ({
               </Group>
 
               <Divider />
-              {(productData?.near_bies || []).length > 0 && (
+              {(productData?.near_bies?.length ?? 0) > 0 && (
                 <>
                   <Text size="md" fw={500}>
                     Lokasi Terdekat
                   </Text>
                   <Grid>
-                    {(productData?.near_bies || []).map((nearby, idx) => (
-                      <Grid.Col key={nearby.id} span={{ base: 12, sm: 6 }}>
+                    {productData?.near_bies?.map((nearby, idx) => (
+                      <Grid.Col key={idx} span={{ base: 12, sm: 6 }}>
                         <Card shadow="xs" radius="md" withBorder>
                           <Text fw={500}>{nearby.name}</Text>
                           <Text size="sm" c="dimmed">

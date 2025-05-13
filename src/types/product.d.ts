@@ -10,7 +10,6 @@ interface IProduct {
   price: number;
   quantity: number;
   sequence: number;
-
   start_price: number;
   near_bies: INearBy[];
   created_at: string;
@@ -38,25 +37,29 @@ interface IProductCreate {
 interface IProductUpdate {
   id: string;
   title: string;
-  location: string;
+  type: string;
   content: string;
   address: string;
   bathroom: string;
   bedroom: string;
   square: string;
   status: string;
-  sequence: number;
   price: number;
+  sequence: number;
   quantity: number;
-  maps: string;
-  start_price: string;
-  near_bies: INearBy[];
+  start_price: number;
+  cluster_id: string | null;
+  near_bies: INearByCreate[];
 }
 
 interface IProductResponse {
   data: IProduct[];
+  limit: number;
+  offset: number;
   status: string;
+  total: number;
 }
+
 interface INearBy {
   id: string;
   name: string;

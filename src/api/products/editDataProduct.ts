@@ -1,34 +1,42 @@
-import { useMutation } from "@tanstack/react-query"; // Correct import from '@tanstack/react-query'
 import { showNotification } from "@mantine/notifications";
 import { APIAxiosInstance } from "../../lib";
+import { useMutation } from "@tanstack/react-query";
 
-const handleEditProductForm = async (values: IProjectCreate) => {
-  console.log("values on fetching", values);
-  const response = await APIAxiosInstance.post(`home/edit`, values);
-  return response.data; // Return the response data
+// Handle the API call for updating the product
+const handleEditProductForm = async (values: IProductCreate & { id: string }) => {
+  try {
+    const response = await APIAxiosInstance.put(`home/update`, values); // ID is inside the payload
+    return response.data;
+  } catch (error: unknown) {
+    if (error && typeof error === "object" && "response" in error) {
+      throw new Error((error as any).response?.data?.message || "An error occurred while updating the product");
+    }
+    throw new Error("An error occurred while updating the product");
+  }
 };
 
-// Custom hook for the mutation
+// Custom hook for editing product form
 export const useEditProductForm = (refetchProductData: () => void, closeModal: () => void) => {
   return useMutation({
-    mutationFn: (values: any) => handleEditProductForm(values),
+    mutationFn: (values: IProductCreate & { id: string }) => handleEditProductForm(values),
     onSuccess: (data: any) => {
-      console.log("pesan sukses terkirim");
       refetchProductData();
       closeModal();
       showNotification({
         title: "Data Berhasil Dikirim",
-        message: "",
+        message: "Produk berhasil diperbarui",
         color: "green",
       });
     },
-    onError: (data: any) => {
+    onError: (error: Error) => {
       showNotification({
         title: "Data Gagal Disimpan",
-        message: `${data.message}`,
+        message: error.message || "Terjadi kesalahan",
         color: "red",
       });
     },
-    onSettled: () => {},
+    onSettled: () => {
+      // Optional: Any cleanup or side-effect after mutation is done
+    },
   });
 };

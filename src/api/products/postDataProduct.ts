@@ -13,7 +13,11 @@ export const useSubmitProductForm = () => {
   return useMutation({
     mutationFn: (values: IProductCreate) => handleSubmitProductForm(values),
     onSuccess: (data: any) => {
-      console.log("pesan sukses terkirim");
+      showNotification({
+        title: "Berhasil",
+        message: "Data berhasil disimpan. Mengunggah gambar...",
+        color: "green",
+      });
     },
     onError: (data: any) => {
       showNotification({
