@@ -1,13 +1,14 @@
 "use client";
 
-import { Card, SimpleGrid, SimpleGridProps } from "@mantine/core";
+import { Card, SimpleGrid, SimpleGridProps, Stack } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 
 interface SimpleGridGlobalProps extends SimpleGridProps {
   children: React.ReactNode;
+  gap?: string; // Menambahkan prop gap, meskipun tidak digunakan di SimpleGrid
 }
 
-const SimpleGridGlobal = ({ children, spacing = "lg", ...props }: SimpleGridGlobalProps) => {
+const SimpleGridGlobal = ({ children, spacing = "lg", gap = "md", ...props }: SimpleGridGlobalProps) => {
   // Menentukan ukuran layar menggunakan media query
   const isSmallScreen = useMediaQuery("(max-width: 767px)"); // Mobile
   const isMediumScreen = useMediaQuery("(min-width: 768px) and (max-width: 1023px)"); // Tablet
@@ -19,14 +20,12 @@ const SimpleGridGlobal = ({ children, spacing = "lg", ...props }: SimpleGridGlob
 
   return (
     <SimpleGrid
-      // bg={"pink"}
       cols={cols} // Menggunakan cols yang ditentukan berdasarkan ukuran layar
       spacing={spacing}
       {...props}
     >
-      <Card p="md" radius="md" shadow="sm" bg={"#1a1a1a"}>
-        {children}
-      </Card>
+      {/* Menggunakan Stack untuk memberi jarak antar item */}
+      <Stack gap={gap}>{children}</Stack>
     </SimpleGrid>
   );
 };

@@ -1,51 +1,38 @@
 "use client";
 
-import { Button, Container, Text, Group, TextInput, SimpleGrid, Stack, Card, Title } from "@mantine/core";
+import { Button, Card, Container, Text, Group, TextInput, Stack, Title } from "@mantine/core";
 import { Formik, Form, Field } from "formik";
 import { getInitialValuesReservationForm } from "../../../utils/initialValues/InitialValuesReservationForm";
 import { useMediaQuery } from "@mantine/hooks";
 import { useSubmitReservationForm } from "@/api/reservation/postDataReservationForm";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 interface ReservationFormProps {
   id: string;
   start_price: any;
 }
 
-// Mock function for handling form submission
-
 const ReservationForm: React.FC<ReservationFormProps> = ({ id, start_price }) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const { mutate: postData, isPending: isLoadingSubmitPropertyData } = useSubmitReservationForm();
 
-  const handleSubmit = (values: Reservation, { setSubmitting }: any) => {
-    console.log("Form values submitted:", values);
+  const handleSubmit = (values: any, { setSubmitting }: any) => {
     postData({ ...values, home_id: id });
     setSubmitting(false);
   };
 
   return (
     <Formik enableReinitialize initialValues={getInitialValuesReservationForm()} onSubmit={handleSubmit} validateOnBlur={false}>
-      {({ values, setFieldValue, resetForm }) => {
-        console.log("values on page", values);
-
-        return (
-          <Form>
-            <Card
-              shadow="xl"
-              p="xl"
-              radius="lg"
-              withBorder
-              style={{
-                maxWidth: isMobile ? 400 : 600,
-                margin: "auto",
-              }}
-            >
-              <Stack align="center" gap="md">
+      {({ values }) => (
+        <Form>
+          <Container size="sm" px={isMobile ? "xs" : "md"}>
+            <Card shadow="xl" p="xl" radius="lg" withBorder style={{ margin: "auto" }}>
+              <Stack align="stretch" gap="md">
                 <Title order={2} ta="center">
                   Mulai dari
                 </Title>
-                <Text fw={700} size="xl" color="blue" ta="center">
-                  {start_price} / bulan
+                <Text fw={700} size="xl" c="green" ta="center">
+                  {formatCurrency(start_price)} / bulan
                 </Text>
                 <Text size="md" c="dimmed" ta="center">
                   Dapatkan Update Promo & Harga Terbaru
@@ -54,7 +41,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ id, start_price }) =>
                 <Field name="name">
                   {({ field }: any) => (
                     <TextInput
-                      w={isMobile ? 300 : 400}
                       {...field}
                       label="Nama"
                       placeholder="Masukkan Nama"
@@ -71,7 +57,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ id, start_price }) =>
                 <Field name="email">
                   {({ field }: any) => (
                     <TextInput
-                      w={isMobile ? 300 : 400}
                       {...field}
                       label="Email"
                       placeholder="Masukkan Email"
@@ -88,7 +73,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ id, start_price }) =>
                 <Field name="phone">
                   {({ field }: any) => (
                     <TextInput
-                      w={isMobile ? 300 : 400}
                       {...field}
                       label="No Whatsapp"
                       placeholder="Masukkan No Whatsapp"
@@ -117,9 +101,9 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ id, start_price }) =>
                 </Group>
               </Stack>
             </Card>
-          </Form>
-        );
-      }}
+          </Container>
+        </Form>
+      )}
     </Formik>
   );
 };

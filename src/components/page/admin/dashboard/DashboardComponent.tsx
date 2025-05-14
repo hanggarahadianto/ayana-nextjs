@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, Paper, Card, Text, Group, Flex } from "@mantine/core";
+import { Tabs, Paper, Card, Text, Group, Flex, Grid } from "@mantine/core";
 import { useState } from "react";
 
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
@@ -25,20 +25,20 @@ export const DashboardComponent = () => {
 
       <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
 
-      <SimpleGridGlobal p={40} cols={2} mt={20}>
-        <Card shadow="sm" padding="lg" radius="md" withBorder style={{ width: "100%", gap: 20 }}>
-          <Group p={40}>
-            <IoCashOutline size={"40px"} />
-            <Text size="40px" fw={700}>
-              Asset
-            </Text>
-          </Group>
+      <Grid>
+        <Grid.Col span={6}>
+          <Card shadow="sm" padding="lg" radius="md" withBorder style={{ width: "100%", gap: 20 }}>
+            <Group p={40}>
+              <IoCashOutline size={"40px"} />
+              <Text size="40px" fw={700}>
+                Asset
+              </Text>
+            </Group>
 
-          <Paper shadow="sm" radius="md" p="md" withBorder>
-            <AvailableCashStats companyId={activeTab?.id} />
-          </Paper>
+            <Paper shadow="sm" radius="md" p="md" withBorder>
+              <AvailableCashStats companyId={activeTab?.id} />
+            </Paper>
 
-          <SimpleGridGlobal cols={1}>
             <Flex>
               <Paper shadow="sm" radius="md" p="md" withBorder w="100%">
                 <CashinStats companyId={activeTab?.id} />
@@ -48,25 +48,26 @@ export const DashboardComponent = () => {
                 <CashOutStats companyId={activeTab?.id} />
               </Paper>
             </Flex>
-          </SimpleGridGlobal>
 
-          <Paper shadow="sm" radius="md" p="md" withBorder>
-            <ReceivableAssetStats companyId={activeTab?.id} />
-          </Paper>
-          <Paper shadow="sm" radius="md" p="md" withBorder>
-            <FixedAssetStats companyId={activeTab?.id} />
-          </Paper>
-        </Card>
-
-        <Paper shadow="sm" radius="md" p="md" withBorder>
-          <Card>
-            <ExpenseStats companyId={activeTab?.id} />
+            <Paper shadow="sm" radius="md" p="md" withBorder>
+              <ReceivableAssetStats companyId={activeTab?.id} />
+            </Paper>
+            <Paper shadow="sm" radius="md" p="md" withBorder>
+              <FixedAssetStats companyId={activeTab?.id} />
+            </Paper>
           </Card>
-          <Card mt={20}>
-            <OutstandingDebtStats companyId={activeTab?.id} />
-          </Card>
-        </Paper>
-      </SimpleGridGlobal>
+        </Grid.Col>
+        <Grid.Col span={6}>
+          <Paper shadow="sm" radius="md" p="md" withBorder>
+            <Card>
+              <ExpenseStats companyId={activeTab?.id} />
+            </Card>
+            <Card mt={20}>
+              <OutstandingDebtStats companyId={activeTab?.id} />
+            </Card>
+          </Paper>
+        </Grid.Col>
+      </Grid>
     </SimpleGridGlobal>
   );
 };

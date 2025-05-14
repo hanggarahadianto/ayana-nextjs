@@ -1,13 +1,12 @@
 "use client";
-
-import React, { useEffect, useMemo, useState } from "react";
-import { AspectRatio, Badge, Card, Container, Flex, Grid, Group, SimpleGrid, Stack, Text, useMantineTheme } from "@mantine/core";
+import React, { useEffect, useState } from "react";
+import { AspectRatio, Card, Container, Flex, Grid, Group, SimpleGrid, Stack, Text, useMantineTheme } from "@mantine/core";
 import Image from "next/image";
 import FloatingWhatsApp from "../product/FloatingWhatsapp";
 import { useMediaQuery } from "@mantine/hooks";
-// import ProductPage from "app/product/page";
 import Testimony from "./testimony";
 import Footer from "./footer";
+import ProductComponent from "../product/ProductComponent";
 
 const LandingPage = () => {
   const isMobile = useMediaQuery("(max-width: 767px)");
@@ -170,7 +169,10 @@ const LandingPage = () => {
           </Flex>
         </Stack>
       </Container>
-      {/* <ProductPage /> */}
+
+      <Stack>
+        <ProductComponent />
+      </Stack>
 
       <Testimony />
 

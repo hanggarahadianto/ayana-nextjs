@@ -3,12 +3,10 @@ import { Button, Container, Group, Stack, Text } from "@mantine/core";
 import { FaLocationArrow } from "react-icons/fa";
 
 interface AdditionalInfoProps {
-  maps: any;
   nearBy: any[];
 }
 
-const AdditionalInfoProduct: React.FC<AdditionalInfoProps> = ({ maps, nearBy }) => {
-  console.log("NEAR", nearBy);
+const AdditionalInfoProduct: React.FC<AdditionalInfoProps> = ({ nearBy }) => {
   return (
     <Stack>
       <Text mt={40} size="xl" fw={800} style={{ fontFamily: "Lora" }}>

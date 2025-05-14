@@ -11,6 +11,7 @@ interface IProduct {
   quantity: number;
   sequence: number;
   start_price: number;
+  maps: string;
   near_bies: INearBy[];
   created_at: string;
   cluster_id: string | null;

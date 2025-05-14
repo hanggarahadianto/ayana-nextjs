@@ -1,15 +1,16 @@
 "use client";
-import { Box, Button, Card, Center, Container, Divider, Flex, Grid, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core";
-import React from "react";
+import { Box, Button, Card, Center, Container, Divider, Flex, Grid, GridCol, SimpleGrid, Stack, Text } from "@mantine/core";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FaBath, FaBed, FaLandmark } from "react-icons/fa";
 import { useMediaQuery } from "@mantine/hooks";
 import Link from "next/link";
 import { getDataProductDetail } from "@/api/products/getDataProductDetail";
-import MyGallery from "./ImageGallery";
 import AdditionalInfoProduct from "./AdditionalInfo";
 import ReservationForm from "../reservation/ReservationForm";
 import AdditionalInfoMaps from "./AdditionalMaps";
+import { getImages } from "@/api/products/getImagesProduct";
+import { ProductImageGallery } from "./ImageGallery";
 
 interface ProductDetailProps {
   productId: string;
@@ -26,52 +27,118 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
     refetchOnWindowFocus: false,
   });
 
-  // console.log(additionalInfo);
+  const [lastMapUrl, setLastMapUrl] = useState<string | null>(null);
+
+  const productDetailImage = useQuery({
+    queryKey: ["getImagesByProductId", productDataDetail?.id],
+    queryFn: () => getImages(productDataDetail?.id),
+    enabled: !!productDataDetail?.id,
+  });
+
+  // console.log("gambar", productDetailImage.data?.thumbnail);
+  const thumbnail = productDetailImage?.data?.thumbnail;
+
+  useEffect(() => {
+    if (productDataDetail?.maps && productDataDetail.maps !== lastMapUrl) {
+      setLastMapUrl(productDataDetail.maps);
+    }
+  }, [productDataDetail]);
+
+  console.log("product detail", productDataDetail);
+
+  const galleryImages =
+    productDetailImage.data?.images?.map((imageUrl: string) => ({
+      original: imageUrl, // Gambar asli
+      thumbnail: productDetailImage.data.thumbnail, // Gambar thumbnail
+    })) || [];
 
   return (
-    <SimpleGrid mt={40} cols={1} px="10vw">
-      <Stack align="center">
-        <MyGallery />
-      </Stack>
+    <SimpleGrid cols={1}>
+      <Container
+        style={{
+          width: "100%", // Mengatur lebar container menjadi 100%
+          maxWidth: "100%", // Pastikan lebar maksimal container juga 100%
+          minHeight: "500px", // Menetapkan tinggi minimum
+          padding: "0", // Menghilangkan padding default
+        }}
+      >
+        <Stack
+          align="center"
+          style={{
+            minHeight: "500px", // Minimum height untuk memastikan galeri terlihat jelas
+            margin: "0 auto", // Agar konten terpusat
+            padding: "20px", // Padding untuk ruang
+          }}
+        >
+          <Box
+            style={{
+              width: "100%", // Menyesuaikan lebar kontainer 100%
+              height: "100%", // Menyesuaikan tinggi Box dengan kontainer
+              maxWidth: "100%", // Agar tidak ada batasan lebar lebih dari 100%
+              margin: "0 auto", // Menjaga kontainer agar tetap terpusat
+              padding: "0", // Menghilangkan padding default
+            }}
+          >
+            <ProductImageGallery items={galleryImages} />
+          </Box>
+        </Stack>
+      </Container>
 
-      <Stack p={isMobile ? 20 : 20} mt={12}>
-        <Text fw={900} style={{ fontFamily: "Lora", fontSize: isMobile ? "1.5rem" : "3.5rem" }}>
-          {productDataDetail?.title}
-        </Text>
+      <Stack p={isMobile ? 20 : 20} px="10vw">
+        <Grid>
+          <Grid.Col span={12}>
+            <Text
+              fw={900}
+              style={{
+                fontFamily: "Lora",
+                fontSize: isMobile ? "1.5rem" : "3.5rem",
+              }}
+            >
+              {productDataDetail?.title}
+            </Text>
+          </Grid.Col>
 
-        <Flex justify={"space-between"}>
-          <Stack gap={4} align="start" mt={8}></Stack>
+          <Grid.Col span={12}>
+            {productDataDetail?.status !== "sold" && (
+              <Stack justify="flex-end" align={isMobile ? "start" : "flex-end"} mt={isMobile ? 10 : 0}>
+                <Text fw={900} size={isMobile ? "md" : "2rem"} c="green" style={{ textAlign: isMobile ? "left" : "right" }}>
+                  {new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                  }).format(productDataDetail?.price || 0)}
+                </Text>
+              </Stack>
+            )}
+          </Grid.Col>
+        </Grid>
 
-          {productDataDetail?.status !== "sold" && (
-            <Stack>
-              <Text fw={900} size={isMobile ? "md" : "2rem"} c={"green"}>
-                {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(productDataDetail?.price || 0)}
-              </Text>
-            </Stack>
-          )}
+        <Flex justify="space-between" wrap="wrap">
+          <Stack gap={4} align="start" mt={8} />
         </Flex>
 
-        <Text style={{ fontFamily: "Poppins" }} mt={20}>
+        <Text size="xl" style={{ fontFamily: "Poppins" }} mt={20}>
           {productDataDetail?.content}
         </Text>
 
         <Divider mt={20} />
-
         {!isMobile && (
-          <Grid>
+          <Grid align="start" justify="space-between" gutter={40}>
+            {/* Kiri: Spesifikasi Unit */}
             <Grid.Col span={6}>
-              <Stack>
+              <Stack gap="md">
                 <Text mt={40} size="xl" fw={800} style={{ fontFamily: "Lora" }}>
                   Spesifikasi Unit
                 </Text>
-                <Grid mt={20}>
+
+                <Grid mt={10} align="center">
                   <Grid.Col span={1}>
-                    <Stack>
+                    <Stack gap={15}>
                       <FaLandmark size={22} />
                       <FaBed size={22} />
                       <FaBath size={22} />
                     </Stack>
                   </Grid.Col>
+
                   <Grid.Col span={3}>
                     <Stack>
                       <Text size="lg">Land Area</Text>
@@ -79,24 +146,38 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
                       <Text size="lg">Bathroom</Text>
                     </Stack>
                   </Grid.Col>
-                  <Grid.Col span={3}>
-                    <Stack>
-                      <Text>{productDataDetail?.square}</Text>
-                      <Text>{productDataDetail?.bedroom}</Text>
-                      <Text>{productDataDetail?.bathroom}</Text>
+
+                  <Grid.Col span={4}>
+                    <Stack gap={15}>
+                      <Text>{productDataDetail?.square ?? "-"}</Text>
+                      <Text>{productDataDetail?.bedroom ?? "-"}</Text>
+                      <Text>{productDataDetail?.bathroom ?? "-"}</Text>
                     </Stack>
                   </Grid.Col>
                 </Grid>
-                {/* <AdditionalInfoProduct maps={additionalInfo?.maps} nearBy={additionalInfo?.near_by || []} /> */}
-                <Divider mt={20} />
+
+                <AdditionalInfoProduct nearBy={productDataDetail?.near_bies || []} />
+                <Divider mt={10} />
               </Stack>
             </Grid.Col>
-            {/* <Grid.Col span={6}>
-              <Stack mt={20}>
-                <ReservationForm id={productId} start_price={additionalInfo?.start_price} />
+
+            {/* Kanan: Form Reservasi */}
+            <Grid.Col span={6}>
+              <Stack mt={40}>
+                <ReservationForm id={productId} start_price={productDataDetail?.start_price} />
               </Stack>
             </Grid.Col>
-            {additionalInfo?.maps && <AdditionalInfoMaps mapsUrl={additionalInfo.maps} />} */}
+
+            {/* Maps */}
+            {productDataDetail?.maps && (
+              <Grid.Col span={12}>
+                <AdditionalInfoMaps
+                  productThumbnail={thumbnail ?? ""}
+                  productName={productDataDetail?.title ?? ""}
+                  mapsUrl={productDataDetail?.maps ?? ""}
+                />
+              </Grid.Col>
+            )}
           </Grid>
         )}
 
@@ -128,11 +209,13 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
                 </Stack>
               </Grid.Col>
               <Grid.Col span={12}>
-                {/* <AdditionalInfoProduct maps={additionalInfo?.maps} nearBy={additionalInfo?.near_by || []} /> */}
+                <AdditionalInfoProduct nearBy={productDataDetail?.near_bies || []} />
               </Grid.Col>
             </Grid>
             <Divider mt={20} />
-            <Stack mt={20}>{/* <ReservationForm id={productId} start_price={additionalInfo?.start_price} /> */}</Stack>
+            <Stack mt={20}>
+              <ReservationForm id={productId} start_price={productDataDetail?.start_price} />
+            </Stack>
           </Stack>
         )}
 
@@ -151,12 +234,10 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
       </Stack>
       <Card
         shadow="md"
-        radius="xl"
         p="xl"
         style={{
           background: "linear-gradient(135deg, #2D4872 0%, #1E3557 100%)",
           marginBottom: "80px",
-          borderRadius: "20px",
           textAlign: "center",
           color: "white",
           position: "relative",

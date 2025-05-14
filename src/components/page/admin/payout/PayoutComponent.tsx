@@ -17,7 +17,7 @@ export default function PayoutComponent() {
       <LoadingGlobal visible={isLoadingCompanies} />
       <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
 
-      <SimpleGridGlobal cols={1}>
+      <SimpleGridGlobal cols={1} gap="20px">
         <GetCashOutData
           companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
