@@ -4,6 +4,7 @@ interface IProduct {
   content: string;
   type: string;
   image: string;
+  location: string;
   bathroom: string;
   bedroom: string;
   square: string;

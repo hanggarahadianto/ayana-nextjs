@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
+import LoadingGlobal from "@/styles/loading/loading-global";
+import { Stack } from "@mantine/core";
 
 // Load Leaflet hanya di client
 const L = typeof window !== "undefined" ? require("leaflet") : null;
@@ -61,7 +63,12 @@ const AdditionalInfoMaps: React.FC<{ productName: string; productThumbnail: stri
     return <p>Invalid map URL</p>;
   }
 
-  if (!isClient || !L) return <p>Loading...</p>;
+  if (!isClient || !L)
+    return (
+      <Stack>
+        <LoadingGlobal visible={true} />
+      </Stack>
+    );
 
   const customIcon = L.icon({
     iconUrl: { productThumbnail },

@@ -47,6 +47,10 @@ export const ProductImageGallery = ({ items }: { items: { original: string; thum
 
       <style jsx>{`
         :global(.custom-gallery .image-gallery-slide img) {
+          .no-pointer,
+          .no-pointer * {
+            cursor: default !important;
+          }
           object-fit: cover;
           width: 100%;
           height: 100%;

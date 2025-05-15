@@ -1,82 +1,87 @@
 "use client";
-import { Box, Button, Card, Center, Container, Divider, Flex, Grid, GridCol, SimpleGrid, Stack, Text } from "@mantine/core";
+import { Box, Button, Card, Center, Container, Divider, Flex, Grid, SimpleGrid, Stack, Text } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FaBath, FaBed, FaLandmark } from "react-icons/fa";
 import { useMediaQuery } from "@mantine/hooks";
-import Link from "next/link";
 import { getDataProductDetail } from "@/api/products/getDataProductDetail";
+import { getImages } from "@/api/products/getImagesProduct";
+import { ProductImageGallery } from "./ImageGallery";
 import AdditionalInfoProduct from "./AdditionalInfo";
 import ReservationForm from "../reservation/ReservationForm";
 import AdditionalInfoMaps from "./AdditionalMaps";
-import { getImages } from "@/api/products/getImagesProduct";
-import { ProductImageGallery } from "./ImageGallery";
+import Link from "next/link";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 interface ProductDetailProps {
   productId: string;
 }
-
+interface GalleryImage {
+  original: string;
+  thumbnail: string;
+}
 const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
-  if (!productId) return <p>Loading...</p>;
+  const [lastMapUrl, setLastMapUrl] = useState<string | null>(null);
 
-  const { data: productDataDetail } = useQuery({
+  const { data: productDataDetail, isLoading: isProductLoading } = useQuery({
     queryKey: ["getProductDetailData", productId],
-    queryFn: () => getDataProductDetail(productId),
+    queryFn: () => getDataProductDetail(productId!),
     enabled: !!productId,
     refetchOnWindowFocus: false,
   });
 
-  const [lastMapUrl, setLastMapUrl] = useState<string | null>(null);
-
-  const productDetailImage = useQuery({
+  const { data: productDetailImage, isLoading: isLoadingProductDetailImage } = useQuery({
     queryKey: ["getImagesByProductId", productDataDetail?.id],
     queryFn: () => getImages(productDataDetail?.id),
     enabled: !!productDataDetail?.id,
   });
 
-  // console.log("gambar", productDetailImage.data?.thumbnail);
-  const thumbnail = productDetailImage?.data?.thumbnail;
-
   useEffect(() => {
     if (productDataDetail?.maps && productDataDetail.maps !== lastMapUrl) {
       setLastMapUrl(productDataDetail.maps);
     }
-  }, [productDataDetail]);
+  }, [productDataDetail?.maps, lastMapUrl]);
 
-  console.log("product detail", productDataDetail);
+  if (!productId || isProductLoading) return <LoadingGlobal visible={true} />;
 
-  const galleryImages =
-    productDetailImage.data?.images?.map((imageUrl: string) => ({
-      original: imageUrl, // Gambar asli
-      thumbnail: productDetailImage.data.thumbnail, // Gambar thumbnail
+  const thumbnail = productDetailImage?.thumbnail || "";
+
+  const galleryImages: GalleryImage[] =
+    productDetailImage?.images?.map((img) => ({
+      original: img.url,
+      thumbnail: img.url, // Gunakan gambar itu sendiri sebagai thumbnail
     })) || [];
 
   return (
-    <SimpleGrid cols={1}>
+    <SimpleGrid cols={1} style={{ cursor: "default" }}>
+      <LoadingGlobal visible={isLoadingProductDetailImage} />
       <Container
         style={{
-          width: "100%", // Mengatur lebar container menjadi 100%
-          maxWidth: "100%", // Pastikan lebar maksimal container juga 100%
-          minHeight: "500px", // Menetapkan tinggi minimum
-          padding: "0", // Menghilangkan padding default
+          width: "100%",
+          maxWidth: "100%",
+          minHeight: "500px",
+          padding: "0",
+          cursor: "default", // Juga di container
         }}
       >
         <Stack
           align="center"
           style={{
-            minHeight: "500px", // Minimum height untuk memastikan galeri terlihat jelas
-            margin: "0 auto", // Agar konten terpusat
-            padding: "20px", // Padding untuk ruang
+            minHeight: "500px",
+            margin: "0 auto",
+            padding: "20px",
+            cursor: "default",
           }}
         >
           <Box
             style={{
-              width: "100%", // Menyesuaikan lebar kontainer 100%
-              height: "100%", // Menyesuaikan tinggi Box dengan kontainer
-              maxWidth: "100%", // Agar tidak ada batasan lebar lebih dari 100%
-              margin: "0 auto", // Menjaga kontainer agar tetap terpusat
-              padding: "0", // Menghilangkan padding default
+              width: "100%",
+              height: "100%",
+              maxWidth: "100%",
+              margin: "0 auto",
+              padding: "0",
+              cursor: "default",
             }}
           >
             <ProductImageGallery items={galleryImages} />
@@ -154,10 +159,13 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
                       <Text>{productDataDetail?.bathroom ?? "-"}</Text>
                     </Stack>
                   </Grid.Col>
+
+                  <Grid.Col span={2}>
+                    <Stack gap={15}></Stack>
+                  </Grid.Col>
                 </Grid>
 
-                <AdditionalInfoProduct nearBy={productDataDetail?.near_bies || []} />
-                <Divider mt={10} />
+                <AdditionalInfoProduct nearBy={productDataDetail?.near_bies || []} location={productDataDetail?.location} />
               </Stack>
             </Grid.Col>
 
