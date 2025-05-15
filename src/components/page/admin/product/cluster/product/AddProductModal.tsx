@@ -22,7 +22,6 @@ interface Props {
 }
 
 const AddProductModal = ({ clusterId }: Props) => {
-  // console.log("cluster id", clusterId);
   const [opened, { open, close }] = useDisclosure(false);
 
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);

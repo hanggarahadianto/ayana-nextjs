@@ -1,8 +1,13 @@
 // api/images/getImages.ts
 import { APIAxiosInstanceMultipart } from "../../lib";
 
+interface ExistingImage {
+  id: string;
+  url: string;
+}
+
 interface ImageResponse {
-  images: string[];
+  images: ExistingImage[];
   thumbnail: string;
 }
 

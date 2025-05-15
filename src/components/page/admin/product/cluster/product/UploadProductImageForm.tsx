@@ -4,14 +4,15 @@ import { IconX } from "@tabler/icons-react";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 
-interface UploadImageFieldProps {
+interface UpdateImageFieldProps {
   onFilesChange: (files: File[]) => void;
-  existingImages?: string[]; // URL gambar yang sudah ada
+  existingImages?: string[]; // URL
+  onDeleteExistingImage?: (url: string) => void; // callback ke parent
 }
 
-const UploadImageField: React.FC<UploadImageFieldProps> = ({ onFilesChange, existingImages = [] }) => {
+const UpdateImageField: React.FC<UpdateImageFieldProps> = ({ onFilesChange, existingImages = [], onDeleteExistingImage }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [existingImageUrls, setExistingImageUrls] = useState<string[]>(existingImages);
+  const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
 
   useEffect(() => {
     setExistingImageUrls(existingImages);
@@ -29,52 +30,52 @@ const UploadImageField: React.FC<UploadImageFieldProps> = ({ onFilesChange, exis
 
   const handleDeleteImage = (index: number, isExisting: boolean) => {
     if (isExisting) {
-      const updatedExisting = existingImageUrls.filter((_, i) => i !== index);
-      setExistingImageUrls(updatedExisting);
-      // NOTE: jika ingin kirim info ke parent bahwa existing image dihapus, buat callback khusus
+      const deletedUrl = existingImageUrls[index];
+      const updated = existingImageUrls.filter((_, i) => i !== index);
+      setExistingImageUrls(updated);
+      onDeleteExistingImage?.(deletedUrl);
     } else {
-      const updatedFiles = selectedFiles.filter((_, i) => i !== index);
-      setSelectedFiles(updatedFiles);
-      onFilesChange(updatedFiles);
+      const updated = selectedFiles.filter((_, i) => i !== index - existingImageUrls.length);
+      setSelectedFiles(updated);
+      onFilesChange(updated);
     }
   };
 
   const combinedImages = [
     ...existingImageUrls.map((url) => ({ src: url, isExisting: true })),
-    ...selectedFiles.map((file) => ({ src: URL.createObjectURL(file), isExisting: false })),
+    ...selectedFiles.map((file) => ({
+      src: URL.createObjectURL(file),
+      isExisting: false,
+    })),
   ];
 
   return (
     <div>
-      <Group justify="flex-end">
-        <Text size="md" fw={200}>
-          Upload Gambar
-        </Text>
+      <Group justify="space-between">
+        <Text size="md">Upload Gambar</Text>
         <ButtonAdd onClick={() => document.getElementById("fileInput")?.click()} size="3.5rem" />
       </Group>
 
-      <SimpleGridGlobal cols={1} mt="40px" h="260px">
+      <SimpleGridGlobal cols={1} mt="40px" h="auto">
         <input type="file" accept="image/*" multiple id="fileInput" style={{ display: "none" }} onChange={handleFileChange} />
 
         {combinedImages.length > 0 && (
-          <div>
+          <div style={{ marginTop: "1rem" }}>
             <h4>Preview Gambar:</h4>
             <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
               {combinedImages.map((img, index) => (
                 <div key={index} style={{ position: "relative", textAlign: "center" }}>
                   <Text size="sm" fw={500} mb="5px">
-                    {index === 0 ? "Thumbnail" : `Gambar ke ${index + 1}`}
+                    {index === 0 ? "Thumbnail" : `Gambar ke-${index + 1}`}
                   </Text>
                   <Card
                     style={{
                       width: "120px",
                       height: "120px",
-                      marginBottom: "10px",
-                      padding: "0",
+                      padding: 0,
                       overflow: "hidden",
                       position: "relative",
                     }}
-                    padding="lg"
                     shadow="sm"
                     radius="md"
                   >
@@ -85,7 +86,6 @@ const UploadImageField: React.FC<UploadImageFieldProps> = ({ onFilesChange, exis
                         width: "100%",
                         height: "100%",
                         objectFit: "cover",
-                        borderRadius: "8px",
                       }}
                     />
                     <ActionIcon
@@ -114,4 +114,4 @@ const UploadImageField: React.FC<UploadImageFieldProps> = ({ onFilesChange, exis
   );
 };
 
-export default UploadImageField;
+export default UpdateImageField;

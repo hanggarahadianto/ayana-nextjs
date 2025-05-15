@@ -28,8 +28,21 @@ const GetProductModal = ({
     enabled: !!productId,
   });
 
-  console.log("productData", productData);
+  // console.log("productData", productData);
 
+  const getBadgeColor = (status: string | undefined) => {
+    switch (status) {
+      case "available":
+        return { bg: "green" };
+      case "booking":
+        return { bg: "yellow" };
+      case "sold":
+        return { bg: "red" };
+      default:
+        return { bg: "gray" };
+    }
+  };
+  const { bg } = getBadgeColor(productData?.status);
   return (
     <>
       <Modal opened={opened} onClose={onClose} size={"60rem"} yOffset="100px">
@@ -38,9 +51,17 @@ const GetProductModal = ({
         <ScrollArea>
           <Paper p="md" shadow="sm">
             <Stack gap="md">
-              <Text size="lg" fw={500}>
-                {productData?.title}
-              </Text>
+              <Group justify="space-between">
+                <Text size="lg" fw={500}>
+                  {productData?.title}
+                </Text>
+                <Badge p="16x" bg={bg}>
+                  <Text size="xs" fw={500}>
+                    {productData?.status}
+                  </Text>
+                </Badge>
+              </Group>
+
               <Divider />
               <Grid mt={"10px"}>
                 <Grid.Col span={6}>
@@ -56,7 +77,6 @@ const GetProductModal = ({
                 </Grid.Col>
               </Grid>
               <Group>
-                <TextInput label="Status" value={productData?.status ?? ""} readOnly />
                 <TextInput label="Urutan" value={productData?.sequence ?? ""} readOnly />
               </Group>
 
@@ -90,7 +110,7 @@ const GetProductModal = ({
 
                     <Card shadow="sm" padding="sm" radius="md" withBorder>
                       <Card.Section>
-                        <Image src={img} alt={`Image ${idx}`} height={150} fit="cover" radius="md" />
+                        <Image src={img.url} alt={`Image ${idx}`} height={150} fit="cover" radius="md" />
                       </Card.Section>
                       <Text size="sm" mt="xs" ta="center" c="dimmed">
                         Gambar {idx + 1}

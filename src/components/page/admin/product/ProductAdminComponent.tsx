@@ -9,8 +9,6 @@ const ProductAdminComponent = () => {
   const [selectedClusterId, setSelectedClusterId] = useState<string | null>(null);
   const [selectedClusterName, setSelectedClusterName] = useState<string>("");
 
-  console.log("cluster id", selectedClusterId);
-
   return (
     <SimpleGrid cols={1}>
       <ClusterAdminCard

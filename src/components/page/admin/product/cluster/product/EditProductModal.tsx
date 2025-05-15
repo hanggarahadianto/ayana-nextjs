@@ -1,21 +1,30 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleGrid, Divider, Stack, Text } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
-import { useUploadImages } from "@/api/products/uploadImageProduct";
 import { useEditProductForm } from "@/api/products/editDataProduct";
 import { validationSchemaProduct } from "@/utils/validation/product-validation";
-import { getInitialValuesUpdateProduct, initialValueProductCreate } from "@/utils/initialValues/initialValuesProduct";
+import { getInitialValuesUpdateProduct } from "@/utils/initialValues/initialValuesProduct";
 import { availabilityOptions, typeOptions } from "@/constants/dictionary";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import UploadImageField from "./UploadProductImageForm";
 import NearByForm from "./NearByForm";
-import LoadingGlobal from "@/styles/loading/loading-global";
 import { useQuery } from "@tanstack/react-query";
 import { getImages } from "@/api/products/getImagesProduct";
+import { useUpdateImageProduct } from "@/api/products/updateImageProduct";
+import UpdateImageField from "./UpdateProductImageForm";
+import LoadingGlobal from "@/styles/loading/loading-global";
+
+interface ExistingImage {
+  id: string;
+  url: string;
+}
+
+interface ImageResponse {
+  images: ExistingImage[];
+  thumbnail: string;
+}
 
 const UpdateProductModal = ({
   clusterId,
@@ -30,23 +39,24 @@ const UpdateProductModal = ({
   onClose: () => void;
   productData?: IProduct;
 }) => {
-  console.log("producut ", productData);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [keepImageIds, setKeepImageIds] = useState<string[]>([]); // ✅ ini penting
+
+  console.log("keepImageId di parent", keepImageIds);
+  console.log("selected file", selectedFiles);
+
+  const handleFilesChange = (files: File[]) => {
+    setSelectedFiles(files);
+  };
+
+  const handleKeepIdsChange = (ids: string[]) => {
+    setKeepImageIds(ids);
+  };
 
   const { mutate: updateDataProduct, isPending: isLoadingUpdateProductData } = useEditProductForm(refetchProductDataByCluster, onClose);
-  const { mutateAsync: uploadImage, isPending: isUploadingImage } = useUploadImages(close, clusterId!);
-
-  const handleFilesChange = (files: File[]) => setSelectedFiles(files);
+  const { mutateAsync: updateImageProduct, isPending: isUploadingImage } = useUpdateImageProduct(close, clusterId!);
 
   const formatCurrencyInput = (val: number | undefined) => (val ? `Rp. ${val.toLocaleString("id-ID")}` : "");
-
-  const uploadProductImages = async (productId: string) => {
-    if (!selectedFiles.length) return;
-
-    const formData = new FormData();
-    selectedFiles.forEach((file) => formData.append("images", file));
-    await uploadImage({ productId, formData });
-  };
 
   const {
     data: dataImages,
@@ -58,40 +68,88 @@ const UpdateProductModal = ({
     enabled: !!productData?.id,
   });
 
-  console.log("data iamges", dataImages);
+  const [originalKeepImageIds, setOriginalKeepImageIds] = useState<string[]>([]);
+  const [originalSelectedFilesCount, setOriginalSelectedFilesCount] = useState(0);
+
+  useEffect(() => {
+    if (dataImages && Array.isArray(dataImages)) {
+      const ids = dataImages.map((img) => img.id);
+      setOriginalKeepImageIds(ids);
+      setKeepImageIds(ids);
+    }
+  }, [dataImages]);
+
+  useEffect(() => {
+    setOriginalSelectedFilesCount(0); // Awalnya belum ada file baru
+  }, []);
+
+  const arraysAreEqual = (arr1: string[], arr2: string[]) => {
+    if (arr1.length !== arr2.length) return false;
+    const sorted1 = [...arr1].sort();
+    const sorted2 = [...arr2].sort();
+    return sorted1.every((val, idx) => val === sorted2[idx]);
+  };
 
   const handleSubmit = useCallback(
     async (values: IProductUpdate, { resetForm }: FormikHelpers<IProductUpdate>) => {
       const payload = { ...values, cluster_id: clusterId ?? null };
-      updateDataProduct(payload, {
-        onSuccess: async (res: any) => {
-          const productId = res?.id;
-          if (!productId) {
-            showNotification({ title: "Gagal", message: "ID produk tidak ditemukan", color: "red" });
-            return;
-          }
+      const productId = productData?.id;
 
-          try {
-            await uploadProductImages(productId);
-          } catch {
-            showNotification({ title: "Upload gagal", message: "Gagal mengunggah gambar", color: "red" });
-          }
+      if (!productId) {
+        showNotification({ title: "Gagal", message: "ID produk tidak ditemukan", color: "red" });
+        return;
+      }
 
-          resetForm();
-          setSelectedFiles([]);
-          close();
-        },
-        onError: (error: any) => {
-          showNotification({ title: "Gagal menyimpan", message: error.message, color: "red" });
-        },
-      });
+      const isDataEdited = JSON.stringify(values) !== JSON.stringify(productData);
+
+      try {
+        // 1. Update data produk jika ada perubahan
+        if (isDataEdited) {
+          await new Promise<void>((resolve, reject) => {
+            updateDataProduct(payload, {
+              onSuccess: () => resolve(),
+              onError: (err: any) => reject(err),
+            });
+          });
+        }
+
+        // 2. Upload gambar baru jika ada
+
+        console.log("upladoing");
+
+        const formData = new FormData();
+
+        // ✅ Kirim ID gambar existing yg mau dipertahankan
+
+        keepImageIds.forEach((id) => formData.append("keepImageIds", id));
+        selectedFiles.forEach((file) => formData.append("images", file));
+
+        await updateImageProduct({ productId, formData });
+
+        // 3. Tampilkan notifikasi dan reset form
+        showNotification({
+          title: "Berhasil",
+          message: "Produk berhasil diperbarui",
+          color: "green",
+        });
+
+        resetForm();
+        setSelectedFiles([]);
+        onClose();
+      } catch (error: any) {
+        showNotification({
+          title: "Gagal",
+          message: error?.message || "Terjadi kesalahan saat menyimpan",
+          color: "red",
+        });
+      }
     },
-    [updateDataProduct, uploadImage, selectedFiles, clusterId, close]
+    [productData, selectedFiles, clusterId, dataImages]
   );
 
   return (
     <SimpleGridGlobal cols={1}>
-      {/* <LoadingGlobal visible={isLoadingDetail} /> */}
+      <LoadingGlobal visible={isLoadingImageData} />
       <Modal opened={opened} onClose={onClose} size="100%" yOffset="100px">
         <Formik
           enableReinitialize
@@ -100,7 +158,7 @@ const UpdateProductModal = ({
           onSubmit={handleSubmit}
         >
           {({ values, errors, touched, setFieldValue }) => {
-            console.log("values", values);
+            // console.log("values", values);
             return (
               <Form>
                 <SimpleGrid p="40px" spacing="md">
@@ -119,6 +177,7 @@ const UpdateProductModal = ({
                       onChange={(e) => setFieldValue("title", e.currentTarget.value)}
                     />
                     <Select
+                      value={values.type}
                       label="Tipe"
                       placeholder="Pilih tipe"
                       clearable
@@ -219,11 +278,17 @@ const UpdateProductModal = ({
                   <Divider p={12} mt={16} />
 
                   <NearByForm setFieldValue={setFieldValue} values={values} />
+                  {/* <UpdateImageField
+                    onFilesChange={(files) => setSelectedFiles(files)}
+                    onKeepIdsChange={(ids) => setKeepImageIds(ids)} // ✅ pastikan anak mengirim ID
+                    existingImages={dataImages?.images}
+                  /> */}
 
-                  {/* <UploadImageField onFilesChange={handleFilesChange} />
-                   */}
-
-                  <UploadImageField onFilesChange={handleFilesChange} existingImages={dataImages?.images} />
+                  <UpdateImageField
+                    existingImages={dataImages?.images}
+                    onFilesChange={handleFilesChange}
+                    onKeepIdsChange={handleKeepIdsChange}
+                  />
 
                   <Group justify="flex-end" mt="md">
                     <Button variant="default" onClick={close}>

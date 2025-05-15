@@ -8,7 +8,7 @@ interface UploadImageParams {
 }
 
 const uploadImagesRequest = async ({ productId, formData }: UploadImageParams) => {
-  const response = await APIAxiosInstanceMultipart.post(`/home/${productId}/images`, formData);
+  const response = await APIAxiosInstanceMultipart.post(`/home/create/images/${productId}`, formData);
   return response.data;
 };
 
