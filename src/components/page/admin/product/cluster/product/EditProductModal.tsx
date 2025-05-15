@@ -8,7 +8,6 @@ import { validationSchemaProduct } from "@/utils/validation/product-validation";
 import { getInitialValuesUpdateProduct } from "@/utils/initialValues/initialValuesProduct";
 import { availabilityOptions, typeOptions } from "@/constants/dictionary";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
-import UploadImageField from "./UploadProductImageForm";
 import NearByForm from "./NearByForm";
 import { useQuery } from "@tanstack/react-query";
 import { getImages } from "@/api/products/getImagesProduct";
@@ -42,8 +41,8 @@ const UpdateProductModal = ({
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [keepImageIds, setKeepImageIds] = useState<string[]>([]); // ✅ ini penting
 
-  console.log("keepImageId di parent", keepImageIds);
-  console.log("selected file", selectedFiles);
+  // console.log("keepImageId di parent", keepImageIds);
+  // console.log("selected file", selectedFiles);
 
   const handleFilesChange = (files: File[]) => {
     setSelectedFiles(files);
@@ -54,7 +53,7 @@ const UpdateProductModal = ({
   };
 
   const { mutate: updateDataProduct, isPending: isLoadingUpdateProductData } = useEditProductForm(refetchProductDataByCluster, onClose);
-  const { mutateAsync: updateImageProduct, isPending: isUploadingImage } = useUpdateImageProduct(close, clusterId!);
+  const { mutateAsync: updateImageProduct, isPending: isUploadingImage } = useUpdateImageProduct(clusterId!);
 
   const formatCurrencyInput = (val: number | undefined) => (val ? `Rp. ${val.toLocaleString("id-ID")}` : "");
 
@@ -68,22 +67,20 @@ const UpdateProductModal = ({
     enabled: !!productData?.id,
   });
 
+  // console.log("data image", dataImages);
+
   const [originalKeepImageIds, setOriginalKeepImageIds] = useState<string[]>([]);
-  const [originalSelectedFilesCount, setOriginalSelectedFilesCount] = useState(0);
+  // console.log("ORIGINAL KEEP", originalKeepImageIds);
 
   useEffect(() => {
-    if (dataImages && Array.isArray(dataImages)) {
-      const ids = dataImages.map((img) => img.id);
-      setOriginalKeepImageIds(ids);
-      setKeepImageIds(ids);
+    if (dataImages && Array.isArray(dataImages.images)) {
+      const idsFromServer = dataImages.images.map((img) => img.id);
+      setOriginalKeepImageIds(idsFromServer);
+      setKeepImageIds(idsFromServer);
     }
   }, [dataImages]);
 
-  useEffect(() => {
-    setOriginalSelectedFilesCount(0); // Awalnya belum ada file baru
-  }, []);
-
-  const arraysAreEqual = (arr1: string[], arr2: string[]) => {
+  const arraysAreEqualIgnoreOrder = (arr1: string[], arr2: string[]) => {
     if (arr1.length !== arr2.length) return false;
     const sorted1 = [...arr1].sort();
     const sorted2 = [...arr2].sort();
@@ -92,6 +89,7 @@ const UpdateProductModal = ({
 
   const handleSubmit = useCallback(
     async (values: IProductUpdate, { resetForm }: FormikHelpers<IProductUpdate>) => {
+      // console.log("values,", values);
       const payload = { ...values, cluster_id: clusterId ?? null };
       const productId = productData?.id;
 
@@ -103,36 +101,43 @@ const UpdateProductModal = ({
       const isDataEdited = JSON.stringify(values) !== JSON.stringify(productData);
 
       try {
-        // 1. Update data produk jika ada perubahan
+        // console.log("payload", payload);
+
         if (isDataEdited) {
-          await new Promise<void>((resolve, reject) => {
-            updateDataProduct(payload, {
-              onSuccess: () => resolve(),
-              onError: (err: any) => reject(err),
-            });
-          });
+          updateDataProduct(payload);
         }
 
-        // 2. Upload gambar baru jika ada
+        const isImageEdited = !arraysAreEqualIgnoreOrder(values.keepImageIds, values.originalKeepImageIds);
+        const isNewFilesAdded = selectedFiles.length > 0;
+        const isAllImagesRemoved = values.keepImageIds.length === 0;
+        // console.log("is all images removes", isAllImagesRemoved);
 
-        console.log("upladoing");
+        if (isImageEdited || isNewFilesAdded || isAllImagesRemoved) {
+          const formData = new FormData();
 
-        const formData = new FormData();
+          // console.log("keepImagesId", values.keepImageIds);
+          // console.log("values keep image", values.keepImageIds);
 
-        // ✅ Kirim ID gambar existing yg mau dipertahankan
+          console.log("values keep image ids", values.keepImageIds);
 
-        keepImageIds.forEach((id) => formData.append("keepImageIds", id));
-        selectedFiles.forEach((file) => formData.append("images", file));
+          values.keepImageIds.forEach((id) => formData.append("keepImageIds", id));
+          selectedFiles.forEach((file) => formData.append("images", file));
 
-        await updateImageProduct({ productId, formData });
+          console.log("🔍 Payload FormData:");
+          for (let pair of formData.entries()) {
+            console.log(`${pair[0]}:`, pair[1]);
+          }
+
+          console.log("📤 fetching update gambar...");
+          await updateImageProduct({ productId, formData });
+          console.log("✅ upload selesai");
+        } else {
+          console.log("⏩ tidak ada perubahan gambar, skip upload");
+        }
 
         // 3. Tampilkan notifikasi dan reset form
-        showNotification({
-          title: "Berhasil",
-          message: "Produk berhasil diperbarui",
-          color: "green",
-        });
 
+        refetchProductDataByCluster();
         resetForm();
         setSelectedFiles([]);
         onClose();
@@ -153,7 +158,7 @@ const UpdateProductModal = ({
       <Modal opened={opened} onClose={onClose} size="100%" yOffset="100px">
         <Formik
           enableReinitialize
-          initialValues={getInitialValuesUpdateProduct(productData)}
+          initialValues={getInitialValuesUpdateProduct(productData, keepImageIds, originalKeepImageIds)}
           validationSchema={validationSchemaProduct}
           onSubmit={handleSubmit}
         >
@@ -291,7 +296,7 @@ const UpdateProductModal = ({
                   />
 
                   <Group justify="flex-end" mt="md">
-                    <Button variant="default" onClick={close}>
+                    <Button variant="default" onClick={close} disabled={isLoadingUpdateProductData || isUploadingImage}>
                       Batal
                     </Button>
                     <Button type="submit" loading={isLoadingUpdateProductData || isUploadingImage}>

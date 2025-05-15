@@ -2,6 +2,7 @@ interface IProduct {
   id: string;
   title: string;
   content: string;
+  type: string;
   image: string;
   bathroom: string;
   bedroom: string;
@@ -51,6 +52,8 @@ interface IProductUpdate {
   start_price: number;
   cluster_id: string | null;
   near_bies: INearByCreate[];
+  keepImageIds: string[];
+  originalKeepImageIds: string[];
 }
 
 interface IProductResponse {

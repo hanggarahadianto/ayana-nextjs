@@ -8,15 +8,11 @@ interface UpdateImageParams {
 }
 
 const updateImagesRequest = async ({ productId, formData }: UpdateImageParams) => {
-  console.log("Sending formData with keys:");
-  for (const pair of formData.entries()) {
-    console.log(pair[0], pair[1]);
-  }
   const response = await APIAxiosInstanceMultipart.put(`/home/update/images/${productId}`, formData);
   return response.data;
 };
 
-export const useUpdateImageProduct = (onClose: () => void, clusterId: string) => {
+export const useUpdateImageProduct = (clusterId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -31,8 +27,6 @@ export const useUpdateImageProduct = (onClose: () => void, clusterId: string) =>
         message: "Gambar berhasil diperbarui",
         color: "green",
       });
-
-      onClose();
     },
     onError: (error: any) => {
       showNotification({

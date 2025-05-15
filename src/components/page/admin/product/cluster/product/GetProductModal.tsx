@@ -46,7 +46,7 @@ const GetProductModal = ({
   return (
     <>
       <Modal opened={opened} onClose={onClose} size={"60rem"} yOffset="100px">
-        <LoadingGlobal visible={isLoadingDetail} />
+        <LoadingGlobal visible={isLoadingDetail || isLoadingImageData} />
 
         <ScrollArea>
           <Paper p="md" shadow="sm">
@@ -66,6 +66,7 @@ const GetProductModal = ({
               <Grid mt={"10px"}>
                 <Grid.Col span={6}>
                   <TextInput label="Deskripsi" value={productData?.content ?? ""} readOnly />
+                  <TextInput label="Tipe" value={productData?.type ?? ""} readOnly />
 
                   <TextInput label="Price" value={`Rp ${productData?.price.toLocaleString()}`} readOnly />
                   <TextInput label="Quantity" value={productData?.quantity ?? ""} readOnly />
@@ -74,11 +75,10 @@ const GetProductModal = ({
                   <TextInput label="Bedrooms" value={productData?.bedroom ?? ""} readOnly />
                   <TextInput label="Bathrooms" value={productData?.bathroom ?? ""} readOnly />
                   <TextInput label="Square Meters" value={productData?.square ?? ""} readOnly />
+
+                  <TextInput label="Urutan" value={productData?.sequence ?? ""} readOnly />
                 </Grid.Col>
               </Grid>
-              <Group>
-                <TextInput label="Urutan" value={productData?.sequence ?? ""} readOnly />
-              </Group>
 
               <Divider />
               {(productData?.near_bies?.length ?? 0) > 0 && (

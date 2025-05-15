@@ -21,20 +21,26 @@ export const initialValueProductCreate: IProductCreate = {
   cluster_id: "",
 };
 
-export const getInitialValuesUpdateProduct = (initialData?: Partial<IProductUpdate>): IProductUpdate => ({
-  id: initialData?.id || "",
-  title: initialData?.title || "",
-  content: initialData?.content || "",
-  address: initialData?.address || "",
-  bathroom: initialData?.bathroom || "",
-  bedroom: initialData?.bedroom || "",
-  square: initialData?.square || "",
-  status: initialData?.status || "available",
-  price: initialData?.price ?? 0,
-  quantity: initialData?.quantity ?? 1,
-  sequence: initialData?.sequence ?? 0,
-  start_price: Number(initialData?.start_price) || 0,
-  type: initialData?.type || "",
-  cluster_id: initialData?.cluster_id || "",
-  near_bies: initialData?.near_bies || [],
+export const getInitialValuesUpdateProduct = (
+  productData?: Partial<IProductUpdate>,
+  keepImageIds?: string[],
+  originalKeepImageIds?: string[]
+): IProductUpdate => ({
+  id: productData?.id || "",
+  title: productData?.title || "",
+  type: productData?.type || "",
+  content: productData?.content || "",
+  address: productData?.address || "",
+  bathroom: productData?.bathroom || "",
+  bedroom: productData?.bedroom || "",
+  square: productData?.square || "",
+  status: productData?.status || "",
+  price: productData?.price || 0,
+  sequence: productData?.sequence || 0,
+  quantity: productData?.quantity || 0,
+  start_price: productData?.start_price || 0,
+  cluster_id: productData?.cluster_id ?? null,
+  near_bies: productData?.near_bies || [],
+  keepImageIds: keepImageIds || [], // nilai awal sama seperti original
+  originalKeepImageIds: originalKeepImageIds || [],
 });

@@ -16,12 +16,12 @@ interface UpdateImageFieldProps {
 }
 
 const UpdateImageField: React.FC<UpdateImageFieldProps> = ({ onFilesChange, onKeepIdsChange, existingImages = [] }) => {
-  console.log("existing image", existingImages);
+  //   console.log("existing image", existingImages);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [keepImageIds, setKeepImageIds] = useState<string[]>([]);
 
-  console.log("selected di component", selectedFiles);
-  console.log("keep di com[ponent", keepImageIds);
+  //   console.log("selected di component", selectedFiles);
+  //   console.log("keep di com[ponent", keepImageIds);
 
   useEffect(() => {
     if (Array.isArray(existingImages) && existingImages.length > 0) {
@@ -36,43 +36,24 @@ const UpdateImageField: React.FC<UpdateImageFieldProps> = ({ onFilesChange, onKe
     const files = Array.from(event.target.files || []);
     const newFiles = [...selectedFiles, ...files];
     setSelectedFiles(newFiles);
+
     onFilesChange(newFiles);
   };
 
-  const handleDeleteImage = (index: number) => {
-    const existingImageCount = existingImages.length;
-    if (index < existingImageCount) {
-      // Delete from existing
-      const updatedIds = keepImageIds.filter((_, i) => i !== index);
-      setKeepImageIds(updatedIds);
-      onKeepIdsChange(updatedIds);
-    } else {
-      // Delete from selected files
-      const adjustedIndex = index - existingImageCount;
-      const updatedFiles = selectedFiles.filter((_, i) => i !== adjustedIndex);
-      setSelectedFiles(updatedFiles);
-      onFilesChange(updatedFiles);
-    }
-  };
-
   const renderImages = () => {
+    const filteredExistingImages = (existingImages ?? []).filter((img) => keepImageIds.includes(img.id));
+    // console.log("Filtered existing images:", filteredExistingImages);
+
+    // Buat array gabungan dengan info id untuk setiap gambar
     const images = [
-      ...(existingImages || [])
-        .filter((img) => keepImageIds.includes(img.id))
-        .map((img) => ({
-          src: img.url,
-          isExisting: true,
-        })),
-      ...selectedFiles.map((file) => ({
-        src: URL.createObjectURL(file),
-        isExisting: false,
-      })),
+      ...filteredExistingImages.map((img) => ({ id: img.id, src: img.url, isExisting: true })),
+      ...selectedFiles.map((file, idx) => ({ id: `new-${idx}`, src: URL.createObjectURL(file), isExisting: false })),
     ];
 
-    return images.map((img, index) => (
-      <div key={index} style={{ position: "relative", textAlign: "center" }}>
+    return images.map((img) => (
+      <div key={img.id} style={{ position: "relative", textAlign: "center" }}>
         <Text size="sm" fw={500} mb="5px">
-          {index === 0 ? "Thumbnail" : `Gambar ke ${index + 1}`}
+          {img.isExisting ? "Thumbnail" : `Gambar baru`}
         </Text>
         <Card
           style={{
@@ -89,7 +70,7 @@ const UpdateImageField: React.FC<UpdateImageFieldProps> = ({ onFilesChange, onKe
         >
           <Image
             src={img.src}
-            alt={`image-${index}`}
+            alt={`image-${img.id}`}
             style={{
               width: "100%",
               height: "100%",
@@ -109,13 +90,32 @@ const UpdateImageField: React.FC<UpdateImageFieldProps> = ({ onFilesChange, onKe
               zIndex: 2,
               cursor: "pointer",
             }}
-            onClick={() => handleDeleteImage(index)}
+            onClick={() => handleDeleteImage(img.id, img.isExisting)}
           >
             <IconX size="1rem" />
           </ActionIcon>
         </Card>
       </div>
     ));
+  };
+
+  const handleDeleteImage = (id: string, isExisting: boolean) => {
+    if (isExisting) {
+      // hapus dari keepImageIds berdasar id
+      const updatedIds = keepImageIds.filter((keepId) => keepId !== id);
+      console.log("Removing existing image ID:", id);
+      setKeepImageIds(updatedIds);
+      onKeepIdsChange(updatedIds);
+    } else {
+      // hapus dari selectedFiles berdasar id (id berupa 'new-idx'), ambil idx-nya
+      const index = Number(id.split("-")[1]);
+      if (!isNaN(index)) {
+        const updatedFiles = selectedFiles.filter((_, i) => i !== index);
+        console.log("Removing new selected file index:", index);
+        setSelectedFiles(updatedFiles);
+        onFilesChange(updatedFiles);
+      }
+    }
   };
 
   return (
