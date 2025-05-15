@@ -104,16 +104,16 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
           </Grid.Col>
 
           <Grid.Col span={12}>
-            {productDataDetail?.status !== "sold" && (
-              <Stack justify="flex-end" align={isMobile ? "start" : "flex-end"} mt={isMobile ? 10 : 0}>
-                <Text fw={900} size={isMobile ? "md" : "2rem"} c="green" style={{ textAlign: isMobile ? "left" : "right" }}>
-                  {new Intl.NumberFormat("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  }).format(productDataDetail?.price || 0)}
-                </Text>
-              </Stack>
-            )}
+            {/* {productDataDetail?.status !== "sold" && ( */}
+            <Stack justify="flex-end" align={isMobile ? "start" : "flex-end"} mt={isMobile ? 10 : 0}>
+              <Text fw={900} size={isMobile ? "md" : "2rem"} c="green" style={{ textAlign: isMobile ? "left" : "right" }}>
+                {new Intl.NumberFormat("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                }).format(productDataDetail?.price || 0)}
+              </Text>
+            </Stack>
+            {/* )} */}
           </Grid.Col>
         </Grid>
 

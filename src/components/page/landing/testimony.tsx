@@ -13,10 +13,8 @@ const Testimony = () => {
 
   return (
     <>
-      {/* <Paper h={"auto"}> */}
-      <Grid style={{ height: "100%" }} gutter={isMobile ? 20 : 40}>
-        {/* Left Side */}
-        <Grid.Col span={isMobile ? 12 : 6} style={{ backgroundColor: "#486245", padding: isMobile ? "10vw" : "5vw" }}>
+      <Grid style={{ height: "100%" }} gutter={isMobile ? 20 : 45}>
+        <Grid.Col span={isMobile ? 12 : 6} style={{ backgroundColor: "#486245", padding: isMobile ? "10vw" : "12vw" }}>
           <Stack align="start" gap={10}>
             <Text c="white" style={{ fontFamily: "Lora", fontSize: isMobile ? "8vw" : "4vw" }}>
               What They Say of
@@ -30,13 +28,12 @@ const Testimony = () => {
           </Stack>
         </Grid.Col>
 
-        {/* Right Side */}
-        <Grid.Col span={isMobile ? 12 : 6} style={{ backgroundColor: "#22492a", padding: isMobile ? "5vw" : "3vw" }}>
+        <Grid.Col span={isMobile ? 12 : 6} style={{ backgroundColor: "#22492a", padding: isMobile ? "5vw" : "5vw" }}>
           <Card
             shadow="sm"
             radius="md"
             withBorder
-            w={isMobile ? "100%" : isWide ? "60%" : "80%"}
+            // w={isMobile ? "100%" : isWide ? "60%" : "120%"}
             style={{ backgroundColor: "#e1d9c9", margin: "auto" }}
           >
             <Group justify="space-between" mt="md" mb="xs" p={40}>
@@ -83,7 +80,7 @@ const Testimony = () => {
               INTERESTED IN OUR HOMES
             </Text>
           </Marquee>
-          <Button mt={40} bg="orange" h={50} radius="md">
+          <Button mt={80} bg="orange" h={50} radius="md">
             <Text fw={900} c="white" style={{ fontFamily: "Montserrat", fontSize: isMobile ? "4vw" : "1.2rem" }}>
               Contact Us
             </Text>

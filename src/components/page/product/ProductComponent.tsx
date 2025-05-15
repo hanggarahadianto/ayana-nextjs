@@ -1,30 +1,36 @@
 "use client";
 
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQuery, useQueries } from "@tanstack/react-query";
 import { useMediaQuery } from "@mantine/hooks";
-import { Card, Stack, Text, Image, Flex, Badge, SimpleGrid } from "@mantine/core";
+import { Badge, Card, Flex, Image, SimpleGrid, Stack, Text } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import Link from "next/link";
 import { generateSlug } from "@/utils/slug";
 import { getDataProduct } from "@/api/products/getDataProduct";
 import { getImages } from "@/api/products/getImagesProduct";
 import LoadingGlobal from "@/styles/loading/loading-global";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 const ProductComponent = () => {
+  // Responsive breakpoints
   const isMobile = useMediaQuery("(max-width: 768px)") ?? false;
   const isTablet = useMediaQuery("(max-width: 1024px)") ?? false;
+  const isTabletOrMobile = isMobile || isTablet;
 
+  const status = "available";
+
+  // Product data fetch
   const page = 1;
   const limit = 10;
-
   const { data: productData, isLoading: isLoadingProducts } = useQuery({
     queryKey: ["getProductData", page, limit],
-    queryFn: () => getDataProduct({ page, limit }),
+    queryFn: () => getDataProduct({ status, page, limit }),
     refetchOnWindowFocus: false,
   });
 
   const products = productData?.data || [];
 
+  // Fetch thumbnails for products
   const imageQueries = useQueries({
     queries: products.map((product) => ({
       queryKey: ["getImagesByProductId", product.id],
@@ -33,43 +39,48 @@ const ProductComponent = () => {
     })),
   });
 
-  const productsWithThumbnails = products.map((product, index) => {
-    const imageData = imageQueries[index]?.data;
-    const thumbnail = imageData?.thumbnail ?? "/placeholder.jpg";
+  const productsWithThumbnails = products.map((product, i) => ({
+    ...product,
+    thumbnail: imageQueries[i]?.data?.thumbnail ?? "/placeholder.jpg",
+  }));
 
-    return {
-      ...product,
-      thumbnail,
-    };
-  });
-
-  const padding = isMobile ? 12 : isTablet ? 24 : 120;
-  const slideSize = isMobile ? "60%" : isTablet ? "50%" : "33.33%";
-  const slideGap = isMobile ? "xs" : isTablet ? "sm" : "md";
-  const imageHeight = isMobile ? 180 : isTablet ? 280 : 300;
-  const carouselHeight = isMobile ? 350 : isTablet ? 300 : 600;
-  const titleSize = isMobile ? "2rem" : isTablet ? "3rem" : "3.5rem";
+  // Responsive values
+  const responsive = {
+    padding: isMobile ? 40 : isTablet ? 80 : 100,
+    slideSize: isMobile ? "60%" : isTablet ? "50%" : "33.33%",
+    slideGap: isMobile ? "xs" : isTablet ? "sm" : "md",
+    imageHeight: isMobile ? 110 : isTablet ? 180 : 300,
+    carouselHeight: isMobile ? 350 : isTablet ? 500 : 650,
+    titleSize: isMobile ? "2rem" : "4rem",
+    cardMinHeight: isMobile ? 300 : 480,
+  };
 
   return (
     <SimpleGrid>
       <LoadingGlobal visible={isLoadingProducts} />
-      <Stack align="center" justify="center">
-        <Text size={titleSize} fw={900} c="#e7a17a" ta="center" style={{ fontFamily: "Lora" }} mt={"60px"}>
+
+      {/* Title */}
+      <Stack align="center" justify="center" mt="60px">
+        <Text size={responsive.titleSize} fw={900} c="#e7a17a" ta="center" style={{ fontFamily: "Lora" }}>
           AYANA HOUSES
         </Text>
-        <Text size={titleSize} fw={900} c="#e7a17a" ta="center" style={{ fontFamily: "Lora" }} mt={"2px"}>
+        <Text size={responsive.titleSize} fw={900} c="#e7a17a" ta="center" mt="2px" style={{ fontFamily: "Lora" }}>
           ON SALE PROJECT
         </Text>
       </Stack>
 
+      {/* Product Carousel */}
       <Carousel
-        p={padding}
+        px={responsive.padding}
+        mb={isTablet ? "120px" : "100px"}
         withIndicators
-        slideSize={slideSize}
-        slideGap={slideGap}
+        withControls={!isTabletOrMobile}
+        slideSize={responsive.slideSize}
+        slideGap={responsive.slideGap}
         loop
-        height={carouselHeight}
+        height={responsive.carouselHeight}
         align="start"
+        controlSize={40}
         styles={{
           control: {
             backgroundColor: "#fff",
@@ -81,66 +92,81 @@ const ProductComponent = () => {
             transform: "translateY(-50%)",
           },
           controls: {
-            top: "50%",
+            top: isMobile ? "null" : "50%",
             left: 0,
             right: 0,
             justifyContent: "space-between",
             transform: "translateY(-50%)",
             position: "absolute",
             padding: "0 16px",
-            pointerEvents: "none", // agar slide bisa diklik walaupun panah ada di atas
+            pointerEvents: "none",
           },
         }}
-        controlSize={40}
       >
-        {productsWithThumbnails.map((product) => (
-          <Carousel.Slide key={product.id} mt={"120px"}>
-            <Link
-              href={{
-                pathname: `/product/${generateSlug(product.title)}`,
-                query: { id: product.id },
-              }}
-              passHref
-              style={{ textDecoration: "none", cursor: "pointer" }}
-            >
-              <Card shadow="sm" padding="lg" radius="md" withBorder>
-                <Card.Section>
-                  <Image src={product.thumbnail} alt={product.title} height={imageHeight} fit="cover" />
-                </Card.Section>
+        {productsWithThumbnails.map((product) => {
+          console.log("PRODUL", product);
+          return (
+            <Carousel.Slide key={product.id} mt={isMobile ? "40px" : "120px"}>
+              <Link
+                href={{
+                  pathname: `/product/${generateSlug(product.title)}`,
+                  query: { id: product.id },
+                }}
+                passHref
+                style={{ textDecoration: "none", cursor: "pointer" }}
+              >
+                <Card
+                  shadow="sm"
+                  padding={isMobile ? "md" : "lg"}
+                  radius="md"
+                  withBorder
+                  style={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    gap: isMobile ? 12 : 16,
+                  }}
+                >
+                  <Card.Section>
+                    <Image src={product.thumbnail} alt={product.title} height={responsive.imageHeight} fit="cover" radius="sm" />
+                  </Card.Section>
 
-                {!isMobile && (
-                  <Text size="lg" fw={700} mt={12}>
-                    {product.title}
-                  </Text>
-                )}
+                  <Stack gap={isMobile ? 4 : 8} mt="sm">
+                    <Text size={isMobile ? "md" : "lg"} fw={700}>
+                      {product.title}
+                    </Text>
 
-                <Text size="sm" c="dimmed" mt={8} lineClamp={2}>
-                  {product.content}
-                </Text>
+                    <Text size={isMobile ? "xs" : "sm"} c="dimmed" lineClamp={2}>
+                      {product.content}
+                    </Text>
+                  </Stack>
 
-                {isMobile && (
-                  <Flex justify="flex-end" mt={12}>
-                    <Flex gap={8}>
-                      <Text fw={600} size="sm">
-                        Start from
+                  <Flex justify="space-between" align="center" mt="sm">
+                    <Badge color={product.status === "available" ? "green" : "pink"}>
+                      {product.status === "available" ? "Tersedia" : "Terjual"}
+                    </Badge>
+
+                    <Text fw={700} size={isMobile ? "xs" : "sm"} c="dimmed">
+                      {product.quantity > 0 ? `Tersedia ${product.quantity} unit` : "Terjual Habis"}
+                    </Text>
+                  </Flex>
+
+                  <Flex justify="flex-end" mt="xs">
+                    <Flex gap={6}>
+                      <Text fw={500} size={isMobile ? "xs" : "sm"} mt={"2.7px"}>
+                        Mulai dari
                       </Text>
-                      <Text fw={800} size="sm" c="green">
-                        {(product.price / 1_000_000).toFixed(0)} Juta
+                      <Text fw={800} size={isMobile ? "sm" : "md"} c="green">
+                        {formatCurrency(product?.start_price)}
                       </Text>
                     </Flex>
                   </Flex>
-                )}
-
-                <Flex justify="space-between" align="center" mt={16}>
-                  <Badge color={product.status === "sale" ? "green" : "pink"}>{product.status === "sale" ? "On Sale" : "Sold"}</Badge>
-                  <Text fw={900} size="sm" c="dimmed">
-                    {product.quantity > 0 ? `Tersedia ${product.quantity} unit` : "Terjual Habis"}
-                  </Text>
-                </Flex>
-              </Card>
-            </Link>
-          </Carousel.Slide>
-        ))}
+                </Card>
+              </Link>
+            </Carousel.Slide>
+          );
+        })}
       </Carousel>
     </SimpleGrid>
   );
