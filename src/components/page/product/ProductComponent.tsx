@@ -39,6 +39,8 @@ const ProductComponent = () => {
     })),
   });
 
+  // console.log("imageq", imageQueries);
+
   const productsWithThumbnails = products.map((product, i) => ({
     ...product,
     thumbnail: imageQueries[i]?.data?.thumbnail ?? "/placeholder.jpg",

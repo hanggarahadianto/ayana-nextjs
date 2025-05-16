@@ -1,7 +1,7 @@
 "use client";
 
 import InternalLayout from "./layout";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 const InternalPage = () => {
   return (

@@ -50,10 +50,10 @@ const UpdateImageField: React.FC<UpdateImageFieldProps> = ({ onFilesChange, onKe
       ...selectedFiles.map((file, idx) => ({ id: `new-${idx}`, src: URL.createObjectURL(file), isExisting: false })),
     ];
 
-    return images.map((img) => (
+    return images.map((img, index) => (
       <div key={img.id} style={{ position: "relative", textAlign: "center" }}>
         <Text size="sm" fw={500} mb="5px">
-          {img.isExisting ? "Thumbnail" : `Gambar baru`}
+          {index === 0 ? "Thumbnail" : `Gambar ${index}`}
         </Text>
         <Card
           style={{

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Modal, Paper, Text, ScrollArea, Flex, Group, Badge, Stack, Grid, Image, TextInput, Divider, Card } from "@mantine/core";
 import LoadingGlobal from "@/styles/loading/loading-global";
 
@@ -69,14 +69,14 @@ const GetProductModal = ({
                   <TextInput label="Tipe" value={productData?.type ?? ""} readOnly />
 
                   <TextInput label="Price" value={`Rp ${productData?.price.toLocaleString()}`} readOnly />
-                  <TextInput label="Quantity" value={productData?.quantity ?? ""} readOnly />
+                  <TextInput label="Start Price" value={`Rp ${productData?.start_price.toLocaleString()}`} readOnly />
+                  <TextInput label="Urutan" value={productData?.sequence ?? ""} readOnly />
                 </Grid.Col>
                 <Grid.Col span={6}>
                   <TextInput label="Bedrooms" value={productData?.bedroom ?? ""} readOnly />
                   <TextInput label="Bathrooms" value={productData?.bathroom ?? ""} readOnly />
                   <TextInput label="Square Meters" value={productData?.square ?? ""} readOnly />
-
-                  <TextInput label="Urutan" value={productData?.sequence ?? ""} readOnly />
+                  <TextInput label="Quantity" value={productData?.quantity ?? ""} readOnly />
                 </Grid.Col>
               </Grid>
 

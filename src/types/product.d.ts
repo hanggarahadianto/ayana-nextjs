@@ -53,8 +53,8 @@ interface IProductUpdate {
   start_price: number;
   cluster_id: string | null;
   near_bies: INearByCreate[];
-  keepImageIds: string[];
-  originalKeepImageIds: string[];
+  keepImageIds?: string[];
+  originalKeepImageIds?: string[];
 }
 
 interface IProductResponse {

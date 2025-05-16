@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { TextInput, Button, Card, Title, Group, Stack, InputWrapper } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { TextInput, Button, Card, Container, Title, Group, Loader, Center, Stack, InputWrapper } from "@mantine/core";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import { Formik, Field, Form } from "formik";
 import { useRouter } from "next/navigation";
@@ -15,33 +15,24 @@ export default function LoginPage() {
 
   const { mutate, isPending: isLoadingLogin } = useLoginMutation();
   const router = useRouter();
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
-  // useEffect(() => {
-  //   const token = Cookies.get("token");
+  useEffect(() => {
+    const token = Cookies.get("token");
 
-  //   if (token) {
-  //     try {
-  //       const decoded: DecodedToken = jwtDecode(token);
-  //       console.log("✅ User memiliki token di cookies:", token);
-  //       console.log("🔍 Token decode:", decoded);
+    if (token) {
+      console.log("🔁 Redirecting to /admin/sidebar/project...");
+      setIsRedirecting(true);
 
-  //       const isExpired = decoded.exp ? Date.now() >= decoded.exp * 1000 : true;
+      setTimeout(() => {
+        router.replace("/admin/sidebar/project");
+      }, 100); // kasih delay agar cookies benar-benar ready
+    }
+  }, [router]);
 
-  //       if (!isExpired) {
-  //         console.log("🔓 Token masih valid, redirect ke internal...");
-  //         router.push("/admin/sidebar/product");
-  //       } else {
-  //         console.log("⛔ Token expired, tetap di halaman login.");
-  //         Cookies.remove("token");
-  //       }
-  //     } catch (err) {
-  //       console.error("❌ Gagal decode token:", err);
-  //       Cookies.remove("token");
-  //     }
-  //   } else {
-  //     console.log("ℹ️ Tidak ada token, user harus login.");
-  //   }
-  // }, [router]);
+  if (isRedirecting) {
+    return <LoadingGlobal visible={true} />;
+  }
 
   const handleSubmit = (values: { username: string; password: string }) => {
     mutate(values, {

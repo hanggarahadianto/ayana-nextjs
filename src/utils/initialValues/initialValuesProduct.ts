@@ -22,9 +22,9 @@ export const initialValueProductCreate: IProductCreate = {
 };
 
 export const getInitialValuesUpdateProduct = (
-  productData?: Partial<IProductUpdate>,
-  keepImageIds?: string[],
-  originalKeepImageIds?: string[]
+  productData?: Partial<IProductUpdate>
+  // keepImageIds?: string[],
+  // originalKeepImageIds?: string[]
 ): IProductUpdate => ({
   id: productData?.id || "",
   title: productData?.title || "",
@@ -41,6 +41,6 @@ export const getInitialValuesUpdateProduct = (
   start_price: productData?.start_price || 0,
   cluster_id: productData?.cluster_id ?? null,
   near_bies: productData?.near_bies || [],
-  keepImageIds: keepImageIds || [], // nilai awal sama seperti original
-  originalKeepImageIds: originalKeepImageIds || [],
+  // keepImageIds: keepImageIds || [], // nilai awal sama seperti original
+  // originalKeepImageIds: originalKeepImageIds || [],
 });

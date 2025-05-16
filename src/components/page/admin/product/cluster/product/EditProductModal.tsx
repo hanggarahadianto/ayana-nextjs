@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleGrid, Divider, Stack, Text } from "@mantine/core";
 import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
@@ -14,11 +14,6 @@ import { getImages } from "@/api/products/getImagesProduct";
 import { useUpdateImageProduct } from "@/api/products/updateImageProduct";
 import UpdateImageField from "./UpdateProductImageForm";
 import LoadingGlobal from "@/styles/loading/loading-global";
-
-interface ExistingImage {
-  id: string;
-  url: string;
-}
 
 const UpdateProductModal = ({
   clusterId,
@@ -35,16 +30,13 @@ const UpdateProductModal = ({
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [keepImageIds, setKeepImageIds] = useState<string[]>([]); // ✅ ini penting
+  const [originalKeepImageIds, setOriginalKeepImageIds] = useState<string[]>([]);
 
-  // console.log("keepImageId di parent", keepImageIds);
+  console.log("keepImageId di parent", keepImageIds);
   // console.log("selected file", selectedFiles);
 
   const handleFilesChange = (files: File[]) => {
     setSelectedFiles(files);
-  };
-
-  const handleKeepIdsChange = (ids: string[]) => {
-    setKeepImageIds(ids);
   };
 
   const { mutate: updateDataProduct, isPending: isLoadingUpdateProductData } = useEditProductForm(refetchProductDataByCluster, onClose);
@@ -64,7 +56,6 @@ const UpdateProductModal = ({
 
   // console.log("data image", dataImages);
 
-  const [originalKeepImageIds, setOriginalKeepImageIds] = useState<string[]>([]);
   // console.log("ORIGINAL KEEP", originalKeepImageIds);
 
   useEffect(() => {
@@ -82,10 +73,22 @@ const UpdateProductModal = ({
     return sorted1.every((val, idx) => val === sorted2[idx]);
   };
 
+  const keepImageIdsRef = useRef<string[]>([]);
+  const handleKeepIdsChange = (ids: string[]) => {
+    setKeepImageIds(ids);
+    keepImageIdsRef.current = ids;
+  };
+
   const handleSubmit = useCallback(
     async (values: IProductUpdate, { resetForm }: FormikHelpers<IProductUpdate>) => {
-      // console.log("values,", values);
-      const payload = { ...values, cluster_id: clusterId ?? null };
+      const payload = {
+        ...values,
+        cluster_id: clusterId ?? null,
+        keepImageIds: keepImageIds, // dari React state
+        originalKeepImageIds: originalKeepImageIds, // dari React state
+      };
+
+      console.log("KEEP IMAGE DI ON SUBMIT", payload.keepImageIds);
       const productId = productData?.id;
 
       if (!productId) {
@@ -96,32 +99,20 @@ const UpdateProductModal = ({
       const isDataEdited = JSON.stringify(values) !== JSON.stringify(productData);
 
       try {
-        // console.log("payload", payload);
-
         if (isDataEdited) {
           updateDataProduct(payload);
         }
 
-        const isImageEdited = !arraysAreEqualIgnoreOrder(values.keepImageIds, values.originalKeepImageIds);
-        const isNewFilesAdded = selectedFiles.length > 0;
-        const isAllImagesRemoved = values.keepImageIds.length === 0;
-        // console.log("is all images removes", isAllImagesRemoved);
+        const isImageEdited = !arraysAreEqualIgnoreOrder(payload.keepImageIds, payload.originalKeepImageIds);
+        console.log("IS EDITED", isImageEdited);
 
+        const isNewFilesAdded = selectedFiles.length > 0;
+        const isAllImagesRemoved = payload.keepImageIds.length === 0;
         if (isImageEdited || isNewFilesAdded || isAllImagesRemoved) {
           const formData = new FormData();
 
-          // console.log("keepImagesId", values.keepImageIds);
-          // console.log("values keep image", values.keepImageIds);
-
-          console.log("values keep image ids", values.keepImageIds);
-
-          values.keepImageIds.forEach((id) => formData.append("keepImageIds", id));
+          payload.keepImageIds.forEach((id) => formData.append("keepImageIds", id));
           selectedFiles.forEach((file) => formData.append("images", file));
-
-          console.log("🔍 Payload FormData:");
-          for (let pair of formData.entries()) {
-            console.log(`${pair[0]}:`, pair[1]);
-          }
 
           console.log("📤 fetching update gambar...");
           await updateImageProduct({ productId, formData });
@@ -153,7 +144,8 @@ const UpdateProductModal = ({
       <Modal opened={opened} onClose={onClose} size="100%" yOffset="100px">
         <Formik
           enableReinitialize
-          initialValues={getInitialValuesUpdateProduct(productData, keepImageIds, originalKeepImageIds)}
+          initialValues={getInitialValuesUpdateProduct(productData)}
+          // initialValues={getInitialValuesUpdateProduct(productData, keepImageIds, originalKeepImageIds)}
           validationSchema={validationSchemaProduct}
           onSubmit={handleSubmit}
         >
