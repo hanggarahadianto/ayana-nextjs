@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { TextInput, Button, Card, Container, Title, Group, Loader, Center, Stack, InputWrapper } from "@mantine/core";
+import { useState } from "react";
+import { TextInput, Button, Card, Title, Group, Stack, InputWrapper } from "@mantine/core";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import { Formik, Field, Form } from "formik";
 import { useRouter } from "next/navigation";
@@ -9,12 +9,6 @@ import Cookies from "js-cookie";
 import { initialValuesUser, validationSchemaUser } from "./initialValuesUser";
 import { useLoginMutation } from "@/api/auth/login";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { jwtDecode } from "jwt-decode";
-
-interface DecodedToken {
-  exp?: number;
-  [key: string]: any;
-}
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);

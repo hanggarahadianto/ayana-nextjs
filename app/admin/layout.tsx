@@ -7,14 +7,13 @@ import { useDisclosure } from "@mantine/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
 export default function InternalLayout({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
-  const [isMounted, setIsMounted] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const router = useRouter();
@@ -22,16 +21,6 @@ export default function InternalLayout({ children }: { children: React.ReactNode
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
   const isDark = colorScheme === "dark";
-
-  // useEffect(() => {
-  //   setIsMounted(true);
-  //   const token = Cookies.get("token");
-  //   if (!token) {
-  //     router.push("/home");
-  //   }
-  // }, []);
-
-  // if (!isMounted) return null;
 
   interface DecodedToken {
     exp?: number;

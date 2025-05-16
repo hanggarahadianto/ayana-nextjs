@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleGrid, Divider, Stack, Text } from "@mantine/core";
 import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
@@ -18,11 +18,6 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 interface ExistingImage {
   id: string;
   url: string;
-}
-
-interface ImageResponse {
-  images: ExistingImage[];
-  thumbnail: string;
 }
 
 const UpdateProductModal = ({
@@ -283,11 +278,6 @@ const UpdateProductModal = ({
                   <Divider p={12} mt={16} />
 
                   <NearByForm setFieldValue={setFieldValue} values={values} />
-                  {/* <UpdateImageField
-                    onFilesChange={(files) => setSelectedFiles(files)}
-                    onKeepIdsChange={(ids) => setKeepImageIds(ids)} // ✅ pastikan anak mengirim ID
-                    existingImages={dataImages?.images}
-                  /> */}
 
                   <UpdateImageField
                     existingImages={dataImages?.images}
