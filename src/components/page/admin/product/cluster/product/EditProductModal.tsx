@@ -8,7 +8,7 @@ import { validationSchemaProduct } from "@/utils/validation/product-validation";
 import { getInitialValuesUpdateProduct } from "@/utils/initialValues/initialValuesProduct";
 import { availabilityOptions, typeOptions } from "@/constants/dictionary";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
-import NearByForm from "./NearByForm";
+import NearByForm from "../NearByForm";
 import { useQuery } from "@tanstack/react-query";
 import { getImages } from "@/api/products/getImagesProduct";
 import { useUpdateImageProduct } from "@/api/products/updateImageProduct";
@@ -268,8 +268,6 @@ const UpdateProductModal = ({
                   </Group>
 
                   <Divider p={12} mt={16} />
-
-                  <NearByForm setFieldValue={setFieldValue} values={values} />
 
                   <UpdateImageField
                     existingImages={dataImages?.images}

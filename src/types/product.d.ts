@@ -34,7 +34,6 @@ interface IProductCreate {
   quantity: number;
   start_price: number;
   cluster_id: string | null;
-  near_bies: INearByCreate[];
 }
 
 interface IProductUpdate {
@@ -52,7 +51,6 @@ interface IProductUpdate {
   quantity: number;
   start_price: number;
   cluster_id: string | null;
-  near_bies: INearByCreate[];
   keepImageIds?: string[];
   originalKeepImageIds?: string[];
 }

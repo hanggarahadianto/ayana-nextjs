@@ -25,14 +25,14 @@ export default function LoginPage() {
       setIsRedirecting(true);
 
       setTimeout(() => {
-        router.replace("/admin/sidebar/project");
+        router.replace("/admin/sidebar/product");
       }, 100); // kasih delay agar cookies benar-benar ready
     }
   }, [router]);
 
-  if (isRedirecting) {
-    return <LoadingGlobal visible={true} />;
-  }
+  // if (isRedirecting) {
+  //   return <LoadingGlobal visible={true} />;
+  // }
 
   const handleSubmit = (values: { username: string; password: string }) => {
     mutate(values, {
@@ -67,6 +67,8 @@ export default function LoginPage() {
         marginBottom: "-16px",
       }}
     >
+      <LoadingGlobal visible={isLoadingLogin || isRedirecting} />
+
       <Card
         shadow="xl"
         radius="md"
@@ -82,7 +84,6 @@ export default function LoginPage() {
         <Title order={2} style={{ fontWeight: 700, textAlign: "center" }}>
           Welcome Back
         </Title>
-        <LoadingGlobal visible={isLoadingLogin} />
 
         <Formik initialValues={initialValuesUser} onSubmit={handleSubmit} validationSchema={validationSchemaUser}>
           {({ values, handleChange, errors, touched }) => (

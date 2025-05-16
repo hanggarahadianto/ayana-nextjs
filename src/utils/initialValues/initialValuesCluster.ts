@@ -7,6 +7,11 @@ export const initialValuesClusterCreate: IClusterCreate = {
   status: "", // default status
   sequence: 0,
   maps: "",
-
+  near_bies: [
+    {
+      name: "",
+      distance: "",
+    },
+  ],
   homes: null, // atau [] jika kamu pakai array
 };

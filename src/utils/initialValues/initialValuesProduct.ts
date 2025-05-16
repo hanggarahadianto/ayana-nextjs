@@ -10,22 +10,11 @@ export const initialValueProductCreate: IProductCreate = {
   price: 0,
   sequence: 0,
   quantity: 0,
-
   start_price: 0,
-  near_bies: [
-    {
-      name: "",
-      distance: "",
-    },
-  ],
   cluster_id: "",
 };
 
-export const getInitialValuesUpdateProduct = (
-  productData?: Partial<IProductUpdate>
-  // keepImageIds?: string[],
-  // originalKeepImageIds?: string[]
-): IProductUpdate => ({
+export const getInitialValuesUpdateProduct = (productData?: Partial<IProductUpdate>): IProductUpdate => ({
   id: productData?.id || "",
   title: productData?.title || "",
   type: productData?.type || "",
@@ -40,7 +29,4 @@ export const getInitialValuesUpdateProduct = (
   quantity: productData?.quantity || 0,
   start_price: productData?.start_price || 0,
   cluster_id: productData?.cluster_id ?? null,
-  near_bies: productData?.near_bies || [],
-  // keepImageIds: keepImageIds || [], // nilai awal sama seperti original
-  // originalKeepImageIds: originalKeepImageIds || [],
 });

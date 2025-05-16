@@ -12,7 +12,6 @@ import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import UploadImageField from "./UploadProductImageForm";
 import { useUploadImages } from "@/api/products/uploadImageProduct";
-import NearByForm from "./NearByForm";
 
 const handleChangeProduct = (field: keyof IProductCreate, value: any, setFieldValue: (field: string, value: any) => void) => {
   setFieldValue(field, value);
@@ -203,7 +202,7 @@ const AddProductModal = ({ clusterId }: Props) => {
                         error={touched.status && errors.status ? errors.status : undefined}
                         label="Status"
                         data={availabilityOptions}
-                        placeholder="Pilih status"
+                        placeholder="Pilih Status"
                         clearable
                         onChange={(val) => handleChangeProduct("status", val || "", setFieldValue)}
                       />
@@ -217,8 +216,6 @@ const AddProductModal = ({ clusterId }: Props) => {
                     </Group>
 
                     <Divider p={12} mt={16} />
-
-                    <NearByForm setFieldValue={setFieldValue} values={values} />
 
                     <Group grow>
                       <UploadImageField onFilesChange={handleFilesChange} />

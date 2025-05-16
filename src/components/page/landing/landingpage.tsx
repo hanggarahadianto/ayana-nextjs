@@ -1,12 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { AspectRatio, Card, Container, Flex, Grid, Group, SimpleGrid, Stack, Text, useMantineTheme } from "@mantine/core";
+import { AspectRatio, Card, Container, Flex, Grid, Group, Stack, Text } from "@mantine/core";
 import Image from "next/image";
 import FloatingWhatsApp from "../product/FloatingWhatsapp";
 import { useMediaQuery } from "@mantine/hooks";
 import Testimony from "./testimony";
 import Footer from "./footer";
 import ProductComponent from "../product/ProductComponent";
+import { cards } from "@/constants/product-content";
 
 const LandingPage = () => {
   const isMobile = useMediaQuery("(max-width: 767px)");
@@ -18,37 +19,15 @@ const LandingPage = () => {
 
   if (!isClient) return null;
 
-  const cards = [
-    {
-      image: "/images/home-card.jpg",
-      alt: "STYLISH AFFORDABLE HOUSING",
-      title: "STYLISH AFFORDABLE HOUSING",
-      description: "Ayana presents affordable housing for you, fellow first homeowner",
-    },
-    {
-      image: "/images/school.jpg",
-      alt: "INTEGRATED ECOSYSTEM",
-      title: "INTEGRATED ECOSYSTEM",
-      description: "Enjoy the integrated ecosystem for a more effective and efficient life",
-    },
-    {
-      image: "/images/happy.jpg",
-      alt: "PLACE TO LIVE AND GROW",
-      title: "PLACE TO LIVE AND GROW",
-      description: "Plan your life for decades ahead with Cendana",
-    },
-  ];
-
   return (
     <>
       <Container fluid p={isMobile ? "sm" : "xl"} bg="#25492c" pos="relative" h={isMobile ? "auto" : "full"}>
         <FloatingWhatsApp />
-        {/* Hero Image */}
+
         <AspectRatio ratio={1} maw={1800} mx="auto">
           <Image src="/images/new-in.jpg" height={isMobile ? 300 : 500} width={isMobile ? 600 : 900} alt="Hero Image" />
         </AspectRatio>
 
-        {/* Section: Text dan Image */}
         <Grid>
           <Grid.Col span={isMobile ? 11 : 3} mr={100}>
             <Stack p={isMobile ? 20 : 40} align={isMobile ? "center" : "flex-start"}>

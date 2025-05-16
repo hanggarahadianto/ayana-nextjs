@@ -5,7 +5,6 @@ import { useMediaQuery } from "@mantine/hooks";
 import Image from "next/image";
 import { FaInstagram, FaYoutube, FaTiktok, FaLocationArrow, FaEnvelope, FaWhatsapp } from "react-icons/fa";
 import Link from "next/link";
-import Testimony from "./testimony";
 
 const message = encodeURIComponent(
   "Halo! Saya menghubungi Anda melalui website dan tertarik dengan rumah yang ditawarkan. Bisa berikan informasi lebih lanjut? Jika ada katalog atau daftar harga, saya ingin melihatnya. Apakah ada promo saat ini? Saya tunggu responnya. Terima kasih! 😊"
@@ -19,7 +18,7 @@ const Footer = () => {
       <SimpleGrid p="xl" bg={"#363a3d"}>
         <Grid gutter={isMobile ? "md" : "xl"} ml={40}>
           {/* Logo & Address Section */}
-          <Grid.Col span={isMobile ? 12 : 4}>
+          <Grid.Col span={isMobile ? 12 : 5}>
             <Stack align={isMobile ? "center" : "flex-start"} gap="md">
               <Image src="/images/ayana.png" height={200} width={200} alt="Ayana Logo" style={{ borderRadius: "15px" }} />
               <Group>
@@ -38,7 +37,7 @@ const Footer = () => {
           </Grid.Col>
 
           {/* Sitemap Section */}
-          <Grid.Col span={isMobile ? 12 : 4}>
+          <Grid.Col span={isMobile ? 12 : 3}>
             <Stack align={isMobile ? "center" : "flex-start"} gap="md">
               <Text fw={700} size={isMobile ? "lg" : "xl"} c="white">
                 Sitemap

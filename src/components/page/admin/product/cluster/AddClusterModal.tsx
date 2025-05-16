@@ -11,6 +11,7 @@ import { availabilityOptions, typeOptions } from "@/constants/dictionary";
 import { initialValuesClusterCreate } from "@/utils/initialValues/initialValuesCluster";
 import { validationSchemaClusterCreate } from "@/utils/validation/cluster-validation";
 import { useSubmitClusterForm } from "@/api/cluster/postCluster";
+import NearByForm from "./NearByForm";
 
 const handleChangeCluster = (field: keyof IClusterCreate, value: any, setFieldValue: (field: string, value: any) => void) => {
   setFieldValue(field, value);
@@ -139,6 +140,7 @@ const AddClusterModal: React.FC<{}> = () => {
                     />
 
                     <Divider p={12} mt={16} />
+                    <NearByForm setFieldValue={setFieldValue} values={values} />
 
                     <Group justify="flex-end" mt="md">
                       <Button onClick={close} variant="default">

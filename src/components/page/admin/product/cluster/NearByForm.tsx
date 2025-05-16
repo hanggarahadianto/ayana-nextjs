@@ -21,7 +21,7 @@ const NearByForm: React.FC<Props> = ({ setFieldValue, values }) => {
             <ButtonAdd onClick={() => push({ name: "", distance: "" })} size="3.5rem" />
           </Group>
 
-          {values.near_bies.map((item, index) => (
+          {values.near_bies?.map((item, index) => (
             <Group grow key={index}>
               <TextInput
                 label="Nama Tempat"

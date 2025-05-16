@@ -1,22 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Button, Group, Text, Card, Image, ActionIcon } from "@mantine/core";
+import React, { useState } from "react";
+import { Group, Text, Card, Image, ActionIcon } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 
 interface UpdateImageFieldProps {
   onFilesChange: (files: File[]) => void;
-  existingImages?: string[]; // URL
-  onDeleteExistingImage?: (url: string) => void; // callback ke parent
 }
 
-const UpdateImageField: React.FC<UpdateImageFieldProps> = ({ onFilesChange, existingImages = [], onDeleteExistingImage }) => {
+const UpdateImageField: React.FC<UpdateImageFieldProps> = ({ onFilesChange }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
-
-  useEffect(() => {
-    setExistingImageUrls(existingImages);
-  }, [existingImages]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -28,26 +21,11 @@ const UpdateImageField: React.FC<UpdateImageFieldProps> = ({ onFilesChange, exis
     }
   };
 
-  const handleDeleteImage = (index: number, isExisting: boolean) => {
-    if (isExisting) {
-      const deletedUrl = existingImageUrls[index];
-      const updated = existingImageUrls.filter((_, i) => i !== index);
-      setExistingImageUrls(updated);
-      onDeleteExistingImage?.(deletedUrl);
-    } else {
-      const updated = selectedFiles.filter((_, i) => i !== index - existingImageUrls.length);
-      setSelectedFiles(updated);
-      onFilesChange(updated);
-    }
+  const handleDeleteImage = (index: number) => {
+    const updatedFiles = selectedFiles.filter((_, i) => i !== index);
+    setSelectedFiles(updatedFiles);
+    onFilesChange(updatedFiles);
   };
-
-  const combinedImages = [
-    ...existingImageUrls.map((url) => ({ src: url, isExisting: true })),
-    ...selectedFiles.map((file) => ({
-      src: URL.createObjectURL(file),
-      isExisting: false,
-    })),
-  ];
 
   return (
     <div>
@@ -59,11 +37,11 @@ const UpdateImageField: React.FC<UpdateImageFieldProps> = ({ onFilesChange, exis
       <SimpleGridGlobal cols={1} mt="40px" h="auto">
         <input type="file" accept="image/*" multiple id="fileInput" style={{ display: "none" }} onChange={handleFileChange} />
 
-        {combinedImages.length > 0 && (
+        {selectedFiles.length > 0 && (
           <div style={{ marginTop: "1rem" }}>
             <h4>Preview Gambar:</h4>
             <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-              {combinedImages.map((img, index) => (
+              {selectedFiles.map((file, index) => (
                 <div key={index} style={{ position: "relative", textAlign: "center" }}>
                   <Text size="sm" fw={500} mb="5px">
                     {index === 0 ? "Thumbnail" : `Gambar ke-${index + 1}`}
@@ -80,7 +58,7 @@ const UpdateImageField: React.FC<UpdateImageFieldProps> = ({ onFilesChange, exis
                     radius="md"
                   >
                     <Image
-                      src={img.src}
+                      src={URL.createObjectURL(file)}
                       alt={`image-${index}`}
                       style={{
                         width: "100%",
@@ -99,7 +77,7 @@ const UpdateImageField: React.FC<UpdateImageFieldProps> = ({ onFilesChange, exis
                         right: 5,
                         zIndex: 2,
                       }}
-                      onClick={() => handleDeleteImage(index, img.isExisting)}
+                      onClick={() => handleDeleteImage(index)}
                     >
                       <IconX size="1rem" />
                     </ActionIcon>
