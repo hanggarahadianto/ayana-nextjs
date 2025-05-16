@@ -20,7 +20,7 @@ export const getDataProduct = async ({ status, page = 1, limit = 10 }: GetDataPr
     const url = `/home/get?${queryParams.toString()}`;
     const response = await APIAxiosInstanceWithoutCredential.get(url);
 
-    console.log("Response:", response.data);
+    // console.log("Response:", response.data);
     return response.data as IProductResponse;
   } catch (error: any) {
     console.error("Error fetching homes:", error.message || error);

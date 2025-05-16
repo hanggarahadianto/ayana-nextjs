@@ -104,7 +104,7 @@ const ProductComponent = () => {
         }}
       >
         {productsWithThumbnails.map((product) => {
-          console.log("PRODUL", product);
+          // console.log("PRODUL", product);
           return (
             <Carousel.Slide key={product.id} mt={isMobile ? "40px" : "120px"}>
               <Link

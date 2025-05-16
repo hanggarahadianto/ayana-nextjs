@@ -10,6 +10,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 export default function InternalLayout({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
@@ -22,15 +23,33 @@ export default function InternalLayout({ children }: { children: React.ReactNode
   const { colorScheme } = useMantineColorScheme();
   const isDark = colorScheme === "dark";
 
-  useEffect(() => {
-    setIsMounted(true);
-    const token = Cookies.get("token");
-    if (!token) {
+  // useEffect(() => {
+  //   setIsMounted(true);
+  //   const token = Cookies.get("token");
+  //   if (!token) {
+  //     router.push("/home");
+  //   }
+  // }, []);
+
+  // if (!isMounted) return null;
+
+  interface DecodedToken {
+    exp?: number;
+    [key: string]: any;
+  }
+
+  const token = Cookies.get("token");
+
+  if (token) {
+    const decoded: DecodedToken = jwtDecode(token);
+
+    const isExpired = decoded.exp ? Date.now() >= decoded.exp * 1000 : true;
+
+    if (isExpired) {
+      Cookies.remove("token");
       router.push("/home");
     }
-  }, []);
-
-  if (!isMounted) return null;
+  }
 
   return (
     <AppShell

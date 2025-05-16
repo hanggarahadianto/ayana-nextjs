@@ -37,6 +37,8 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
     enabled: !!productDataDetail?.id,
   });
 
+  // console.log("isloading image", isLoadingProductDetailImage);
+
   useEffect(() => {
     if (productDataDetail?.maps && productDataDetail.maps !== lastMapUrl) {
       setLastMapUrl(productDataDetail.maps);
