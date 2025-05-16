@@ -32,7 +32,7 @@ const UpdateProductModal = ({
   const [keepImageIds, setKeepImageIds] = useState<string[]>([]); // ✅ ini penting
   const [originalKeepImageIds, setOriginalKeepImageIds] = useState<string[]>([]);
 
-  console.log("keepImageId di parent", keepImageIds);
+  // console.log("keepImageId di parent", keepImageIds);
   // console.log("selected file", selectedFiles);
 
   const handleFilesChange = (files: File[]) => {
@@ -88,7 +88,7 @@ const UpdateProductModal = ({
         originalKeepImageIds: originalKeepImageIds, // dari React state
       };
 
-      console.log("KEEP IMAGE DI ON SUBMIT", payload.keepImageIds);
+      // console.log("KEEP IMAGE DI ON SUBMIT", payload.keepImageIds);
       const productId = productData?.id;
 
       if (!productId) {
