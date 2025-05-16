@@ -1,7 +1,6 @@
 "use client";
 
-import { Tabs, Paper, Card, Text, Group, Flex, Grid } from "@mantine/core";
-import { useState } from "react";
+import { Paper, Card, Text, Group, Flex, Grid } from "@mantine/core";
 
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import { ExpenseStats } from "../../../common/stats/ExpenseStats";
@@ -39,7 +38,7 @@ export const DashboardComponent = () => {
               <AvailableCashStats companyId={activeTab?.id} />
             </Paper>
 
-            <Flex>
+            <Flex gap={"12px"}>
               <Paper shadow="sm" radius="md" p="md" withBorder w="100%">
                 <CashinStats companyId={activeTab?.id} />
               </Paper>
