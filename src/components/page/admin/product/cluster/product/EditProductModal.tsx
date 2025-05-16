@@ -135,7 +135,7 @@ const UpdateProductModal = ({
         });
       }
     },
-    [productData, selectedFiles, clusterId, dataImages]
+    [productData, selectedFiles, clusterId, dataImages, keepImageIds, originalKeepImageIds]
   );
 
   return (
