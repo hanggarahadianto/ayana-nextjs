@@ -39,7 +39,7 @@ const UpdateProductModal = ({
     setSelectedFiles(files);
   };
 
-  const { mutate: updateDataProduct, isPending: isLoadingUpdateProductData } = useEditProductForm(refetchProductDataByCluster, onClose);
+  const { mutate: updateDataProduct, isPending: isLoadingUpdateProductData } = useEditProductForm();
   const { mutateAsync: updateImageProduct, isPending: isUploadingImage } = useUpdateImageProduct(clusterId!);
 
   const formatCurrencyInput = (val: number | undefined) => (val ? `Rp. ${val.toLocaleString("id-ID")}` : "");

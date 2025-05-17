@@ -8,7 +8,8 @@ export const validationSchemaClusterCreate = Yup.object().shape({
   quantity: Yup.number().required("Jumlah unit wajib diisi").min(1, "Jumlah unit harus lebih dari 0"),
   status: Yup.string().oneOf(["available", "sold", "booked"], "Status tidak valid").required("Status wajib dipilih"),
   sequence: Yup.number().required("Urutan wajib diisi").min(1, "Urutan minimal 1"),
-  maps: Yup.string().url("Format URL tidak valid").required("URL Maps wajib diisi"),
+  maps: Yup.string().required("URL Maps wajib diisi"),
+
   near_bies: Yup.array()
     .of(
       Yup.object().shape({

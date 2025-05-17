@@ -16,12 +16,10 @@ const handleEditProductForm = async (values: IProductCreate & { id: string }) =>
 };
 
 // Custom hook for editing product form
-export const useEditProductForm = (refetchProductData: () => void, closeModal: () => void) => {
+export const useEditProductForm = () => {
   return useMutation({
     mutationFn: (values: IProductCreate & { id: string }) => handleEditProductForm(values),
     onSuccess: (data: any) => {
-      refetchProductData();
-      closeModal();
       showNotification({
         title: "Data Berhasil Dikirim",
         message: "Produk berhasil diperbarui",

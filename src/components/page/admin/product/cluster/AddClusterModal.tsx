@@ -4,7 +4,6 @@ import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleG
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
-
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { availabilityOptions, typeOptions } from "@/constants/dictionary";
@@ -56,8 +55,8 @@ const AddClusterModal: React.FC<{}> = () => {
       <Modal opened={opened} onClose={close} size={"70%"} yOffset="100px">
         <Formik initialValues={initialValuesClusterCreate} validationSchema={validationSchemaClusterCreate} onSubmit={handleSubmit}>
           {({ values, errors, touched, setFieldValue }) => {
-            console.log("values", values);
-            console.log("error", errors);
+            // console.log("values", values);
+            // console.log("error", errors);
             return (
               <SimpleGrid>
                 <Form>
@@ -117,7 +116,7 @@ const AddClusterModal: React.FC<{}> = () => {
                         error={touched.status && errors.status ? errors.status : undefined}
                         label="Status"
                         data={availabilityOptions}
-                        placeholder="Pilih status"
+                        placeholder="Pilih Status"
                         clearable
                         onChange={(val) => handleChangeCluster("status", val || "", setFieldValue)}
                         required

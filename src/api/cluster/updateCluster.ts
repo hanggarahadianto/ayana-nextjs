@@ -31,6 +31,10 @@ export const useUpdateClusterData = (closeModal: () => void) => {
           queryKey: ["getAllClusters"],
           exact: false,
         });
+        await queryClient.refetchQueries({
+          queryKey: ["getClusterData"],
+          exact: false,
+        });
       }
       showNotification({
         title: "Data Berhasil Dikirim",

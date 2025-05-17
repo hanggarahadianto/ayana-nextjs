@@ -19,6 +19,10 @@ export const useSubmitClusterForm = (closeModal: () => void) => {
             queryKey: ["getClusterData"],
             exact: false,
           }),
+          queryClient.refetchQueries({
+            queryKey: ["getAllClusters"],
+            exact: false,
+          }),
         ]);
       }
       closeModal();

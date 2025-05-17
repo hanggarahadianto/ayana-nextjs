@@ -2,7 +2,7 @@
 
 import { Card, Text, Stack, Flex, Group } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
@@ -61,9 +61,17 @@ const ClusterAdminCard = ({ setSelectedClusterId, setSelectedClusterName, select
   });
 
   const { mutate: mutateDeleteDataCluster, isPending: isLoadingDeleteProduct } = useDeleteDataCluster(refetchClusterData);
+  // const { mutate: mutateDeleteDataCluster, isPending: isLoadingDeleteProduct } = useDeleteDataCluster();
 
   const handleDeleteCluster = (idToDelete: string) => {
-    mutateDeleteDataCluster(idToDelete);
+    mutateDeleteDataCluster(idToDelete, {
+      onSuccess: () => {
+        refetchAllClusters();
+        setSelectedClusterId(null);
+        setSelectedClusterName?.("");
+        setDefaultClusterId(null);
+      },
+    });
   };
 
   useEffect(() => {

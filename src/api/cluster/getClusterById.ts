@@ -7,7 +7,7 @@ export const getDataClusterById = async (id: string) => {
 
     return response?.data?.data as ICluster;
   } catch (error: any) {
-    console.error("Error fetching cluster by ID:", error.message || error);
+    console.log("Error fetching cluster by ID:", error.message || error);
     throw error;
   }
 };
