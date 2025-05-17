@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, Text, Stack, Flex, Group } from "@mantine/core";
+import { Card, Text, Stack, Flex, Group, Badge } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
@@ -85,6 +85,19 @@ const ClusterAdminCard = ({ setSelectedClusterId, setSelectedClusterName, select
 
   const selectedCluster: ClusterOption | null = clusterList.find((c) => c.id === (selectedClusterId || defaultClusterId)) ?? null;
 
+  const getBadgeColor = (status: string | undefined) => {
+    switch (status) {
+      case "available":
+        return { bg: "green" };
+      case "booking":
+        return { bg: "yellow" };
+      case "sold":
+        return { bg: "red" };
+      default:
+        return { bg: "gray" };
+    }
+  };
+
   return (
     <>
       <SimpleGridGlobal cols={1}>
@@ -132,16 +145,39 @@ const ClusterAdminCard = ({ setSelectedClusterId, setSelectedClusterName, select
 
         <LoadingGlobal visible={isLoadingClusterData || isLoadingDeleteProduct} />
 
-        {clusterData && (
-          <Card p="sm" radius="sm" shadow="xs" withBorder mt={"40px"}>
-            <Text fw={600} size="lg">
-              {clusterData.name}
-            </Text>
-            <Text size="sm" c="dimmed">
-              Lokasi: {clusterData.location}
-            </Text>
-          </Card>
-        )}
+        {clusterData &&
+          (() => {
+            const { bg } = getBadgeColor(clusterData?.status);
+
+            return (
+              <Card p="sm" radius="sm" shadow="xs" withBorder mt="40px">
+                <Stack gap={"20px"}>
+                  <Group justify="space-between">
+                    <Text fw={600} size="lg">
+                      {clusterData.name}
+                    </Text>
+                    <Badge p="16x" bg={bg}>
+                      <Text size="xs" fw={500}>
+                        {clusterData?.status}
+                      </Text>
+                    </Badge>
+                  </Group>
+                  <Text size="sm" c="dimmed">
+                    Lokasi: {clusterData.location}
+                  </Text>
+                  <Text size="sm" c="dimmed">
+                    Luas Lahan: {clusterData.square}
+                  </Text>
+                  <Text size="sm" c="dimmed">
+                    Unit Tersedia: {clusterData.quantity}
+                  </Text>
+                  <Text size="sm" c="dimmed">
+                    Urutan: {clusterData.sequence}
+                  </Text>
+                </Stack>
+              </Card>
+            );
+          })()}
       </SimpleGridGlobal>
       {selectedClusterData && (
         <EditClusterModal opened={editModalOpen} onClose={() => setEditModalOpen(false)} initialData={selectedClusterData} />
