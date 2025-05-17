@@ -110,8 +110,9 @@ const GetProductModal = ({
 
                     <Card shadow="sm" padding="sm" radius="md" withBorder>
                       <Card.Section>
-                        <Image src={img.url} alt={`Image ${idx}`} height={150} fit="cover" radius="md" />
+                        <Image src={img.url || null} alt={`Image ${idx}`} height={150} fit="cover" radius="md" />
                       </Card.Section>
+
                       <Text size="sm" mt="xs" ta="center" c="dimmed">
                         Gambar {idx + 1}
                       </Text>

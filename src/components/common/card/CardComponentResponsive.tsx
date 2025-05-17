@@ -6,12 +6,13 @@ import useScreenSize from "@/lib/hook/useScreenSize";
 import { ReactNode } from "react";
 interface CardComponentUIProps {
   title: string;
+  subTitle: string;
   status?: string;
   badgeColor?: string;
   children?: ReactNode;
 }
 
-const CardComponentResponsive = ({ title, status, badgeColor, children }: CardComponentUIProps) => {
+const CardComponentResponsive = ({ title, subTitle, status, badgeColor, children }: CardComponentUIProps) => {
   const { screenType } = useScreenSize();
   const fontSize = screenType === "small" ? "lg" : "xl";
   const cardPadding = screenType === "small" ? "16px" : "20px";
@@ -40,6 +41,9 @@ const CardComponentResponsive = ({ title, status, badgeColor, children }: CardCo
       <Stack w="100%" mih={120} style={{ flexGrow: 1 }}>
         <Text fw={900} size={fontSize} style={{ color: "#ffffff" }}>
           {title}
+        </Text>
+        <Text fw={400} size={fontSize} style={{ color: "#ffffff" }}>
+          {subTitle}
         </Text>
 
         {status && (

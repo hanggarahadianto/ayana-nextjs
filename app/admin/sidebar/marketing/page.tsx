@@ -1,3 +1,9 @@
+import MarketingComponent from "@/components/page/admin/marketing/MarketingComponent";
+
 export default function MarketingPage() {
-  return <div>{/* <PayoutComponent /> */}</div>;
+  return (
+    <div>
+      <MarketingComponent />
+    </div>
+  );
 }

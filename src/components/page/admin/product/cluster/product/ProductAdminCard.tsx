@@ -90,7 +90,12 @@ const ProductAdminCard = ({ clusterId }: Props) => {
             };
             return (
               <SimpleGrid key={product.id}>
-                <CardComponentResponsive title={product.title} status={product.status} badgeColor={getBadgeBg(product.status)}>
+                <CardComponentResponsive
+                  title={product.title}
+                  subTitle={product.type}
+                  status={product.status}
+                  badgeColor={getBadgeBg(product.status)}
+                >
                   <Group justify="flex-end" wrap="nowrap">
                     <BreathingActionIcon
                       onClick={() => handleClickProductAction(product.id, "view")}
