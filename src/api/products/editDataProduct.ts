@@ -20,6 +20,8 @@ export const useEditProductForm = (refetchProductData: () => void, closeModal: (
   return useMutation({
     mutationFn: (values: IProductCreate & { id: string }) => handleEditProductForm(values),
     onSuccess: (data: any) => {
+      refetchProductData();
+      closeModal();
       showNotification({
         title: "Data Berhasil Dikirim",
         message: "Produk berhasil diperbarui",

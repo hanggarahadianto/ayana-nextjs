@@ -19,27 +19,6 @@ export const useSubmitClusterForm = (closeModal: () => void) => {
             queryKey: ["getClusterData"],
             exact: false,
           }),
-          // queryClient.refetchQueries({
-          //   queryKey: ["getCashOutData", companyId],
-
-          //   exact: false,
-          // }),
-          // queryClient.refetchQueries({
-          //   queryKey: ["getExpenseSummaryData", companyId],
-          //   exact: false,
-          // }),
-          // queryClient.refetchQueries({
-          //   queryKey: ["getOutstandingDebtByCompanyId", companyId],
-          //   exact: false,
-          // }),
-          // queryClient.refetchQueries({
-          //   queryKey: ["getFixedAssetData", companyId],
-          //   exact: false,
-          // }),
-          // queryClient.refetchQueries({
-          //   queryKey: ["getReceivableAssetData", companyId],
-          //   exact: false,
-          // }),
         ]);
       }
       closeModal();

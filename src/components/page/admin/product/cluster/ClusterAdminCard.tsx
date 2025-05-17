@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, Text, Stack, Flex } from "@mantine/core";
+import { Card, Text, Stack, Flex, Group } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
@@ -12,6 +12,9 @@ import AddClusterModal from "./AddClusterModal";
 import { useDeleteDataCluster } from "@/api/cluster/deleteCluster";
 import { getDataCluster } from "@/api/cluster/getCluster";
 import Cookies from "js-cookie";
+import EditClusterModal from "./UpdateClusterModal";
+import BreathingActionIcon from "@/components/common/button/buttonAction";
+import { IconPencil } from "@tabler/icons-react";
 
 interface ClusterOption {
   id: string;
@@ -27,6 +30,11 @@ interface Props {
 
 const ClusterAdminCard = ({ setSelectedClusterId, setSelectedClusterName, selectedClusterId, selectedClusterName }: Props) => {
   const [defaultClusterId, setDefaultClusterId] = useState<string | null>(null);
+  const [selectedClusterData, setSelectedClusterData] = useState<IClusterUpdate | null>(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  // console.log("Edit modal open:", editModalOpen);
+  // console.log("Selected cluster data:", selectedClusterData);
 
   const {
     data: allClusters,
@@ -84,7 +92,21 @@ const ClusterAdminCard = ({ setSelectedClusterId, setSelectedClusterName, select
             />
           </Stack>
 
-          <Stack mt={22}>
+          <Group mt={22}>
+            <BreathingActionIcon
+              onClick={() => {
+                // contoh sederhana: ambil data dari SelectCluster jika value-nya sudah lengkap
+                const selected = clusterList.find((item) => item.id === selectedClusterId);
+                if (selected) {
+                  setSelectedClusterData(selected);
+                  setEditModalOpen(true);
+                }
+              }}
+              size="2.5rem"
+              icon={<IconPencil size="1rem" />}
+              gradient="linear-gradient(135deg, #60A5FA, #3B82F6)"
+            />
+
             {selectedClusterId && (
               <ButtonDeleteWithConfirmation
                 id={selectedClusterId}
@@ -93,7 +115,7 @@ const ClusterAdminCard = ({ setSelectedClusterId, setSelectedClusterName, select
                 size={2.5}
               />
             )}
-          </Stack>
+          </Group>
 
           <Stack justify="flex-end" ml="auto">
             <AddClusterModal />
@@ -113,6 +135,9 @@ const ClusterAdminCard = ({ setSelectedClusterId, setSelectedClusterName, select
           </Card>
         )}
       </SimpleGridGlobal>
+      {selectedClusterData && (
+        <EditClusterModal opened={editModalOpen} onClose={() => setEditModalOpen(false)} initialData={selectedClusterData} />
+      )}
     </>
   );
 };
