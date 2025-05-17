@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, Text, Stack, Flex, Group, Badge } from "@mantine/core";
+import { Card, Text, Stack, Flex, Group, Badge, Grid } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
@@ -144,36 +144,53 @@ const ClusterAdminCard = ({ setSelectedClusterId, setSelectedClusterName, select
         </Flex>
 
         <LoadingGlobal visible={isLoadingClusterData || isLoadingDeleteProduct} />
-
         {clusterData &&
           (() => {
-            const { bg } = getBadgeColor(clusterData?.status);
+            const { bg } = getBadgeColor(clusterData.status);
 
             return (
-              <Card p="sm" radius="sm" shadow="xs" withBorder mt="40px">
-                <Stack gap={"20px"}>
-                  <Group justify="space-between">
-                    <Text fw={600} size="lg">
-                      {clusterData.name}
-                    </Text>
-                    <Badge p="16x" bg={bg}>
-                      <Text size="xs" fw={500}>
-                        {clusterData?.status}
+              <Card p="md" radius="md" shadow="sm" withBorder mt="xl">
+                <Stack gap="md">
+                  <Group justify="space-between" align="flex-start">
+                    <div>
+                      <Text fw={600} size="lg">
+                        {clusterData.name}
                       </Text>
+                      <Text size="sm" c="dimmed" mt={4}>
+                        Lokasi: {clusterData.location}
+                      </Text>
+                    </div>
+                    <Badge bg={bg} radius="sm" size="md" variant="filled">
+                      {clusterData.status}
                     </Badge>
                   </Group>
-                  <Text size="sm" c="dimmed">
-                    Lokasi: {clusterData.location}
-                  </Text>
-                  <Text size="sm" c="dimmed">
-                    Luas Lahan: {clusterData.square}
-                  </Text>
-                  <Text size="sm" c="dimmed">
-                    Unit Tersedia: {clusterData.quantity}
-                  </Text>
-                  <Text size="sm" c="dimmed">
-                    Urutan: {clusterData.sequence}
-                  </Text>
+
+                  <Grid>
+                    <Grid.Col span={{ base: 12, sm: 6 }}>
+                      <Text size="sm" c="dimmed">
+                        Luas Lahan:
+                      </Text>
+                      <Text fw={500}>{clusterData.square} m²</Text>
+                    </Grid.Col>
+                    <Grid.Col span={{ base: 12, sm: 6 }}>
+                      <Text size="sm" c="dimmed">
+                        Unit Tersedia:
+                      </Text>
+                      <Text fw={500}>{clusterData.quantity}</Text>
+                    </Grid.Col>
+                    <Grid.Col span={{ base: 12, sm: 6 }}>
+                      <Text size="sm" c="dimmed">
+                        Harga per Unit:
+                      </Text>
+                      <Text fw={500}>Rp {clusterData.price.toLocaleString("id-ID")}</Text>
+                    </Grid.Col>
+                    <Grid.Col span={{ base: 12, sm: 6 }}>
+                      <Text size="sm" c="dimmed">
+                        Urutan:
+                      </Text>
+                      <Text fw={500}>{clusterData.sequence}</Text>
+                    </Grid.Col>
+                  </Grid>
                 </Stack>
               </Card>
             );
