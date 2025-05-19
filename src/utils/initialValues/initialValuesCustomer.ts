@@ -6,3 +6,14 @@ export const initialValuesCustomer: ICustomerCreate = {
   marketer: "",
   home_id: "",
 };
+
+export const getInitialValuesUpdateCustomer = (initialValuesCustomer?: Partial<ICustomerUpdate>): ICustomerUpdate => ({
+  id: initialValuesCustomer?.id || "",
+  name: initialValuesCustomer?.name || "",
+  address: initialValuesCustomer?.address || "",
+  phone: initialValuesCustomer?.phone || "",
+  status: initialValuesCustomer?.status || "", // default status bisa disesuaikan
+  marketer: initialValuesCustomer?.marketer || "",
+  home_id: initialValuesCustomer?.home_id ?? null,
+  home: initialValuesCustomer?.home ?? null,
+});

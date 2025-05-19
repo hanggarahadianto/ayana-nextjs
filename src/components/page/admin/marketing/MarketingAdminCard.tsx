@@ -11,9 +11,6 @@ const MarketingAdminCard = () => {
   const limit = 10;
   const offset = (page - 1) * limit;
 
-  const [openedModal, setOpenedModal] = useState(false);
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
-
   return (
     <>
       <SimpleGridGlobal cols={1}>

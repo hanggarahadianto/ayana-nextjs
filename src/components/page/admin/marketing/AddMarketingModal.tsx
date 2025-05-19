@@ -56,7 +56,7 @@ const AddMarketingModal = () => {
     [postDataCustomer, close]
   );
 
-  const handleChangeProduct = (field: keyof ICustomerCreate, value: any, setFieldValue: (field: string, value: any) => void) => {
+  const handleChangeCustomer = (field: keyof ICustomerCreate, value: any, setFieldValue: (field: string, value: any) => void) => {
     setFieldValue(field, value);
   };
 
@@ -84,21 +84,21 @@ const AddMarketingModal = () => {
                         error={touched.name && errors.name ? errors.name : undefined}
                         label="Nama Customer"
                         placeholder="Masukkan Nama Konsumen"
-                        onChange={(e) => handleChangeProduct("name", e.currentTarget.value, setFieldValue)}
+                        onChange={(e) => handleChangeCustomer("name", e.currentTarget.value, setFieldValue)}
                       />
                     </Group>
                     <TextInput
                       error={touched.name && errors.name ? errors.name : undefined}
                       label="Alamat Konsumen"
                       placeholder="Masukkan Alamat "
-                      onChange={(e) => handleChangeProduct("address", e.currentTarget.value, setFieldValue)}
+                      onChange={(e) => handleChangeCustomer("address", e.currentTarget.value, setFieldValue)}
                     />
                     <NumberInput
                       error={touched.phone && errors.phone ? errors.phone : undefined}
                       label="Nomor Telepon"
                       hideControls
                       placeholder="Masukkan Nomor Telepon"
-                      onChange={(val) => handleChangeProduct("phone", val.toString() || 0, setFieldValue)}
+                      onChange={(val) => handleChangeCustomer("phone", val.toString() || 0, setFieldValue)}
                     />
 
                     <Divider mt={20} />
@@ -110,7 +110,7 @@ const AddMarketingModal = () => {
                       data={statusOptions}
                       placeholder="Pilih Status"
                       clearable
-                      onChange={(val) => handleChangeProduct("status", val || "", setFieldValue)}
+                      onChange={(val) => handleChangeCustomer("status", val || "", setFieldValue)}
                     />
 
                     <Divider p={12} mt={16} />
@@ -118,7 +118,7 @@ const AddMarketingModal = () => {
                       error={touched.name && errors.name ? errors.name : undefined}
                       label="Nama Sales / Marketer"
                       placeholder="Masukkan Nama Sales"
-                      onChange={(e) => handleChangeProduct("marketer", e.currentTarget.value, setFieldValue)}
+                      onChange={(e) => handleChangeCustomer("marketer", e.currentTarget.value, setFieldValue)}
                     />
                     <Divider p={12} mt={16} />
 

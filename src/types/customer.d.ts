@@ -19,6 +19,17 @@ interface ICustomerCreate {
   home_id?: string | null; // UUID atau null
 }
 
+interface ICustomerUpdate {
+  id: string; // UUID
+  name: string;
+  address: string;
+  phone: string;
+  status: string; // contoh: "pending", "deal", dsb
+  marketer: string;
+  home_id?: string | null; // UUID atau null
+  home?: IProduct | null; // Optional relasi
+}
+
 interface ICustomerResponse {
   data: ICustomer[];
   status: string;

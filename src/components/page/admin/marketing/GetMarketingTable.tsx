@@ -1,10 +1,16 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Badge } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Badge, Group, Button } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useEffect, useMemo, useState } from "react";
 import TableComponent from "@/components/common/table/TableComponent";
 import { getDataCustomer } from "@/api/customer/getDataCustomer";
 import { useCookies } from "@/utils/hook/useCookies";
+import { useDeleteDataCustomer } from "@/api/customer/deleteDataCustomer";
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import BreathingActionIcon from "@/components/common/button/buttonAction";
+import { IconPencil } from "@tabler/icons-react";
+import { useModalStore } from "@/store/modalStore";
+import EditCustomerModal from "./UpdateMarketingModal";
 
 export const CustomerTable = () => {
   const { getToken } = useCookies();
@@ -16,7 +22,7 @@ export const CustomerTable = () => {
 
   const {
     data: customerData,
-    isLoading,
+    isLoading: isLoadingCustomerData,
     refetch: refetchCustomerData,
   } = useQuery({
     queryKey: ["getCustomerData", page, limit, selectedType],
@@ -30,7 +36,6 @@ export const CustomerTable = () => {
   });
 
   const customerList = customerData?.data ?? [];
-  console.log("CUSTOMER LIST", customerList);
 
   const totalPages = useMemo(() => {
     return customerData?.total ? Math.ceil(customerData.total / limit) : 1;
@@ -43,9 +48,18 @@ export const CustomerTable = () => {
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, customerData?.total || 0);
 
+  const { mutate: mutateDeleteDataCluster, isPending: isLoadingDeleteCustomer } = useDeleteDataCustomer(refetchCustomerData);
+  const handleDeleteCustomer = (idToDelete: string) => {
+    mutateDeleteDataCluster(idToDelete);
+  };
+
+  const openEditModal = (customer: any) => {
+    useModalStore.getState().openModal("editCustomer", customer);
+  };
+
   return (
     <Card shadow="sm" padding="lg">
-      <LoadingGlobal visible={isLoading} />
+      <LoadingGlobal visible={isLoadingCustomerData || isLoadingDeleteCustomer} />
 
       {/* <Select
           label="Filter berdasarkan Type"
@@ -65,15 +79,15 @@ export const CustomerTable = () => {
         totalAmount={customerData?.total}
         title="Daftar Konsumen"
         columns={[
-          { key: "name", title: "Nama", width: 160, minWidth: 160 },
-          { key: "address", title: "Alamat", width: 160, minWidth: 160 },
+          { key: "name", title: "Nama", width: 200, minWidth: 200 },
+          { key: "address", title: "Alamat", width: 240, minWidth: 240 },
           { key: "phone", title: "Nomor Telepon", width: 100, minWidth: 100 },
 
           {
             key: "home.title",
             title: "Produk",
-            width: 160,
-            minWidth: 160,
+            width: 260,
+            minWidth: 260,
             render: (row: any) => row.home?.title ?? "-",
           },
           {
@@ -104,8 +118,26 @@ export const CustomerTable = () => {
               );
             },
           },
+          {
+            key: "aksi",
+            title: "Aksi",
+            width: 100,
+            minWidth: 100,
+            render: (row: any) => (
+              <Group gap="lg">
+                <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="1rem" />} size={"2.2rem"} />
+                <ButtonDeleteWithConfirmation
+                  id={row.id} // Gunakan id customer
+                  onDelete={() => handleDeleteCustomer(row.id)}
+                  description={`Hapus konsumen ${row.name}?`}
+                  size={2.2}
+                />
+              </Group>
+            ),
+          },
         ]}
       />
+      <EditCustomerModal initialData={useModalStore((state) => state.modalData)} />
 
       {totalPages > 0 && (
         <Stack gap="xs" mt="md" style={{ paddingBottom: "16px" }}>

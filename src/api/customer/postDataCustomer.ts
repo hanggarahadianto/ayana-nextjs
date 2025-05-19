@@ -23,7 +23,7 @@ export const useSubmitCustomerForm = () => {
       ]);
       showNotification({
         title: "Berhasil",
-        message: "Data berhasil disimpan. Mengunggah gambar...",
+        message: "Data berhasil disimpan",
         color: "green",
       });
     },
