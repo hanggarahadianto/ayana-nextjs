@@ -113,7 +113,7 @@ const ClusterAdminCard = ({ setSelectedClusterId, setSelectedClusterName, select
             />
           </Stack>
 
-          <Group mt={22}>
+          <Group>
             <BreathingActionIcon
               onClick={() => {
                 // contoh sederhana: ambil data dari SelectCluster jika value-nya sudah lengkap

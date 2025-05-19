@@ -34,9 +34,12 @@ const AddProductModal = ({ clusterId }: Props) => {
   const handleSubmit = useCallback(
     async (values: IProductCreate, { resetForm }: FormikHelpers<IProductCreate>) => {
       try {
+        const titleModified = `${values.title} Tipe ${values.type}`;
+
         const payload = {
           ...values,
           cluster_id: clusterId ?? null,
+          title: titleModified, // opsional: hanya jika kamu ingin mengirimkannya
         };
 
         postDataProduct(payload, {
@@ -120,7 +123,7 @@ const AddProductModal = ({ clusterId }: Props) => {
                       <TextInput
                         error={touched.title && errors.title ? errors.title : undefined}
                         label="Nama Produk"
-                        placeholder="Masukkan nama produk"
+                        placeholder="Masukkan Nama Produk"
                         onChange={(e) => handleChangeProduct("title", e.currentTarget.value, setFieldValue)}
                       />
 
@@ -128,7 +131,7 @@ const AddProductModal = ({ clusterId }: Props) => {
                         error={touched.type && errors.type ? errors.type : undefined}
                         label="Tipe"
                         data={typeOptions}
-                        placeholder="Pilih tipe"
+                        placeholder="Pilih Tipe"
                         clearable
                         onChange={(value) => handleChangeProduct("type", value || "", setFieldValue)}
                       />
@@ -137,7 +140,7 @@ const AddProductModal = ({ clusterId }: Props) => {
                     <Textarea
                       error={touched.content && errors.content ? errors.content : undefined}
                       label="Deskripsi"
-                      placeholder="Masukkan deskripsi"
+                      placeholder="Masukkan Deskripsi"
                       onChange={(e) => handleChangeProduct("content", e.currentTarget.value, setFieldValue)}
                     />
                     <Divider mt={20} />
@@ -147,28 +150,28 @@ const AddProductModal = ({ clusterId }: Props) => {
                         error={touched.bathroom && errors.bathroom ? errors.bathroom : undefined}
                         label="Kamar Mandi"
                         hideControls
-                        placeholder="Masukkan jumlah kamar mandi"
+                        placeholder="Masukkan Jumlah Kamar Mandi"
                         onChange={(val) => handleChangeProduct("bathroom", val || 0, setFieldValue)}
                       />
                       <NumberInput
                         error={touched.bedroom && errors.bedroom ? errors.bedroom : undefined}
                         label="Kamar Tidur"
                         hideControls
-                        placeholder="Masukkan jumlah kamar tidur"
+                        placeholder="Masukkan Jumlah Kamar Tidur"
                         onChange={(val) => handleChangeProduct("bedroom", val || 0, setFieldValue)}
                       />
                       <NumberInput
                         error={touched.square && errors.square ? errors.square : undefined}
                         label="Luas Tanah"
                         hideControls
-                        placeholder="Masukkan luas tanah"
+                        placeholder="Masukkan Luas Tanah"
                         onChange={(val) => handleChangeProduct("square", val || 0, setFieldValue)}
                       />
                       <NumberInput
                         error={touched.quantity && errors.quantity ? errors.quantity : undefined}
                         label="Kuantitas"
                         hideControls
-                        placeholder="Masukkan kuantitas"
+                        placeholder="Masukkan Kuantitas"
                         onChange={(val) => handleChangeProduct("quantity", val || 0, setFieldValue)}
                       />
                     </Group>

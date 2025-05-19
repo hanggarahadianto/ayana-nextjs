@@ -1,7 +1,6 @@
 import { getDataAccount } from "@/api/account/getDataAccount";
 import { LoadingOverlay, Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { error } from "console";
 import { useMemo } from "react";
 
 interface ISelectFinanceAccountProps {

@@ -26,6 +26,13 @@ export const availabilityOptions = [
   { value: "sold", label: "Sold" },
 ];
 
+export const statusOptions = [
+  { value: "done", label: "Done" },
+  { value: "booking", label: "Booking" },
+  { value: "progress", label: "Progress" },
+  { value: "sold", label: "Sold" },
+];
+
 export const satuan: string[] = [
   "Pcs",
   "Sak",
