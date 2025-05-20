@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Paper, Text, ScrollArea, Flex, Group, Badge, Stack, Grid, Image, TextInput, Divider, Card } from "@mantine/core";
+import { Modal, Paper, Text, ScrollArea, Flex, Group, Badge, Stack, Grid, Image, TextInput, Divider, Card, Textarea } from "@mantine/core";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import NextImage from "next/image";
 
@@ -67,7 +67,6 @@ const GetProductModal = ({
               <Divider />
               <Grid mt={"10px"}>
                 <Grid.Col span={6}>
-                  <TextInput label="Deskripsi" value={productData?.content ?? ""} readOnly />
                   <TextInput label="Tipe" value={productData?.type ?? ""} readOnly />
 
                   <TextInput label="Price" value={`Rp ${productData?.price.toLocaleString()}`} readOnly />
@@ -81,6 +80,7 @@ const GetProductModal = ({
                   <TextInput label="Quantity" value={productData?.quantity ?? ""} readOnly />
                 </Grid.Col>
               </Grid>
+              <Textarea label="Deskripsi" value={productData?.content ?? ""} readOnly />
 
               <Divider />
               {(productData?.near_bies?.length ?? 0) > 0 && (

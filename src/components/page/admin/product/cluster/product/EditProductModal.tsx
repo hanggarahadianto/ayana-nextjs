@@ -165,6 +165,7 @@ const UpdateProductModal = ({
                       onChange={(e) => setFieldValue("title", e.currentTarget.value)}
                     />
                     <Select
+                      w={"40px"}
                       value={values.type}
                       label="Tipe"
                       placeholder="Pilih tipe"
