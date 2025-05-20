@@ -112,7 +112,7 @@ const GetProductModal = ({
 
                     <Card shadow="sm" padding="sm" radius="md" withBorder>
                       <Card.Section>
-                        <CloudinaryImage src={img.url} alt={`Image ${idx}`} />
+                        <Image src={img.url} alt={`Image ${idx}`} height={150} fit="cover" radius="md" />
                       </Card.Section>
 
                       <Text size="sm" mt="xs" ta="center" c="dimmed">

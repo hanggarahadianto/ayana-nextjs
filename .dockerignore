@@ -5,6 +5,9 @@
 .env.production
 .DS_Store
 node_modules
-.next
 .git
-
+*.log
+tests/
+coverage/
+README.md
+Dockerfile
