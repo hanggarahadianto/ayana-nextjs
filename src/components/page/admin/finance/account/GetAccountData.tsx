@@ -1,11 +1,15 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Group } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { getDataAccount } from "@/api/account/getDataAccount";
 import { useEffect, useMemo, useState } from "react";
 import AddAccountModal from "./AddAccountModal";
 import TableComponent from "@/components/common/table/TableComponent";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
+import BreathingActionIcon from "@/components/common/button/buttonAction";
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import { IconPencil } from "@tabler/icons-react";
+import { useModalStore } from "@/store/modalStore";
 
 interface AccountCardProps {
   companyId: string;
@@ -52,6 +56,15 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, accountData?.total || 0);
 
+  const openEditModal = (account: any) => {
+    useModalStore.getState().openModal("editAccount", account);
+  };
+
+  // const { mutate: mutateDeleteDataAccount, isPending: isLoadingDeleteAccount } = useDeleteDataAccount(refetchAccountData);
+  // const handleDeleteAccount = (idToDelete: string) => {
+  //   mutateDeleteDataAccount(idToDelete);
+  // };
+
   return (
     <Card shadow="sm" padding="lg">
       <LoadingGlobal visible={isLoading} />
@@ -83,6 +96,23 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
           { key: "name", title: "Nama", width: 160, minWidth: 160 },
           { key: "category", title: "Kategori", width: 140, minWidth: 140 },
           { key: "description", title: "Deskripsi", width: 180, minWidth: 180 },
+          {
+            key: "aksi",
+            title: "Aksi",
+            width: 100,
+            minWidth: 100,
+            render: (row: any) => (
+              <Group gap="lg">
+                <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="1rem" />} size={"2.2rem"} />
+                {/* <ButtonDeleteWithConfirmation
+                  id={row.id} // Gunakan id customer
+                  onDelete={() => handleDeleteAccount(row.id)}
+                  description={`Hapus konsumen ${row.name}?`}
+                  size={2.2}
+                /> */}
+              </Group>
+            ),
+          },
         ]}
       />
 

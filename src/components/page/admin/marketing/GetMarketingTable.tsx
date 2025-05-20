@@ -48,9 +48,9 @@ export const CustomerTable = () => {
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, customerData?.total || 0);
 
-  const { mutate: mutateDeleteDataCluster, isPending: isLoadingDeleteCustomer } = useDeleteDataCustomer(refetchCustomerData);
+  const { mutate: mutateDeleteDataCustomer, isPending: isLoadingDeleteCustomer } = useDeleteDataCustomer(refetchCustomerData);
   const handleDeleteCustomer = (idToDelete: string) => {
-    mutateDeleteDataCluster(idToDelete);
+    mutateDeleteDataCustomer(idToDelete);
   };
 
   const openEditModal = (customer: any) => {

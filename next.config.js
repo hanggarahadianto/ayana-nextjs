@@ -31,7 +31,8 @@ const nextConfig = {
   },
 
   images: {
-    domains: ["res.cloudinary.com"], // <--- tambahkan ini
+    domains: ["res.cloudinary.com"],
+    formats: ["image/webp", "image/avif"], // optional, untuk optimasi
   },
 
   // ✅ Tambahkan ini
