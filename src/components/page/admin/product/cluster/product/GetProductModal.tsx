@@ -1,9 +1,11 @@
 import React from "react";
 import { Modal, Paper, Text, ScrollArea, Flex, Group, Badge, Stack, Grid, Image, TextInput, Divider, Card } from "@mantine/core";
 import LoadingGlobal from "@/styles/loading/loading-global";
+import NextImage from "next/image";
 
 import { useQuery } from "@tanstack/react-query";
 import { getImages } from "@/api/products/getImagesProduct";
+import CloudinaryImage from "@/components/common/image/CloudinaryImage";
 
 const GetProductModal = ({
   opened,
@@ -110,7 +112,7 @@ const GetProductModal = ({
 
                     <Card shadow="sm" padding="sm" radius="md" withBorder>
                       <Card.Section>
-                        <Image src={img.url || null} alt={`Image ${idx}`} height={150} fit="cover" radius="md" />
+                        <CloudinaryImage src={img.url} alt={`Image ${idx}`} />
                       </Card.Section>
 
                       <Text size="sm" mt="xs" ta="center" c="dimmed">

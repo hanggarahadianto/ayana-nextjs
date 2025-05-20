@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Group, Text, Card, Image, ActionIcon } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 import { IconX } from "@tabler/icons-react";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
@@ -10,15 +11,35 @@ interface UpdateImageFieldProps {
 
 const UpdateImageField: React.FC<UpdateImageFieldProps> = ({ onFilesChange }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const MAX_FILE_SIZE = 2.5 * 1024 * 1024; // 2.5 MB
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (files) {
-      const fileArray = Array.from(files);
-      const newFiles = [...selectedFiles, ...fileArray];
-      setSelectedFiles(newFiles);
-      onFilesChange(newFiles);
+    if (!files) return;
+
+    const fileArray = Array.from(files);
+    const oversizedFiles: string[] = [];
+
+    const validFiles = fileArray.filter((file) => {
+      const isValid = file.size <= MAX_FILE_SIZE;
+      if (!isValid) oversizedFiles.push(file.name);
+      return isValid;
+    });
+
+    if (oversizedFiles.length > 0) {
+      showNotification({
+        title: "Error",
+        message: `File melebihi 2.5 MB: ${oversizedFiles.join(", ")}`,
+        color: "red",
+      });
     }
+
+    const newFiles = [...selectedFiles, ...validFiles];
+    setSelectedFiles(newFiles);
+    onFilesChange(newFiles);
+
+    // Reset input agar bisa unggah file yang sama lagi
+    event.target.value = "";
   };
 
   const handleDeleteImage = (index: number) => {

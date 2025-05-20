@@ -31,7 +31,7 @@ const nextConfig = {
   },
 
   images: {
-    domains: ["yourdomain.com"],
+    domains: ["res.cloudinary.com"], // <--- tambahkan ini
   },
 
   // ✅ Tambahkan ini

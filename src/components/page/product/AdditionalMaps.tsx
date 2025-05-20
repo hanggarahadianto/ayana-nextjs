@@ -70,31 +70,12 @@ const AdditionalInfoMaps: React.FC<{ productName: string; productThumbnail: stri
       </Stack>
     );
 
-  const customIcon = L.icon({
-    iconUrl: { productThumbnail },
-    shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
-    iconSize: [40, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-  });
-
   const createCustomIcon = (productThumbnail: string) => {
-    if (isClient) {
-      return L.icon({
-        iconUrl: productThumbnail,
-        shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
-        iconSize: [35, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41],
-      });
-    }
-    // Return fallback icon jika tidak di sisi klien
+    const fallbackIcon = "/default-icon.png";
     return L.icon({
-      iconUrl: "/default-icon.png", // Ganti dengan ikon default jika tidak ada gambar
+      iconUrl: productThumbnail || fallbackIcon,
       shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
-      iconSize: [25, 41],
+      iconSize: [35, 41],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
       shadowSize: [41, 41],

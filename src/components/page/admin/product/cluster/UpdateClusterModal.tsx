@@ -7,6 +7,7 @@ import { validationSchemaClusterCreate } from "@/utils/validation/cluster-valida
 import NearByForm from "./NearByForm";
 import { useUpdateClusterData } from "@/api/cluster/updateCluster";
 import { getInitialValuesUpdateCluster } from "@/utils/initialValues/initialValuesCluster";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 interface EditClusterModalProps {
   opened: boolean;
@@ -15,7 +16,7 @@ interface EditClusterModalProps {
 }
 
 const EditClusterModal: React.FC<EditClusterModalProps> = ({ opened, onClose, initialData }) => {
-  const { mutate: updateCluster, isPending: isSubmitting } = useUpdateClusterData(onClose);
+  const { mutate: updateCluster, isPending: isLoadingEditCluster } = useUpdateClusterData(onClose);
 
   const handleSubmit = useCallback(
     async (values: IClusterUpdate, { resetForm }: FormikHelpers<IClusterUpdate>) => {
@@ -51,6 +52,7 @@ const EditClusterModal: React.FC<EditClusterModalProps> = ({ opened, onClose, in
                       Ubah Cluster
                     </Text>
                   </Stack>
+                  <LoadingGlobal visible={isLoadingEditCluster} />
 
                   <Group grow>
                     <TextInput
@@ -129,7 +131,7 @@ const EditClusterModal: React.FC<EditClusterModalProps> = ({ opened, onClose, in
                     <Button onClick={onClose} variant="default">
                       Batal
                     </Button>
-                    <Button type="submit" loading={isSubmitting} disabled={isSubmitting}>
+                    <Button type="submit" loading={isLoadingEditCluster} disabled={isLoadingEditCluster}>
                       Simpan Perubahan
                     </Button>
                   </Group>

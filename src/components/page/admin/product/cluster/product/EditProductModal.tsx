@@ -8,7 +8,6 @@ import { validationSchemaProduct } from "@/utils/validation/product-validation";
 import { getInitialValuesUpdateProduct } from "@/utils/initialValues/initialValuesProduct";
 import { availabilityOptions, typeOptions } from "@/constants/dictionary";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
-import NearByForm from "../NearByForm";
 import { useQuery } from "@tanstack/react-query";
 import { getImages } from "@/api/products/getImagesProduct";
 import { useUpdateImageProduct } from "@/api/products/updateImageProduct";
@@ -31,9 +30,6 @@ const UpdateProductModal = ({
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [keepImageIds, setKeepImageIds] = useState<string[]>([]); // ✅ ini penting
   const [originalKeepImageIds, setOriginalKeepImageIds] = useState<string[]>([]);
-
-  // console.log("keepImageId di parent", keepImageIds);
-  // console.log("selected file", selectedFiles);
 
   const handleFilesChange = (files: File[]) => {
     setSelectedFiles(files);
@@ -140,7 +136,7 @@ const UpdateProductModal = ({
 
   return (
     <SimpleGridGlobal cols={1}>
-      <LoadingGlobal visible={isLoadingImageData} />
+      <LoadingGlobal visible={isLoadingImageData || isLoadingUpdateProductData} />
       <Modal opened={opened} onClose={onClose} size="100%" yOffset="100px">
         <Formik
           enableReinitialize

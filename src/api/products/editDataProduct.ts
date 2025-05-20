@@ -1,6 +1,6 @@
 import { showNotification } from "@mantine/notifications";
 import { APIAxiosInstance } from "../../lib";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // Handle the API call for updating the product
 const handleEditProductForm = async (values: IProductCreate & { id: string }) => {
@@ -17,9 +17,17 @@ const handleEditProductForm = async (values: IProductCreate & { id: string }) =>
 
 // Custom hook for editing product form
 export const useEditProductForm = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (values: IProductCreate & { id: string }) => handleEditProductForm(values),
-    onSuccess: (data: any) => {
+    onSuccess: async (data: any) => {
+      if (data) {
+        await queryClient.refetchQueries({
+          queryKey: ["getProductDataByClusterId"],
+          exact: false,
+        });
+      }
       showNotification({
         title: "Data Berhasil Dikirim",
         message: "Produk berhasil diperbarui",

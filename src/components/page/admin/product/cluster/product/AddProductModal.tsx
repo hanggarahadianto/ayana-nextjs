@@ -24,6 +24,7 @@ const AddProductModal = ({ clusterId }: Props) => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
   const handleFilesChange = (files: File[]) => {
     setSelectedFiles(files);
   };
@@ -34,12 +35,9 @@ const AddProductModal = ({ clusterId }: Props) => {
   const handleSubmit = useCallback(
     async (values: IProductCreate, { resetForm }: FormikHelpers<IProductCreate>) => {
       try {
-        const titleModified = `${values.title} Tipe ${values.type}`;
-
         const payload = {
           ...values,
           cluster_id: clusterId ?? null,
-          title: titleModified, // opsional: hanya jika kamu ingin mengirimkannya
         };
 
         postDataProduct(payload, {
@@ -97,7 +95,7 @@ const AddProductModal = ({ clusterId }: Props) => {
         console.error("Submit Error:", error);
       }
     },
-    [postDataProduct, uploadImage, selectedFiles, close]
+    [postDataProduct, uploadImage, clusterId, selectedFiles, close]
   );
 
   return (

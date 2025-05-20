@@ -14,7 +14,38 @@ export const ProductImageGallery = ({ items }: { items: { original: string; thum
   const resizedItems = items.map((item) => ({
     original: item.original.replace("/image/upload/", `/image/upload/${originalSize},c_fill/`),
     thumbnail: item.thumbnail.replace("/image/upload/", `/image/upload/${thumbnailSize},c_fill/`),
+    originalAlt: "Gallery Image",
+    thumbnailAlt: "Thumbnail",
   }));
+
+  // Custom render function with lazy loading
+  const renderItem = (item: any) => (
+    <img
+      src={item.original}
+      alt={item.originalAlt || "Image"}
+      loading="lazy"
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        borderRadius: "12px",
+      }}
+    />
+  );
+
+  const renderThumbInner = (item: any) => (
+    <img
+      src={item.thumbnail}
+      alt={item.thumbnailAlt || "Thumbnail"}
+      loading="lazy"
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        borderRadius: "8px",
+      }}
+    />
+  );
 
   return (
     <Stack
@@ -33,47 +64,21 @@ export const ProductImageGallery = ({ items }: { items: { original: string; thum
         }}
       >
         <ImageGallery
-          items={resizedItems}
-          showThumbnails={true} // Tetap tampilkan thumbnails di semua ukuran layar
-          showFullscreenButton={false}
-          showPlayButton={false}
-          autoPlay={!isMobile}
-          slideDuration={500}
-          slideInterval={3000}
-          infinite={true}
-          additionalClass="custom-gallery"
+          {...({
+            items: resizedItems,
+            showThumbnails: true,
+            showFullscreenButton: false,
+            showPlayButton: false,
+            autoPlay: !isMobile,
+            slideDuration: 500,
+            slideInterval: 3000,
+            infinite: true,
+            additionalClass: "custom-gallery",
+            renderItem,
+            renderThumbInner,
+          } as any)}
         />
       </Box>
-
-      <style jsx>{`
-        :global(.custom-gallery .image-gallery-slide img) {
-          .no-pointer,
-          .no-pointer * {
-            cursor: default !important;
-          }
-          object-fit: cover;
-          width: 100%;
-          height: 100%;
-          border-radius: 12px;
-        }
-
-        :global(.custom-gallery .image-gallery-thumbnail img) {
-          object-fit: cover;
-          width: 100%;
-          height: 100%;
-          border-radius: 8px;
-        }
-
-        :global(.custom-gallery .image-gallery-thumbnails-container) {
-          margin-top: 20px;
-          height: ${isMobile ? "90px" : "100px"};
-        }
-
-        :global(.custom-gallery .image-gallery-thumbnail) {
-          height: ${isMobile ? "90px" : "100px"};
-          width: ${isMobile ? "120px" : "150px"};
-        }
-      `}</style>
     </Stack>
   );
 };

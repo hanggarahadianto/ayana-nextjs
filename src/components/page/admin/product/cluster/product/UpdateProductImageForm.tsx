@@ -3,6 +3,7 @@ import { Group, Text, Card, Image, ActionIcon } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
+import { showNotification } from "@mantine/notifications";
 
 interface ExistingImage {
   id: string;
@@ -18,7 +19,9 @@ interface UpdateImageFieldProps {
 const UpdateImageField: React.FC<UpdateImageFieldProps> = ({ onFilesChange, onKeepIdsChange, existingImages = [] }) => {
   //   console.log("existing image", existingImages);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
   const [keepImageIds, setKeepImageIds] = useState<string[]>([]);
+  const MAX_FILE_SIZE = 2.5 * 1024 * 1024; // 2.5 MB
 
   //   console.log("selected di component", selectedFiles);
   //   console.log("keep di com[ponent", keepImageIds);
@@ -33,11 +36,37 @@ const UpdateImageField: React.FC<UpdateImageFieldProps> = ({ onFilesChange, onKe
   }, [existingImages]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    const newFiles = [...selectedFiles, ...files];
-    setSelectedFiles(newFiles);
+    const files = event.target.files;
+    if (!files) return;
 
-    onFilesChange(newFiles);
+    const fileArray = Array.from(files);
+    const validFiles: File[] = [];
+    const oversizedFiles: string[] = [];
+
+    for (const file of fileArray) {
+      if (file.size <= MAX_FILE_SIZE) {
+        validFiles.push(file);
+      } else {
+        oversizedFiles.push(`${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)`);
+      }
+    }
+
+    if (oversizedFiles.length > 0) {
+      showNotification({
+        title: "Error",
+        message: `Ukuran file melebihi 2.5MB: ${oversizedFiles.join(", ")}`,
+        color: "red",
+      });
+    }
+
+    if (validFiles.length > 0) {
+      const newFiles = [...selectedFiles, ...validFiles];
+      setSelectedFiles(newFiles);
+      onFilesChange(newFiles);
+    }
+
+    // Reset input
+    event.target.value = "";
   };
 
   const renderImages = () => {
