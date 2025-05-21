@@ -1,6 +1,6 @@
 "use client";
 
-import { TransactionCategoryCard } from "@/components/page/admin/finance/transactionCategory/TransactionCategoryCard";
+import { TransactionCategoryCard } from "@/components/page/admin/finance/transactionCategory/GetTransactionCategoryData";
 import { AccountCard } from "@/components/page/admin/finance/account/GetAccountData";
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import LoadingGlobal from "@/styles/loading/loading-global";

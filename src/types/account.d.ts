@@ -19,6 +19,7 @@ interface IAccountCreate {
 
 // ICashFlowUpdate.ts
 interface IAccountUpdate {
+  id: string;
   code: number;
   name: string;
   type: string;

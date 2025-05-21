@@ -1,15 +1,16 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Group } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Group, Flex } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { getDataAccount } from "@/api/account/getDataAccount";
 import { useEffect, useMemo, useState } from "react";
 import AddAccountModal from "./AddAccountModal";
 import TableComponent from "@/components/common/table/TableComponent";
-import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
-import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
+import BreathingActionIcon from "@/components/common/button/buttonAction";
+import { IconPencil } from "@tabler/icons-react";
+import { useDeleteDataAccount } from "@/api/account/deleteDataAccount";
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import UpdateAccountModal from "./UpdateAccountModal";
 
 interface AccountCardProps {
   companyId: string;
@@ -21,13 +22,9 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
   const limit = 10;
   const [selectedType, setSelectedType] = useState<string | null>(null);
 
-  useEffect(() => {
-    console.log("selectedType updated:", selectedType);
-  }, [selectedType]);
-
   const {
     data: accountData,
-    isLoading,
+    isPending: isLoadingGetAccount,
     refetch: refetchAccountData,
   } = useQuery({
     queryKey: ["getAccountData", companyId, page, limit, selectedType],
@@ -56,18 +53,18 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, accountData?.total || 0);
 
-  const openEditModal = (account: any) => {
+  const openEditModal = (account: IAccountUpdate) => {
     useModalStore.getState().openModal("editAccount", account);
   };
 
-  // const { mutate: mutateDeleteDataAccount, isPending: isLoadingDeleteAccount } = useDeleteDataAccount(refetchAccountData);
-  // const handleDeleteAccount = (idToDelete: string) => {
-  //   mutateDeleteDataAccount(idToDelete);
-  // };
+  const { mutate: mutateDeleteDataAccount, isPending: isLoadingDeleteAccount } = useDeleteDataAccount();
+  const handleDeleteAccount = (idToDelete: string) => {
+    mutateDeleteDataAccount(idToDelete);
+  };
 
   return (
     <Card shadow="sm" padding="lg">
-      <LoadingGlobal visible={isLoading} />
+      <LoadingGlobal visible={isLoadingGetAccount} />
       <Stack align="flex-end" mb={16}>
         <AddAccountModal companyId={companyId} refetchAccountData={refetchAccountData} />
       </Stack>
@@ -91,33 +88,36 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
         data={accountList}
         totalAmount={accountData?.total}
         title="Akun Keuangan"
+        height={"580"}
         columns={[
           { key: "code", title: "Code", width: 40, minWidth: 40 },
           { key: "name", title: "Nama", width: 160, minWidth: 160 },
           { key: "category", title: "Kategori", width: 140, minWidth: 140 },
-          { key: "description", title: "Deskripsi", width: 180, minWidth: 180 },
+          { key: "description", title: "Deskripsi", width: 280, minWidth: 280 },
           {
             key: "aksi",
             title: "Aksi",
-            width: 100,
-            minWidth: 100,
-            render: (row: any) => (
-              <Group gap="lg">
-                <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="1rem" />} size={"2.2rem"} />
-                {/* <ButtonDeleteWithConfirmation
+            width: 10,
+            minWidth: 10,
+            render: (row: IAccountUpdate) => (
+              <Flex gap="lg" justify="center">
+                <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
+                <ButtonDeleteWithConfirmation
                   id={row.id} // Gunakan id customer
                   onDelete={() => handleDeleteAccount(row.id)}
-                  description={`Hapus konsumen ${row.name}?`}
+                  description={`Hapus Akun ${row.name}?`}
                   size={2.2}
-                /> */}
-              </Group>
+                />
+              </Flex>
             ),
           },
         ]}
       />
 
+      <UpdateAccountModal initialValues={useModalStore((state) => state.modalData)} />
+
       {totalPages > 0 && (
-        <Stack gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
+        <Stack gap="xs" mt="40" style={{ paddingBottom: "16px" }}>
           <Pagination total={totalPages} value={page} onChange={setPage} />
           <Text size="sm" c="dimmed">
             Menampilkan {startIndex} sampai {endIndex} dari {accountData?.total} data

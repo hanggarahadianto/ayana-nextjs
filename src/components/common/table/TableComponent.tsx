@@ -3,21 +3,18 @@ import { Table, Card, Select, Text, Group, Box, Stack, Divider } from "@mantine/
 import React, { ReactNode, useState } from "react";
 
 // Tipe untuk props ScrollXWrapper
+
 interface ScrollXWrapperProps {
   children: ReactNode;
   minWidth?: string | number;
-  height?: string | number;
+  height: string | number; // ← bukan lagi optional
 }
 
 // Komponen ScrollXWrapper untuk membungkus konten dan memberikan scroll horizontal
-function ScrollXWrapper({
-  children,
-  minWidth = "1000px",
-  height = "480px", // ← default tinggi statis
-}: ScrollXWrapperProps) {
+function ScrollXWrapper({ children, minWidth = "1000px", height }: ScrollXWrapperProps) {
   return (
     <div style={{ width: "100%", overflowX: "auto", height }}>
-      <div style={{ minWidth }}>{children}</div>
+      <div style={{ minWidth, height: "100%", minHeight: 600 }}>{children}</div>
     </div>
   );
 }
@@ -41,6 +38,7 @@ interface TableComponentProps<T> {
   totalAmount?: number; // Menambahkan properti untuk menampilkan total amount yang dapat disesuaikan
   title?: string;
   transactionType?: string;
+  height?: string | number; // ← Tambahkan ini
 }
 
 // Komponen Tabel utama
@@ -53,6 +51,7 @@ export default function TableComponent<T>({
   totalAmount = 0, // Menyediakan nilai default 0 untuk totalAmount
   title,
   transactionType,
+  height, // ← Terima props height
 }: TableComponentProps<T>) {
   const [selectedType, setSelectedType] = useState<string | null>(null);
 
@@ -96,7 +95,7 @@ export default function TableComponent<T>({
       </Box>
 
       {/* Tabel dengan ScrollXWrapper */}
-      <ScrollXWrapper minWidth={`${columns.length * 200}px`}>
+      <ScrollXWrapper minWidth={`${columns.length * 200}px`} height={height || "400px"}>
         <Table highlightOnHover withColumnBorders striped>
           <Table.Thead>
             <Table.Tr>

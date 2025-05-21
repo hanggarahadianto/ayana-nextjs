@@ -8,12 +8,12 @@ import { validationSchemaTransactionCategory } from "@/utils/validation/transact
 import { useSubmitTransactionCategory } from "@/api/transaction-category/postDataTransactionCategory";
 import SelectFinanceAccount from "@/components/common/select/SelectAccountType";
 
-interface AddTransactionCategoryModalProps {
+interface UpdateTransactionCategoryModalProps {
   refetchTransactionCategoryData: () => void;
   companyId?: string;
 }
 
-const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId }: AddTransactionCategoryModalProps) => {
+const UpdateTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId }: UpdateTransactionCategoryModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const { mutate: postData, isPending: isLoadingSubmitTransactionCategoryData } = useSubmitTransactionCategory(
@@ -185,4 +185,4 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
   );
 };
 
-export default memo(AddTransactionCategoryModal);
+export default memo(UpdateTransactionCategoryModal);

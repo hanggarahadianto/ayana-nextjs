@@ -76,7 +76,6 @@ export const accountTypeOptions = [
   { value: "Liability", label: "Liability (Kewajiban)" },
   { value: "Equity", label: "Equity (Ekuitas)" },
   { value: "Revenue", label: "Revenue (Pendapatan)" },
-  { value: "COGS", label: "Cost of Goods Sold (HPP)" },
   { value: "Expense", label: "Expense (Beban)" },
 ];
 

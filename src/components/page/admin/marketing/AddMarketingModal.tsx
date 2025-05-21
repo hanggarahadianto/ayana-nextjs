@@ -82,7 +82,7 @@ const AddMarketingModal = () => {
                     <Group grow>
                       <TextInput
                         error={touched.name && errors.name ? errors.name : undefined}
-                        label="Nama Customer"
+                        label="Nama Konsumen"
                         placeholder="Masukkan Nama Konsumen"
                         onChange={(e) => handleChangeCustomer("name", e.currentTarget.value, setFieldValue)}
                       />
