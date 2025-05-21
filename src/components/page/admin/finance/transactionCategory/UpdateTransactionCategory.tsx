@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 import { Modal, TextInput, Button, Group, Select, Textarea, Stack, SimpleGrid } from "@mantine/core";
 import { Form, Formik } from "formik";
 import ButtonAdd from "@/components/common/button/buttonAdd";
@@ -7,7 +7,7 @@ import { validationSchemaTransactionCategory } from "@/utils/validation/transact
 import SelectFinanceAccount from "@/components/common/select/SelectAccountType";
 import { useModalStore } from "@/store/modalStore";
 import { useUpdateTransactionCategory } from "@/api/transaction-category/updateDataTransactionCategory";
-import LoadingGlobal from "@/styles/loading/loading-global";
+import { useGlobalLoadingStore } from "@/styles/loading/global-loading-store";
 
 interface UpdateTransactionCategoryModalProps {
   companyId?: string;
@@ -17,7 +17,13 @@ interface UpdateTransactionCategoryModalProps {
 const UpdateTransactionCategoryModal = ({ companyId }: UpdateTransactionCategoryModalProps) => {
   const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
 
-  const { mutate: updateData, isPending: isLoadingUpdateTransactionCategoryData } = useUpdateTransactionCategory();
+  const { mutate: updateData, isPending } = useUpdateTransactionCategory();
+
+  const setLoading = useGlobalLoadingStore((state) => state.setLoading);
+
+  useEffect(() => {
+    setLoading("updateTransactionCategory", isPending);
+  }, [isPending, setLoading]);
 
   // Mock submit function - replace with your actual API call
   const handleSubmit = useCallback(
@@ -51,16 +57,14 @@ const UpdateTransactionCategoryModal = ({ companyId }: UpdateTransactionCategory
 
   return (
     <>
-      <ButtonAdd onClick={open} size={"3.5rem"} />
-      <LoadingGlobal visible={isLoadingUpdateTransactionCategoryData} />
-      <Modal opened={opened} onClose={closeModal} size="lg" yOffset="100px" title="Tambah Kategori Transaksi Baru">
+      <Modal opened={opened} onClose={closeModal} size="70%" yOffset="100px" title={`Ubah Kategori Transaksi ${initialData.name}`}>
         <Formik
           initialValues={initialValuesTransactionCategoryUpdate(initialData)}
           validationSchema={validationSchemaTransactionCategory}
           onSubmit={handleSubmit}
         >
-          {({ values, errors, touched, setFieldValue, handleBlur, isSubmitting }) => {
-            // console.log("error", errors);
+          {({ values, errors, touched, setFieldValue, handleBlur }) => {
+            console.log("values", values);
             return (
               <Form>
                 <SimpleGrid p={20}>
@@ -166,14 +170,10 @@ const UpdateTransactionCategoryModal = ({ companyId }: UpdateTransactionCategory
                   </Stack>
 
                   <Group justify="flex-end" mt="md">
-                    <Button onClick={close} variant="default">
+                    <Button onClick={closeModal} variant="default" disabled={isPending}>
                       Batal
                     </Button>
-                    <Button
-                      type="submit"
-                      disabled={isLoadingUpdateTransactionCategoryData}
-                      loading={isLoadingUpdateTransactionCategoryData}
-                    >
+                    <Button type="submit" disabled={isPending} loading={isPending}>
                       Tambah Transaksi kategori
                     </Button>
                   </Group>

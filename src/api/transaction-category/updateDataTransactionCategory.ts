@@ -7,7 +7,7 @@ const handleEditTransactionCategoryForm = async (id: string, values: ITransactio
     const response = await APIAxiosInstance.put(`/transaction-category/edit/${id}`, values);
     return response.data;
   } catch (error: any) {
-    throw error.response?.data?.error || "Terjadi kesalahan saat memperbarui data";
+    throw error.response?.data?.error;
   }
 };
 

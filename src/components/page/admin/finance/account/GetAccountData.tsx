@@ -65,30 +65,36 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
 
   return (
     <Card shadow="sm" padding="lg">
-      <LoadingGlobal visible={isLoadingGetAccount} />
-      <Stack align="flex-end" mb={16}>
-        <AddAccountModal companyId={companyId} refetchAccountData={refetchAccountData} />
-      </Stack>
+      <LoadingGlobal visible={isLoadingGetAccount || isLoadingDeleteAccount} />
+      <Group justify="space-between">
+        {/* <Stack> */}
+        <Stack>
+          <Text size="xl" fw={600}>
+            Akun keuangan {companyName}
+          </Text>
+          <Select
+            label="Filter berdasarkan Type"
+            placeholder="Pilih Type"
+            data={accountTypeOptions}
+            value={selectedType}
+            onChange={(value) => {
+              setSelectedType(value);
+            }}
+            clearable
+            style={{ width: 250 }}
+          />
+        </Stack>
+        {/* </Stack> */}
 
-      <Select
-        label="Filter berdasarkan Type"
-        placeholder="Pilih Type"
-        data={accountTypeOptions}
-        value={selectedType}
-        onChange={(value) => {
-          console.log("Select onChange:", value); // Debug
-          setSelectedType(value);
-        }}
-        clearable
-        style={{ width: 250 }}
-      />
+        <Stack align="flex-end" mb={16}>
+          <AddAccountModal companyId={companyId} refetchAccountData={refetchAccountData} />
+        </Stack>
+      </Group>
 
       <TableComponent
-        companyName={companyName}
         startIndex={startIndex}
         data={accountList}
         totalAmount={accountData?.total}
-        title="Akun Keuangan"
         height={"580"}
         columns={[
           { key: "code", title: "Code", width: 40, minWidth: 40 },

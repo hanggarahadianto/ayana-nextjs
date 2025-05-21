@@ -1,14 +1,11 @@
-import React, { memo, useCallback } from "react";
-import { Modal, TextInput, Button, Group, Select, Textarea, Stack, SimpleGrid, NumberInput } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import React, { memo, useCallback, useEffect } from "react";
+import { Modal, TextInput, Button, Group, Select, Textarea, Stack, SimpleGrid, NumberInput, Text } from "@mantine/core";
 import { Form, Formik } from "formik";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import { validationSchemaAccount } from "@/utils/validation/account-validation";
 import { getInitialAccountValues, initialAccountValues } from "@/utils/initialValues/initialValuesAccount";
 import { accountTypeOptions, ValidCategories } from "@/constants/dictionary";
 import { useUpdateAccountForm } from "@/api/account/updateDataAccount";
 import { useModalStore } from "@/store/modalStore";
-import LoadingGlobal from "@/styles/loading/loading-global";
 
 interface UpdateAccountModalProps {
   companyId?: string;
@@ -18,7 +15,8 @@ interface UpdateAccountModalProps {
 const UpdateAccountModal = ({ companyId, initialValues }: UpdateAccountModalProps) => {
   const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
 
-  const { mutate: editData, isPending: isLoadingUpdateAccountData } = useUpdateAccountForm();
+  const { mutate: editData, isPending } = useUpdateAccountForm();
+
   const handleSubmit = useCallback(
     (values: IAccountUpdate) => {
       const payload = {
@@ -26,12 +24,12 @@ const UpdateAccountModal = ({ companyId, initialValues }: UpdateAccountModalProp
         values: values,
       };
 
-      console.log("Submitting account:", payload);
-
       editData(payload, {
+        onSuccess: () => {
+          closeModal(); // hanya tutup modal kalau berhasil
+        },
         onError: () => {},
       });
-      closeModal();
     },
     [companyId]
   );
@@ -42,16 +40,16 @@ const UpdateAccountModal = ({ companyId, initialValues }: UpdateAccountModalProp
 
   return (
     <>
-      <ButtonAdd onClick={open} size={"3.5rem"} />
-      <LoadingGlobal visible={isLoadingUpdateAccountData} />
-      <Modal opened={opened} onClose={closeModal} size="lg" yOffset="100px" title="Tambah Akun Baru">
+      <Modal opened={opened} onClose={closeModal} size="lg" yOffset="100px">
         <Formik initialValues={getInitialAccountValues(initialValues)} validationSchema={validationSchemaAccount} onSubmit={handleSubmit}>
           {({ values, errors, touched, setFieldValue, handleBlur }) => {
-            console.log("valus", values);
-            console.log("err", errors);
+            // console.log("valus", values);
+            // console.log("err", errors);
             return (
               <Form>
                 <SimpleGrid p={20}>
+                  <Text fw={600}>Ubah Akun {values?.name}</Text>
+
                   <Stack gap={20}>
                     <NumberInput
                       hideControls
@@ -122,10 +120,10 @@ const UpdateAccountModal = ({ companyId, initialValues }: UpdateAccountModalProp
                   </Stack>
 
                   <Group justify="flex-end" mt="md">
-                    <Button onClick={close} variant="default" disabled={isLoadingUpdateAccountData}>
+                    <Button onClick={closeModal} variant="default" disabled={isPending}>
                       Batal
                     </Button>
-                    <Button type="submit" loading={isLoadingUpdateAccountData} disabled={isLoadingUpdateAccountData}>
+                    <Button type="submit" loading={isPending} disabled={isPending}>
                       Simpan Akun
                     </Button>
                   </Group>

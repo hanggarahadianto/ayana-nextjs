@@ -14,11 +14,11 @@ export const useModalStore = create<ModalState>((set) => ({
   modalName: null,
   modalData: null,
   openModal: (modalName, data = null) => {
-    console.log("openModal dipanggil:", modalName, data);
+    // console.log("openModal dipanggil:", modalName, data);
     set({ opened: true, modalName, modalData: data });
   },
   closeModal: () => {
-    console.log("closeModal dipanggil");
+    // console.log("closeModal dipanggil");
     set({ opened: false, modalName: null, modalData: null });
   },
 }));

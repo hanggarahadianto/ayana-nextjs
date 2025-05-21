@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from "react";
-import { Modal, TextInput, Button, Group, Select, Textarea, Stack, SimpleGrid, NumberInput } from "@mantine/core";
+import { Modal, TextInput, Button, Group, Select, Textarea, Stack, SimpleGrid, NumberInput, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import ButtonAdd from "@/components/common/button/buttonAdd";
@@ -46,14 +46,15 @@ const AddAccountModal = ({ refetchAccountData, companyId }: AddAccountModalProps
     <>
       <ButtonAdd onClick={open} size={"3.5rem"} />
 
-      <Modal opened={opened} onClose={close} size="lg" yOffset="100px" title="Tambah Akun Baru">
+      <Modal opened={opened} onClose={close} size="lg" yOffset="100px">
         <Formik initialValues={initialAccountValues} validationSchema={validationSchemaAccount} onSubmit={handleSubmit}>
           {({ values, errors, touched, setFieldValue, handleBlur, isSubmitting }) => {
-            console.log("valus", values);
-            console.log("err", errors);
+            // console.log("valus", values);
+            // console.log("err", errors);
             return (
               <Form>
                 <SimpleGrid p={20}>
+                  <Text fw={600}>Tambah Akun Keuangan</Text>
                   <Stack gap={20}>
                     <NumberInput
                       hideControls
@@ -96,7 +97,7 @@ const AddAccountModal = ({ refetchAccountData, companyId }: AddAccountModalProps
                       <Select
                         withAsterisk
                         label="Kategori Akun"
-                        placeholder="Pilih kategori akun"
+                        placeholder="Pilih Kategori Akun"
                         value={values.category}
                         onChange={(value) => setFieldValue("category", value || null)} // set null, jangan ""
                         onBlur={handleBlur}
@@ -115,7 +116,7 @@ const AddAccountModal = ({ refetchAccountData, companyId }: AddAccountModalProps
 
                     <Textarea
                       label="Deskripsi"
-                      placeholder="Deskripsi akun (opsional)"
+                      placeholder="Deskripsi Akun (opsional)"
                       value={values.description}
                       onChange={(e) => setFieldValue("description", e.currentTarget.value)}
                       onBlur={handleBlur}

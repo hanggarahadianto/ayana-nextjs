@@ -39,7 +39,7 @@ export const getDataAccount = async ({
   if (category) params.append("category", category);
 
   const url = `account/get?${params.toString()}`;
-  console.log("URL request:", url);
+  // console.log("URL request:", url);
 
   const response = await APIAxiosInstance.get(url);
   return response.data as IAccountResponse;

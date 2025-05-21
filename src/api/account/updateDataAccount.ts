@@ -7,30 +7,35 @@ const handleEditAccountForm = async (id: string, values: IAccountUpdate) => {
     const response = await APIAxiosInstance.put(`/account/edit/${id}`, values);
     return response.data;
   } catch (error: any) {
-    throw error.response?.data?.error || "Terjadi kesalahan saat memperbarui data";
+    throw error.response?.data?.message || "Terjadi kesalahan saat mengedit akun";
   }
 };
 
-// Custom hook untuk update cash flow
 export const useUpdateAccountForm = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, values }: { id: string; values: IAccountUpdate }) => handleEditAccountForm(id, values),
     onSuccess: async (data: any) => {
-      if (data) {
-        await Promise.all([
-          queryClient.refetchQueries({
-            queryKey: ["getAccountData"],
-            exact: false,
-          }),
-        ]);
-      }
+      // console.log("✅ Update berhasil:", data);
+
+      await queryClient.refetchQueries({
+        queryKey: ["getAccountData"],
+        exact: false,
+      });
+
+      showNotification({
+        title: "Berhasil",
+        message: "Data akun berhasil diperbarui.",
+        color: "green",
+      });
     },
     onError: (error: any) => {
+      // console.log("❌ Update gagal:", error);
+
       showNotification({
         title: "Data Gagal Disimpan",
-        message: error as string,
+        message: `${error}`,
         color: "red",
       });
     },

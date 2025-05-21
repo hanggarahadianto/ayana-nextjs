@@ -69,13 +69,11 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
       </Stack>
 
       <TableComponent
-        companyName={companyName}
         startIndex={startIndex}
         data={(transactionCategoryData?.data || []).map((item) => ({
           ...item,
           transaction_type: item.transaction_type?.toUpperCase() || "",
         }))}
-        title="Kategori Transaksi"
         height={"580"}
         columns={[
           { key: "name", title: "Nama", width: 240, minWidth: 240 },

@@ -108,7 +108,8 @@ export const ValidCategories: Record<string, string[]> = {
   Asset: ["Kas & Bank", "Piutang", "Perlengkapan", "Aset Tetap"],
   Liability: ["Utang Dagang", "Pinjaman", "Kewajiban Lancar", "Pajak", "Pembayaran Bagi Hasil", "Hutang Usaha"],
   Equity: ["Modal", "Laba Ditahan"],
-  Revenue: ["Penjualan", "Jasa", "Pendapatan Dari Bunga"],
-  COGS: ["Persediaan", "Tenaga Kerja", "Biaya Lain"],
+  Revenue: ["Penjualan", "Jasa", "Pencairan", "Pendapatan Dari Bunga"],
   Expense: ["Operasional", "Utilitas", "Non Operasional"],
+
+  // COGS: ["Persediaan", "Tenaga Kerja", "Biaya Lain"],
 };
