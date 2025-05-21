@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from "react";
-import { Modal, TextInput, Button, Group, Select, Textarea, Stack, SimpleGrid, NumberInput } from "@mantine/core";
+import { Modal, TextInput, Button, Group, Select, Textarea, Stack, SimpleGrid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import ButtonAdd from "@/components/common/button/buttonAdd";
@@ -16,10 +16,7 @@ interface AddTransactionCategoryModalProps {
 const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId }: AddTransactionCategoryModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const { mutate: postData, isPending: isLoadingSubmitTransactionCategoryData } = useSubmitTransactionCategory(
-    refetchTransactionCategoryData,
-    close
-  );
+  const { mutate: postData, isPending: isLoadingSubmitTransactionCategoryData } = useSubmitTransactionCategory();
 
   // Mock submit function - replace with your actual API call
   const handleSubmit = useCallback(

@@ -32,6 +32,8 @@ interface ITransactionCategoryCreate {
 interface ITransactionCategoryUpdate {
   id: string;
   name: string;
+  jenis_transaksi: string; // hanya untuk UI
+  status: string;
   debit_account_id: string;
   debit_account_name: string;
   credit_account_id: string;
@@ -40,8 +42,6 @@ interface ITransactionCategoryUpdate {
   transaction_type: string;
   description: string;
   company_id: string;
-  created_at: string;
-  updated_at: string;
 }
 
 interface ITransactionCategoryResponse {

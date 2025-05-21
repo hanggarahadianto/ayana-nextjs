@@ -1,5 +1,5 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Group, Flex } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Group, Flex, Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { getDataAccount } from "@/api/account/getDataAccount";
 import { useEffect, useMemo, useState } from "react";
@@ -11,6 +11,7 @@ import { IconPencil } from "@tabler/icons-react";
 import { useDeleteDataAccount } from "@/api/account/deleteDataAccount";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import UpdateAccountModal from "./UpdateAccountModal";
+import { accountTypeOptions } from "@/constants/dictionary";
 
 interface AccountCardProps {
   companyId: string;
@@ -69,18 +70,18 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
         <AddAccountModal companyId={companyId} refetchAccountData={refetchAccountData} />
       </Stack>
 
-      {/* <Select
-          label="Filter berdasarkan Type"
-          placeholder="Pilih Type"
-          data={accountTypeOptions}
-          value={selectedType}
-          onChange={(value) => {
-            console.log("Select onChange:", value); // Debug
-            setSelectedType(value);
-          }}
-          clearable
-          style={{ width: 250 }}
-        /> */}
+      <Select
+        label="Filter berdasarkan Type"
+        placeholder="Pilih Type"
+        data={accountTypeOptions}
+        value={selectedType}
+        onChange={(value) => {
+          console.log("Select onChange:", value); // Debug
+          setSelectedType(value);
+        }}
+        clearable
+        style={{ width: 250 }}
+      />
 
       <TableComponent
         companyName={companyName}

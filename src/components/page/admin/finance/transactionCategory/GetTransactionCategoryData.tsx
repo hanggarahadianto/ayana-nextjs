@@ -10,6 +10,7 @@ import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDelet
 import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
 import { useDeleteDataTransactionCategory } from "@/api/transaction-category/deleteDataTransactionCategory";
+import UpdateTransactionCategory from "./UpdateTransactionCategory";
 
 interface AccountCardProps {
   companyId: string;
@@ -51,8 +52,8 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, transactionCategoryData?.total || 0);
 
-  const openEditModal = (account: ITransactionCategoryUpdate) => {
-    useModalStore.getState().openModal("editTransactionCategory", account);
+  const openEditModal = (transactionCategory: ITransactionCategory) => {
+    useModalStore.getState().openModal("editTransactionCategory", transactionCategory);
   };
 
   const { mutate: mutateDeleteDataTransactionCategory, isPending: isLoadingDeleteTransactionCategory } = useDeleteDataTransactionCategory();
@@ -88,7 +89,7 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
             title: "Aksi",
             width: 90,
             minWidth: 40,
-            render: (row: ITransactionCategoryUpdate) => (
+            render: (row: ITransactionCategory) => (
               <Group gap="lg" justify="center">
                 <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
                 <ButtonDeleteWithConfirmation
@@ -102,6 +103,8 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
           },
         ]}
       />
+
+      <UpdateTransactionCategory initialValues={useModalStore((state) => state.modalData)} />
 
       {totalPages > 0 && (
         <Stack gap="xs" mt="40" style={{ paddingBottom: "16px" }}>

@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { showNotification } from "@mantine/notifications";
 import { APIAxiosInstance } from "../../lib";
 import { AxiosError } from "axios";
@@ -16,16 +16,23 @@ const handleSubmitTransactionCategoryForm = async (values: ITransactionCategoryC
   return response.data;
 };
 
-export const useSubmitTransactionCategory = (refetchTransactionCategoryData: () => void, closeModal: () => void) => {
+export const useSubmitTransactionCategory = () => {
+  const queryClient = useQueryClient();
+
   return useMutation<void, AxiosError<APIErrorResponse>, ITransactionCategoryCreate>({
     mutationFn: handleSubmitTransactionCategoryForm,
-    onSuccess: () => {
+    onSuccess: async (data) => {
       try {
         console.log("TransactionCategory data successfully submitted");
 
         // Jalankan refetch dan tampilkan notifikasi
-        refetchTransactionCategoryData?.(); // Gunakan optional chaining
-        closeModal?.();
+
+        await Promise.all([
+          queryClient.refetchQueries({
+            queryKey: ["getTransactionCategory"],
+            exact: false,
+          }),
+        ]);
 
         showNotification({
           title: "Data Berhasil Dikirim",

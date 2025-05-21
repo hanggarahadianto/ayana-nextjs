@@ -1,42 +1,42 @@
 import React, { memo, useCallback } from "react";
-import { Modal, TextInput, Button, Group, Select, Textarea, Stack, SimpleGrid, NumberInput } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { Modal, TextInput, Button, Group, Select, Textarea, Stack, SimpleGrid } from "@mantine/core";
 import { Form, Formik } from "formik";
 import ButtonAdd from "@/components/common/button/buttonAdd";
-import { initialValuesTransactionCategoryCreate } from "@/utils/initialValues/initialValuesTransactionCategory";
+import { initialValuesTransactionCategoryUpdate } from "@/utils/initialValues/initialValuesTransactionCategory";
 import { validationSchemaTransactionCategory } from "@/utils/validation/transactionCategory-validation";
-import { useSubmitTransactionCategory } from "@/api/transaction-category/postDataTransactionCategory";
 import SelectFinanceAccount from "@/components/common/select/SelectAccountType";
+import { useModalStore } from "@/store/modalStore";
+import { useUpdateTransactionCategory } from "@/api/transaction-category/updateDataTransactionCategory";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 interface UpdateTransactionCategoryModalProps {
-  refetchTransactionCategoryData: () => void;
   companyId?: string;
+  initialValues: ITransactionCategoryUpdate;
 }
 
-const UpdateTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId }: UpdateTransactionCategoryModalProps) => {
-  const [opened, { open, close }] = useDisclosure(false);
+const UpdateTransactionCategoryModal = ({ companyId }: UpdateTransactionCategoryModalProps) => {
+  const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
 
-  const { mutate: postData, isPending: isLoadingSubmitTransactionCategoryData } = useSubmitTransactionCategory(
-    refetchTransactionCategoryData,
-    close
-  );
+  const { mutate: updateData, isPending: isLoadingUpdateTransactionCategoryData } = useUpdateTransactionCategory();
 
   // Mock submit function - replace with your actual API call
   const handleSubmit = useCallback(
-    (values: ITransactionCategoryCreate, { setSubmitting }: any) => {
+    (values: ITransactionCategoryUpdate, { setSubmitting }: any) => {
       const statusLabel = values.status === "paid" ? "TUNAI" : values.status === "unpaid" ? "TEMPO" : "";
       const combinedName = `${values.jenis_transaksi} ${values.name}${statusLabel ? ` (${statusLabel})` : ""}`.trim();
 
       const payload = {
-        ...values,
-        name: combinedName,
-        company_id: companyId || "",
+        id: values.id,
+        values: {
+          ...values,
+          name: combinedName,
+          company_id: companyId || "",
+        },
       };
 
-      postData(payload, {
+      updateData(payload, {
         onSuccess: () => {
-          refetchTransactionCategoryData();
-          close();
+          closeModal;
           setSubmitting(false);
         },
         onError: () => {
@@ -47,13 +47,15 @@ const UpdateTransactionCategoryModal = ({ refetchTransactionCategoryData, compan
     [companyId]
   );
 
+  if (modalName !== "editTransactionCategory" || !opened || !initialData) return null;
+
   return (
     <>
       <ButtonAdd onClick={open} size={"3.5rem"} />
-
-      <Modal opened={opened} onClose={close} size="lg" yOffset="100px" title="Tambah Kategori Transaksi Baru">
+      <LoadingGlobal visible={isLoadingUpdateTransactionCategoryData} />
+      <Modal opened={opened} onClose={closeModal} size="lg" yOffset="100px" title="Tambah Kategori Transaksi Baru">
         <Formik
-          initialValues={initialValuesTransactionCategoryCreate(companyId)}
+          initialValues={initialValuesTransactionCategoryUpdate(initialData)}
           validationSchema={validationSchemaTransactionCategory}
           onSubmit={handleSubmit}
         >
@@ -169,8 +171,8 @@ const UpdateTransactionCategoryModal = ({ refetchTransactionCategoryData, compan
                     </Button>
                     <Button
                       type="submit"
-                      disabled={isLoadingSubmitTransactionCategoryData}
-                      loading={isLoadingSubmitTransactionCategoryData}
+                      disabled={isLoadingUpdateTransactionCategoryData}
+                      loading={isLoadingUpdateTransactionCategoryData}
                     >
                       Tambah Transaksi kategori
                     </Button>

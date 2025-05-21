@@ -12,16 +12,16 @@ const handleEditTransactionCategoryForm = async (id: string, values: ITransactio
 };
 
 // Custom hook untuk update cash flow
-export const useUpdateAccountForm = () => {
+export const useUpdateTransactionCategory = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, values }: { id: string; values: ITransactionCategoryUpdate }) => handleEditTransactionCategoryForm(id, values),
-    onSuccess: async (data: any) => {
+    onSuccess: async (data: ITransactionCategoryUpdate) => {
       if (data) {
         await Promise.all([
           queryClient.refetchQueries({
-            queryKey: ["editTransactionCategory"],
+            queryKey: ["getTransactionCategory"],
             exact: false,
           }),
         ]);

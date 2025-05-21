@@ -79,7 +79,7 @@ const AddAccountModal = ({ refetchAccountData, companyId }: AddAccountModalProps
                     <Select
                       withAsterisk
                       label="Tipe Akun"
-                      placeholder="Pilih tipe akun"
+                      placeholder="Pilih Tipe Akun"
                       data={accountTypeOptions}
                       value={values.type}
                       onChange={(value) => {

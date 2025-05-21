@@ -74,14 +74,14 @@ export default function TableComponent<T>({
               <Text size="xl" fw={600}>
                 {title} {companyName}
               </Text>
-              <Select
+              {/* <Select
                 label="Pilih Tipe"
                 placeholder="Pilih"
                 value={selectedType}
                 onChange={setSelectedType}
                 data={["Tipe 1", "Tipe 2", "Tipe 3"]} // Data untuk Select, bisa diubah sesuai kebutuhan
                 style={{ width: 250 }}
-              />
+              /> */}
             </Stack>
             {
               (totalAmount = 0 && (
