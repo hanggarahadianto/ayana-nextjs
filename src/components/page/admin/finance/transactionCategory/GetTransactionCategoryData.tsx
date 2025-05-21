@@ -14,10 +14,9 @@ import UpdateTransactionCategory from "./UpdateTransactionCategory";
 
 interface AccountCardProps {
   companyId: string;
-  companyName?: string;
 }
 
-export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardProps) => {
+export const TransactionCategoryCard = ({ companyId }: AccountCardProps) => {
   const [page, setPage] = useState(1);
   const limit = 10;
   const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -45,6 +44,8 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
     refetchOnWindowFocus: false,
   });
 
+  console.log("transaction category", transactionCategoryData);
+
   const totalPages = useMemo(() => {
     return transactionCategoryData?.total ? Math.ceil(transactionCategoryData.total / limit) : 1;
   }, [transactionCategoryData]);
@@ -70,10 +71,7 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
 
       <TableComponent
         startIndex={startIndex}
-        data={(transactionCategoryData?.data || []).map((item) => ({
-          ...item,
-          transaction_type: item.transaction_type?.toUpperCase() || "",
-        }))}
+        data={transactionCategoryData?.data || []}
         height={"580"}
         columns={[
           { key: "name", title: "Nama", width: 240, minWidth: 240 },
@@ -102,7 +100,7 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
         ]}
       />
 
-      <UpdateTransactionCategory initialValues={useModalStore((state) => state.modalData)} />
+      <UpdateTransactionCategory companyId={companyId} initialValues={useModalStore((state) => state.modalData)} />
 
       {totalPages > 0 && (
         <Stack gap="xs" mt="40" style={{ paddingBottom: "16px" }}>

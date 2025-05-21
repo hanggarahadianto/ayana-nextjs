@@ -1,11 +1,13 @@
 interface ITransactionCategory {
   id: string;
   name: string;
+  transaction_label: string; // hanya untuk UI
+
   debit_account_id: string;
-  debit_account_name: string;
+  // debit_account_name: string;
   debit_account_type: string;
   credit_account_id: string;
-  credit_account_name: string;
+  // credit_account_name: string;
   credit_account_type: string;
   transaction_type: string;
   category: string;
@@ -17,12 +19,13 @@ interface ITransactionCategory {
 
 interface ITransactionCategoryCreate {
   name: string;
-  jenis_transaksi: string; // hanya untuk UI
+  transaction_label: string; // hanya untuk UI
+
   status: string;
   debit_account_id: string;
-  debit_account_name: string;
+  debit_account_type: string;
   credit_account_id: string;
-  credit_account_name: string;
+  credit_account_type: string;
   transaction_type: string;
   category: string;
   description: string;
@@ -32,12 +35,12 @@ interface ITransactionCategoryCreate {
 interface ITransactionCategoryUpdate {
   id: string;
   name: string;
-  jenis_transaksi: string; // hanya untuk UI
+  transaction_label: string; // hanya untuk UI
   status: string;
   debit_account_id: string;
-  debit_account_name: string;
+  debit_account_type: string;
   credit_account_id: string;
-  credit_account_name: string;
+  credit_account_type: string;
   category: string;
   transaction_type: string;
   description: string;

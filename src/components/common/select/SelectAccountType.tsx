@@ -11,6 +11,7 @@ interface ISelectFinanceAccountProps {
   onSelect: (selected: { id: string; category: string; code?: string; type?: string; name?: string } | null) => void;
   label: string;
   error: any;
+  value?: string | null; // Tambahan
 }
 
 export default function SelectFinanceAccount({
@@ -21,6 +22,7 @@ export default function SelectFinanceAccount({
   onSelect,
   label,
   error,
+  value,
 }: ISelectFinanceAccountProps) {
   const { data: accountData, isLoading } = useQuery({
     queryKey: ["getAccountData", companyId, category, category_only],
@@ -79,6 +81,7 @@ export default function SelectFinanceAccount({
     <>
       <LoadingOverlay visible={isLoading} />
       <Select
+        value={value || null}
         error={error}
         w={400}
         searchable

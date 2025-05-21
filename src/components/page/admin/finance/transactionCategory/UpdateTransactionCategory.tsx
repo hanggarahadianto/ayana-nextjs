@@ -1,13 +1,12 @@
 import React, { memo, useCallback, useEffect } from "react";
 import { Modal, TextInput, Button, Group, Select, Textarea, Stack, SimpleGrid } from "@mantine/core";
 import { Form, Formik } from "formik";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import { initialValuesTransactionCategoryUpdate } from "@/utils/initialValues/initialValuesTransactionCategory";
 import { validationSchemaTransactionCategory } from "@/utils/validation/transactionCategory-validation";
 import SelectFinanceAccount from "@/components/common/select/SelectAccountType";
 import { useModalStore } from "@/store/modalStore";
 import { useUpdateTransactionCategory } from "@/api/transaction-category/updateDataTransactionCategory";
-import { useGlobalLoadingStore } from "@/styles/loading/global-loading-store";
+import { transactionLabel } from "@/constants/dictionary";
 
 interface UpdateTransactionCategoryModalProps {
   companyId?: string;
@@ -15,21 +14,18 @@ interface UpdateTransactionCategoryModalProps {
 }
 
 const UpdateTransactionCategoryModal = ({ companyId }: UpdateTransactionCategoryModalProps) => {
+  console.log("company ID", companyId);
   const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
 
+  console.log("initial data", initialData);
+
   const { mutate: updateData, isPending } = useUpdateTransactionCategory();
-
-  const setLoading = useGlobalLoadingStore((state) => state.setLoading);
-
-  useEffect(() => {
-    setLoading("updateTransactionCategory", isPending);
-  }, [isPending, setLoading]);
 
   // Mock submit function - replace with your actual API call
   const handleSubmit = useCallback(
     (values: ITransactionCategoryUpdate, { setSubmitting }: any) => {
       const statusLabel = values.status === "paid" ? "TUNAI" : values.status === "unpaid" ? "TEMPO" : "";
-      const combinedName = `${values.jenis_transaksi} ${values.name}${statusLabel ? ` (${statusLabel})` : ""}`.trim();
+      const combinedName = `${values.transaction_label} ${values.name}${statusLabel ? ` (${statusLabel})` : ""}`.trim();
 
       const payload = {
         id: values.id,
@@ -57,7 +53,13 @@ const UpdateTransactionCategoryModal = ({ companyId }: UpdateTransactionCategory
 
   return (
     <>
-      <Modal opened={opened} onClose={closeModal} size="70%" yOffset="100px" title={`Ubah Kategori Transaksi ${initialData.name}`}>
+      <Modal
+        opened={opened}
+        onClose={closeModal}
+        size="70%"
+        yOffset="100px"
+        title={`Ubah Kategori Transaksi ${initialData.transaction_type}`}
+      >
         <Formik
           initialValues={initialValuesTransactionCategoryUpdate(initialData)}
           validationSchema={validationSchemaTransactionCategory}
@@ -91,17 +93,11 @@ const UpdateTransactionCategoryModal = ({ companyId }: UpdateTransactionCategory
                           withAsterisk
                           label="Jenis Transaksi"
                           placeholder="Pilih Jenis Transaksi"
-                          data={[
-                            { value: "Penjualan", label: "Penjualan" },
-                            { value: "Pinjaman", label: "Pinjaman" },
-                            { value: "Pembelian", label: "Pembelian" },
-                            { value: "Pengeluaran", label: "Pengeluaran" },
-                            { value: "Piutang", label: "Piutang" },
-                          ]}
-                          value={values.jenis_transaksi}
-                          onChange={(value) => setFieldValue("jenis_transaksi", value)}
+                          data={transactionLabel}
+                          value={values.transaction_label}
+                          onChange={(value) => setFieldValue("transaction_label", value)}
                           onBlur={handleBlur}
-                          error={touched.jenis_transaksi && errors.jenis_transaksi}
+                          error={touched.transaction_label && errors.transaction_label}
                         />
                         <TextInput
                           w={"100%"}
@@ -130,6 +126,7 @@ const UpdateTransactionCategoryModal = ({ companyId }: UpdateTransactionCategory
                       error={touched.transaction_type && errors.transaction_type}
                     />
                     <SelectFinanceAccount
+                      value={values.debit_account_id}
                       companyId={companyId}
                       onSelect={(selected) => {
                         setFieldValue("debit_account_id", selected?.id);
@@ -141,6 +138,7 @@ const UpdateTransactionCategoryModal = ({ companyId }: UpdateTransactionCategory
                       error={touched.debit_account_id && errors.debit_account_id}
                     />
                     <SelectFinanceAccount
+                      value={values.credit_account_id}
                       companyId={companyId}
                       onSelect={(selected) => {
                         setFieldValue("credit_account_id", selected?.id);
