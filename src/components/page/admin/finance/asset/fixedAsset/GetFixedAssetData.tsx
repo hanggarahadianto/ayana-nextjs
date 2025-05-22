@@ -67,9 +67,9 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         transactionType={transactionType}
         height={"580"}
         columns={[
+          { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
           { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
           { key: "partner", title: "Partner", width: 80, minWidth: 80 },
-
           {
             key: "amount",
             title: "Nominal",

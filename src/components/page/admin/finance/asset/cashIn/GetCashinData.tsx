@@ -70,8 +70,8 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         transactionType={transactionType}
         height={"580"}
         columns={[
-          { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
           { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
+          { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
           { key: "category", title: "Kategori", width: 80, minWidth: 80 },
           { key: "partner", title: "Partner", width: 80, minWidth: 80 },
           {

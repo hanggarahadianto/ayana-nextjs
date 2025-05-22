@@ -25,17 +25,17 @@ export default function PayoutComponent() {
           transactionType={transactionType}
         />
 
-        <GetExpenseSummaryData companyId={activeTab?.id} companyName={activeTab?.title} />
+        <GetExpenseSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} />
 
         <GetOutstandingDebtData
-          companyId={activeTab?.id}
+          companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
           title="Hutang Berjalan"
           status="going"
           transactionType={transactionType}
         />
         <GetOutstandingDebtData
-          companyId={activeTab?.id}
+          companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
           title="Hutang Lunas"
           status="done"

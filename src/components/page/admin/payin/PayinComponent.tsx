@@ -25,16 +25,16 @@ export default function PayinComponent() {
           transactionType={transactionType}
         />
 
-        <GetFixedAssetData
-          companyId={activeTab?.id || ""}
-          companyName={activeTab?.title}
-          assetType="fixed_asset"
-          transactionType={transactionType}
-        />
         <GetReceivableAssetData
           companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
           assetType="receivable"
+          transactionType={transactionType}
+        />
+        <GetFixedAssetData
+          companyId={activeTab?.id || ""}
+          companyName={activeTab?.title}
+          assetType="fixed_asset"
           transactionType={transactionType}
         />
       </SimpleGridGlobal>

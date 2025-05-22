@@ -1,6 +1,6 @@
 import { getOutstandingDebt } from "@/api/finance/getOutstandingDebt";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Badge } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Badge, Group } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { formatCurrency } from "@/utils/formatCurrency";
@@ -9,9 +9,10 @@ import { IoIosSend } from "react-icons/io";
 import TableComponent from "@/components/common/table/TableComponent";
 import { calculateDaysLeft, formatDaysToMonths, getStatusColor } from "@/utils/debtStatus";
 import ReversedJournalEntryModal from "../journalEntry/ReversedJournalEntryModal";
+import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 
 interface GetOutStandingDebtDataProps {
-  companyId?: string;
+  companyId: string;
   companyName?: string;
   title: string;
   status: string;
@@ -21,7 +22,8 @@ interface GetOutStandingDebtDataProps {
 export const GetOutstandingDebtData = ({ companyId, companyName, title, status, transactionType }: GetOutStandingDebtDataProps) => {
   const limit = 10;
   const [pageOutstandingDebt, setPageOutstandingDebt] = useState(1);
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
   const [selectedDebt, setSelectedDebt] = useState<IDebtSummaryItem | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,17 +65,30 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingOutstandingDebt} />
+      <Group justify="space-between">
+        <Stack>
+          <Text size="xl" fw={600}>
+            {title} {companyName}
+          </Text>
+
+          <SelectCategoryFilter
+            companyId={companyId}
+            value={selectedCategory}
+            onChange={(value) => {
+              setSelectedCategory(value);
+            }}
+          />
+        </Stack>
+      </Group>
       <TableComponent
-        companyName={companyName}
         startIndex={startIndex}
         data={debtList}
         totalAmount={outstandingDebtData?.data.total_debt}
-        title={title}
         transactionType={transactionType}
+        height={"580"}
         columns={[
+          { key: "transaction_id", title: "Transaction ID", width: 140, minWidth: 140 },
           { key: "invoice", title: "Invoice", width: 160, minWidth: 160 },
-          { key: "transaction_id", title: "Transaction ID", width: 120, minWidth: 120 },
-
           { key: "partner", title: "Partner", width: 160, minWidth: 160 },
           {
             key: "amount",

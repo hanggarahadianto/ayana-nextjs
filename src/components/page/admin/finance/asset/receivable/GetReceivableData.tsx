@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { formatCurrency } from "@/utils/formatCurrency";
-import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
@@ -73,9 +72,9 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
           transactionType={transactionType}
           height={"580"}
           columns={[
+            { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
             { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
             { key: "partner", title: "Partner", width: 80, minWidth: 80 },
-
             {
               key: "amount",
               title: "Nominal",
@@ -90,7 +89,6 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
               minWidth: 120,
               render: (item) => formatDateIndonesia(item.date_inputed),
             },
-
             { key: "description", title: "Deskripsi", width: 220, minWidth: 220 },
           ]}
         />

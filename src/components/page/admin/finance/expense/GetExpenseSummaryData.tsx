@@ -1,22 +1,24 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Select, Box } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Select, Box, Group } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { getExpenseSummary } from "@/api/finance/getExpenseSummary";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
+import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 
 interface GetExpenseDataProps {
-  companyId?: string;
+  companyId: string;
   companyName?: string;
 }
 
 export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseDataProps) => {
   const limit = 10;
   const [pageExpense, setPageExpense] = useState(1);
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
   const status = "base";
   const {
     data: expenseData,
@@ -51,19 +53,32 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
     <SimpleGridGlobal cols={1}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <LoadingGlobal visible={isLoadingExpense} />
+        <Group justify="space-between">
+          <Stack>
+            <Text size="xl" fw={600}>
+              Pengeluaran {companyName}
+            </Text>
+
+            <SelectCategoryFilter
+              companyId={companyId}
+              value={selectedCategory}
+              onChange={(value) => {
+                setSelectedCategory(value);
+              }}
+            />
+          </Stack>
+        </Group>
 
         <Box style={{ flex: 1 }}>
           <TableComponent
-            companyName={companyName}
             startIndex={startIndex}
             data={expenseList}
             totalAmount={expenseData?.data?.total_expense ?? 0}
-            title={"Pengeluaran"}
+            height={"580"}
             columns={[
-              { key: "invoice", title: "Invoice", width: 100, minWidth: 100 },
               { key: "transaction_id", title: "Transaction ID", width: 40, minWidth: 40 },
+              { key: "invoice", title: "Invoice", width: 100, minWidth: 100 },
               { key: "partner", title: "Partner", width: 120, minWidth: 120 },
-
               {
                 key: "amount",
                 title: "Nominal",
@@ -78,7 +93,6 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
                 minWidth: 120,
                 render: (item) => formatDateIndonesia(item.date_inputed),
               },
-
               { key: "description", title: "Deskripsi", width: 260, minWidth: 260 },
             ]}
           />

@@ -7,6 +7,7 @@ import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 import CreateJournalEntryModal from "../../journalEntry/CreateJournalEntryModal";
+import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -18,15 +19,17 @@ interface CashSummaryCardProps {
 export const GetCashOutData = ({ companyId, companyName, assetType, transactionType }: CashSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const limit = 10;
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const { data: cashOutSummaryData, isPending: isLoadingcashOutData } = useQuery({
-    queryKey: ["getCashOutData", companyId, page, assetType],
+    queryKey: ["getCashOutData", companyId, page, assetType, selectedCategory],
     queryFn: () =>
       getAssetSummary({
         companyId,
         page,
         limit,
         assetType,
+        category: selectedCategory ?? "",
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -41,19 +44,36 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingcashOutData} />
-      <Stack align="flex-end" mb={16}>
-        <CreateJournalEntryModal companyId={companyId} transactionType={"payout"} />
-      </Stack>
+
+      <Group justify="space-between">
+        <Stack>
+          <Text size="xl" fw={600}>
+            Uang Keluar {companyName}
+          </Text>
+
+          <SelectCategoryFilter
+            companyId={companyId}
+            value={selectedCategory}
+            onChange={(value) => {
+              setSelectedCategory(value);
+            }}
+          />
+        </Stack>
+        <Stack align="flex-end" mb={16}>
+          <CreateJournalEntryModal companyId={companyId} transactionType={"payout"} />
+        </Stack>
+      </Group>
       <Box style={{ flex: 1 }}>
         <TableComponent
           startIndex={startIndex}
           data={cashOutList}
           totalAmount={cashOutSummaryData?.data.total_asset}
           transactionType={transactionType}
+          height={"580"}
           columns={[
+            { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
             { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
             { key: "partner", title: "Partner", width: 80, minWidth: 80 },
-
             {
               key: "amount",
               title: "Nominal",
@@ -68,7 +88,6 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
               minWidth: 120,
               render: (item) => formatDateIndonesia(item.date_inputed),
             },
-
             { key: "description", title: "Deskripsi", width: 220, minWidth: 220 },
           ]}
         />
