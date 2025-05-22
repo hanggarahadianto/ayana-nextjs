@@ -55,3 +55,7 @@ interface ITransactionCategoryResponse {
   page?: number;
   total?: number;
 }
+interface ITransactionCategorySelectByCategoryResponse {
+  data: string[];
+  status: string;
+}

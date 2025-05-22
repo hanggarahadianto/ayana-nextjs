@@ -37,8 +37,6 @@ export const TransactionCategoryCard = ({ companyId }: AccountCardProps) => {
         transactionType: selectedType,
         category: selectedCategory,
         status: null, // bisa juga dihapus kalau tidak dipakai
-        select: true,
-        selectByCategory: false,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,

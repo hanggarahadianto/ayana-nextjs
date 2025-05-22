@@ -3,10 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { formatCurrency } from "@/utils/formatCurrency";
-import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
+import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -18,24 +18,26 @@ interface AssetSummaryCardProps {
 export const GetFixedAssetData = ({ companyId, companyName, assetType, transactionType }: AssetSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const limit = 10;
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const { data: assetSummaryData, isPending } = useQuery({
-    queryKey: ["getFixedAssetData", companyId, page, assetType],
+  const { data: fixAssetSummaryData, isPending } = useQuery({
+    queryKey: ["getFixedAssetData", companyId, page, assetType, selectedCategory],
     queryFn: () =>
       getAssetSummary({
         companyId,
         page,
         limit,
         assetType,
+        category: selectedCategory ?? "",
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
 
-  const assetList = assetSummaryData?.data?.assetList ?? [];
-  const totalData = assetSummaryData?.data?.total ?? 0;
+  const assetList = fixAssetSummaryData?.data?.assetList ?? [];
+  const totalData = fixAssetSummaryData?.data?.total ?? 0;
   const totalPages = Math.ceil(totalData / limit);
-  const totalAssetIn = assetSummaryData?.data?.total_asset ?? 0;
+  const totalAssetIn = fixAssetSummaryData?.data?.total_asset ?? 0;
 
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, totalData);
@@ -43,14 +45,27 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <LoadingGlobal visible={isPending} />
+      <Group justify="space-between">
+        <Stack>
+          <Text size="xl" fw={600}>
+            Aset Tetap {companyName}
+          </Text>
 
+          <SelectCategoryFilter
+            companyId={companyId}
+            value={selectedCategory}
+            onChange={(value) => {
+              setSelectedCategory(value);
+            }}
+          />
+        </Stack>
+      </Group>
       <TableComponent
-        companyName={companyName}
         startIndex={startIndex}
         data={assetList}
         totalAmount={totalAssetIn}
-        title={"Aset Tetap"}
         transactionType={transactionType}
+        height={"580"}
         columns={[
           { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
           { key: "partner", title: "Partner", width: 80, minWidth: 80 },
@@ -74,12 +89,14 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         ]}
       />
 
-      <Group gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
-        <Pagination total={totalPages} value={page} onChange={setPage} />
-        <Text size="sm" c="dimmed">
-          Menampilkan {startIndex} sampai {endIndex} dari {totalData} data
-        </Text>
-      </Group>
+      {totalPages > 0 && (
+        <Stack gap="xs" mt="40" style={{ paddingBottom: "16px" }}>
+          <Pagination total={totalPages} value={page} onChange={setPage} />
+          <Text size="sm" c="dimmed">
+            Menampilkan {startIndex} sampai {endIndex} dari {fixAssetSummaryData?.data.total} data
+          </Text>
+        </Stack>
+      )}
     </Card>
   );
 };

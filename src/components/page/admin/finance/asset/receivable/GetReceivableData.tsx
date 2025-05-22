@@ -7,6 +7,7 @@ import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
+import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -18,15 +19,17 @@ interface AssetSummaryCardProps {
 export const GetReceivableAssetData = ({ companyId, companyName, assetType, transactionType }: AssetSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const limit = 10;
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const { data: receivableAssetSummaryData, isPending } = useQuery({
-    queryKey: ["getReceivableAssetData", companyId, page, assetType],
+    queryKey: ["getReceivableAssetData", companyId, page, assetType, selectedCategory],
     queryFn: () =>
       getAssetSummary({
         companyId,
         page,
         limit,
         assetType,
+        category: selectedCategory ?? "",
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -46,15 +49,29 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <LoadingGlobal visible={isPending} />
+      <Group justify="space-between">
+        <Stack>
+          <Text size="xl" fw={600}>
+            Piutang Usaha {companyName}
+          </Text>
+
+          <SelectCategoryFilter
+            companyId={companyId}
+            value={selectedCategory}
+            onChange={(value) => {
+              setSelectedCategory(value);
+            }}
+          />
+        </Stack>
+      </Group>
 
       <Box style={{ flex: 1 }}>
         <TableComponent
-          companyName={companyName}
           startIndex={startIndex}
           data={assetList}
           totalAmount={totalAssetIn}
-          title={"Piutang Usaha"}
           transactionType={transactionType}
+          height={"580"}
           columns={[
             { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
             { key: "partner", title: "Partner", width: 80, minWidth: 80 },

@@ -6,6 +6,7 @@ interface GetAssetSummaryParams {
   limit?: number;
   assetType?: string | null;
   summaryOnly?: boolean;
+  category?: string;
 }
 
 export const getAssetSummary = async ({
@@ -14,6 +15,7 @@ export const getAssetSummary = async ({
   limit = 10,
   assetType = null,
   summaryOnly,
+  category,
 }: GetAssetSummaryParams): Promise<IAssetSummaryResponse> => {
   if (!companyId) throw new Error("Company ID is required");
 
@@ -25,6 +27,7 @@ export const getAssetSummary = async ({
 
   if (assetType) queryParams.append("asset_type", assetType);
   if (summaryOnly) queryParams.append("summary_only", "true");
+  if (category) queryParams.append("category", category);
 
   const url = `finance/get-asset-summary?${queryParams.toString()}`;
 

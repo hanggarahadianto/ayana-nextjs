@@ -10,7 +10,6 @@ export interface GetTransactionCategoryParams {
   category?: string | null;
   status?: string | null;
   select?: boolean;
-  selectByCategory?: boolean;
 }
 
 export const getDataTransactionCategory = async ({
@@ -21,7 +20,6 @@ export const getDataTransactionCategory = async ({
   category,
   status,
   select = false,
-  selectByCategory = false, // ✅ tambahkan default
 }: GetTransactionCategoryParams) => {
   if (!companyId) {
     console.error("Company ID tidak ada!");
@@ -34,10 +32,6 @@ export const getDataTransactionCategory = async ({
     url += `&select=true`;
   } else {
     url += `&page=${page}&limit=${limit}`;
-  }
-
-  if (selectByCategory) {
-    url += `&selectByCategory=true`; // ✅ tambahkan parameter
   }
 
   if (transactionType) {

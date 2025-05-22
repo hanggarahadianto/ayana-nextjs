@@ -59,6 +59,7 @@ interface IAssetSummaryItem {
   invoice: string;
   description: string;
   amount: number;
+  category: string;
   partner: string;
   transaction_type: string;
   status: string;

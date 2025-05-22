@@ -46,11 +46,9 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
       </Stack>
       <Box style={{ flex: 1 }}>
         <TableComponent
-          companyName={companyName}
           startIndex={startIndex}
           data={cashOutList}
           totalAmount={cashOutSummaryData?.data.total_asset}
-          title={"Uang Keluar"}
           transactionType={transactionType}
           columns={[
             { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
@@ -75,12 +73,15 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
           ]}
         />
       </Box>
-      <Group gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
-        <Pagination total={totalPages} value={page} onChange={setPage} />
-        <Text size="sm" c="dimmed">
-          Menampilkan {startIndex} sampai {endIndex} dari {cashOutSummaryData?.data.total} data
-        </Text>
-      </Group>
+
+      {totalPages > 0 && (
+        <Stack gap="xs" mt={"md"} style={{ paddingBottom: "16px" }}>
+          <Pagination total={totalPages} value={page} onChange={setPage} />
+          <Text size="sm" c="dimmed">
+            Menampilkan {startIndex} sampai {endIndex} dari {cashOutSummaryData?.data.total} data
+          </Text>
+        </Stack>
+      )}
     </Card>
   );
 };

@@ -7,6 +7,7 @@ import CreateJournalEntryModal from "../../journalEntry/CreateJournalEntryModal"
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
+import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -18,16 +19,17 @@ interface CashSummaryCardProps {
 export const GetCashinData = ({ companyId, companyName, assetType, transactionType }: CashSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const limit = 10;
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const { data: cashinSummaryData, isPending: isLoadingCashinData } = useQuery({
-    queryKey: ["getCashinData", companyId, page, assetType],
+    queryKey: ["getCashinData", companyId, page, assetType, selectedCategory],
     queryFn: () =>
       getAssetSummary({
         companyId,
         page,
         limit,
         assetType,
+        category: selectedCategory ?? "",
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -47,16 +49,13 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
           <Text size="xl" fw={600}>
             Uang Masuk {companyName}
           </Text>
-          <Select
-            label="Filter "
-            placeholder="Pilih Type"
-            // data={accountTypeOptions}
-            value={selectedType}
+
+          <SelectCategoryFilter
+            companyId={companyId}
+            value={selectedCategory}
             onChange={(value) => {
-              setSelectedType(value);
+              setSelectedCategory(value);
             }}
-            clearable
-            style={{ width: 250 }}
           />
         </Stack>
         <Stack align="flex-end" mb={16}>
@@ -73,6 +72,7 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         columns={[
           { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
           { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
+          { key: "category", title: "Kategori", width: 80, minWidth: 80 },
           { key: "partner", title: "Partner", width: 80, minWidth: 80 },
           {
             key: "amount",
