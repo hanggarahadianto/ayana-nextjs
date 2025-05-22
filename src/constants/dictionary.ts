@@ -119,8 +119,10 @@ export const ValidCategories: Record<string, string[]> = {
 export const transactionLabel = [
   { value: "Penjualan", label: "Penjualan" },
   { value: "Pencairan", label: "Pencairan" },
+  { value: "Penerimaan", label: "Penerimaan" },
   { value: "Pinjaman", label: "Pinjaman" },
-  { value: "Pembelian", label: "Pembelian" },
-  { value: "Pengeluaran", label: "Pengeluaran" },
   { value: "Piutang", label: "Piutang" },
+  { value: "Pembelian", label: "Pembelian" },
+  { value: "Pembayaran", label: "Pembayaran" },
+  { value: "Pengeluaran", label: "Pengeluaran" },
 ];

@@ -2,6 +2,7 @@ interface ITransactionCategory {
   id: string;
   name: string;
   transaction_label: string; // hanya untuk UI
+  status: string;
 
   debit_account_id: string;
   // debit_account_name: string;

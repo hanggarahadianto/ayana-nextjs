@@ -14,7 +14,8 @@ export const initialValuesJournalEntry = (companyId?: string | null, transaction
         installment: 0,
         is_repaid: false,
         note: "",
-        status: defaultStatus, // Status diatur berdasarkan transaksi
+        status: "", // Status diatur berdasarkan transaksi
+        // status: defaultStatus, // Status diatur berdasarkan transaksi
         transaction_type: (transactionType as "payin" | "payout") || "",
         transaction_category_id: "",
         company_id: companyId || "", // Gunakan companyId jika ada, jika tidak gunakan default

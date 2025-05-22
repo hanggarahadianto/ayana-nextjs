@@ -1,6 +1,16 @@
 import { getDataTranasctionCategory } from "@/api/transaction-category/getDataTransactionCategory";
-import { Group, Select, SimpleGrid, Stack, Text } from "@mantine/core";
+import { Grid, Group, Select, Text, ComboboxItem } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
+
+declare module "@mantine/core" {
+  interface ComboboxItem {
+    raw?: {
+      name: string;
+      description: string;
+      status: string;
+    };
+  }
+}
 
 interface ISelectFinanceTransactionCategoryProps {
   companyId?: string;
@@ -39,68 +49,49 @@ export default function SelectFinanceTransactionCategory({
 
   const TransactionCategoryOptions = TransactionCategoryData?.data?.map((item) => ({
     value: item.id,
-    label: `${item.name} ${item.description ? `(${item.description})` : ""}`, // Combine name & description
+    label: `${item.name} ${item.description}`,
+    raw: item, // simpan data asli untuk render custom
   }));
 
   return (
-    <>
-      {/* <LoadingGlobal visible={isLoading} /> */}
-      <Select
-        searchable
-        clearable
-        label={label}
-        placeholder={`Pilih ${label ?? ""}`}
-        onChange={handleSelect}
-        data={TransactionCategoryOptions}
-        styles={{
-          option: {
-            fontSize: "14px",
-            padding: "6px 10px",
-          },
-          input: {
-            cursor: "pointer",
-          },
-        }}
-        renderOption={({ option }) => {
-          console.log("options", option);
+    <Select
+      searchable
+      clearable
+      label={label}
+      placeholder={`Pilih ${label}`}
+      onChange={handleSelect}
+      data={TransactionCategoryOptions}
+      styles={{
+        option: {
+          fontSize: "14px",
+          padding: "6px 10px",
+        },
+        input: {
+          cursor: "pointer",
+        },
+      }}
+      renderOption={({ option }) => {
+        const { name, description, status } = option.raw || {};
+        const statusLabel = status === "paid" ? "Tunai" : status === "unpaid" ? "Tenor" : (status || "").toUpperCase();
 
-          // Match label to separate parts and capture the status between parentheses
-          const match = option.label.match(/^(.*?)\s+(.*?)\s+\((.*?)\)$/);
-
-          // Bagian sebelum tanda kurung (misalnya Pengeluaran Wifi Internet)
-          const bagianAwal = match?.[1] ?? option.label;
-
-          // Bagian setelah bagian pertama dan sebelum tanda kurung (misalnya Wifi Internet)
-          const sisa = match?.[2] ?? "";
-
-          // Status yang ada di dalam tanda kurung (TUNAI, Tempo, etc.)
-          const statusMatch = match?.[3]?.toUpperCase() ?? "";
-
-          // Extracting the status between TUNAI and TEMPO
-          const status = statusMatch.match(/(TUNAI|TEMPO)/)?.[0] ?? "";
-
-          // Console log untuk memeriksa nilai status
-          console.log("Extracted Status:", status);
-
-          return (
-            <SimpleGrid h={22}>
-              <Group>
-                <Stack w={200} maw={200}>
-                  <Text>{bagianAwal}</Text>
-                </Stack>
-                <Stack w={400} maw={400}>
-                  <Text>{sisa}</Text>
-                </Stack>
-                <Stack w={100} maw={100}>
-                  <Text w={80} c="dimmed" ta="right">
-                    {status ? status : ""} {/* Menampilkan status dalam huruf besar */}
-                  </Text>
-                </Stack>
-              </Group>
-            </SimpleGrid>
-          );
-        }}
-      />
-    </>
+        return (
+          <Grid w={"100%"}>
+            <Grid.Col span={4}>
+              <Text size="sm" fw={500}>
+                {name}
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Text size="sm" c="dimmed">
+                {description || "-"}
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={2}>
+              <Text size="sm">{statusLabel || "-"}</Text>
+            </Grid.Col>
+          </Grid>
+        );
+      }}
+    />
   );
 }

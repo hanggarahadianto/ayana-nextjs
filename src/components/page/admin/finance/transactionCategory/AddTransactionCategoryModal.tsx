@@ -7,6 +7,7 @@ import { initialValuesTransactionCategoryCreate } from "@/utils/initialValues/in
 import { validationSchemaTransactionCategory } from "@/utils/validation/transactionCategory-validation";
 import { useSubmitTransactionCategory } from "@/api/transaction-category/postDataTransactionCategory";
 import SelectFinanceAccount from "@/components/common/select/SelectAccountType";
+import { transactionLabel } from "@/constants/dictionary";
 
 interface AddTransactionCategoryModalProps {
   refetchTransactionCategoryData: () => void;
@@ -21,12 +22,9 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
   // Mock submit function - replace with your actual API call
   const handleSubmit = useCallback(
     (values: ITransactionCategoryCreate, { setSubmitting }: any) => {
-      const statusLabel = values.status === "paid" ? "TUNAI" : values.status === "unpaid" ? "TEMPO" : "";
-      const combinedName = `${values.jenis_transaksi} ${values.name}${statusLabel ? ` (${statusLabel})` : ""}`.trim();
-
       const payload = {
         ...values,
-        name: combinedName,
+
         company_id: companyId || "",
       };
 
@@ -56,6 +54,7 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
         >
           {({ values, errors, touched, setFieldValue, handleBlur, isSubmitting }) => {
             // console.log("error", errors);
+            // console.log("values", values);
             return (
               <Form>
                 <SimpleGrid p={20}>
@@ -82,17 +81,11 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
                           withAsterisk
                           label="Jenis Transaksi"
                           placeholder="Pilih Jenis Transaksi"
-                          data={[
-                            { value: "Penjualan", label: "Penjualan" },
-                            { value: "Pinjaman", label: "Pinjaman" },
-                            { value: "Pembelian", label: "Pembelian" },
-                            { value: "Pengeluaran", label: "Pengeluaran" },
-                            { value: "Piutang", label: "Piutang" },
-                          ]}
-                          value={values.jenis_transaksi}
-                          onChange={(value) => setFieldValue("jenis_transaksi", value)}
+                          data={transactionLabel}
+                          value={values.transaction_label}
+                          onChange={(value) => setFieldValue("transaction_label", value)}
                           onBlur={handleBlur}
-                          error={touched.jenis_transaksi && errors.jenis_transaksi}
+                          error={touched.transaction_label && errors.transaction_label}
                         />
                         <TextInput
                           w={"100%"}
@@ -121,6 +114,7 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
                       error={touched.transaction_type && errors.transaction_type}
                     />
                     <SelectFinanceAccount
+                      value={values.debit_account_id}
                       companyId={companyId}
                       onSelect={(selected) => {
                         setFieldValue("debit_account_id", selected?.id);
@@ -132,6 +126,7 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
                       error={touched.debit_account_id && errors.debit_account_id}
                     />
                     <SelectFinanceAccount
+                      value={values.credit_account_id}
                       companyId={companyId}
                       onSelect={(selected) => {
                         setFieldValue("credit_account_id", selected?.id);

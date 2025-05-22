@@ -44,7 +44,7 @@ export const TransactionCategoryCard = ({ companyId }: AccountCardProps) => {
     refetchOnWindowFocus: false,
   });
 
-  console.log("transaction category", transactionCategoryData);
+  // console.log("transaction category", transactionCategoryData);
 
   const totalPages = useMemo(() => {
     return transactionCategoryData?.total ? Math.ceil(transactionCategoryData.total / limit) : 1;
@@ -71,20 +71,43 @@ export const TransactionCategoryCard = ({ companyId }: AccountCardProps) => {
 
       <TableComponent
         startIndex={startIndex}
-        data={transactionCategoryData?.data || []}
+        data={(transactionCategoryData?.data || []).map((item) => ({
+          ...item,
+        }))}
         height={"580"}
         columns={[
-          { key: "name", title: "Nama", width: 240, minWidth: 240 },
+          {
+            key: "name",
+            title: "Nama",
+            width: 400,
+            minWidth: 400,
+            render: (row) => {
+              const statusLabel = row.status === "paid" ? "Tunai" : row.status === "unpaid" ? "Tenor" : row.status || "";
+
+              return `${row.transaction_label} ${row.name} ( ${statusLabel} )`;
+            },
+          },
           { key: "category", title: "Kategori", width: 160, minWidth: 160 },
+          {
+            key: "status",
+            title: "Status",
+            width: 60,
+            minWidth: 60,
+            render: (row) => {
+              if (row.status === "paid") return "TUNAI";
+              if (row.status === "unpaid") return "TENOR";
+              return row.status?.toUpperCase() || "";
+            },
+          },
           { key: "transaction_type", title: "Tipe Transaksi", width: 100, minWidth: 10 },
           { key: "debit_account_type", title: "Debit", width: 100, minWidth: 100 },
           { key: "credit_account_type", title: "Kredit", width: 100, minWidth: 100 },
-          { key: "description", title: "Deskripsi", width: 220, minWidth: 220 },
+          { key: "description", title: "Deskripsi", width: 320, minWidth: 320 },
           {
             key: "aksi",
             title: "Aksi",
-            width: 90,
-            minWidth: 40,
+            width: 120,
+            minWidth: 60,
             render: (row: ITransactionCategory) => (
               <Group gap="lg" justify="center">
                 <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />

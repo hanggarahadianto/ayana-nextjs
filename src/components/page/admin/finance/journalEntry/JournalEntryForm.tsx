@@ -45,6 +45,8 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
     journalEntries: IJournalEntryCreate[];
   }>();
 
+  console.log("values", values);
+
   // Handle changes to the journal entry fields
   const handleJournalChange = useCallback(
     (index: number, field: keyof IJournalEntryCreate, value: any) => {
@@ -100,8 +102,9 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
       {() => (
         <Stack gap="xl">
           {values?.journalEntries?.map((entry, index) => {
-            console.log("TRANSACTION TYPE", entry.transaction_type);
-            console.log("Status", entry.status);
+            // console.log("TRANSACTION TYPE", entry.transaction_type);
+            // console.log("Status", entry.status);
+            console.log("entry", entry);
 
             const calculateTotalBagiHasil = (entry: any, percentage: number) => {
               const startDate = new Date(entry.date_inputed);

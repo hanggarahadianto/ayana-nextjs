@@ -67,7 +67,6 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
     <Card shadow="sm" padding="lg">
       <LoadingGlobal visible={isLoadingGetAccount || isLoadingDeleteAccount} />
       <Group justify="space-between">
-        {/* <Stack> */}
         <Stack>
           <Text size="xl" fw={600}>
             Akun keuangan {companyName}
@@ -84,8 +83,6 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
             style={{ width: 250 }}
           />
         </Stack>
-        {/* </Stack> */}
-
         <Stack align="flex-end" mb={16}>
           <AddAccountModal companyId={companyId} refetchAccountData={refetchAccountData} />
         </Stack>

@@ -1,10 +1,9 @@
-import { Card, Text, Group, Stack, Loader, Box, Pagination } from "@mantine/core";
+import { Card, Text, Group, Stack, Pagination, Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { formatCurrency } from "@/utils/formatCurrency";
 import CreateJournalEntryModal from "../../journalEntry/CreateJournalEntryModal";
-import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
@@ -19,6 +18,7 @@ interface CashSummaryCardProps {
 export const GetCashinData = ({ companyId, companyName, assetType, transactionType }: CashSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const limit = 10;
+  const [selectedType, setSelectedType] = useState<string | null>(null);
 
   const { data: cashinSummaryData, isPending: isLoadingCashinData } = useQuery({
     queryKey: ["getCashinData", companyId, page, assetType],
@@ -42,17 +42,34 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingCashinData} />
-      <Stack align="flex-end" mb={16}>
-        <CreateJournalEntryModal companyId={companyId} transactionType={"payin"} />
-      </Stack>
+      <Group justify="space-between">
+        <Stack>
+          <Text size="xl" fw={600}>
+            Uang Masuk {companyName}
+          </Text>
+          <Select
+            label="Filter berdasarkan Type"
+            placeholder="Pilih Type"
+            // data={accountTypeOptions}
+            value={selectedType}
+            onChange={(value) => {
+              setSelectedType(value);
+            }}
+            clearable
+            style={{ width: 250 }}
+          />
+        </Stack>
+        <Stack align="flex-end" mb={16}>
+          <CreateJournalEntryModal companyId={companyId} transactionType={"payin"} />
+        </Stack>
+      </Group>
 
       <TableComponent
-        companyName={companyName}
         startIndex={startIndex}
         data={cashInList}
         totalAmount={cashinSummaryData?.data.total_asset}
-        title="Uang Masuk"
         transactionType={transactionType}
+        height={"580"}
         columns={[
           { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
           { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
@@ -76,12 +93,14 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         ]}
       />
 
-      <Group gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
-        <Pagination total={totalPages} value={page} onChange={setPage} />
-        <Text size="sm" c="dimmed">
-          Menampilkan {startIndex} sampai {endIndex} dari {cashinSummaryData?.data.total} data
-        </Text>
-      </Group>
+      {totalPages > 0 && (
+        <Stack gap="xs" mt="40" style={{ paddingBottom: "16px" }}>
+          <Pagination total={totalPages} value={page} onChange={setPage} />
+          <Text size="sm" c="dimmed">
+            Menampilkan {startIndex} sampai {endIndex} dari {cashinSummaryData?.data.total} data
+          </Text>
+        </Stack>
+      )}
     </Card>
   );
 };
