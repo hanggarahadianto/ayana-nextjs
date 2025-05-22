@@ -48,7 +48,7 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
             Uang Masuk {companyName}
           </Text>
           <Select
-            label="Filter berdasarkan Type"
+            label="Filter "
             placeholder="Pilih Type"
             // data={accountTypeOptions}
             value={selectedType}

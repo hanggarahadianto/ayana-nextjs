@@ -69,7 +69,7 @@ const UpdateTransactionCategoryModal = ({ companyId }: UpdateTransactionCategory
                       placeholder="Pilih Status Pembayaran"
                       data={[
                         { value: "paid", label: "Tunai" },
-                        { value: "unpaid", label: "Tempo" },
+                        { value: "unpaid", label: "Tenor" },
                       ]}
                       value={values.status}
                       onChange={(value) => setFieldValue("status", value)}

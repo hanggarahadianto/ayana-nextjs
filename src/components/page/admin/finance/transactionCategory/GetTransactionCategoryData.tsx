@@ -4,13 +4,13 @@ import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useMemo, useState } from "react";
 import TableComponent from "@/components/common/table/TableComponent";
 import AddTransactionCategoryModal from "./AddTransactionCategoryModal";
-import { getDataTranasctionCategory } from "@/api/transaction-category/getDataTransactionCategory";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
 import { useDeleteDataTransactionCategory } from "@/api/transaction-category/deleteDataTransactionCategory";
 import UpdateTransactionCategory from "./UpdateTransactionCategory";
+import { getDataTransactionCategory } from "@/api/transaction-category/getDataTransactionCategory";
 
 interface AccountCardProps {
   companyId: string;
@@ -30,16 +30,16 @@ export const TransactionCategoryCard = ({ companyId }: AccountCardProps) => {
   } = useQuery({
     queryKey: ["getTransactionCategory", companyId, page, selectedType, selectedCategory, true],
     queryFn: () =>
-      getDataTranasctionCategory(
-        companyId,
+      getDataTransactionCategory({
+        companyId: companyId as string,
         page,
         limit,
-        selectedType,
-        selectedCategory,
-        null, // status
-        true // all
-      ),
-
+        transactionType: selectedType,
+        category: selectedCategory,
+        status: null, // bisa juga dihapus kalau tidak dipakai
+        select: true,
+        selectByCategory: false,
+      }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
@@ -69,9 +69,9 @@ export const TransactionCategoryCard = ({ companyId }: AccountCardProps) => {
         <AddTransactionCategoryModal companyId={companyId} refetchTransactionCategoryData={refetchTransactionCategoryData} />
       </Stack>
 
-      <TableComponent
+      <TableComponent<ITransactionCategory>
         startIndex={startIndex}
-        data={(transactionCategoryData?.data || []).map((item) => ({
+        data={(transactionCategoryData?.data || []).map((item: ITransactionCategory) => ({
           ...item,
         }))}
         height={"580"}

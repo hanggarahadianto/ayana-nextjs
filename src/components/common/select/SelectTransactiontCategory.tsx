@@ -1,5 +1,5 @@
-import { getDataTranasctionCategory } from "@/api/transaction-category/getDataTransactionCategory";
-import { Grid, Group, Select, Text, ComboboxItem } from "@mantine/core";
+import { getDataTransactionCategory } from "@/api/transaction-category/getDataTransactionCategory";
+import { Grid, Select, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 
 declare module "@mantine/core" {
@@ -28,9 +28,14 @@ export default function SelectFinanceTransactionCategory({
   status,
 }: ISelectFinanceTransactionCategoryProps) {
   const { data: TransactionCategoryData, isLoading } = useQuery({
-    queryKey: ["getTransactionCategoryData", companyId, transactionType, status],
-    queryFn: () => getDataTranasctionCategory(companyId as string, 1, 1000, transactionType, undefined, status),
-    refetchOnWindowFocus: false,
+    queryKey: ["getTransactionCategorySelect", companyId, transactionType, status],
+    queryFn: () =>
+      getDataTransactionCategory({
+        companyId: companyId as string,
+        transactionType,
+        status,
+        select: true,
+      }),
     enabled: !!companyId && !!transactionType,
   });
 

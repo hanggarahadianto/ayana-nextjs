@@ -1,19 +1,5 @@
 import React, { memo, useCallback, useState } from "react";
-import {
-  Stack,
-  Group,
-  TextInput,
-  NumberInput,
-  Textarea,
-  Button,
-  SimpleGrid,
-  Badge,
-  Switch,
-  Select,
-  Divider,
-  Flex,
-  InputWrapper,
-} from "@mantine/core";
+import { Stack, Group, TextInput, NumberInput, Textarea, Button, SimpleGrid, Badge, Switch, Select, Divider, Flex } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar, IconTrash } from "@tabler/icons-react";
 import { useFormikContext, FieldArray } from "formik";
@@ -45,7 +31,7 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
     journalEntries: IJournalEntryCreate[];
   }>();
 
-  console.log("values", values);
+  // console.log("values", values);
 
   // Handle changes to the journal entry fields
   const handleJournalChange = useCallback(
@@ -102,7 +88,6 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
       {() => (
         <Stack gap="xl">
           {values?.journalEntries?.map((entry, index) => {
-            // console.log("TRANSACTION TYPE", entry.transaction_type);
             // console.log("Status", entry.status);
             console.log("entry", entry);
 
@@ -149,34 +134,34 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
 
                 <Group justify="space-between" align="flex-start">
                   <Stack w="100%" gap="md">
-                    {entry.transaction_type !== "payin" && (
-                      <Group w="100%" grow>
-                        <Select
-                          clearable
-                          withAsterisk
-                          label="Status Pembayaran"
-                          placeholder="Pilih Status Pembayaran"
-                          data={[
-                            { value: "paid", label: "Tunai" },
-                            { value: "unpaid", label: "Tempo" },
-                          ]}
-                          onChange={(value: string | null) => {
-                            const isPaid = value === "paid";
-                            const isUnpaid = value === "unpaid";
+                    {/* {entry.transaction_type !== "payin" && ( */}
+                    <Group w="100%" grow>
+                      <Select
+                        clearable
+                        withAsterisk
+                        label="Status Pembayaran"
+                        placeholder="Pilih Status Pembayaran"
+                        data={[
+                          { value: "paid", label: "Tunai" },
+                          { value: "unpaid", label: "Tempo" },
+                        ]}
+                        onChange={(value: string | null) => {
+                          const isPaid = value === "paid";
+                          const isUnpaid = value === "unpaid";
 
-                            // Tentukan transactionType berdasarkan status
-                            const transactionType = isUnpaid ? "payout" : isPaid ? "payin" : undefined;
+                          // Tentukan transactionType berdasarkan status
+                          const transactionType = isUnpaid ? "payout" : isPaid ? "payin" : undefined;
 
-                            handleJournalChange(index, "status", value);
-                            handleJournalChange(index, "is_repaid", isPaid);
-                            handleJournalChange(index, "invoice", isUnpaid ? "Tempo" : value === null ? null : "");
-                            // handleJournalChange(index, "transaction_type", transactionType);
-                          }}
-                          onBlur={handleBlur}
-                          value={entry.status}
-                        />
-                      </Group>
-                    )}
+                          handleJournalChange(index, "status", value);
+                          handleJournalChange(index, "is_repaid", isPaid);
+                          handleJournalChange(index, "invoice", isUnpaid ? "Tempo" : value === null ? null : "");
+                          // handleJournalChange(index, "transaction_type", transactionType);
+                        }}
+                        onBlur={handleBlur}
+                        value={entry.status}
+                      />
+                    </Group>
+                    {/* )} */}
 
                     <SelectFinanceTransactionCategory
                       companyId={companyId}

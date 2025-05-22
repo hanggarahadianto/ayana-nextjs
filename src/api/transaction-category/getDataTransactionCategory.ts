@@ -1,44 +1,57 @@
+// src/api/transaction-category/getDataTransactionCategory.ts
+
 import { APIAxiosInstance } from "@/lib";
 
-export const getDataTranasctionCategory = async (
-  companyId: string,
+export interface GetTransactionCategoryParams {
+  companyId: string;
+  page?: number;
+  limit?: number;
+  transactionType?: string | null;
+  category?: string | null;
+  status?: string | null;
+  select?: boolean;
+  selectByCategory?: boolean;
+}
+
+export const getDataTransactionCategory = async ({
+  companyId,
   page = 1,
-  limit: number,
-  type?: string | null,
-  category?: string | null,
-  status?: string | null,
-  all?: boolean | null
-) => {
+  limit = 10,
+  transactionType,
+  category,
+  status,
+  select = false,
+  selectByCategory = false, // ✅ tambahkan default
+}: GetTransactionCategoryParams) => {
   if (!companyId) {
     console.error("Company ID tidak ada!");
     return;
   }
 
-  console.log("kategori", category);
+  let url = `transaction-category/get?company_id=${companyId}`;
 
-  try {
-    let url = `transaction-category/get?company_id=${companyId}&page=${page}&limit=${limit}`;
-
-    if (all) {
-      url += `&all=true`;
-    }
-
-    if (type) {
-      url += `&transaction_type=${encodeURIComponent(type)}`;
-    }
-
-    if (category) {
-      url += `&category=${encodeURIComponent(category)}`;
-    }
-
-    if (status) {
-      url += `&status=${encodeURIComponent(status)}`;
-    }
-
-    const response = await APIAxiosInstance.get(url);
-    return response.data as ITransactionCategoryResponse;
-  } catch (error: any) {
-    console.error("Error fetching data:", error.message || error);
-    throw error;
+  if (select) {
+    url += `&select=true`;
+  } else {
+    url += `&page=${page}&limit=${limit}`;
   }
+
+  if (selectByCategory) {
+    url += `&selectByCategory=true`; // ✅ tambahkan parameter
+  }
+
+  if (transactionType) {
+    url += `&transaction_type=${encodeURIComponent(transactionType)}`;
+  }
+
+  if (category) {
+    url += `&category=${encodeURIComponent(category)}`;
+  }
+
+  if (status) {
+    url += `&status=${encodeURIComponent(status)}`;
+  }
+
+  const response = await APIAxiosInstance.get(url);
+  return response.data as ITransactionCategoryResponse;
 };
