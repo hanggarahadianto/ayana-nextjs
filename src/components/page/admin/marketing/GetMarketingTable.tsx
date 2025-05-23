@@ -131,17 +131,20 @@ export const CustomerTable = () => {
             render: (row: ICustomer) => {
               const colorMap: Record<string, string> = {
                 booking: "yellow",
-                bank_processing: "blue",
-                approved_by_bank: "teal",
+                bank_processing: "orange",
+                approved_by_bank: "indigo",
                 rejected_by_bank: "red",
-                credit_agreement: "indigo",
-                under_construction: "orange",
-                construction_completed: "green",
-                handover: "cyan",
+                credit_agreement: "violet",
+                under_construction: "pink",
+                construction_completed: "cyan",
+                handover: "teal",
                 canceled: "gray",
               };
               const color = colorMap[row.status] ?? "gray";
-              const label = row.status?.charAt(0).toUpperCase() + row.status?.slice(1);
+              const label = row.status
+                ?.split("_")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ");
               return (
                 <Badge color={color} variant="filled" radius="sm">
                   {label}

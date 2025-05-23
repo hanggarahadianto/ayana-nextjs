@@ -48,7 +48,7 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = () => {
       >
         {({ values, errors, touched, setFieldValue }) => {
           //   console.log("values", values);
-          console.log("error", errors);
+          // console.log("error", errors);
           return (
             <SimpleGrid>
               <Form>
