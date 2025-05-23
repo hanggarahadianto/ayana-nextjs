@@ -59,6 +59,9 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
             }}
           />
         </Stack>
+        <Text size="xl" fw={800} c={"teal"} mt={20}>
+          {formatCurrency(fixAssetSummaryData?.data.total_asset ?? 0)}
+        </Text>
       </Group>
       <TableComponent
         startIndex={startIndex}

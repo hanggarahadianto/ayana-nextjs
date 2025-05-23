@@ -67,6 +67,9 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
               }}
             />
           </Stack>
+          <Text size="xl" fw={800} c={"teal"} mt={20}>
+            -{formatCurrency(expenseData?.data.total_expense ?? 0)}
+          </Text>
         </Group>
 
         <Box style={{ flex: 1 }}>

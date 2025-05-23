@@ -62,6 +62,9 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
             }}
           />
         </Stack>
+        <Text size="xl" fw={800} c={"teal"} mt={20}>
+          {formatCurrency(receivableAssetSummaryData?.data.total_asset ?? 0)}
+        </Text>
       </Group>
 
       <Box style={{ flex: 1 }}>

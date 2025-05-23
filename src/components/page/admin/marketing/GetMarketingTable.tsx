@@ -48,6 +48,8 @@ export const CustomerTable = () => {
     setPage(1);
   }, [selectedType]);
 
+  // console.log("data", customerData);
+
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, customerData?.total || 0);
 

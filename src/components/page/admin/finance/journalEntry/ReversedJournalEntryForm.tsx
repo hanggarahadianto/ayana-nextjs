@@ -1,9 +1,10 @@
 import React, { memo, useCallback } from "react";
-import { Stack, Group, TextInput, Textarea, SimpleGrid, Badge, Switch, Divider, Text, InputWrapper } from "@mantine/core";
+import { Stack, Group, TextInput, Textarea, SimpleGrid, Badge, Switch, Divider, Text, InputWrapper, Card, Grid } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar } from "@tabler/icons-react";
 import { useFormikContext, FieldArray } from "formik";
 import SelectFinanceTransactionCategory from "@/components/common/select/SelectTransactiontCategory";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 interface JournalFormProps {
   companyId?: string;
@@ -36,16 +37,33 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: J
     [setFieldValue]
   );
 
+  console.log("selected debt", selectedDebt);
+
   return (
     <FieldArray name="journalEntries">
       {() => (
         <Stack gap="xl">
           {values?.journalEntries?.map((entry, index) => {
-            console.log("errors", error);
+            console.log("values", values);
+            // console.log("errors", error);
 
             return (
               <SimpleGrid key={index} p={20} spacing="md">
-                <Text>{selectedDebt.invoice}</Text>
+                <Text>
+                  Pembayaran Hutang {selectedDebt?.description?.toLowerCase().replace(/\b\w/g, (char: string) => char.toUpperCase())}
+                </Text>
+                <Card>
+                  <Grid p={12}>
+                    <Grid.Col span={3}>
+                      <Text>Invoice</Text>
+                      <Text>Nominal</Text>
+                    </Grid.Col>
+                    <Grid.Col span={4}>
+                      <Text>{selectedDebt.invoice}</Text>
+                      <Text>{formatCurrency(selectedDebt?.amount)}</Text>
+                    </Grid.Col>
+                  </Grid>
+                </Card>
 
                 <Group>
                   <Switch disabled mr={16} w={40} checked={entry.transaction_type === "payin"} size="lg" />

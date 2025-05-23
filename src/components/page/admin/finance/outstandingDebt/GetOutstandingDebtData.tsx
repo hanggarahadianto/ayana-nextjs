@@ -79,6 +79,9 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
             }}
           />
         </Stack>
+        <Text size="xl" fw={800} c={"teal"} mt={20}>
+          -{formatCurrency(outstandingDebtData?.data.total_debt ?? 0)}
+        </Text>
       </Group>
       <TableComponent
         startIndex={startIndex}

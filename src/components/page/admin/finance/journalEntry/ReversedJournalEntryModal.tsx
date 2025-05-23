@@ -22,8 +22,8 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
   opened,
   close,
 }) => {
-  console.log("Modal opened:", opened); // Log when modal is opened or closed
-  console.log("Selected Debt:", selectedDebt);
+  // console.log("Modal opened:", opened); // Log when modal is opened or closed
+  // console.log("Selected Debt:", selectedDebt);
   const { mutate: submitJournal, isPending: isLoadingSubmitJournalEntry } = useSubmitReservedJournalEntry(close, companyId);
 
   const handleSubmit = (values: any) => {
@@ -56,7 +56,7 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
         opened={opened}
       >
         <Formik
-          initialValues={initialValuesJournalEntry(companyId, transactionType)}
+          initialValues={initialValuesJournalEntry(companyId, transactionType, selectedDebt)}
           validationSchema={reversedValidationSchemaJournalEntry(transactionType)}
           validateOnBlur={false}
           enableReinitialize

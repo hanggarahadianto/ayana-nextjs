@@ -1,4 +1,4 @@
-export const initialValuesJournalEntry = (companyId?: string | null, transactionType?: string | null) => {
+export const initialValuesJournalEntry = (companyId?: string | null, transactionType?: string | null, selectedDeb?: IDebtSummaryItem) => {
   const defaultStatus = transactionType === "payin" ? "unpaid" : null;
 
   return {
@@ -8,7 +8,7 @@ export const initialValuesJournalEntry = (companyId?: string | null, transaction
         invoice: "",
         description: "",
         amount: 0,
-        partner: "",
+        partner: selectedDeb?.partner,
         date_inputed: "", // Tanggal input (kosongkan jika tidak ada)
         due_date: "",
         installment: 0,

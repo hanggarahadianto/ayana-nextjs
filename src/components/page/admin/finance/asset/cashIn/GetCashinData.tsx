@@ -60,6 +60,9 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         </Stack>
         <Stack align="flex-end" mb={16}>
           <CreateJournalEntryModal companyId={companyId} transactionType={"payin"} />
+          <Text size="xl" fw={800} c={"teal"} mt={20}>
+            {formatCurrency(cashinSummaryData?.data.total_asset ?? 0)}
+          </Text>
         </Stack>
       </Group>
 
