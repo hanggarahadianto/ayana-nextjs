@@ -7,7 +7,39 @@ export const validationSchemaCustomer = Yup.object({
     .matches(/^[0-9]+$/, "Nomor telepon harus berupa angka")
     .min(10, "Nomor telepon minimal 10 digit")
     .required("Nomor telepon wajib diisi"),
-  status: Yup.string().oneOf(["pending", "deal", "booking", "sold", "progress"], "Status tidak valid").required("Status wajib dipilih"),
+
+  // Sesuai dengan value dari houseSaleStatuses
+  status: Yup.string()
+    .oneOf(
+      [
+        "booking",
+        "bank_processing",
+        "approved_by_bank",
+        "rejected_by_bank",
+        "credit_agreement",
+        "under_construction",
+        "construction_completed",
+        "handover",
+        "canceled",
+      ],
+      "Status tidak valid"
+    )
+    .required("Status wajib dipilih"),
+
+  // Payment methods
+  payment_method: Yup.string()
+    .oneOf(["cash", "cash_installment", "kpr", "kpr_subsidized", "construction_progress", "inhouse"], "Metode pembayaran tidak valid")
+    .required("Metode pembayaran wajib dipilih"),
+  amount: Yup.number()
+    .typeError("Jumlah harus berupa angka")
+    .moreThan(0, "Jumlah harus lebih dari 0")
+    .required("Jumlah pembayaran wajib diisi"),
+
+  date_inputed: Yup.string()
+    .required("Tanggal input wajib diisi")
+    .test("is-date", "Format tanggal tidak valid", (val) => !isNaN(Date.parse(val || ""))),
+
   marketer: Yup.string().required("Nama marketer wajib diisi"),
-  home_id: Yup.string().nullable().notRequired(), // opsional, tergantung kondisi
+
+  home_id: Yup.string().required("Produk wajib diisi"),
 });

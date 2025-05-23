@@ -1,5 +1,5 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Badge, Group, Button } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Badge, Group, Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useEffect, useMemo, useState } from "react";
 import TableComponent from "@/components/common/table/TableComponent";
@@ -11,6 +11,9 @@ import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
 import EditCustomerModal from "./UpdateMarketingModal";
+import AddMarketingModal from "./AddMarketingModal";
+import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 export const CustomerTable = () => {
   const { getToken } = useCookies();
@@ -61,23 +64,32 @@ export const CustomerTable = () => {
     <Card shadow="sm" padding="lg">
       <LoadingGlobal visible={isLoadingCustomerData || isLoadingDeleteCustomer} />
 
-      {/* <Select
-          label="Filter berdasarkan Type"
-          placeholder="Pilih Type"
-          data={accountTypeOptions}
-          value={selectedType}
-          onChange={(value) => {
-            console.log("Select onChange:", value); // Debug
-            setSelectedType(value);
-          }}
-          clearable
-          style={{ width: 250 }}
-        /> */}
+      <Group justify="space-between">
+        <Stack>
+          <Text size="xl" fw={600}>
+            Daftar Konsumen
+          </Text>
+          <Select
+            label="Filter berdasarkan Type"
+            placeholder="Pilih Type"
+            // data={accountTypeOptions}
+            value={selectedType}
+            onChange={(value) => {
+              setSelectedType(value);
+            }}
+            clearable
+            style={{ width: 250 }}
+          />
+        </Stack>
+        <Stack align="flex-end" mb={16}>
+          <AddMarketingModal />
+        </Stack>
+      </Group>
       <TableComponent
         startIndex={startIndex}
         data={customerList}
         totalAmount={customerData?.total}
-        title="Daftar Konsumen"
+        height={"580"}
         columns={[
           { key: "name", title: "Nama", width: 200, minWidth: 200 },
           { key: "address", title: "Alamat", width: 240, minWidth: 240 },
@@ -88,26 +100,45 @@ export const CustomerTable = () => {
             title: "Produk",
             width: 260,
             minWidth: 260,
-            render: (row: any) => row.home?.title ?? "-",
+            render: (row: ICustomer) => row.home?.title ?? "-",
+          },
+          {
+            key: "date_inputed",
+            title: "Tanggal Transaksi",
+            width: 120,
+            minWidth: 120,
+            render: (item) => formatDateIndonesia(item.date_inputed),
+          },
+          {
+            key: "amount",
+            title: "Nominal",
+            width: 120,
+            minWidth: 120,
+            render: (row: ICustomer) => formatCurrency(row.amount) ?? "-",
           },
           {
             key: "marketer",
             title: "Marketing",
             width: 120,
             minWidth: 120,
-            render: (row: any) => row.marketer ?? "-",
+            render: (row: ICustomer) => row.marketer ?? "-",
           },
           {
             key: "status",
             title: "Status",
-            width: 100,
-            minWidth: 100,
-            render: (row: any) => {
+            width: 180,
+            minWidth: 180,
+            render: (row: ICustomer) => {
               const colorMap: Record<string, string> = {
-                sold: "red",
-                done: "green",
                 booking: "yellow",
-                progress: "blue", // 👈 tambahan status pembangunan
+                bank_processing: "blue",
+                approved_by_bank: "teal",
+                rejected_by_bank: "red",
+                credit_agreement: "indigo",
+                under_construction: "orange",
+                construction_completed: "green",
+                handover: "cyan",
+                canceled: "gray",
               };
               const color = colorMap[row.status] ?? "gray";
               const label = row.status?.charAt(0).toUpperCase() + row.status?.slice(1);
@@ -123,7 +154,7 @@ export const CustomerTable = () => {
             title: "Aksi",
             width: 100,
             minWidth: 100,
-            render: (row: any) => (
+            render: (row: ICustomer) => (
               <Group gap="lg">
                 <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="1rem" />} size={"2.2rem"} />
                 <ButtonDeleteWithConfirmation

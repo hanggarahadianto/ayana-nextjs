@@ -28,11 +28,25 @@ export const availabilityOptions = [
   { value: "sold", label: "Sold" },
 ];
 
-export const statusOptions = [
-  { value: "done", label: "Done" },
+export const houseSaleStatuses = [
   { value: "booking", label: "Booking" },
-  { value: "progress", label: "Progress" },
-  { value: "sold", label: "Sold" },
+  { value: "bank_processing", label: "Bank Processing" },
+  { value: "approved_by_bank", label: "Approved by Bank" },
+  { value: "rejected_by_bank", label: "Rejected by Bank" }, // alternatif jalur gagal
+  { value: "credit_agreement", label: "Credit Agreement (Akad)" },
+  { value: "under_construction", label: "Under Construction" },
+  { value: "construction_completed", label: "Construction Completed" },
+  { value: "handover", label: "Handover to Buyer" },
+  { value: "canceled", label: "Canceled" }, // bisa terjadi kapan saja
+];
+
+export const paymentMethods = [
+  { value: "cash", label: "Cash" },
+  { value: "cash_installment", label: "Cash Installment" }, // cicilan langsung ke developer
+  { value: "kpr", label: "KPR (Mortgage)" },
+  { value: "kpr_subsidized", label: "KPR Subsidized" }, // KPR FLPP atau subsidi pemerintah
+  { value: "construction_progress", label: "Progress-Based Payment (Termin)" },
+  { value: "inhouse", label: "In-House Financing" },
 ];
 
 export const satuan: string[] = [

@@ -9,6 +9,7 @@ interface SelectProductProps {
   label?: string;
   placeholder?: string;
   required?: boolean;
+  error?: string;
 }
 
 const SelectProduct = ({
@@ -17,6 +18,7 @@ const SelectProduct = ({
   label = "Pilih Product",
   placeholder = "Pilih Salah Satu",
   required = false,
+  error,
 }: SelectProductProps) => {
   const status = "available";
   const { data: productData, isPending } = useQuery({
@@ -33,6 +35,7 @@ const SelectProduct = ({
 
   return (
     <Select
+      error={error}
       w="100%"
       label={label}
       placeholder={placeholder}

@@ -19,9 +19,6 @@ const MarketingAdminCard = () => {
           <Text fw={900} size="2rem">
             Daftar Konsumen
           </Text>
-          <Stack>
-            <AddMarketingModal />
-          </Stack>
         </Group>
         <CustomerTable />
       </SimpleGridGlobal>
