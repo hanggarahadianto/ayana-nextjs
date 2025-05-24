@@ -1,4 +1,4 @@
-import { Card, Text, Group, Stack, Pagination, Select } from "@mantine/core";
+import { Card, Text, Group, Stack, Pagination, Select, Flex } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
@@ -8,6 +8,10 @@ import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
+import BreathingActionIcon from "@/components/common/button/buttonAction";
+import { IconPencil } from "@tabler/icons-react";
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -41,9 +45,15 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, cashinSummaryData?.data.total || 0);
 
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteCashIn } = useDeleteDataJournalEntry();
+  const handleDeleteAccount = (idToDelete: string) => {
+    console.log("idToDelete", idToDelete);
+    mutateDeleteDataJournal(idToDelete);
+  };
+
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <LoadingGlobal visible={isLoadingCashinData} />
+      <LoadingGlobal visible={isLoadingCashinData || isLoadingDeleteCashIn} />
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>
@@ -93,6 +103,26 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
           },
 
           { key: "description", title: "Deskripsi", width: 220, minWidth: 220 },
+          {
+            key: "aksi",
+            title: "Aksi",
+            width: 10,
+            minWidth: 10,
+            render: (row: IAssetSummaryItem) => {
+              // console.log("row", row);
+              return (
+                <Flex gap="lg" justify="center">
+                  {/* <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} /> */}
+                  <ButtonDeleteWithConfirmation
+                    id={row.id} // Gunakan id customer
+                    onDelete={() => handleDeleteAccount(row.journal_entry_id)}
+                    description={`Hapus Transaksi ${row.description}?`}
+                    size={2.2}
+                  />
+                </Flex>
+              );
+            },
+          },
         ]}
       />
 

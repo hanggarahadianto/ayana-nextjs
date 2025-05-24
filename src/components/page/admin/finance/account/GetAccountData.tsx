@@ -72,7 +72,7 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
             Akun keuangan {companyName}
           </Text>
           <Select
-            label="Filter berdasarkan Type"
+            label="Filter Berdasarkan Tipe Akun"
             placeholder="Pilih Type"
             data={accountTypeOptions}
             value={selectedType}

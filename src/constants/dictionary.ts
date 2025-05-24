@@ -73,6 +73,14 @@ export const paymentCategory = [
   { value: "tunai", label: "Tunai" },
   { value: "tempo", label: "Tempo" },
 ];
+export const paymentStatus = [
+  { value: "paid", label: "Tunai" },
+  { value: "unpaid", label: "Tenor" },
+];
+export const transactionTypeOptions = [
+  { value: "payin", label: "Payin" },
+  { value: "payout", label: "Payout" },
+];
 
 export const projectDuration = [
   { value: "35", label: "35 Hari" },

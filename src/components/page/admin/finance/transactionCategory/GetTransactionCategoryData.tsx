@@ -1,5 +1,5 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Group, Stack, Pagination } from "@mantine/core";
+import { Card, Text, Group, Stack, Pagination, Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useMemo, useState } from "react";
 import TableComponent from "@/components/common/table/TableComponent";
@@ -11,24 +11,27 @@ import { useModalStore } from "@/store/modalStore";
 import { useDeleteDataTransactionCategory } from "@/api/transaction-category/deleteDataTransactionCategory";
 import UpdateTransactionCategory from "./UpdateTransactionCategory";
 import { getDataTransactionCategory } from "@/api/transaction-category/getDataTransactionCategory";
+import { paymentStatus, transactionTypeOptions } from "@/constants/dictionary";
+import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 
 interface AccountCardProps {
   companyId: string;
+  companyName?: string;
 }
 
-export const TransactionCategoryCard = ({ companyId }: AccountCardProps) => {
+export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardProps) => {
   const [page, setPage] = useState(1);
   const limit = 10;
   const [selectedType, setSelectedType] = useState<string | null>(null);
-
-  const [selectedCategory, setSelectedCategory] = useState<string | null>("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<string | null>("");
 
   const {
     data: transactionCategoryData,
     isPending: isLoadingGetTransactionCategory,
     refetch: refetchTransactionCategoryData,
   } = useQuery({
-    queryKey: ["getTransactionCategory", companyId, page, selectedType, selectedCategory, true],
+    queryKey: ["getTransactionCategory", companyId, page, selectedType, selectedCategory, selectedStatus],
     queryFn: () =>
       getDataTransactionCategory({
         companyId: companyId as string,
@@ -36,7 +39,7 @@ export const TransactionCategoryCard = ({ companyId }: AccountCardProps) => {
         limit,
         transactionType: selectedType,
         category: selectedCategory,
-        status: null, // bisa juga dihapus kalau tidak dipakai
+        status: selectedStatus, // bisa juga dihapus kalau tidak dipakai
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -63,9 +66,47 @@ export const TransactionCategoryCard = ({ companyId }: AccountCardProps) => {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingGetTransactionCategory || isLoadingDeleteTransactionCategory} />
-      <Stack align="flex-end" mb={16}>
-        <AddTransactionCategoryModal companyId={companyId} refetchTransactionCategoryData={refetchTransactionCategoryData} />
-      </Stack>
+      <Group justify="space-between">
+        <Stack>
+          <Text size="xl" fw={600}>
+            Transaksi Kategori {companyName}
+          </Text>
+          <Group>
+            <Select
+              label="Filter Berdasarkan Tipe Transaksi"
+              placeholder="Pilih Type"
+              data={transactionTypeOptions}
+              value={selectedType}
+              onChange={(value) => {
+                setSelectedType(value);
+              }}
+              clearable
+              style={{ width: 250 }}
+            />
+            <SelectCategoryFilter
+              companyId={companyId}
+              value={selectedCategory}
+              onChange={(value) => {
+                setSelectedCategory(value);
+              }}
+            />
+            <Select
+              label="Filter Status Pembayaran"
+              placeholder="Pilih Status"
+              data={paymentStatus}
+              value={selectedStatus}
+              onChange={(value) => {
+                setSelectedStatus(value);
+              }}
+              clearable
+              style={{ width: 250 }}
+            />
+          </Group>
+        </Stack>
+        <Stack align="flex-end" mb={16}>
+          <AddTransactionCategoryModal companyId={companyId} refetchTransactionCategoryData={refetchTransactionCategoryData} />
+        </Stack>
+      </Group>
 
       <TableComponent<ITransactionCategory>
         startIndex={startIndex}

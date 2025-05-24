@@ -1,6 +1,6 @@
 import { getOutstandingDebt } from "@/api/finance/getOutstandingDebt";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Badge, Group } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Badge, Group, Flex } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { formatCurrency } from "@/utils/formatCurrency";
@@ -10,6 +10,8 @@ import TableComponent from "@/components/common/table/TableComponent";
 import { calculateDaysLeft, formatDaysToMonths, getStatusColor } from "@/utils/debtStatus";
 import ReversedJournalEntryModal from "../journalEntry/ReversedJournalEntryModal";
 import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 
 interface GetOutStandingDebtDataProps {
   companyId: string;
@@ -62,9 +64,15 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
     setIsModalOpen(true);
   };
 
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteDebt } = useDeleteDataJournalEntry();
+  const handleDeleteDataJournal = (idToDelete: string) => {
+    console.log("idToDelete", idToDelete);
+    mutateDeleteDataJournal(idToDelete);
+  };
+
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <LoadingGlobal visible={isLoadingOutstandingDebt} />
+      <LoadingGlobal visible={isLoadingOutstandingDebt || isLoadingDeleteDebt} />
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>
@@ -79,7 +87,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
             }}
           />
         </Stack>
-        <Text size="xl" fw={800} c={"teal"} mt={20}>
+        <Text size="xl" fw={800} c={"red"} mt={20}>
           -{formatCurrency(outstandingDebtData?.data.total_debt ?? 0)}
         </Text>
       </Group>
@@ -114,6 +122,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
             minWidth: 180,
             render: (item) => formatDateIndonesia(item.due_date),
           },
+
           {
             key: "status",
             title: "Status",
@@ -155,7 +164,28 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
                 },
               ]
             : []),
+
           { key: "description", title: "Deskripsi", width: 400, minWidth: 400 },
+          {
+            key: "aksi",
+            title: "Aksi",
+            width: 10,
+            minWidth: 10,
+            render: (row: IDebtSummaryItem) => {
+              // console.log("row", row);
+              return (
+                <Flex gap="lg" justify="center">
+                  {/* <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} /> */}
+                  <ButtonDeleteWithConfirmation
+                    id={row.id} // Gunakan id customer
+                    onDelete={() => handleDeleteDataJournal(row.journal_entry_id)}
+                    description={`Hapus Transaksi ${row.description}?`}
+                    size={2.2}
+                  />
+                </Flex>
+              );
+            },
+          },
         ]}
       />
 

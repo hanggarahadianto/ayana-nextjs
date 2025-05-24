@@ -1,13 +1,15 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Select, Box, Group } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Box, Group, Flex } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { getExpenseSummary } from "@/api/finance/getExpenseSummary";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 
 interface GetExpenseDataProps {
   companyId: string;
@@ -42,17 +44,21 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
 
   const expenseList = expenseData?.data.expenseList ?? [];
 
-  const totalPages = useMemo(() => {
-    return expenseData?.data?.total ? Math.ceil(expenseData.data.total / limit) : 1;
-  }, [expenseData]);
+  const totalPages = Math.ceil((expenseData?.data?.total ?? 0) / limit);
 
   const startIndex = (pageExpense - 1) * limit + 1;
   const endIndex = Math.min(pageExpense * limit, expenseData?.data.total || 0);
 
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteExpense } = useDeleteDataJournalEntry();
+  const handleDeleteDataJournal = (idToDelete: string) => {
+    console.log("idToDelete", idToDelete);
+    mutateDeleteDataJournal(idToDelete);
+  };
+
   return (
     <SimpleGridGlobal cols={1}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
-        <LoadingGlobal visible={isLoadingExpense} />
+        <LoadingGlobal visible={isLoadingExpense || isLoadingDeleteExpense} />
         <Group justify="space-between">
           <Stack>
             <Text size="xl" fw={600}>
@@ -67,7 +73,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
               }}
             />
           </Stack>
-          <Text size="xl" fw={800} c={"teal"} mt={20}>
+          <Text size="xl" fw={800} c={"red"} mt={20}>
             -{formatCurrency(expenseData?.data.total_expense ?? 0)}
           </Text>
         </Group>
@@ -97,6 +103,26 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
                 render: (item) => formatDateIndonesia(item.date_inputed),
               },
               { key: "description", title: "Deskripsi", width: 260, minWidth: 260 },
+              {
+                key: "aksi",
+                title: "Aksi",
+                width: 10,
+                minWidth: 10,
+                render: (row: IExpenseSummaryItem) => {
+                  // console.log("row", row);
+                  return (
+                    <Flex gap="lg" justify="center">
+                      {/* <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} /> */}
+                      <ButtonDeleteWithConfirmation
+                        id={row.id} // Gunakan id customer
+                        onDelete={() => handleDeleteDataJournal(row.journal_entry_id)}
+                        description={`Hapus Transaksi ${row.description}?`}
+                        size={2.2}
+                      />
+                    </Flex>
+                  );
+                },
+              },
             ]}
           />
         </Box>

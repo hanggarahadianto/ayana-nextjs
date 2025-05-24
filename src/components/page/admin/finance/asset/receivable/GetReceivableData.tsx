@@ -1,4 +1,4 @@
-import { Card, Text, Group, Stack, Box, Pagination } from "@mantine/core";
+import { Card, Text, Group, Stack, Box, Pagination, Flex } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
@@ -7,6 +7,8 @@ import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -20,7 +22,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
   const limit = 10;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const { data: receivableAssetSummaryData, isPending } = useQuery({
+  const { data: receivableAssetSummaryData, isPending: isLoadingReceivableAsset } = useQuery({
     queryKey: ["getReceivableAssetData", companyId, page, assetType, selectedCategory],
     queryFn: () =>
       getAssetSummary({
@@ -45,9 +47,15 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, totalAssetIn);
 
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteRecivableAsset } = useDeleteDataJournalEntry();
+  const handleDeleteDataJournal = (idToDelete: string) => {
+    console.log("idToDelete", idToDelete);
+    mutateDeleteDataJournal(idToDelete);
+  };
+
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <LoadingGlobal visible={isPending} />
+      <LoadingGlobal visible={isLoadingReceivableAsset || isLoadingDeleteRecivableAsset} />
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>
@@ -93,6 +101,26 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
               render: (item) => formatDateIndonesia(item.date_inputed),
             },
             { key: "description", title: "Deskripsi", width: 220, minWidth: 220 },
+            {
+              key: "aksi",
+              title: "Aksi",
+              width: 10,
+              minWidth: 10,
+              render: (row: IAssetSummaryItem) => {
+                // console.log("row", row);
+                return (
+                  <Flex gap="lg" justify="center">
+                    {/* <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} /> */}
+                    <ButtonDeleteWithConfirmation
+                      id={row.id} // Gunakan id customer
+                      onDelete={() => handleDeleteDataJournal(row.journal_entry_id)}
+                      description={`Hapus Transaksi ${row.description}?`}
+                      size={2.2}
+                    />
+                  </Flex>
+                );
+              },
+            },
           ]}
         />
       </Box>

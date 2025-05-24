@@ -1,4 +1,4 @@
-import { Card, Text, Group, Box, Pagination, Stack } from "@mantine/core";
+import { Card, Text, Group, Box, Pagination, Stack, Flex } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
@@ -8,6 +8,8 @@ import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 import CreateJournalEntryModal from "../../journalEntry/CreateJournalEntryModal";
 import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
+import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -41,9 +43,15 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, cashOutSummaryData?.data.total || 0);
 
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteCashout } = useDeleteDataJournalEntry();
+  const handleDeleteDataJournal = (idToDelete: string) => {
+    console.log("idToDelete", idToDelete);
+    mutateDeleteDataJournal(idToDelete);
+  };
+
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <LoadingGlobal visible={isLoadingcashOutData} />
+      <LoadingGlobal visible={isLoadingcashOutData || isLoadingDeleteCashout} />
 
       <Group justify="space-between">
         <Stack>
@@ -62,7 +70,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
 
         <Stack align="flex-end" mb={16}>
           <CreateJournalEntryModal companyId={companyId} transactionType={"payout"} />
-          <Text size="xl" fw={800} c={"teal"} mt={20}>
+          <Text size="xl" fw={800} c={"red"} mt={20}>
             {formatCurrency(cashOutSummaryData?.data.total_asset ?? 0)}
           </Text>
         </Stack>
@@ -93,6 +101,26 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
               render: (item) => formatDateIndonesia(item.date_inputed),
             },
             { key: "description", title: "Deskripsi", width: 220, minWidth: 220 },
+            {
+              key: "aksi",
+              title: "Aksi",
+              width: 10,
+              minWidth: 10,
+              render: (row: IAssetSummaryItem) => {
+                // console.log("row", row);
+                return (
+                  <Flex gap="lg" justify="center">
+                    {/* <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} /> */}
+                    <ButtonDeleteWithConfirmation
+                      id={row.id} // Gunakan id customer
+                      onDelete={() => handleDeleteDataJournal(row.journal_entry_id)}
+                      description={`Hapus Transaksi ${row.description}?`}
+                      size={2.2}
+                    />
+                  </Flex>
+                );
+              },
+            },
           ]}
         />
       </Box>
