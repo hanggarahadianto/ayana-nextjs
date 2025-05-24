@@ -143,27 +143,27 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
               );
             },
           },
-          ...(status !== "done"
-            ? [
-                {
-                  key: "action",
-                  title: "Aksi",
-                  width: 80,
-                  minWidth: 80,
-                  render: (item: IDebtSummaryItem) => (
-                    <IoIosSend
-                      color="green"
-                      size="22px"
-                      style={{ cursor: "pointer" }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleSendClick(item);
-                      }}
-                    />
-                  ),
-                },
-              ]
-            : []),
+          // ...(status !== "done"
+          //   ? [
+          //       {
+          //         key: "action",
+          //         title: "Aksi",
+          //         width: 80,
+          //         minWidth: 80,
+          //         render: (item: IDebtSummaryItem) => (
+          //           <IoIosSend
+          //             color="green"
+          //             size="22px"
+          //             style={{ cursor: "pointer" }}
+          //             onClick={(e) => {
+          //               e.stopPropagation();
+          //               handleSendClick(item);
+          //             }}
+          //           />
+          //         ),
+          //       },
+          //     ]
+          //   : []),
 
           { key: "description", title: "Deskripsi", width: 400, minWidth: 400 },
           {
@@ -175,6 +175,15 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
               // console.log("row", row);
               return (
                 <Flex gap="lg" justify="center">
+                  <IoIosSend
+                    color="green"
+                    size="22px"
+                    style={{ cursor: "pointer" }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSendClick(row);
+                    }}
+                  />
                   {/* <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} /> */}
                   <ButtonDeleteWithConfirmation
                     id={row.id} // Gunakan id customer

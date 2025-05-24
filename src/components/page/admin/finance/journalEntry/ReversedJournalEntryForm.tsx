@@ -5,6 +5,7 @@ import { IconCalendar } from "@tabler/icons-react";
 import { useFormikContext, FieldArray } from "formik";
 import SelectFinanceTransactionCategory from "@/components/common/select/SelectTransactiontCategory";
 import { formatCurrency } from "@/utils/formatCurrency";
+import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 
 interface JournalFormProps {
   companyId?: string;
@@ -37,7 +38,7 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: J
     [setFieldValue]
   );
 
-  console.log("selected debt", selectedDebt);
+  // console.log("selected debt", selectedDebt);
 
   return (
     <FieldArray name="journalEntries">
@@ -54,13 +55,15 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: J
                 </Text>
                 <Card>
                   <Grid p={12}>
-                    <Grid.Col span={3}>
+                    <Grid.Col span={4}>
                       <Text>Invoice</Text>
                       <Text>Nominal</Text>
+                      <Text>Tanggal Jatuh Tempo</Text>
                     </Grid.Col>
                     <Grid.Col span={4}>
-                      <Text>{selectedDebt.invoice}</Text>
-                      <Text>{formatCurrency(selectedDebt?.amount)}</Text>
+                      <Text>: {selectedDebt.invoice}</Text>
+                      <Text>: {formatCurrency(Math.abs(selectedDebt?.amount || 0))}</Text>
+                      <Text>: {formatDateIndonesia(selectedDebt?.due_date)}</Text>
                     </Grid.Col>
                   </Grid>
                 </Card>
@@ -82,6 +85,7 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: J
                         onSelect={(selected) => {
                           handleJournalChange(index, "description", selected.description);
                           handleJournalChange(index, "transaction_category_id", selected.id);
+                          handleJournalChange(index, "status", "done");
                         }}
                         status="paid"
                       />

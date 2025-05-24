@@ -1,5 +1,9 @@
-export const initialValuesJournalEntry = (companyId?: string | null, transactionType?: string | null) => {
-  const defaultStatus = transactionType === "payin" ? "unpaid" : null;
+export const initialValuesReservedJournalEntry = (
+  companyId?: string | null,
+  transactionType?: string | null,
+  selectedDeb?: IDebtSummaryItem
+) => {
+  const defaultStatus: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | "" = transactionType === "payin" ? "unpaid" : "";
 
   return {
     journalEntries: [
@@ -8,11 +12,11 @@ export const initialValuesJournalEntry = (companyId?: string | null, transaction
         invoice: "",
         description: "",
         amount: 0,
-        partner: "",
+        partner: selectedDeb?.partner || "", // Gunakan partner dari selectedDeb jika ada
         date_inputed: "", // Tanggal input (kosongkan jika tidak ada)
         due_date: "",
         installment: 0,
-        is_repaid: false,
+        is_repaid: true,
         note: "",
         status: defaultStatus, // Status diatur berdasarkan transaksi
         transaction_type: (transactionType as "payin" | "payout") || "",

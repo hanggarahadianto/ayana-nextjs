@@ -144,6 +144,7 @@ export const transactionLabel = [
   { value: "Penerimaan", label: "Penerimaan" },
   { value: "Pinjaman", label: "Pinjaman" },
   { value: "Piutang", label: "Piutang" },
+  { value: "Pelunasan", label: "Pelunasan" },
   { value: "Pembelian", label: "Pembelian" },
   { value: "Pembayaran", label: "Pembayaran" },
   { value: "Pengeluaran", label: "Pengeluaran" },

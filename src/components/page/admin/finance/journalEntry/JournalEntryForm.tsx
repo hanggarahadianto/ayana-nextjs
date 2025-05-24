@@ -163,16 +163,18 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                     </Group>
                     {/* )} */}
 
-                    <SelectFinanceTransactionCategory
-                      companyId={companyId}
-                      transactionType={entry.transaction_type}
-                      label="Kategori Transaksi"
-                      onSelect={(selected) => {
-                        handleJournalChange(index, "description", selected.description);
-                        handleJournalChange(index, "transaction_category_id", selected.id);
-                      }}
-                      status={entry.status}
-                    />
+                    {entry.status && (
+                      <SelectFinanceTransactionCategory
+                        companyId={companyId}
+                        transactionType={entry.transaction_type}
+                        label="Kategori Transaksi"
+                        onSelect={(selected) => {
+                          handleJournalChange(index, "description", selected.description);
+                          handleJournalChange(index, "transaction_category_id", selected.id);
+                        }}
+                        status={entry.status}
+                      />
+                    )}
 
                     <Group w="100%" grow>
                       <TextInput

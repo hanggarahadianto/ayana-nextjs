@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { Modal, Button, Group, Stack, SimpleGrid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form } from "formik";
@@ -6,6 +6,7 @@ import { initialValuesJournalEntry } from "@/utils/initialValues/initialValuesJo
 import { reversedValidationSchemaJournalEntry } from "@/utils/validation/reversedJournalEntry-validation";
 import ReversedJournalEntryForm from "./ReversedJournalEntryForm";
 import { useSubmitReservedJournalEntry } from "@/api/finance/postDataReservedJournalEntry";
+import { initialValuesReservedJournalEntry } from "@/utils/initialValues/initialValuesReversedJournalEntry";
 
 interface IReversedJournalEntryModalProps {
   companyId: string;
@@ -25,25 +26,32 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
   // console.log("Modal opened:", opened); // Log when modal is opened or closed
   // console.log("Selected Debt:", selectedDebt);
   const { mutate: submitJournal, isPending: isLoadingSubmitJournalEntry } = useSubmitReservedJournalEntry(close, companyId);
+  console.log("selectedDebt", selectedDebt);
 
-  const handleSubmit = (values: any) => {
-    if (!selectedDebt?.id) return;
+  const handleSubmit = useCallback(
+    (values: { journalEntries: IJournalEntryCreate[] }) => {
+      if (!selectedDebt?.id) return;
 
-    const newEntry = {
-      ...values.journalEntries[0], // hanya 1 entri yang baru
-      date_inputed: values.journalEntries[0].date_inputed,
-      due_date: values.journalEntries[0].due_date || null,
-    };
+      const newEntry: IJournalEntryCreate = {
+        ...values.journalEntries[0],
+        date_inputed: values.journalEntries[0].date_inputed || null,
+        due_date: values.journalEntries[0].due_date || null,
+      };
 
-    const updatedDebt = {
-      ...selectedDebt,
-      is_repaid: true,
-      status: "paid",
-    };
+      const updatedDebt = {
+        ...selectedDebt,
+        id: selectedDebt.journal_entry_id,
+        is_repaid: true,
+        status: "done",
+      };
 
-    const payload = [updatedDebt, newEntry];
-    submitJournal(payload);
-  };
+      console.log("updatedDebt", updatedDebt);
+
+      const payload = [updatedDebt, newEntry];
+      submitJournal(payload);
+    },
+    [selectedDebt, submitJournal] // tambahkan semua dependensi yang digunakan dalam fungsi
+  );
 
   return (
     <>
@@ -56,7 +64,7 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
         opened={opened}
       >
         <Formik
-          initialValues={initialValuesJournalEntry(companyId, transactionType, selectedDebt)}
+          initialValues={initialValuesReservedJournalEntry(companyId, transactionType, selectedDebt)}
           validationSchema={reversedValidationSchemaJournalEntry(transactionType)}
           validateOnBlur={false}
           enableReinitialize

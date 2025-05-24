@@ -54,7 +54,7 @@ export default function SelectFinanceTransactionCategory({
 
   const TransactionCategoryOptions = TransactionCategoryData?.data?.map((item) => ({
     value: item.id,
-    label: `${item.name} ${item.description}`,
+    label: ` ${item.description}`,
     raw: item, // simpan data asli untuk render custom
   }));
 

@@ -25,11 +25,27 @@ interface IJournalEntryCreate {
   amount: number;
   partner: string;
   transaction_type: "payin" | "payout"; // bisa disesuaikan kalau ada lebih dari dua tipe
-  status: "draft" | "paid" | "unpaid" | "completed" | "cancelled"; // sesuaikan dengan status yang valid di sistem
+  status: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | ""; // sesuaikan dengan status yang valid di sistem
   date_inputed: string | null;
   due_date: string | null;
   installment: number;
-
+  note: string;
+  is_repaid: boolean;
+  company_id: string;
+}
+interface IJournalEntryUpdate {
+  id: string;
+  transaction_id: string;
+  invoice: string;
+  description: string;
+  transaction_category_id: string;
+  amount: number;
+  partner: string;
+  transaction_type: "payin" | "payout"; // bisa disesuaikan kalau ada lebih dari dua tipe
+  status: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | ""; // sesuaikan dengan status yang valid di sistem
+  date_inputed: string | null;
+  due_date: string | null;
+  installment: number;
   note: string;
   is_repaid: boolean;
   company_id: string;
@@ -41,4 +57,5 @@ interface IJournalEntryResponse {
   limit?: number; // Optional jika tidak selalu ada
   page?: number; // Optional jika tidak selalu ada
   total?: number; // Optional jika tidak selalu ada
+  message?: string; // Optional jika tidak selalu ada
 }

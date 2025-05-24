@@ -14,7 +14,7 @@ interface ICreateJournalEntryModalProps {
   companyId?: string;
 }
 
-const CreateJournalEntryModal: React.FC<ICreateJournalEntryModalProps> = ({ transactionType, companyId }) => {
+const UpdateJournalEntryModal: React.FC<ICreateJournalEntryModalProps> = ({ transactionType, companyId }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const { mutate: submitJournal, isPending: isLoadingSubmitJournalEntry } = useSubmitJournalEntry(close, companyId);
 
@@ -74,4 +74,4 @@ const CreateJournalEntryModal: React.FC<ICreateJournalEntryModalProps> = ({ tran
   );
 };
 
-export default memo(CreateJournalEntryModal);
+export default memo(UpdateJournalEntryModal);
