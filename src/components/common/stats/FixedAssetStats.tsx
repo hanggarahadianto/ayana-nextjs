@@ -13,8 +13,6 @@ export const FixedAssetStats = ({ companyId }: AssetStatsProps) => {
     queryFn: () =>
       getAssetSummary({
         companyId: companyId || "",
-        page: 1,
-        limit: 10,
         assetType: "fixed_asset",
         summaryOnly: true,
       }),

@@ -38,7 +38,15 @@ export const StatsGrid = ({ data }: StatsGridProps) => {
           <Flex w="100%" gap={20}>
             <Icon size={40} color={stat.color} />
             <Group>
-              <Text mt={4} size="lg" c="dimmed" style={{ fontWeight: 700, textTransform: "uppercase" }}>
+              <Text
+                mt={4}
+                c="dimmed"
+                style={{
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  fontSize: "clamp(0.8rem, 1.2vw, 0.8rem)", // responsif dari kecil ke sedang
+                }}
+              >
                 {stat.title}
               </Text>
             </Group>
@@ -48,7 +56,7 @@ export const StatsGrid = ({ data }: StatsGridProps) => {
             <Text
               c={Number(stat.value) < 0 ? "red.7" : stat.color}
               style={{
-                fontSize: "24px",
+                fontSize: "clamp(1.1rem, 1.9vw, 1.6rem)", // responsif dari sedang ke besar
                 fontWeight: 700,
                 textAlign: "center",
               }}

@@ -155,7 +155,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
               // console.log("row", row);
               return (
                 <Flex gap="lg" justify="center">
-                  <ButtonReversedJournal size={2.2} onClick={() => handleSendClick(row)} />
+                  {row.status !== "done" && <ButtonReversedJournal size={2.2} onClick={() => handleSendClick(row)} />}
 
                   <ButtonDeleteWithConfirmation
                     id={row.id} // Gunakan id customer
