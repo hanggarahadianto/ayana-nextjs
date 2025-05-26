@@ -6,8 +6,8 @@ declare module "@mantine/core" {
   interface ComboboxItem {
     raw?: {
       name: string;
-      description: string;
       status: string;
+      transaction_label: string;
     };
   }
 }
@@ -76,19 +76,19 @@ export default function SelectFinanceTransactionCategory({
         },
       }}
       renderOption={({ option }) => {
-        const { name, description, status } = option.raw || {};
+        const { name, status, transaction_label } = option.raw || {};
         const statusLabel = status === "paid" ? "Tunai" : status === "unpaid" ? "Tenor" : (status || "").toUpperCase();
 
         return (
           <Grid w={"100%"}>
             <Grid.Col span={4}>
               <Text size="sm" fw={500}>
-                {name}
+                {transaction_label}
               </Text>
             </Grid.Col>
             <Grid.Col span={6}>
               <Text size="sm" c="dimmed">
-                {description || "-"}
+                {name || "-"}
               </Text>
             </Grid.Col>
             <Grid.Col span={2}>
