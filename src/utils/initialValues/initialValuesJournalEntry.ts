@@ -25,7 +25,7 @@
 // };
 
 export const initialValuesJournalEntry = (companyId?: string | null, transactionType?: string | null, selectedDeb?: IDebtSummaryItem) => {
-  const defaultStatus: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | "" = transactionType === "payin" ? "unpaid" : "";
+  const defaultStatus: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | "" = "";
   return {
     journalEntries: [
       {

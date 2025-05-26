@@ -43,7 +43,7 @@ const CreateJournalEntryModal: React.FC<ICreateJournalEntryModalProps> = ({ tran
         >
           {({ handleSubmit, errors, touched }) => {
             // console.log("values", values);
-            console.log("errors", errors);
+            // console.log("errors", errors);
             return (
               <SimpleGrid p={20} cols={1}>
                 <Form onSubmit={handleSubmit}>

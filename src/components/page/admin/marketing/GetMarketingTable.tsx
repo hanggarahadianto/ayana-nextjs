@@ -107,8 +107,8 @@ export const CustomerTable = () => {
           {
             key: "date_inputed",
             title: "Tanggal Transaksi",
-            width: 120,
-            minWidth: 120,
+            width: 200,
+            minWidth: 200,
             render: (item) => formatDateIndonesia(item.date_inputed),
           },
           {

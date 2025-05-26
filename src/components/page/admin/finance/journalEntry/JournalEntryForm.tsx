@@ -89,7 +89,7 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
         <Stack gap="xl">
           {values?.journalEntries?.map((entry, index) => {
             // console.log("Status", entry.status);
-            console.log("entry", entry);
+            // console.log("entry", entry);
 
             const calculateTotalBagiHasil = (entry: any, percentage: number) => {
               const startDate = new Date(entry.date_inputed);
@@ -150,7 +150,6 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                           const isUnpaid = value === "unpaid";
 
                           // Tentukan transactionType berdasarkan status
-                          const transactionType = isUnpaid ? "payout" : isPaid ? "payin" : undefined;
 
                           handleJournalChange(index, "status", value);
                           handleJournalChange(index, "is_repaid", isPaid);

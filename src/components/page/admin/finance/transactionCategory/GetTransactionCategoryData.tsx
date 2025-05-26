@@ -72,6 +72,13 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
             Transaksi Kategori {companyName}
           </Text>
           <Group>
+            <SelectCategoryFilter
+              companyId={companyId}
+              value={selectedCategory}
+              onChange={(value) => {
+                setSelectedCategory(value);
+              }}
+            />
             <Select
               label="Filter Berdasarkan Tipe Transaksi"
               placeholder="Pilih Type"
@@ -83,13 +90,7 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
               clearable
               style={{ width: 250 }}
             />
-            <SelectCategoryFilter
-              companyId={companyId}
-              value={selectedCategory}
-              onChange={(value) => {
-                setSelectedCategory(value);
-              }}
-            />
+
             <Select
               label="Filter Status Pembayaran"
               placeholder="Pilih Status"
