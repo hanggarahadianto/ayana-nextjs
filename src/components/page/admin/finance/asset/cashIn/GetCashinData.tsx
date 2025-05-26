@@ -46,8 +46,8 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, cashinSummaryData?.data.total || 0);
 
-  const openEditModal = (account: IJournalEntryUpdate) => {
-    useModalStore.getState().openModal("editCashinData", account);
+  const openEditModal = (cashInAsset: IAssetSummaryItem) => {
+    useModalStore.getState().openModal("editCashinData", cashInAsset);
   };
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteCashIn } = useDeleteDataJournalEntry();
@@ -113,15 +113,13 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
             title: "Aksi",
             width: 10,
             minWidth: 10,
-            render: (row: IJournalEntryUpdate) => {
-              // render: (row: IAssetSummaryItem) => {
-              // console.log("row", row);
+            render: (row: IAssetSummaryItem) => {
               return (
                 <Flex gap="lg" justify="center">
                   <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
                   <ButtonDeleteWithConfirmation
-                    id={row.id} // Gunakan id customer
-                    onDelete={() => handleDeleteAccount(row.id)}
+                    id={row.transaction_category_id} // Gunakan id customer
+                    onDelete={() => handleDeleteAccount(row.journal_entry_id)}
                     description={`Hapus Transaksi ${row.description}?`}
                     size={2.2}
                   />
