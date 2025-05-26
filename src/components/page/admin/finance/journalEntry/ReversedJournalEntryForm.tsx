@@ -46,7 +46,7 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: J
         <Stack gap="xl">
           {values?.journalEntries?.map((entry, index) => {
             console.log("values", values);
-            // console.log("errors", error);
+            console.log("errors", error);
 
             return (
               <SimpleGrid key={index} p={20} spacing="md">
@@ -137,7 +137,7 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: J
                           onChange={(date) => handleJournalChange(index, "date_inputed", date ? date.toISOString() : null)}
                         />
 
-                        {entry.status !== "paid" && (
+                        {/* {entry.status !== "paid" && (
                           <DatePickerInput
                             label="Jatuh Tempo"
                             placeholder="Tanggal Jatuh Tempo"
@@ -149,7 +149,7 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: J
                             value={entry.due_date ? new Date(entry.due_date) : null}
                             onChange={(date) => handleJournalChange(index, "due_date", date ? date.toISOString() : null)}
                           />
-                        )}
+                        )} */}
                       </Group>
                     )}
 

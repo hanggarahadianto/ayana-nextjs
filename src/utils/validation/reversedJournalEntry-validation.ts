@@ -14,8 +14,8 @@ export const reversedValidationSchemaJournalEntry = (transactionType?: string | 
         transaction_type: Yup.mixed<"payin" | "payout">()
           .oneOf(["payin", "payout"], "Tipe transaksi tidak valid")
           .required("Tipe transaksi wajib diisi"),
-        status: Yup.mixed<"draft" | "unpaid" | "paid" | "completed" | "cancelled">()
-          .oneOf(["draft", "unpaid", "paid", "completed", "cancelled"], "Status tidak valid")
+        status: Yup.mixed<"draft" | "unpaid" | "paid" | "cancelled" | "done">()
+          .oneOf(["draft", "unpaid", "paid", "cancelled", "done"], "Status tidak valid")
           .required("Status wajib diisi"),
         note: Yup.string().required("Keterangan wajib diisi").max(255, "Keterangan maksimal 255 karakter"),
 

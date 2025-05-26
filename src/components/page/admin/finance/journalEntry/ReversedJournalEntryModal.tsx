@@ -1,8 +1,6 @@
 import React, { memo, useCallback } from "react";
 import { Modal, Button, Group, Stack, SimpleGrid } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form } from "formik";
-import { initialValuesJournalEntry } from "@/utils/initialValues/initialValuesJournalEntry";
 import { reversedValidationSchemaJournalEntry } from "@/utils/validation/reversedJournalEntry-validation";
 import ReversedJournalEntryForm from "./ReversedJournalEntryForm";
 import { useSubmitReservedJournalEntry } from "@/api/finance/postDataReservedJournalEntry";
@@ -23,11 +21,7 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
   opened,
   close,
 }) => {
-  // console.log("Modal opened:", opened); // Log when modal is opened or closed
-  // console.log("Selected Debt:", selectedDebt);
   const { mutate: submitJournal, isPending: isLoadingSubmitJournalEntry } = useSubmitReservedJournalEntry(close, companyId);
-  console.log("selectedDebt", selectedDebt);
-
   const handleSubmit = useCallback(
     (values: { journalEntries: IJournalEntryCreate[] }) => {
       if (!selectedDebt?.id) return;

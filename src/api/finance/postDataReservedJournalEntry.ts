@@ -33,6 +33,11 @@ export const useSubmitReservedJournalEntry = (closeModal: () => void, companyId?
               exact: false,
             }),
             queryClient.refetchQueries({
+              queryKey: ["getCashOutData", companyId],
+
+              exact: false,
+            }),
+            queryClient.refetchQueries({
               queryKey: ["getExpenseSummaryData", companyId],
               exact: false,
             }),
@@ -42,6 +47,10 @@ export const useSubmitReservedJournalEntry = (closeModal: () => void, companyId?
             }),
             queryClient.refetchQueries({
               queryKey: ["getFixedAssetData", companyId],
+              exact: false,
+            }),
+            queryClient.refetchQueries({
+              queryKey: ["getReceivableAssetData", companyId],
               exact: false,
             }),
           ]);

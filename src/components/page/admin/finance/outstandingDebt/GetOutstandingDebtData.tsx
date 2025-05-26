@@ -12,6 +12,7 @@ import ReversedJournalEntryModal from "../journalEntry/ReversedJournalEntryModal
 import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
+import ButtonReversedJournal from "@/components/common/button/buttonReversedJournal";
 
 interface GetOutStandingDebtDataProps {
   companyId: string;
@@ -175,15 +176,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
               // console.log("row", row);
               return (
                 <Flex gap="lg" justify="center">
-                  <IoIosSend
-                    color="green"
-                    size="22px"
-                    style={{ cursor: "pointer" }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleSendClick(row);
-                    }}
-                  />
+                  <ButtonReversedJournal size={2.2} onClick={() => handleSendClick(row)} />
                   {/* <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} /> */}
                   <ButtonDeleteWithConfirmation
                     id={row.id} // Gunakan id customer
