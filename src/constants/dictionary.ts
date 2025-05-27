@@ -129,7 +129,7 @@ export const transactionStatusOption = {
 export type TransactionStatus = keyof typeof transactionStatusOption;
 
 export const ValidCategories: Record<string, string[]> = {
-  Asset: ["Kas & Bank", "Piutang", "Perlengkapan", "Aset Tetap"],
+  Asset: ["Kas & Bank", "Barang Dagangan", "Piutang", "Perlengkapan", "Aset Tetap"],
   Liability: ["Utang Dagang", "Pinjaman", "Kewajiban Lancar", "Pajak", "Pembayaran Bagi Hasil", "Hutang Usaha"],
   Equity: ["Modal", "Laba Ditahan"],
   Revenue: ["Penjualan", "Jasa", "Pencairan", "Pendapatan Dari Bunga"],

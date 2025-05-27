@@ -30,7 +30,8 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         page,
         limit,
         assetType,
-        category: selectedCategory ?? "",
+        // category: selectedCategory ?? "",
+        category: "Piutang", // Hardcoded for Receivable Asset
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -64,10 +65,11 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
 
           <SelectCategoryFilter
             companyId={companyId}
-            value={selectedCategory}
+            value={"Piutang"} // Hardcoded for Receivable Asset
             onChange={(value) => {
               setSelectedCategory(value);
             }}
+            readonly
           />
         </Stack>
         <Text size="xl" fw={800} c={"teal"} mt={20}>

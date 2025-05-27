@@ -1,13 +1,20 @@
 import { getOutstandingDebt } from "@/api/finance/getOutstandingDebt";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Badge, Group, Flex } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Badge, Group, Flex, Box } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 import { IoIosSend } from "react-icons/io";
 import TableComponent from "@/components/common/table/TableComponent";
-import { calculateDaysLeft, formatDaysToMonths, getStatusColor } from "@/utils/debtStatus";
+import {
+  calculateDaysLeft,
+  formatDaysToDueMessage,
+  formatEarlyOrLateTransaction,
+  formatPaidStatusMessage,
+  getColorForPaidStatus,
+  getStatusColor,
+} from "@/utils/debtStatus";
 import ReversedJournalEntryModal from "../journalEntry/ReversedJournalEntryModal";
 import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
@@ -71,6 +78,9 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
     mutateDeleteDataJournal(idToDelete);
   };
 
+  // console.log("debitList", debtList);
+  const shouldShowPaymentStatus = debtList.some((item) => item.status === "done" || item.status === "paid");
+
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingOutstandingDebt || isLoadingDeleteDebt} />
@@ -105,8 +115,8 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
           {
             key: "amount",
             title: "Nominal",
-            width: 120,
-            minWidth: 120,
+            width: 180,
+            minWidth: 180,
             render: (item) => formatCurrency(item.amount),
           },
           {
@@ -127,32 +137,57 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
           {
             key: "status",
             title: "Status",
-            width: 120,
-            minWidth: 120,
+            width: 320,
+            minWidth: 220,
             render: (item) => {
+              const isPaid = item.status === "done";
+              const earlyLate = formatEarlyOrLateTransaction(item.date_inputed, item.due_date);
+
+              if (isPaid) {
+                const color = getColorForPaidStatus(item.date_inputed, item.due_date);
+
+                return (
+                  <Box style={{ width: 200 }}>
+                    <Badge color={color} p={8}>
+                      <Text fw={700} size="xs">
+                        {earlyLate}
+                      </Text>
+                    </Badge>
+                  </Box>
+                );
+              }
+
               const daysLeft = calculateDaysLeft(item.due_date);
-              return item.status === "done" ? (
-                <Badge color="green" p={8}>
-                  <Text fw={700} size="xs">
-                    Sudah Lunas
-                  </Text>
-                </Badge>
-              ) : (
-                <Badge color={getStatusColor(daysLeft)} variant="light">
-                  {formatDaysToMonths(daysLeft)}
-                </Badge>
+              return (
+                <Box style={{ width: 320 }}>
+                  <Badge color={getStatusColor(daysLeft)} p={8}>
+                    <Text fw={700} size="xs">
+                      {formatDaysToDueMessage(daysLeft)}
+                    </Text>
+                  </Badge>
+                </Box>
               );
             },
           },
-
+          ...(shouldShowPaymentStatus
+            ? [
+                {
+                  key: "payment_date_status",
+                  title: "Keterangan Pembayaran",
+                  width: 400,
+                  minWidth: 400,
+                  render: (row: { payment_date_status: string }) => row.payment_date_status,
+                },
+              ]
+            : []),
           { key: "description", title: "Deskripsi", width: 400, minWidth: 400 },
+
           {
             key: "aksi",
             title: "Aksi",
             width: 10,
             minWidth: 10,
             render: (row: IDebtSummaryItem) => {
-              // console.log("row", row);
               return (
                 <Flex gap="lg" justify="center">
                   {row.status !== "done" && <ButtonReversedJournal size={2.2} onClick={() => handleSendClick(row)} />}

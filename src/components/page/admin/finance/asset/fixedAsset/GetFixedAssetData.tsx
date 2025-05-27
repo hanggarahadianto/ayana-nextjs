@@ -30,7 +30,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         page,
         limit,
         assetType,
-        category: selectedCategory ?? "",
+        category: "Aset Tetap",
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -61,7 +61,8 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
 
           <SelectCategoryFilter
             companyId={companyId}
-            value={selectedCategory}
+            // value={selectedCategory}
+            value={"Aset Tetap"}
             onChange={(value) => {
               setSelectedCategory(value);
             }}

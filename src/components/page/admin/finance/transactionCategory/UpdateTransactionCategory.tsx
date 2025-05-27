@@ -60,7 +60,9 @@ const UpdateTransactionCategoryModal = ({ companyId }: UpdateTransactionCategory
             return (
               <Form>
                 <SimpleGrid p={20}>
-                  <Text fw={600}>Ubah Akun {initialData?.name}</Text>
+                  <Text fw={600}>
+                    Ubah Akun {initialData?.transaction_label} {initialData?.name}
+                  </Text>
                   <Stack gap={20}>
                     <Select
                       clearable

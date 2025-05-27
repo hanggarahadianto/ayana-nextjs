@@ -38,7 +38,7 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: J
     [setFieldValue]
   );
 
-  // console.log("selected debt", selectedDebt);
+  console.log("selected debt", selectedDebt);
 
   return (
     <FieldArray name="journalEntries">
@@ -139,6 +139,7 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: J
 
                         {entry.status !== "paid" && (
                           <DatePickerInput
+                            disabled={selectedDebt.due_date}
                             label="Jatuh Tempo"
                             placeholder="Tanggal Jatuh Tempo"
                             locale="id"
@@ -146,7 +147,7 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: J
                             radius="sm"
                             valueFormat="DD MMMM YYYY"
                             rightSection={<IconCalendar size={18} />}
-                            value={entry.due_date ? new Date(entry.due_date) : null}
+                            value={selectedDebt.due_date ? new Date(selectedDebt.due_date) : null}
                             onChange={(date) => handleJournalChange(index, "due_date", date ? date.toISOString() : null)}
                           />
                         )}

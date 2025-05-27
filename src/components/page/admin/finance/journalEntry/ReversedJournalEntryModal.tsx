@@ -67,7 +67,7 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
           onSubmit={handleSubmit}
         >
           {({ handleSubmit, values, errors, touched }) => {
-            console.log("values", values);
+            // console.log("values", values);
             return (
               <SimpleGrid p={20} cols={1}>
                 <Form onSubmit={handleSubmit}>

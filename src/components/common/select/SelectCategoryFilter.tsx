@@ -1,15 +1,17 @@
 import { getTransactionCategoryByCategoryOnly } from "@/api/transaction-category/getDataTransactionCategoryFilter";
 import { Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
+import { read } from "fs";
 import React from "react";
 
 interface SelectCategoryFilterProps {
   companyId: string;
   value: string | null;
   onChange: (value: string | null) => void;
+  readonly?: boolean;
 }
 
-const SelectCategoryFilter: React.FC<SelectCategoryFilterProps> = ({ companyId, value, onChange }) => {
+const SelectCategoryFilter: React.FC<SelectCategoryFilterProps> = ({ companyId, value, onChange, readonly = false }) => {
   const { data: transactionCategoryData, isLoading } = useQuery({
     queryKey: ["getTransactionCategoryByCategoryOnly", companyId],
     queryFn: () => getTransactionCategoryByCategoryOnly(companyId),
@@ -25,14 +27,14 @@ const SelectCategoryFilter: React.FC<SelectCategoryFilterProps> = ({ companyId, 
 
   return (
     <Select
+      clearable={!readonly}
+      disabled={isLoading || readonly}
       label="Kategori Transaksi"
       placeholder={isLoading ? "Memuat..." : "Pilih Kategori"}
       data={options}
       value={value}
       onChange={onChange}
       searchable
-      clearable
-      disabled={isLoading}
       styles={{
         input: { cursor: "pointer" },
         dropdown: { cursor: "pointer" },

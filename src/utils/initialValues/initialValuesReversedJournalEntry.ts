@@ -14,7 +14,7 @@ export const initialValuesReservedJournalEntry = (
         amount: 0,
         partner: selectedDeb?.partner || "", // Gunakan partner dari selectedDeb jika ada
         date_inputed: "", // Tanggal input (kosongkan jika tidak ada)
-        due_date: "",
+        due_date: selectedDeb?.due_date || "", // Tanggal jatuh tempo dari selectedDeb jika ada
         installment: 0,
         is_repaid: true,
         note: "",

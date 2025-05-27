@@ -33,7 +33,6 @@ interface IDebtSummaryItem {
   amount: number;
   partner: string;
   transaction_type: "payin" | "payout"; // bisa disesuaikan kalau ada lebih dari dua tipe
-
   status: string;
   company_id: string;
   date_inputed: string;
@@ -41,6 +40,7 @@ interface IDebtSummaryItem {
   is_repaid: boolean;
   installment: number;
   note: string;
+  payment_date_status: string;
 }
 
 interface IDebtSummaryData {

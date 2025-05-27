@@ -149,12 +149,10 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                           const isPaid = value === "paid";
                           const isUnpaid = value === "unpaid";
 
-                          // Tentukan transactionType berdasarkan status
-
                           handleJournalChange(index, "status", value);
                           handleJournalChange(index, "is_repaid", isPaid);
                           handleJournalChange(index, "invoice", isUnpaid ? "Tempo" : value === null ? null : "");
-                          // handleJournalChange(index, "transaction_type", transactionType);
+                          handleJournalChange(index, "transaction_id", isUnpaid ? "Tempo" : value === null ? null : "");
                         }}
                         onBlur={handleBlur}
                         value={entry.status}
@@ -184,6 +182,7 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                         value={entry.transaction_id || ""}
                         onChange={(e) => handleJournalChange(index, "transaction_id", e.currentTarget.value)}
                         onBlur={handleBlur}
+                        disabled={entry.transaction_type !== "payin" && entry.status === "unpaid"}
                       />
                       <TextInput
                         error={touched?.[index]?.invoice && error?.[index]?.invoice}
