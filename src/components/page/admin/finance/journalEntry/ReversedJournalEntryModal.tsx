@@ -34,7 +34,6 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
 
       const updatedDebt = {
         ...selectedDebt,
-        id: selectedDebt.journal_entry_id,
         is_repaid: true,
         status: "done",
       };

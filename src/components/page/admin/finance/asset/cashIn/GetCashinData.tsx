@@ -13,6 +13,7 @@ import { IconPencil } from "@tabler/icons-react";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 import { useModalStore } from "@/store/modalStore";
+import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -47,7 +48,7 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
   const endIndex = Math.min(page * limit, cashinSummaryData?.data.total || 0);
 
   const openEditModal = (cashInAsset: IAssetSummaryItem) => {
-    useModalStore.getState().openModal("editCashinData", cashInAsset);
+    useModalStore.getState().openModal("editCashInData", cashInAsset);
   };
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteCashIn } = useDeleteDataJournalEntry();
@@ -119,7 +120,7 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
                   <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
                   <ButtonDeleteWithConfirmation
                     id={row.transaction_category_id} // Gunakan id customer
-                    onDelete={() => handleDeleteAccount(row.journal_entry_id)}
+                    onDelete={() => handleDeleteAccount(row.id)}
                     description={`Hapus Transaksi ${row.description}?`}
                     size={2.2}
                   />
@@ -129,6 +130,8 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
           },
         ]}
       />
+
+      <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payin" />
 
       {totalPages > 0 && (
         <Stack gap="xs" mt="40" style={{ paddingBottom: "16px" }}>

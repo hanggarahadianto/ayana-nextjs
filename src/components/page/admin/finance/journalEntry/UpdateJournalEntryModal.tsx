@@ -1,39 +1,50 @@
 import React, { memo } from "react";
 import { Modal, Button, Group, Stack, Alert, SimpleGrid } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form } from "formik";
-import ButtonAdd from "@/components/common/button/buttonAdd";
-import { initialValuesJournalEntry } from "@/utils/initialValues/initialValuesJournalEntry";
+import { initialValuesJournalEntryUpdate } from "@/utils/initialValues/initialValuesJournalEntry";
 import { validationSchemaJournalEntry } from "@/utils/validation/journalEntry-validation";
+import { useModalStore } from "@/store/modalStore";
+import JournalEntryFormUpdate from "./JournalEntryFormUpdate";
+import { useSubmitJournalEntryUpdate } from "@/api/finance/updateDataJournalEntry";
 
-import JournalEntryForm from "./JournalEntryForm";
-import { useSubmitJournalEntry } from "@/api/finance/postDataJournalEntry";
-
-interface ICreateJournalEntryModalProps {
+interface IUpdateJournalEntryModalProps {
+  initialValues: IJournalEntryUpdate;
   transactionType: "payin" | "payout";
   companyId?: string;
 }
 
-const UpdateJournalEntryModal: React.FC<ICreateJournalEntryModalProps> = ({ transactionType, companyId }) => {
-  const [opened, { open, close }] = useDisclosure(false);
-  const { mutate: submitJournal, isPending: isLoadingSubmitJournalEntry } = useSubmitJournalEntry(close, companyId);
+const UpdateJournalEntryModal: React.FC<IUpdateJournalEntryModalProps> = ({ transactionType, companyId }) => {
+  const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
+
+  const { mutate: submitJournal, isPending: isLoadingUpdateJournalEntry } = useSubmitJournalEntryUpdate(closeModal);
 
   // 3. useCallback for handleSubmit
-  const handleSubmit = (values: { journalEntries: IJournalEntryCreate[] }) => {
-    const transformedEntries = values.journalEntries.map((entry: any) => ({
-      ...entry,
-      date_inputed: entry.date_inputed,
-      due_date: entry.due_date || null,
-    }));
+  const handleSubmit = ({ journalEntries }: { journalEntries: IJournalEntryUpdate[] }) => {
+    if (!journalEntries?.length) {
+      console.warn("Tidak ada entri jurnal yang dikirim.");
+      return;
+    }
 
-    submitJournal(transformedEntries);
+    const [entry] = journalEntries;
+
+    const transformedEntry: IJournalEntryUpdate = {
+      ...entry,
+      due_date: entry.due_date || null,
+    };
+
+    console.log("Transformed Entry:", transformedEntry);
+
+    submitJournal(transformedEntry); // kirim objek langsung, bukan array
   };
+
+  if (modalName !== "editCashInData" || !opened || !initialData) return null;
+  // console.log("initialData", initialData);
+
   return (
     <>
-      <ButtonAdd onClick={open} size={"3.5rem"} />
-      <Modal opened={opened} onClose={close} size={"60%"}>
+      <Modal opened={opened} onClose={closeModal} size={"60%"}>
         <Formik
-          initialValues={initialValuesJournalEntry(companyId, transactionType)}
+          initialValues={initialValuesJournalEntryUpdate(initialData, companyId, transactionType)}
           validationSchema={validationSchemaJournalEntry(transactionType)}
           validateOnBlur={false}
           enableReinitialize
@@ -43,12 +54,12 @@ const UpdateJournalEntryModal: React.FC<ICreateJournalEntryModalProps> = ({ tran
         >
           {({ handleSubmit, errors, touched }) => {
             // console.log("values", values);
-            console.log("errors", errors);
+            // console.log("errors", errors);
             return (
               <SimpleGrid p={20} cols={1}>
                 <Form onSubmit={handleSubmit}>
                   <Stack>
-                    <JournalEntryForm
+                    <JournalEntryFormUpdate
                       companyId={companyId}
                       transactionType={transactionType}
                       error={(errors.journalEntries as any) || []} // Kirimkan array error ke FormGoods
@@ -56,11 +67,11 @@ const UpdateJournalEntryModal: React.FC<ICreateJournalEntryModalProps> = ({ tran
                     />
 
                     <Group justify="flex-end" mt="md">
-                      <Button onClick={close} variant="default">
+                      <Button onClick={closeModal} variant="default" disabled={isLoadingUpdateJournalEntry}>
                         Cancel
                       </Button>
-                      <Button type="submit" color="blue" disabled={isLoadingSubmitJournalEntry} loading={isLoadingSubmitJournalEntry}>
-                        Tambah
+                      <Button type="submit" color="blue" disabled={isLoadingUpdateJournalEntry} loading={isLoadingUpdateJournalEntry}>
+                        Ubah
                       </Button>
                     </Group>
                   </Stack>

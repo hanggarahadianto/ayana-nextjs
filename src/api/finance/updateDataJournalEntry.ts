@@ -9,52 +9,29 @@ interface APIErrorResponse {
   status?: string;
 }
 
-interface IJournalEntryCreate {
-  // Define your journal entry interface properties here
-}
-
-const handleSubmitJournalEntry = async (values: IJournalEntryCreate[]) => {
-  const response = await APIAxiosInstance.post("journal-entry/update", values);
+const handleSubmitJournalEntryUpdate = async (value: IJournalEntryUpdate) => {
+  const response = await APIAxiosInstance.put(`journal-entry/update/${value?.id}`, value);
   return response.data;
 };
 
-export const useSubmitJournalEntry = (closeModal: () => void, companyId?: string) => {
+export const useSubmitJournalEntryUpdate = (closeModal: () => void) => {
   const queryClient = useQueryClient();
 
-  return useMutation<void, AxiosError<APIErrorResponse>, IJournalEntryCreate[]>({
-    mutationFn: handleSubmitJournalEntry,
-    onSuccess: async () => {
+  return useMutation<void, AxiosError<APIErrorResponse>, IJournalEntryUpdate>({
+    mutationFn: async (value) => {
+      return await handleSubmitJournalEntryUpdate(value);
+    },
+    onSuccess: async (data, variables) => {
       try {
-        // Refetch all related queries in parallel
-        if (companyId) {
-          await Promise.all([
-            queryClient.refetchQueries({
-              queryKey: ["getCashinData", companyId],
-              exact: false,
-            }),
-            queryClient.refetchQueries({
-              queryKey: ["getCashOutData", companyId],
-
-              exact: false,
-            }),
-            queryClient.refetchQueries({
-              queryKey: ["getExpenseSummaryData", companyId],
-              exact: false,
-            }),
-            queryClient.refetchQueries({
-              queryKey: ["getOutstandingDebtByCompanyId", companyId],
-              exact: false,
-            }),
-            queryClient.refetchQueries({
-              queryKey: ["getFixedAssetData", companyId],
-              exact: false,
-            }),
-            queryClient.refetchQueries({
-              queryKey: ["getReceivableAssetData", companyId],
-              exact: false,
-            }),
-          ]);
-        }
+        const companyId = variables.company_id;
+        await Promise.all([
+          queryClient.refetchQueries({ queryKey: ["getCashinData", companyId] }),
+          queryClient.refetchQueries({ queryKey: ["getCashOutData", companyId] }),
+          queryClient.refetchQueries({ queryKey: ["getExpenseSummaryData", companyId] }),
+          queryClient.refetchQueries({ queryKey: ["getOutstandingDebtByCompanyId", companyId] }),
+          queryClient.refetchQueries({ queryKey: ["getFixedAssetData", companyId] }),
+          queryClient.refetchQueries({ queryKey: ["getReceivableAssetData", companyId] }),
+        ]);
 
         closeModal?.();
         showNotification({
@@ -73,7 +50,6 @@ export const useSubmitJournalEntry = (closeModal: () => void, companyId?: string
     },
     onError: (error) => {
       console.error("Journal Entry submission error:", error);
-
       const errorMessage =
         error.response?.data?.message || error.response?.data?.error || error.message || "Terjadi kesalahan saat menyimpan data transaksi";
 

@@ -4,6 +4,7 @@ interface IJournalEntry {
   invoice: string;
   description: string;
   transaction_category_id: string;
+  transaction_category_name?: string; // Optional jika tidak selalu ada
   amount: number;
   installment: number;
   partner: string;
@@ -14,7 +15,6 @@ interface IJournalEntry {
   status: string;
   is_repaid: boolean;
   note: string;
-
   company_id: string;
 }
 interface IJournalEntryCreate {
@@ -36,6 +36,7 @@ interface IJournalEntryCreate {
 interface IJournalEntryUpdate {
   id: string;
   transaction_id: string;
+
   invoice: string;
   description: string;
   transaction_category_id: string;

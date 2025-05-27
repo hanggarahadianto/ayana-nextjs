@@ -1,4 +1,4 @@
-import { Card, Text, Group, Stack, Box, Pagination, Flex } from "@mantine/core";
+import { Card, Text, Group, Stack, Pagination, Flex } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
@@ -61,7 +61,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
 
           <SelectCategoryFilter
             companyId={companyId}
-            // value={selectedCategory}
+            readonly
             value={"Aset Tetap"}
             onChange={(value) => {
               setSelectedCategory(value);
@@ -110,7 +110,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
                   {/* <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} /> */}
                   <ButtonDeleteWithConfirmation
                     id={row.id} // Gunakan id customer
-                    onDelete={() => handleDeleteDataJournal(row.journal_entry_id)}
+                    onDelete={() => handleDeleteDataJournal(row.id)}
                     description={`Hapus Transaksi ${row.description}?`}
                     size={2.2}
                   />

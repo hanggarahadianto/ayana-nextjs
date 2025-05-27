@@ -115,7 +115,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
                       {/* <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} /> */}
                       <ButtonDeleteWithConfirmation
                         id={row.id} // Gunakan id customer
-                        onDelete={() => handleDeleteDataJournal(row.journal_entry_id)}
+                        onDelete={() => handleDeleteDataJournal(row.id)}
                         description={`Hapus Transaksi ${row.description}?`}
                         size={2.2}
                       />

@@ -2,7 +2,6 @@ interface IExpenseSummaryItem {
   id: string;
   invoice;
   description: string;
-  journal_entry_id: string;
   amount: number;
   partner: string;
   date_inputed: string;
@@ -25,7 +24,6 @@ interface IExpenseSummaryResponse {
 
 interface IDebtSummaryItem {
   id: string;
-  journal_entry_id: string;
   transaction_id: string;
   invoice: string;
   description: string;
@@ -59,7 +57,6 @@ interface IDebtSummaryResponse {
 
 interface IAssetSummaryItem {
   id: string;
-  journal_entry_id: string;
   invoice: string;
   description: string;
   amount: number;

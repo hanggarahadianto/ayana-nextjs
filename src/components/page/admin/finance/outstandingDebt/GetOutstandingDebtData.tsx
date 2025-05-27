@@ -194,7 +194,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
 
                   <ButtonDeleteWithConfirmation
                     id={row.id} // Gunakan id customer
-                    onDelete={() => handleDeleteDataJournal(row.journal_entry_id)}
+                    onDelete={() => handleDeleteDataJournal(row.id)}
                     description={`Hapus Transaksi ${row.description}?`}
                     size={2.2}
                   />
