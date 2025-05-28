@@ -38,7 +38,7 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
         status: "done",
       };
 
-      console.log("updatedDebt", updatedDebt);
+      // console.log("updatedDebt", updatedDebt);
 
       const payload = [updatedDebt, newEntry];
       submitJournal(payload);

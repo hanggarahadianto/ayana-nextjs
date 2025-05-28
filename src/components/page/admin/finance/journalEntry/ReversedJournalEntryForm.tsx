@@ -38,7 +38,7 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: J
     [setFieldValue]
   );
 
-  console.log("selected debt", selectedDebt);
+  // console.log("selected debt", selectedDebt);
 
   return (
     <FieldArray name="journalEntries">

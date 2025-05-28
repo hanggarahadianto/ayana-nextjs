@@ -20,6 +20,9 @@ import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilte
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 import ButtonReversedJournal from "@/components/common/button/buttonReversedJournal";
+import BreathingActionIcon from "@/components/common/button/buttonAction";
+import { IconPencil } from "@tabler/icons-react";
+import { useModalStore } from "@/store/modalStore";
 
 interface GetOutStandingDebtDataProps {
   companyId: string;
@@ -58,11 +61,10 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
     refetchOnWindowFocus: false,
   });
 
-  const debtList = outstandingDebtData?.data.debtList ?? [];
+  const totalData = outstandingDebtData?.data?.total ?? 0;
+  const totalPages = Math.ceil(totalData / limit);
 
-  const totalPages = useMemo(() => {
-    return outstandingDebtData?.data?.total ? Math.ceil(outstandingDebtData.data.total / limit) : 1;
-  }, [outstandingDebtData]);
+  const debtList = outstandingDebtData?.data.debtList ?? [];
 
   const startIndex = (pageOutstandingDebt - 1) * limit + 1;
   const endIndex = Math.min(pageOutstandingDebt * limit, outstandingDebtData?.data.total || 0);
@@ -80,6 +82,10 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
 
   // console.log("debitList", debtList);
   const shouldShowPaymentStatus = debtList.some((item) => item.status === "done" || item.status === "paid");
+
+  const openEditModal = (expenseData: IExpenseSummaryItem) => {
+    useModalStore.getState().openModal("editExpenseData", expenseData);
+  };
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -191,6 +197,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
               return (
                 <Flex gap="lg" justify="center">
                   {row.status !== "done" && <ButtonReversedJournal size={2.2} onClick={() => handleSendClick(row)} />}
+                  <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
 
                   <ButtonDeleteWithConfirmation
                     id={row.id} // Gunakan id customer

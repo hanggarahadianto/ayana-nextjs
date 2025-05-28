@@ -1,4 +1,4 @@
-import { Card, Text, Group, Stack, Pagination, Select, Flex } from "@mantine/core";
+import { Card, Text, Group, Stack, Pagination, Flex } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
@@ -107,13 +107,12 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
             minWidth: 120,
             render: (item) => formatDateIndonesia(item.date_inputed),
           },
-
-          { key: "description", title: "Deskripsi", width: 220, minWidth: 220 },
+          { key: "note", title: "Keterangan", width: 220, minWidth: 220 },
           {
             key: "aksi",
             title: "Aksi",
-            width: 10,
-            minWidth: 10,
+            width: 8,
+            minWidth: 8,
             render: (row: IAssetSummaryItem) => {
               return (
                 <Flex gap="lg" justify="center">

@@ -1,6 +1,6 @@
 import { Card, Text, Group, Stack, Box, Pagination, Flex } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
@@ -9,6 +9,10 @@ import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
+import BreathingActionIcon from "@/components/common/button/buttonAction";
+import { IconPencil } from "@tabler/icons-react";
+import { useModalStore } from "@/store/modalStore";
+import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -30,7 +34,6 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         page,
         limit,
         assetType,
-        // category: selectedCategory ?? "",
         category: "Piutang", // Hardcoded for Receivable Asset
       }),
     enabled: !!companyId,
@@ -38,11 +41,8 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
   });
 
   const assetList = receivableAssetSummaryData?.data?.assetList ?? [];
-
-  const totalPages = useMemo(() => {
-    return receivableAssetSummaryData?.data?.total ? Math.ceil(receivableAssetSummaryData.data.total / limit) : 1;
-  }, [receivableAssetSummaryData]);
-
+  const totalData = receivableAssetSummaryData?.data?.total ?? 0;
+  const totalPages = Math.ceil(totalData / limit);
   const totalAssetIn = receivableAssetSummaryData?.data?.total_asset ?? 0;
 
   const startIndex = (page - 1) * limit + 1;
@@ -52,6 +52,10 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
   const handleDeleteDataJournal = (idToDelete: string) => {
     console.log("idToDelete", idToDelete);
     mutateDeleteDataJournal(idToDelete);
+  };
+
+  const openEditModal = (receivableAssetSummaryData: IAssetSummaryItem) => {
+    useModalStore.getState().openModal("editReceivableAssetData", receivableAssetSummaryData);
   };
 
   return (
@@ -102,7 +106,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
               minWidth: 120,
               render: (item) => formatDateIndonesia(item.date_inputed),
             },
-            { key: "description", title: "Deskripsi", width: 220, minWidth: 220 },
+            { key: "note", title: "Keterangan", width: 220, minWidth: 220 },
             {
               key: "aksi",
               title: "Aksi",
@@ -112,7 +116,8 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
                 // console.log("row", row);
                 return (
                   <Flex gap="lg" justify="center">
-                    {/* <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} /> */}
+                    <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
+
                     <ButtonDeleteWithConfirmation
                       id={row.id} // Gunakan id customer
                       onDelete={() => handleDeleteDataJournal(row.id)}
@@ -126,6 +131,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
           ]}
         />
       </Box>
+      <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payin" />
 
       {totalPages > 0 && (
         <Stack gap="xs" mt={"md"} style={{ paddingBottom: "16px" }}>

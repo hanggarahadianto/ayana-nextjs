@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { Modal, Button, Group, Stack, Alert, SimpleGrid } from "@mantine/core";
+import { Modal, Button, Group, Stack, SimpleGrid } from "@mantine/core";
 import { Formik, Form } from "formik";
 import { initialValuesJournalEntryUpdate } from "@/utils/initialValues/initialValuesJournalEntry";
 import { validationSchemaJournalEntry } from "@/utils/validation/journalEntry-validation";
@@ -37,8 +37,8 @@ const UpdateJournalEntryModal: React.FC<IUpdateJournalEntryModalProps> = ({ tran
     submitJournal(transformedEntry); // kirim objek langsung, bukan array
   };
 
-  if (modalName !== "editCashInData" || !opened || !initialData) return null;
-  // console.log("initialData", initialData);
+  const validModals = ["editCashInData", "editReceivableAssetData", "editFixAssetData", "editCashOutData", "editExpenseData"];
+  if (!modalName || !validModals.includes(modalName) || !opened || !initialData) return null;
 
   return (
     <>
@@ -53,15 +53,13 @@ const UpdateJournalEntryModal: React.FC<IUpdateJournalEntryModalProps> = ({ tran
           onSubmit={handleSubmit}
         >
           {({ handleSubmit, errors, touched }) => {
-            // console.log("values", values);
             // console.log("errors", errors);
             return (
               <SimpleGrid p={20} cols={1}>
                 <Form onSubmit={handleSubmit}>
                   <Stack>
                     <JournalEntryFormUpdate
-                      companyId={companyId}
-                      transactionType={transactionType}
+                      initialData={initialData}
                       error={(errors.journalEntries as any) || []} // Kirimkan array error ke FormGoods
                       touched={(touched.journalEntries as any) || []}
                     />

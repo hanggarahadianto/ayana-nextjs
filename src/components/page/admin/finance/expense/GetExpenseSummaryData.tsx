@@ -10,12 +10,15 @@ import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
 import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
+import { useModalStore } from "@/store/modalStore";
+import UpdateJournalEntryModal from "../journalEntry/UpdateJournalEntryModal";
+import BreathingActionIcon from "@/components/common/button/buttonAction";
+import { IconPencil } from "@tabler/icons-react";
 
 interface GetExpenseDataProps {
   companyId: string;
   companyName?: string;
 }
-
 export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseDataProps) => {
   const limit = 10;
   const [pageExpense, setPageExpense] = useState(1);
@@ -53,6 +56,10 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
   const handleDeleteDataJournal = (idToDelete: string) => {
     console.log("idToDelete", idToDelete);
     mutateDeleteDataJournal(idToDelete);
+  };
+
+  const openEditModal = (expenseData: IExpenseSummaryItem) => {
+    useModalStore.getState().openModal("editExpenseData", expenseData);
   };
 
   return (
@@ -102,7 +109,8 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
                 minWidth: 120,
                 render: (item) => formatDateIndonesia(item.date_inputed),
               },
-              { key: "description", title: "Deskripsi", width: 260, minWidth: 260 },
+              { key: "note", title: "Keterangan", width: 220, minWidth: 220 },
+
               {
                 key: "aksi",
                 title: "Aksi",
@@ -112,7 +120,8 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
                   // console.log("row", row);
                   return (
                     <Flex gap="lg" justify="center">
-                      {/* <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} /> */}
+                      <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
+
                       <ButtonDeleteWithConfirmation
                         id={row.id} // Gunakan id customer
                         onDelete={() => handleDeleteDataJournal(row.id)}
@@ -126,6 +135,8 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
             ]}
           />
         </Box>
+
+        <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />
 
         {/* Bagian Paginasi */}
         {totalPages > 0 && (

@@ -10,7 +10,7 @@ interface APIErrorResponse {
 }
 
 const handleSubmitJournalEntryUpdate = async (value: IJournalEntryUpdate) => {
-  const response = await APIAxiosInstance.put(`journal-entry/update/${value?.id}`, value);
+  const response = await APIAxiosInstance.put(`journal-entry/update`, value);
   return response.data;
 };
 

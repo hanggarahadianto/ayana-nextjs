@@ -5,8 +5,8 @@ import { IconCalendar } from "@tabler/icons-react";
 import { useFormikContext, FieldArray } from "formik";
 
 interface JournalFormProps {
-  companyId?: string;
-  transactionType: "payin" | "payout";
+  initialData: IJournalEntry;
+
   error?: Array<{
     transaction_id?: string;
     amount?: string;
@@ -22,7 +22,7 @@ interface JournalFormProps {
   touched?: Array<boolean | any>;
 }
 
-const JournalEntryForm = ({ companyId, transactionType, error, touched }: JournalFormProps) => {
+const JournalEntryForm = ({ initialData, error, touched }: JournalFormProps) => {
   const { values, setFieldValue, handleBlur } = useFormikContext<{
     transactionType: "payin" | "payout";
     journalEntries: IJournalEntry[];
@@ -35,6 +35,8 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
     [setFieldValue]
   );
 
+  // console.log("initialData", initialData);
+
   return (
     <FieldArray name="journalEntries">
       {() => (
@@ -44,7 +46,9 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
 
             return (
               <SimpleGrid key={index} p={20} spacing="md">
-                <Text fw={600}>Ubah Data {entry.transaction_category_name}</Text>
+                <Text fw={600}>
+                  Ubah Data {initialData.transaction_category_name} {initialData.partner}
+                </Text>
                 <Group>
                   <Switch disabled mr={16} w={40} checked={entry.transaction_type === "payin"} size="lg" />
                   <Badge color={entry.transaction_type === "payin" ? "green" : "red"} w={80}>

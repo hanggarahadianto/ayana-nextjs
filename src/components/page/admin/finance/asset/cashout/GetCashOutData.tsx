@@ -10,6 +10,10 @@ import CreateJournalEntryModal from "../../journalEntry/CreateJournalEntryModal"
 import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import BreathingActionIcon from "@/components/common/button/buttonAction";
+import { IconPencil } from "@tabler/icons-react";
+import { useModalStore } from "@/store/modalStore";
+import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -47,6 +51,10 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   const handleDeleteDataJournal = (idToDelete: string) => {
     console.log("idToDelete", idToDelete);
     mutateDeleteDataJournal(idToDelete);
+  };
+
+  const openEditModal = (cashOutAsset: IAssetSummaryItem) => {
+    useModalStore.getState().openModal("editCashOutData", cashOutAsset);
   };
 
   return (
@@ -100,7 +108,8 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
               minWidth: 120,
               render: (item) => formatDateIndonesia(item.date_inputed),
             },
-            { key: "description", title: "Deskripsi", width: 220, minWidth: 220 },
+            { key: "note", title: "Keterangan", width: 220, minWidth: 220 },
+
             {
               key: "aksi",
               title: "Aksi",
@@ -110,7 +119,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
                 // console.log("row", row);
                 return (
                   <Flex gap="lg" justify="center">
-                    {/* <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} /> */}
+                    <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
                     <ButtonDeleteWithConfirmation
                       id={row.id} // Gunakan id customer
                       onDelete={() => handleDeleteDataJournal(row.id)}
@@ -124,6 +133,8 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
           ]}
         />
       </Box>
+
+      <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />
 
       {totalPages > 0 && (
         <Stack gap="xs" mt={"md"} style={{ paddingBottom: "16px" }}>
