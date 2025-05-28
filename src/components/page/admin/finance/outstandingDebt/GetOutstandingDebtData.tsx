@@ -38,7 +38,6 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const [selectedDebt, setSelectedDebt] = useState<IDebtSummaryItem | null>(null);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
@@ -76,7 +75,6 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteDebt } = useDeleteDataJournalEntry();
   const handleDeleteDataJournal = (idToDelete: string) => {
-    console.log("idToDelete", idToDelete);
     mutateDeleteDataJournal(idToDelete);
   };
 
@@ -225,7 +223,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
         <ReversedJournalEntryModal
           companyId={companyId}
           transactionType="payout"
-          selectedDebt={selectedDebt}
+          initialData={selectedDebt}
           opened={isModalOpen}
           close={() => setIsModalOpen(false)}
         />

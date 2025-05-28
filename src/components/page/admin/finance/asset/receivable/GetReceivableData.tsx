@@ -13,6 +13,8 @@ import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
+import ButtonReversedJournal from "@/components/common/button/buttonReversedJournal";
+import ReversedJournalEntryModal from "../../journalEntry/ReversedJournalEntryModal";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -25,6 +27,9 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
   const [page, setPage] = useState(1);
   const limit = 10;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  const [selectedReceivableAsset, setSelectedReceivableAsset] = useState<IAssetSummaryItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: receivableAssetSummaryData, isPending: isLoadingReceivableAsset } = useQuery({
     queryKey: ["getReceivableAssetData", companyId, page, assetType, selectedCategory],
@@ -56,6 +61,11 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
 
   const openEditModal = (receivableAssetSummaryData: IAssetSummaryItem) => {
     useModalStore.getState().openModal("editReceivableAssetData", receivableAssetSummaryData);
+  };
+
+  const handleSendClick = (receivableAsset: IAssetSummaryItem) => {
+    setSelectedReceivableAsset(receivableAsset);
+    setIsModalOpen(true);
   };
 
   return (
@@ -110,14 +120,13 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
             {
               key: "aksi",
               title: "Aksi",
-              width: 10,
-              minWidth: 10,
+              width: 1,
+              minWidth: 1,
               render: (row: IAssetSummaryItem) => {
-                // console.log("row", row);
                 return (
                   <Flex gap="lg" justify="center">
+                    {row.status !== "paid" && <ButtonReversedJournal size={2.2} onClick={() => handleSendClick(row)} />}
                     <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
-
                     <ButtonDeleteWithConfirmation
                       id={row.id} // Gunakan id customer
                       onDelete={() => handleDeleteDataJournal(row.id)}
@@ -140,6 +149,15 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
             Menampilkan {startIndex} sampai {endIndex} dari {receivableAssetSummaryData?.data.total} data
           </Text>
         </Stack>
+      )}
+      {selectedReceivableAsset && companyId && (
+        <ReversedJournalEntryModal
+          companyId={companyId}
+          transactionType="payout"
+          initialData={selectedReceivableAsset}
+          opened={isModalOpen}
+          close={() => setIsModalOpen(false)}
+        />
       )}
     </Card>
   );

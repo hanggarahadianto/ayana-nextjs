@@ -9,7 +9,8 @@ interface IJournalEntry {
   installment: number;
   partner: string;
   transaction_type: "payin" | "payout"; // bisa disesuaikan kalau ada lebih dari dua tipe
-  status: "draft" | "paid" | "unpaid" | "completed" | "cancelled"; // sesuaikan dengan status yang valid di sistem
+  status: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | "done"; // sesuaikan dengan status yang valid di sistem
+
   date_inputed: string | null;
   due_date: string | null;
   status: string;
@@ -25,7 +26,8 @@ interface IJournalEntryCreate {
   amount: number;
   partner: string;
   transaction_type: "payin" | "payout"; // bisa disesuaikan kalau ada lebih dari dua tipe
-  status: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | ""; // sesuaikan dengan status yang valid di sistem
+  status: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | "done"; // sesuaikan dengan status yang valid di sistem
+
   date_inputed: string | null;
   due_date: string | null;
   installment: number;
@@ -36,14 +38,14 @@ interface IJournalEntryCreate {
 interface IJournalEntryUpdate {
   id: string;
   transaction_id: string;
-
   invoice: string;
   description: string;
   transaction_category_id: string;
   amount: number;
   partner: string;
   transaction_type: "payin" | "payout"; // bisa disesuaikan kalau ada lebih dari dua tipe
-  status: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | ""; // sesuaikan dengan status yang valid di sistem
+  status: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | "done"; // sesuaikan dengan status yang valid di sistem
+
   date_inputed: string | null;
   due_date: string | null;
   installment: number;

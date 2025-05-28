@@ -3,7 +3,7 @@ export const initialValuesReservedJournalEntry = (
   transactionType?: string | null,
   selectedDeb?: IDebtSummaryItem
 ) => {
-  const defaultStatus: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | "" = transactionType === "payin" ? "unpaid" : "";
+  const defaultStatus: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | "done" = transactionType === "payin" ? "unpaid" : "draft";
 
   return {
     journalEntries: [

@@ -9,7 +9,7 @@ import { initialValuesReservedJournalEntry } from "@/utils/initialValues/initial
 interface IReversedJournalEntryModalProps {
   companyId: string;
   transactionType: "payin" | "payout";
-  selectedDebt?: IDebtSummaryItem;
+  initialData?: IJournalEntry;
   opened: boolean;
   close: () => void;
 }
@@ -17,14 +17,14 @@ interface IReversedJournalEntryModalProps {
 const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
   companyId,
   transactionType,
-  selectedDebt,
+  initialData,
   opened,
   close,
 }) => {
   const { mutate: submitJournal, isPending: isLoadingSubmitJournalEntry } = useSubmitReservedJournalEntry(close, companyId);
   const handleSubmit = useCallback(
     (values: { journalEntries: IJournalEntryCreate[] }) => {
-      if (!selectedDebt?.id) return;
+      if (!initialData?.id) return;
 
       const newEntry: IJournalEntryCreate = {
         ...values.journalEntries[0],
@@ -33,7 +33,7 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
       };
 
       const updatedDebt = {
-        ...selectedDebt,
+        ...initialData,
         is_repaid: true,
         status: "done",
       };
@@ -43,7 +43,7 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
       const payload = [updatedDebt, newEntry];
       submitJournal(payload);
     },
-    [selectedDebt, submitJournal] // tambahkan semua dependensi yang digunakan dalam fungsi
+    [initialData, submitJournal] // tambahkan semua dependensi yang digunakan dalam fungsi
   );
 
   return (
@@ -57,7 +57,7 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
         opened={opened}
       >
         <Formik
-          initialValues={initialValuesReservedJournalEntry(companyId, transactionType, selectedDebt)}
+          initialValues={initialValuesReservedJournalEntry(companyId, transactionType)}
           validationSchema={reversedValidationSchemaJournalEntry(transactionType)}
           validateOnBlur={false}
           enableReinitialize
@@ -76,7 +76,7 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
                       transactionType={transactionType}
                       error={(errors.journalEntries as any) || []}
                       touched={(touched.journalEntries as any) || []}
-                      selectedDebt={selectedDebt}
+                      initialData={initialData}
                     />
 
                     <Group justify="flex-end" mt="md">

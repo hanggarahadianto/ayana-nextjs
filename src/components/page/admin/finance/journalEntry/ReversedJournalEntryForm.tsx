@@ -21,10 +21,10 @@ interface JournalFormProps {
     total_cost?: string;
   }>;
   touched?: Array<boolean | any>;
-  selectedDebt: any;
+  initialData: any;
 }
 
-const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: JournalFormProps) => {
+const ReversedJournalEntryForm = ({ companyId, error, touched, initialData }: JournalFormProps) => {
   const { values, setFieldValue, handleBlur } = useFormikContext<{
     transactionType: "payin" | "payout";
     journalEntries: IJournalEntryCreate[];
@@ -51,7 +51,7 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: J
             return (
               <SimpleGrid key={index} p={20} spacing="md">
                 <Text>
-                  Pembayaran Hutang {selectedDebt?.description?.toLowerCase().replace(/\b\w/g, (char: string) => char.toUpperCase())}
+                  Pembayaran Hutang {initialData?.description?.toLowerCase().replace(/\b\w/g, (char: string) => char.toUpperCase())}
                 </Text>
                 <Card>
                   <Grid p={12}>
@@ -61,9 +61,9 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: J
                       <Text>Tanggal Jatuh Tempo</Text>
                     </Grid.Col>
                     <Grid.Col span={4}>
-                      <Text>: {selectedDebt.invoice}</Text>
-                      <Text>: {formatCurrency(Math.abs(selectedDebt?.amount || 0))}</Text>
-                      <Text>: {formatDateIndonesia(selectedDebt?.due_date)}</Text>
+                      <Text>: {initialData.invoice}</Text>
+                      <Text>: {formatCurrency(Math.abs(initialData?.amount || 0))}</Text>
+                      <Text>: {formatDateIndonesia(initialData?.due_date)}</Text>
                     </Grid.Col>
                   </Grid>
                 </Card>
@@ -139,7 +139,7 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: J
 
                         {entry.status !== "paid" && (
                           <DatePickerInput
-                            disabled={selectedDebt.due_date}
+                            disabled={initialData.due_date}
                             label="Jatuh Tempo"
                             placeholder="Tanggal Jatuh Tempo"
                             locale="id"
@@ -147,7 +147,7 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, selectedDebt }: J
                             radius="sm"
                             valueFormat="DD MMMM YYYY"
                             rightSection={<IconCalendar size={18} />}
-                            value={selectedDebt.due_date ? new Date(selectedDebt.due_date) : null}
+                            value={initialData.due_date ? new Date(initialData.due_date) : null}
                             onChange={(date) => handleJournalChange(index, "due_date", date ? date.toISOString() : null)}
                           />
                         )}
