@@ -32,15 +32,14 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
         due_date: values.journalEntries[0].due_date || null,
       };
 
-      const updatedDebt = {
+      // console.log("newEntry", newEntry);
+
+      const updatedData = {
         ...initialData,
         is_repaid: true,
         status: "done",
       };
-
-      // console.log("updatedDebt", updatedDebt);
-
-      const payload = [updatedDebt, newEntry];
+      const payload = [updatedData, newEntry];
       submitJournal(payload);
     },
     [initialData, submitJournal] // tambahkan semua dependensi yang digunakan dalam fungsi
@@ -50,7 +49,6 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
     <>
       <Modal
         onClose={() => {
-          console.log("Close button clicked");
           close();
         }}
         size={"60%"}

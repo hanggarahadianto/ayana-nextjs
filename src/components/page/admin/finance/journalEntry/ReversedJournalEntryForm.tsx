@@ -19,12 +19,15 @@ interface JournalFormProps {
     partner?: string;
     status?: string;
     total_cost?: string;
+    date_inputed?: string;
+    due_date?: string;
   }>;
   touched?: Array<boolean | any>;
   initialData: any;
 }
 
-const ReversedJournalEntryForm = ({ companyId, error, touched, initialData }: JournalFormProps) => {
+const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, initialData }: JournalFormProps) => {
+  console.log("transactionType,", transactionType);
   const { values, setFieldValue, handleBlur } = useFormikContext<{
     transactionType: "payin" | "payout";
     journalEntries: IJournalEntryCreate[];
@@ -38,15 +41,12 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, initialData }: Jo
     [setFieldValue]
   );
 
-  // console.log("selected debt", selectedDebt);
-  // console.log("initialData", initialData);
-
   return (
     <FieldArray name="journalEntries">
       {() => (
         <Stack gap="xl">
           {values?.journalEntries?.map((entry, index) => {
-            console.log("values", values);
+            // console.log("values", values);
             // console.log("errors", error);
 
             return (
@@ -72,9 +72,9 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, initialData }: Jo
                 </Card>
 
                 <Group>
-                  <Switch disabled mr={16} w={40} checked={entry.transaction_type === "payin"} size="lg" />
-                  <Badge color={entry.transaction_type === "payin" ? "green" : "red"} w={80}>
-                    {entry.transaction_type === "payin" ? "Pay In" : "Pay Out"}
+                  <Switch disabled mr={16} w={40} checked={transactionType === "payin"} size="lg" />
+                  <Badge color={transactionType === "payin" ? "green" : "red"} w={80}>
+                    {transactionType === "payin" ? "Pay In" : "Pay Out"}
                   </Badge>
                 </Group>
 
@@ -83,7 +83,7 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, initialData }: Jo
                     <InputWrapper error={touched?.[index]?.transaction_category_id && error?.[index]?.transaction_category_id}>
                       <SelectFinanceTransactionCategory
                         companyId={companyId}
-                        transactionType={entry.transaction_type}
+                        transactionType={transactionType}
                         label="Kategori Transaksi"
                         onSelect={(selected) => {
                           handleJournalChange(index, "description", selected.description);
@@ -129,6 +129,7 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, initialData }: Jo
                     {entry.status && (
                       <Group grow mt={20}>
                         <DatePickerInput
+                          error={touched?.[index]?.date_inputed && error?.[index]?.date_inputed}
                           label="Tanggal Transaksi"
                           placeholder="Tanggal"
                           locale="id"
@@ -142,6 +143,7 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, initialData }: Jo
 
                         {entry.status !== "paid" && (
                           <DatePickerInput
+                            error={touched?.[index]?.due_date && error?.[index]?.due_date}
                             disabled={initialData.due_date}
                             label="Jatuh Tempo"
                             placeholder="Tanggal Jatuh Tempo"

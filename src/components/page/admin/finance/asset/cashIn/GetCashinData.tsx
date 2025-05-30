@@ -35,7 +35,8 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         page,
         limit,
         assetType,
-        category: selectedCategory ?? "",
+        // category: selectedCategory ?? "",
+        category: "Kas & Bank", // Hardcoded for Cash In
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -68,10 +69,12 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
 
           <SelectCategoryFilter
             companyId={companyId}
-            value={selectedCategory}
+            // value={selectedCategory}
+            value={"Kas & Bank"} // Hardcoded for Receivable Asset
             onChange={(value) => {
               setSelectedCategory(value);
             }}
+            readonly
           />
         </Stack>
         <Stack align="flex-end" mb={16}>
@@ -90,9 +93,9 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         height={"580"}
         columns={[
           { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
-          { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
-          { key: "category", title: "Kategori", width: 80, minWidth: 80 },
-          { key: "partner", title: "Partner", width: 80, minWidth: 80 },
+          { key: "invoice", title: "Invoice", width: 120, minWidth: 120 },
+          { key: "category", title: "Kategori", width: 120, minWidth: 120 },
+          { key: "partner", title: "Partner", width: 120, minWidth: 120 },
           {
             key: "amount",
             title: "Nominal",
@@ -103,8 +106,8 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
           {
             key: "date_inputed",
             title: "Tanggal Transaksi",
-            width: 120,
-            minWidth: 120,
+            width: 160,
+            minWidth: 160,
             render: (item) => formatDateIndonesia(item.date_inputed),
           },
           { key: "note", title: "Keterangan", width: 220, minWidth: 220 },

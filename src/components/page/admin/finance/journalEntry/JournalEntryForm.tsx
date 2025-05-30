@@ -31,9 +31,6 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
     journalEntries: IJournalEntryCreate[];
   }>();
 
-  // console.log("values", values);
-
-  // Handle changes to the journal entry fields
   const handleJournalChange = useCallback(
     (index: number, field: keyof IJournalEntryCreate, value: any) => {
       setFieldValue(`journalEntries.${index}.${field}`, value);

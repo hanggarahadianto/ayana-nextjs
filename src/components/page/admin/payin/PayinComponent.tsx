@@ -30,6 +30,14 @@ export default function PayinComponent() {
           companyName={activeTab?.title}
           assetType="receivable"
           transactionType={transactionType}
+          title="Piutang Berjalan"
+        />
+        <GetReceivableAssetData
+          companyId={activeTab?.id || ""}
+          companyName={activeTab?.title}
+          assetType="receivable_history"
+          transactionType={transactionType}
+          title="Piutang Lunas"
         />
         <GetFixedAssetData
           companyId={activeTab?.id || ""}

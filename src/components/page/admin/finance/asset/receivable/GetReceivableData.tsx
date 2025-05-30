@@ -20,10 +20,11 @@ interface AssetSummaryCardProps {
   companyId: string;
   companyName?: string;
   assetType?: string;
-  transactionType: string;
+  transactionType: "payout" | "payin";
+  title: string;
 }
 
-export const GetReceivableAssetData = ({ companyId, companyName, assetType, transactionType }: AssetSummaryCardProps) => {
+export const GetReceivableAssetData = ({ companyId, companyName, assetType, transactionType, title }: AssetSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const limit = 10;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -74,7 +75,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>
-            Piutang Usaha {companyName}
+            {title} {companyName}
           </Text>
 
           <SelectCategoryFilter
@@ -100,7 +101,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
           height={"580"}
           columns={[
             { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
-            { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
+            { key: "invoice", title: "Invoice", width: 120, minWidth: 120 },
             { key: "partner", title: "Partner", width: 80, minWidth: 80 },
             {
               key: "amount",
@@ -140,7 +141,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
           ]}
         />
       </Box>
-      <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payin" />
+      <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType={transactionType} />
 
       {totalPages > 0 && (
         <Stack gap="xs" mt={"md"} style={{ paddingBottom: "16px" }}>
@@ -153,7 +154,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
       {selectedReceivableAsset && companyId && (
         <ReversedJournalEntryModal
           companyId={companyId}
-          transactionType="payout"
+          transactionType={transactionType}
           initialData={selectedReceivableAsset}
           opened={isModalOpen}
           close={() => setIsModalOpen(false)}

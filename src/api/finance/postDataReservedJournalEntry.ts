@@ -14,6 +14,7 @@ interface IJournalEntryCreate {
 }
 
 const handleSubmitReservedJournalEntry = async (values: IJournalEntryCreate[]) => {
+  console.log("values to submit", values);
   const response = await APIAxiosInstance.post("journal-entry/reversed-post", values);
   return response.data;
 };
