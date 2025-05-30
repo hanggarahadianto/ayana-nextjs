@@ -39,20 +39,23 @@ const ReversedJournalEntryForm = ({ companyId, error, touched, initialData }: Jo
   );
 
   // console.log("selected debt", selectedDebt);
+  // console.log("initialData", initialData);
 
   return (
     <FieldArray name="journalEntries">
       {() => (
         <Stack gap="xl">
           {values?.journalEntries?.map((entry, index) => {
-            // console.log("values", values);
+            console.log("values", values);
             // console.log("errors", error);
 
             return (
               <SimpleGrid key={index} p={20} spacing="md">
                 <Text>
-                  Pembayaran Hutang {initialData?.description?.toLowerCase().replace(/\b\w/g, (char: string) => char.toUpperCase())}
+                  Pelunasan Untuk {initialData.label} {initialData.transaction_category_name}{" "}
+                  {initialData?.description?.toLowerCase().replace(/\b\w/g, (char: string) => char.toUpperCase())}
                 </Text>
+
                 <Card>
                   <Grid p={12}>
                     <Grid.Col span={4}>

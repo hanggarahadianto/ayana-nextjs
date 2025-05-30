@@ -31,8 +31,7 @@ interface IDebtSummaryItem {
   amount: number;
   partner: string;
   transaction_type: "payin" | "payout"; // bisa disesuaikan kalau ada lebih dari dua tipe
-  status: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | "done"; // sesuaikan dengan status yang valid di sistem
-
+  status: "paid" | "unpaid" | "completed" | "cancelled" | "done"; // sesuaikan dengan status yang valid di sistem
   company_id: string;
   date_inputed: string;
   due_date: string;
@@ -41,6 +40,7 @@ interface IDebtSummaryItem {
   note: string;
   transaction_category_id: string;
   payment_date_status: string;
+  label: string;
 }
 
 interface IDebtSummaryData {
@@ -65,7 +65,7 @@ interface IAssetSummaryItem {
   category: string;
   partner: string;
   transaction_type: "payin" | "payout"; // bisa disesuaikan kalau ada lebih dari dua tipe
-  status: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | "done"; // sesuaikan dengan status yang valid di sistem
+  status: "paid" | "unpaid" | "completed" | "cancelled" | "done"; // sesuaikan dengan status yang valid di sistem
   company_id: string;
   date_inputed: string;
   due_date: string;
@@ -75,6 +75,7 @@ interface IAssetSummaryItem {
   transaction_category_id: string;
   transaction_category: string;
   transaction_id: string;
+  label: string;
 }
 
 interface IAssetSummaryData {

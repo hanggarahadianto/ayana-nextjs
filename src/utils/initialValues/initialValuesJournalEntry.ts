@@ -1,5 +1,5 @@
 export const initialValuesJournalEntry = (companyId?: string | null, transactionType?: string | null) => {
-  const defaultStatus: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | "" = "";
+  const defaultStatus: "paid" | "unpaid" | "completed" | "cancelled" | "done" | "" = "";
   return {
     journalEntries: [
       {
@@ -27,7 +27,7 @@ export const initialValuesJournalEntryUpdate = (
   companyId?: string | null,
   transactionType?: string | null
 ) => {
-  const defaultStatus: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | "" = "";
+  const defaultStatus: "paid" | "unpaid" | "completed" | "cancelled" | "done" | "" = "";
   return {
     journalEntries: [
       {

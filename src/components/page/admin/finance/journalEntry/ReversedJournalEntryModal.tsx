@@ -9,7 +9,7 @@ import { initialValuesReservedJournalEntry } from "@/utils/initialValues/initial
 interface IReversedJournalEntryModalProps {
   companyId: string;
   transactionType: "payin" | "payout";
-  initialData?: IJournalEntry;
+  initialData?: IJournalEntryUpdate;
   opened: boolean;
   close: () => void;
 }
@@ -57,7 +57,7 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
         opened={opened}
       >
         <Formik
-          initialValues={initialValuesReservedJournalEntry(companyId, transactionType)}
+          initialValues={initialValuesReservedJournalEntry(companyId, transactionType, initialData)}
           validationSchema={reversedValidationSchemaJournalEntry(transactionType)}
           validateOnBlur={false}
           enableReinitialize
@@ -81,10 +81,10 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
 
                     <Group justify="flex-end" mt="md">
                       <Button onClick={close} variant="default">
-                        Cancel
+                        Batal
                       </Button>
                       <Button type="submit" color="blue" disabled={isLoadingSubmitJournalEntry} loading={isLoadingSubmitJournalEntry}>
-                        Tambah
+                        Lunaskan
                       </Button>
                     </Group>
                   </Stack>

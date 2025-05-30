@@ -1,27 +1,27 @@
 export const initialValuesReservedJournalEntry = (
   companyId?: string | null,
   transactionType?: string | null,
-  selectedDeb?: IDebtSummaryItem
-) => {
-  const defaultStatus: "draft" | "paid" | "unpaid" | "completed" | "cancelled" | "done" = transactionType === "payin" ? "unpaid" : "draft";
+  initialData: IJournalEntryUpdate | null = null
+): { journalEntries: IJournalEntryCreate[] } => {
+  const defaultStatus: "paid" | "unpaid" | "completed" | "cancelled" | "done" = "unpaid";
 
   return {
     journalEntries: [
       {
-        transaction_id: "",
-        invoice: "",
-        description: "",
-        amount: 0,
-        partner: selectedDeb?.partner || "", // Gunakan partner dari selectedDeb jika ada
-        date_inputed: "", // Tanggal input (kosongkan jika tidak ada)
-        due_date: selectedDeb?.due_date || "", // Tanggal jatuh tempo dari selectedDeb jika ada
-        installment: 0,
-        is_repaid: true,
-        note: "",
-        status: defaultStatus, // Status diatur berdasarkan transaksi
-        transaction_type: (transactionType as "payin" | "payout") || "",
+        transaction_id: initialData?.transaction_id ?? "",
+        invoice: initialData?.invoice ?? "",
+        description: initialData?.description ?? "",
         transaction_category_id: "",
-        company_id: companyId || "", // Gunakan companyId jika ada, jika tidak gunakan default
+        amount: initialData?.amount ?? 0,
+        partner: initialData?.partner ?? "",
+        transaction_type: (initialData?.transaction_type ?? transactionType ?? "payin") as "payin" | "payout",
+        status: "done",
+        date_inputed: "", // sesuai definisi: string | null
+        due_date: initialData?.due_date ?? null, // sesuai definisi: string | null
+        installment: initialData?.installment ?? 0,
+        note: initialData?.note ?? "",
+        is_repaid: initialData?.is_repaid ?? false,
+        company_id: initialData?.company_id ?? companyId ?? "",
       },
     ],
   };

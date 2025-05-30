@@ -69,7 +69,7 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>
-            Akun keuangan {companyName}
+            Akun Keuangan {companyName}
           </Text>
           <Select
             label="Filter Berdasarkan Tipe Akun"
