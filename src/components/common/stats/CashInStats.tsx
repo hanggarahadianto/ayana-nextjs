@@ -1,25 +1,28 @@
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
-import { getAvailableCash } from "@/api/finance/getAvailableCash";
 import { StatItem, StatsGrid } from "@/components/common/stats/StatsGrid";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
 
 type CashInStatsProps = {
   companyId?: string;
+  assetType?: string;
+  category?: string;
 };
 
-export const CashinStats = ({ companyId }: CashInStatsProps) => {
-  const { data: cashinData, isPending: isLoadingCashin } = useQuery({
-    queryKey: ["getCashIn", companyId],
+export const CashinStats = ({ companyId, assetType, category }: CashInStatsProps) => {
+  const { data: cashinData, isPending: isLoadingCashinData } = useQuery({
+    queryKey: ["getCashinData", companyId, assetType, category],
     queryFn: () =>
-      getAvailableCash({
-        companyId: companyId || "",
+      getAssetSummary({
+        companyId: companyId!,
+        assetType,
+        summaryOnly: true,
+        category,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
 
-  const totalCashIn = cashinData?.data?.total_cash_in ?? 0;
+  const totalCashIn = cashinData?.data?.total_asset ?? 0;
 
   const statsData: StatItem[] = [
     {
@@ -27,8 +30,8 @@ export const CashinStats = ({ companyId }: CashInStatsProps) => {
       icon: "receipt",
       value: totalCashIn,
       color: "green",
-      diff: 12, // nanti bisa dihitung dari backend atau cache data lama
-      loading: isLoadingCashin,
+      diff: 12,
+      loading: isLoadingCashinData,
     },
   ];
 

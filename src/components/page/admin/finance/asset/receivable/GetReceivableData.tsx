@@ -1,4 +1,4 @@
-import { Card, Text, Group, Stack, Box, Pagination, Flex } from "@mantine/core";
+import { Card, Text, Group, Stack, Box, Pagination, Flex, Badge } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
@@ -15,6 +15,13 @@ import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
 import ButtonReversedJournal from "@/components/common/button/buttonReversedJournal";
 import ReversedJournalEntryModal from "../../journalEntry/ReversedJournalEntryModal";
+import {
+  calculateDaysLeft,
+  formatDaysToDueMessage,
+  formatEarlyOrLateTransaction,
+  getColorForPaidStatus,
+  getStatusColor,
+} from "@/utils/debtStatus";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -100,9 +107,9 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
           transactionType={transactionType}
           height={"580"}
           columns={[
-            { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
+            { key: "transaction_id", title: "Transaction ID", width: 120, minWidth: 120 },
             { key: "invoice", title: "Invoice", width: 120, minWidth: 120 },
-            { key: "partner", title: "Partner", width: 80, minWidth: 80 },
+            { key: "partner", title: "Partner", width: 160, minWidth: 160 },
             {
               key: "amount",
               title: "Nominal",
@@ -113,11 +120,60 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
             {
               key: "date_inputed",
               title: "Tanggal Transaksi",
-              width: 120,
-              minWidth: 120,
+              width: 160,
+              minWidth: 160,
               render: (item) => formatDateIndonesia(item.date_inputed),
             },
+            {
+              key: "due_date",
+              title: "Jatuh Tempo",
+              width: 160,
+              minWidth: 160,
+              render: (item) => formatDateIndonesia(item.due_date),
+            },
+            {
+              key: "repayment_date",
+              title: "Tanggal Pelunasan",
+              width: 160,
+              minWidth: 160,
+              render: (item) => formatDateIndonesia(item.repayment_date),
+            },
             { key: "note", title: "Keterangan", width: 220, minWidth: 220 },
+            {
+              key: "status",
+              title: "Status",
+              width: 320,
+              minWidth: 220,
+              render: (item) => {
+                const isPaid = item.status === "done";
+                const earlyLate = formatEarlyOrLateTransaction(item.repayment_date, item.due_date);
+
+                if (isPaid) {
+                  const color = getColorForPaidStatus(item.repayment_date, item.due_date);
+
+                  return (
+                    <Box style={{ width: 200 }}>
+                      <Badge color={color} p={8}>
+                        <Text fw={700} size="xs">
+                          {earlyLate}
+                        </Text>
+                      </Badge>
+                    </Box>
+                  );
+                }
+
+                const daysLeft = calculateDaysLeft(item.due_date);
+                return (
+                  <Box style={{ width: 320 }}>
+                    <Badge color={getStatusColor(daysLeft)} p={8}>
+                      <Text fw={700} size="xs">
+                        {formatDaysToDueMessage(daysLeft)}
+                      </Text>
+                    </Badge>
+                  </Box>
+                );
+              },
+            },
             {
               key: "aksi",
               title: "Aksi",

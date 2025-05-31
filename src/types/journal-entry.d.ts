@@ -29,6 +29,7 @@ interface IJournalEntryCreate {
   status: "paid" | "unpaid" | "completed" | "cancelled" | "done" | ""; // sesuaikan dengan status yang valid di sistem
   date_inputed: string | null;
   due_date: string | null;
+  repayment_date: string | null;
   installment: number;
   note: string;
   is_repaid: boolean;
@@ -46,6 +47,7 @@ interface IJournalEntryUpdate {
   status: "paid" | "unpaid" | "completed" | "cancelled" | "done" | ""; // sesuaikan dengan status yang valid di sistem
   date_inputed: string | null;
   due_date: string | null;
+  repayment_date: string | null;
   installment: number;
   note: string;
   is_repaid: boolean;

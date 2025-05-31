@@ -40,11 +40,11 @@ export const DashboardComponent = () => {
 
             <Flex gap={"12px"}>
               <Paper shadow="sm" radius="md" p="md" withBorder w="100%">
-                <CashinStats companyId={activeTab?.id} />
+                <CashinStats companyId={activeTab?.id} assetType="cashin" category="Kas & Bank" />
               </Paper>
 
               <Paper shadow="sm" radius="md" p="md" withBorder w="100%">
-                <CashOutStats companyId={activeTab?.id} />
+                <CashOutStats companyId={activeTab?.id} assetType="cashout" />
               </Paper>
             </Flex>
 

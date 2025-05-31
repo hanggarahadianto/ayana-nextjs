@@ -3,8 +3,6 @@ export const initialValuesReservedJournalEntry = (
   transactionType?: string | null,
   initialData: IJournalEntryUpdate | null = null
 ): { journalEntries: IJournalEntryCreate[] } => {
-  const defaultStatus: "paid" | "unpaid" | "completed" | "cancelled" | "done" = "unpaid";
-
   return {
     journalEntries: [
       {
@@ -17,7 +15,8 @@ export const initialValuesReservedJournalEntry = (
         transaction_type: (transactionType as "payin" | "payout") || "",
         status: "done",
         is_repaid: true,
-        date_inputed: "", // sesuai definisi: string | null
+        date_inputed: "",
+        repayment_date: initialData?.repayment_date ?? null, // sesuai definisi: string | null
         due_date: initialData?.due_date ?? null, // sesuai definisi: string | null
         installment: initialData?.installment ?? 0,
         note: initialData?.note ?? "",

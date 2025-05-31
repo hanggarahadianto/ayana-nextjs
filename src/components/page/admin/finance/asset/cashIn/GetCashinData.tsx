@@ -35,7 +35,6 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         page,
         limit,
         assetType,
-        // category: selectedCategory ?? "",
         category: "Kas & Bank", // Hardcoded for Cash In
       }),
     enabled: !!companyId,

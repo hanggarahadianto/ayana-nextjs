@@ -35,6 +35,7 @@ interface IDebtSummaryItem {
   company_id: string;
   date_inputed: string;
   due_date: string;
+  repayment_date: string;
   is_repaid: boolean;
   installment: number;
   note: string;
@@ -69,6 +70,7 @@ interface IAssetSummaryItem {
   company_id: string;
   date_inputed: string;
   due_date: string;
+  repayment_date: string;
   is_repaid: boolean;
   installment: number;
   note: string;

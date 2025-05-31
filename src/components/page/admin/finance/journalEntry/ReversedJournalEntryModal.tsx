@@ -32,17 +32,18 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
         due_date: values.journalEntries[0].due_date || null,
       };
 
-      // console.log("newEntry", newEntry);
-
       const updatedData = {
         ...initialData,
         is_repaid: true,
         status: "done",
+        repayment_date: newEntry.repayment_date || null,
       };
       const payload = [updatedData, newEntry];
+      // console.log("updatedData", updatedData);
+      // console.log("newEntry", newEntry);
       submitJournal(payload);
     },
-    [initialData, submitJournal] // tambahkan semua dependensi yang digunakan dalam fungsi
+    [initialData, submitJournal]
   );
 
   return (
@@ -65,6 +66,7 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
         >
           {({ handleSubmit, values, errors, touched }) => {
             // console.log("values", values);
+            // console.log("errors", errors);
             return (
               <SimpleGrid p={20} cols={1}>
                 <Form onSubmit={handleSubmit}>

@@ -251,7 +251,10 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                           valueFormat="DD MMMM YYYY"
                           rightSection={<IconCalendar size={18} />}
                           value={entry.date_inputed ? new Date(entry.date_inputed) : null}
-                          onChange={(date) => handleJournalChange(index, "date_inputed", date ? date.toISOString() : null)}
+                          onChange={(date) => {
+                            handleJournalChange(index, "date_inputed", date ? date.toISOString() : null);
+                            handleJournalChange(index, "repayment_date", date ? date.toISOString() : null);
+                          }}
                         />
 
                         {entry.status !== "paid" && (

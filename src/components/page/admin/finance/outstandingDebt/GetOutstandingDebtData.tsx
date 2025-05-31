@@ -2,10 +2,9 @@ import { getOutstandingDebt } from "@/api/finance/getOutstandingDebt";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { Card, Text, Stack, Pagination, Badge, Group, Flex, Box } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
-import { IoIosSend } from "react-icons/io";
 import TableComponent from "@/components/common/table/TableComponent";
 import {
   calculateDaysLeft,
