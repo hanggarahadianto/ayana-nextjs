@@ -1,4 +1,4 @@
-import { Card, Text, Group, Stack, Pagination, Flex } from "@mantine/core";
+import { Card, Text, Group, Stack, Pagination, Flex, TextInput } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
@@ -25,9 +25,10 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
   const [page, setPage] = useState(1);
   const limit = 10;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { data: fixAssetSummaryData, isPending: isLoadingAssetData } = useQuery({
-    queryKey: ["getFixedAssetData", companyId, page, assetType, selectedCategory],
+    queryKey: ["getFixedAssetData", companyId, page, assetType, selectedCategory, searchTerm],
     queryFn: () =>
       getAssetSummary({
         companyId,
@@ -35,6 +36,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         limit,
         assetType,
         category: "Aset Tetap",
+        search: searchTerm,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -67,14 +69,23 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
             Aset Tetap {companyName}
           </Text>
 
-          <SelectCategoryFilter
-            companyId={companyId}
-            readonly
-            value={"Aset Tetap"}
-            onChange={(value) => {
-              setSelectedCategory(value);
-            }}
-          />
+          <Group>
+            <SelectCategoryFilter
+              companyId={companyId}
+              readonly
+              value={"Aset Tetap"}
+              onChange={(value) => {
+                setSelectedCategory(value);
+              }}
+            />
+            <TextInput
+              w={400}
+              label="Cari Data Asset"
+              placeholder="Cari data asset..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </Group>
         </Stack>
         <Text size="xl" fw={800} c={"teal"} mt={20}>
           {formatCurrency(fixAssetSummaryData?.data.total_asset ?? 0)}
@@ -112,7 +123,6 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
             width: 10,
             minWidth: 10,
             render: (row: IAssetSummaryItem) => {
-              // console.log("row", row);
               return (
                 <Flex gap="lg" justify="center">
                   <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />

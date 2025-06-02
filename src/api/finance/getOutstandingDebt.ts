@@ -7,6 +7,7 @@ interface GetOutstandingDebtParams {
   limit?: number;
   status: string;
   summaryOnly?: boolean;
+  search?: string;
 }
 
 export const getOutstandingDebt = async ({
@@ -16,6 +17,7 @@ export const getOutstandingDebt = async ({
   limit = 10,
   status,
   summaryOnly,
+  search,
 }: GetOutstandingDebtParams): Promise<IDebtSummaryResponse | undefined> => {
   if (!companyId) {
     console.error("Company ID tidak tersedia!");
@@ -28,12 +30,9 @@ export const getOutstandingDebt = async ({
     limit: limit.toString(),
   });
 
-  if (summaryOnly) {
-    queryParams.append("summary_only", "true");
-  }
-  if (status) {
-    queryParams.append("status", status);
-  }
+  if (summaryOnly) queryParams.append("summary_only", "true");
+  if (status) queryParams.append("status", status);
+  if (search) queryParams.append("search", search); // 🔍
 
   const url = `/finance/get-outstanding-debt?${queryParams.toString()}`;
 

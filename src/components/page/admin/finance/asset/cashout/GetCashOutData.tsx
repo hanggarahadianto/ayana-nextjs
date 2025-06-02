@@ -1,4 +1,4 @@
-import { Card, Text, Group, Box, Pagination, Stack, Flex } from "@mantine/core";
+import { Card, Text, Group, Box, Pagination, Stack, Flex, TextInput } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
@@ -26,9 +26,10 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   const [page, setPage] = useState(1);
   const limit = 10;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { data: cashOutSummaryData, isPending: isLoadingcashOutData } = useQuery({
-    queryKey: ["getCashOutData", companyId, page, assetType, selectedCategory],
+    queryKey: ["getCashOutData", companyId, page, assetType, selectedCategory, searchTerm],
     queryFn: () =>
       getAssetSummary({
         companyId,
@@ -36,20 +37,18 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
         limit,
         assetType,
         category: selectedCategory ?? "",
+        search: searchTerm,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
   const cashOutList = cashOutSummaryData?.data.assetList ?? [];
-
   const totalPages = Math.ceil((cashOutSummaryData?.data?.total ?? 0) / limit);
-
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, cashOutSummaryData?.data.total || 0);
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteCashout } = useDeleteDataJournalEntry();
   const handleDeleteDataJournal = (idToDelete: string) => {
-    console.log("idToDelete", idToDelete);
     mutateDeleteDataJournal(idToDelete);
   };
 
@@ -67,13 +66,22 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
             Uang Keluar {companyName}
           </Text>
 
-          <SelectCategoryFilter
-            companyId={companyId}
-            value={selectedCategory}
-            onChange={(value) => {
-              setSelectedCategory(value);
-            }}
-          />
+          <Group>
+            <SelectCategoryFilter
+              companyId={companyId}
+              value={selectedCategory}
+              onChange={(value) => {
+                setSelectedCategory(value);
+              }}
+            />
+            <TextInput
+              w={400}
+              label="Cari Data Asset"
+              placeholder="Cari data asset..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </Group>
         </Stack>
 
         <Stack align="flex-end" mb={16}>

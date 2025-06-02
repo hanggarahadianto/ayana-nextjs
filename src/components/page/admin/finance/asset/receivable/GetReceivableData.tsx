@@ -1,4 +1,4 @@
-import { Card, Text, Group, Stack, Box, Pagination, Flex, Badge } from "@mantine/core";
+import { Card, Text, Group, Stack, Box, Pagination, Flex, Badge, TextInput } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
@@ -35,12 +35,13 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
   const [page, setPage] = useState(1);
   const limit = 10;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [selectedReceivableAsset, setSelectedReceivableAsset] = useState<IAssetSummaryItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: receivableAssetSummaryData, isPending: isLoadingReceivableAsset } = useQuery({
-    queryKey: ["getReceivableAssetData", companyId, page, assetType, selectedCategory],
+    queryKey: ["getReceivableAssetData", companyId, page, assetType, selectedCategory, searchTerm],
     queryFn: () =>
       getAssetSummary({
         companyId,
@@ -48,6 +49,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         limit,
         assetType,
         category: "Piutang", // Hardcoded for Receivable Asset
+        search: searchTerm, // 🔍
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -84,15 +86,24 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
           <Text size="xl" fw={600}>
             {title} {companyName}
           </Text>
+          <Group>
+            <SelectCategoryFilter
+              companyId={companyId}
+              value={"Piutang"} // Hardcoded for Receivable Asset
+              onChange={(value) => {
+                setSelectedCategory(value);
+              }}
+              readonly
+            />
 
-          <SelectCategoryFilter
-            companyId={companyId}
-            value={"Piutang"} // Hardcoded for Receivable Asset
-            onChange={(value) => {
-              setSelectedCategory(value);
-            }}
-            readonly
-          />
+            <TextInput
+              w={400}
+              label="Cari Data Asset"
+              placeholder="Cari data asset..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </Group>
         </Stack>
         <Text size="xl" fw={800} c={"teal"} mt={20}>
           {formatCurrency(receivableAssetSummaryData?.data.total_asset ?? 0)}

@@ -1,5 +1,5 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Box, Group, Flex } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Box, Group, Flex, TextInput } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { formatCurrency } from "@/utils/formatCurrency";
@@ -23,6 +23,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
   const limit = 10;
   const [pageExpense, setPageExpense] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const status = "base";
   const {
@@ -30,7 +31,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
     isLoading: isLoadingExpense,
     refetch: refetchExpenseData,
   } = useQuery({
-    queryKey: ["getExpenseSummaryData", companyId, pageExpense, limit, status],
+    queryKey: ["getExpenseSummaryData", companyId, pageExpense, limit, status, searchTerm],
     queryFn: async () => {
       if (!companyId) return null;
 
@@ -39,6 +40,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
         page: pageExpense,
         status,
         limit,
+        search: searchTerm,
       });
     },
     enabled: Boolean(companyId),
@@ -71,14 +73,22 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
             <Text size="xl" fw={600}>
               Pengeluaran {companyName}
             </Text>
-
-            <SelectCategoryFilter
-              companyId={companyId}
-              value={selectedCategory}
-              onChange={(value) => {
-                setSelectedCategory(value);
-              }}
-            />
+            <Group>
+              <SelectCategoryFilter
+                companyId={companyId}
+                value={selectedCategory}
+                onChange={(value) => {
+                  setSelectedCategory(value);
+                }}
+              />
+              <TextInput
+                w={400}
+                label="Cari Data Asset"
+                placeholder="Cari data asset..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </Group>
           </Stack>
           <Text size="xl" fw={800} c={"red"} mt={20}>
             -{formatCurrency(expenseData?.data.total_expense ?? 0)}

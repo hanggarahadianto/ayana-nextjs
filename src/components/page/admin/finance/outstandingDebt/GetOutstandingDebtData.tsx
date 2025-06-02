@@ -1,6 +1,6 @@
 import { getOutstandingDebt } from "@/api/finance/getOutstandingDebt";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Badge, Group, Flex, Box } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Badge, Group, Flex, Box, TextInput } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { formatCurrency } from "@/utils/formatCurrency";
@@ -10,7 +10,6 @@ import {
   calculateDaysLeft,
   formatDaysToDueMessage,
   formatEarlyOrLateTransaction,
-  formatPaidStatusMessage,
   getColorForPaidStatus,
   getStatusColor,
 } from "@/utils/debtStatus";
@@ -35,6 +34,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
   const limit = 10;
   const [pageOutstandingDebt, setPageOutstandingDebt] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [selectedDebt, setSelectedDebt] = useState<IDebtSummaryItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,7 +44,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
     isLoading: isLoadingOutstandingDebt,
     refetch: refetchOutstandingDebtData,
   } = useQuery({
-    queryKey: ["getOutstandingDebtByCompanyId", companyId, pageOutstandingDebt, limit, status],
+    queryKey: ["getOutstandingDebtByCompanyId", companyId, pageOutstandingDebt, limit, status, searchTerm],
     queryFn: async () => {
       if (!companyId) return null;
 
@@ -53,6 +53,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
         page: pageOutstandingDebt,
         status,
         limit,
+        search: searchTerm,
       });
     },
     enabled: Boolean(companyId),
@@ -93,13 +94,22 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
             {title} {companyName}
           </Text>
 
-          <SelectCategoryFilter
-            companyId={companyId}
-            value={selectedCategory}
-            onChange={(value) => {
-              setSelectedCategory(value);
-            }}
-          />
+          <Group>
+            <SelectCategoryFilter
+              companyId={companyId}
+              value={selectedCategory}
+              onChange={(value) => {
+                setSelectedCategory(value);
+              }}
+            />
+            <TextInput
+              w={400}
+              label="Cari Data Asset"
+              placeholder="Cari data asset..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </Group>
         </Stack>
         <Text size="xl" fw={800} c={"red"} mt={20}>
           -{formatCurrency(outstandingDebtData?.data.total_debt ?? 0)}

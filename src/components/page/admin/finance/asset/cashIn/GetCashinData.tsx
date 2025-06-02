@@ -1,4 +1,4 @@
-import { Card, Text, Group, Stack, Pagination, Flex } from "@mantine/core";
+import { Card, Text, Group, Stack, Pagination, Flex, TextInput } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
@@ -26,9 +26,10 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
   const [page, setPage] = useState(1);
   const limit = 10;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { data: cashinSummaryData, isPending: isLoadingCashinData } = useQuery({
-    queryKey: ["getCashinData", companyId, page, assetType, selectedCategory],
+    queryKey: ["getCashinData", companyId, page, assetType, selectedCategory, searchTerm],
     queryFn: () =>
       getAssetSummary({
         companyId,
@@ -36,6 +37,7 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         limit,
         assetType,
         category: "Kas & Bank", // Hardcoded for Cash In
+        search: searchTerm, // 🔍
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -65,16 +67,24 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
           <Text size="xl" fw={600}>
             Uang Masuk {companyName}
           </Text>
-
-          <SelectCategoryFilter
-            companyId={companyId}
-            // value={selectedCategory}
-            value={"Kas & Bank"} // Hardcoded for Receivable Asset
-            onChange={(value) => {
-              setSelectedCategory(value);
-            }}
-            readonly
-          />
+          <Group>
+            <SelectCategoryFilter
+              companyId={companyId}
+              value={"Kas & Bank"} // Hardcoded for Receivable Asset
+              onChange={(value) => {
+                setSelectedCategory(value);
+              }}
+              readonly
+            />
+            <TextInput
+              w={400}
+              label="Cari Data Asset"
+              placeholder="Cari data asset..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="input-class"
+            />
+          </Group>
         </Stack>
         <Stack align="flex-end" mb={16}>
           <CreateJournalEntryModal companyId={companyId} transactionType={"payin"} />
