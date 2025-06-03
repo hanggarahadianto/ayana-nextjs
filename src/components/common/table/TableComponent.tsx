@@ -1,6 +1,6 @@
 import { formatCurrency } from "@/helper/formatCurrency";
-import { Table, Card, Select, Text, Group, Box, Stack, Divider } from "@mantine/core";
-import React, { ReactNode, useState } from "react";
+import { Table, Card, Text, Group, Box } from "@mantine/core";
+import React, { ReactNode } from "react";
 
 // Tipe untuk props ScrollXWrapper
 
@@ -49,11 +49,8 @@ export default function TableComponent<T>({
   transactionType,
   height, // ← Terima props height
 }: TableComponentProps<T>) {
-  const [selectedType, setSelectedType] = useState<string | null>(null);
-
   return (
     <div>
-      {/* Menambahkan Box dengan layout flex untuk menata tampilan */}
       <Box
         style={{
           display: "flex",
@@ -76,9 +73,7 @@ export default function TableComponent<T>({
           </Group>
         </Card>
       </Box>
-
-      {/* Tabel dengan ScrollXWrapper */}
-      <ScrollXWrapper minWidth={`${columns.length * 200}px`} height={height || "400px"}>
+      <ScrollXWrapper minWidth={`${columns.length * 300}px`} height={height || "400px"}>
         <Table highlightOnHover withColumnBorders striped>
           <Table.Thead>
             <Table.Tr>

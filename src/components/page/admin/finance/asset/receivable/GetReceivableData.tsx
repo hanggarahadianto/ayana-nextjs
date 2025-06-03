@@ -5,24 +5,14 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 import { formatCurrency } from "@/helper/formatCurrency";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
-import { formatDateIndonesia, formatDateRange } from "@/helper/formatDateIndonesia";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import { formatDateRange } from "@/helper/formatDateIndonesia";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
-import ButtonReversedJournal from "@/components/common/button/buttonReversedJournal";
 import ReversedJournalEntryModal from "../../journalEntry/ReversedJournalEntryModal";
-import {
-  calculateDaysLeft,
-  formatDaysToDueMessage,
-  formatEarlyOrLateTransaction,
-  getColorForPaidStatus,
-  getStatusColor,
-} from "@/helper/debtStatus";
 import SearchTable from "@/components/common/table/SearchTableComponent";
-import { IconPencil } from "@tabler/icons-react";
-import { endOfDay, format } from "date-fns";
+import { columnsBaseReceivableAsset } from "./ReceivableAssetColumn";
+import { useDebounce } from "use-debounce";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -37,6 +27,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
   const limit = 10;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
@@ -51,7 +42,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
       page,
       assetType,
       selectedCategory,
-      searchTerm,
+      debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
     ],
@@ -62,7 +53,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         limit,
         assetType,
         category: "Piutang", // Hardcoded for Receivable Asset
-        search: searchTerm, // 🔍
+        search: debouncedSearch, // 🔍
         startDate: formattedStartDate,
         endDate: formattedEndDate,
       }),
@@ -92,6 +83,12 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
     setSelectedReceivableAsset(receivableAsset);
     setIsModalOpen(true);
   };
+
+  const columns = columnsBaseReceivableAsset(assetList, {
+    handleSendClick,
+    openEditModal,
+    handleDeleteDataJournal,
+  });
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -127,95 +124,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
           totalAmount={totalAssetIn}
           transactionType={transactionType}
           height={"580"}
-          columns={[
-            { key: "transaction_id", title: "Transaction ID", width: 120, minWidth: 120 },
-            { key: "invoice", title: "Invoice", width: 120, minWidth: 120 },
-            { key: "partner", title: "Partner", width: 160, minWidth: 160 },
-            {
-              key: "amount",
-              title: "Nominal",
-              width: 120,
-              minWidth: 120,
-              render: (item) => formatCurrency(item.amount),
-            },
-            {
-              key: "date_inputed",
-              title: "Tanggal Transaksi",
-              width: 160,
-              minWidth: 160,
-              render: (item) => formatDateIndonesia(item.date_inputed),
-            },
-            {
-              key: "due_date",
-              title: "Jatuh Tempo",
-              width: 160,
-              minWidth: 160,
-              render: (item) => formatDateIndonesia(item.due_date),
-            },
-            {
-              key: "repayment_date",
-              title: "Tanggal Pelunasan",
-              width: 160,
-              minWidth: 160,
-              render: (item) => formatDateIndonesia(item.repayment_date),
-            },
-            { key: "note", title: "Keterangan", width: 220, minWidth: 220 },
-            {
-              key: "status",
-              title: "Status",
-              width: 320,
-              minWidth: 220,
-              render: (item) => {
-                const isPaid = item.status === "done";
-                const earlyLate = formatEarlyOrLateTransaction(item.repayment_date, item.due_date);
-
-                if (isPaid) {
-                  const color = getColorForPaidStatus(item.repayment_date, item.due_date);
-
-                  return (
-                    <Box style={{ width: 200 }}>
-                      <Badge color={color} p={8}>
-                        <Text fw={700} size="xs">
-                          {earlyLate}
-                        </Text>
-                      </Badge>
-                    </Box>
-                  );
-                }
-
-                const daysLeft = calculateDaysLeft(item.due_date);
-                return (
-                  <Box style={{ width: 320 }}>
-                    <Badge color={getStatusColor(daysLeft)} p={8}>
-                      <Text fw={700} size="xs">
-                        {formatDaysToDueMessage(daysLeft)}
-                      </Text>
-                    </Badge>
-                  </Box>
-                );
-              },
-            },
-            {
-              key: "aksi",
-              title: "Aksi",
-              width: 1,
-              minWidth: 1,
-              render: (row: IAssetSummaryItem) => {
-                return (
-                  <Flex gap="lg" justify="center">
-                    {row.status !== "paid" && <ButtonReversedJournal size={2.2} onClick={() => handleSendClick(row)} />}
-                    <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
-                    <ButtonDeleteWithConfirmation
-                      id={row.id} // Gunakan id customer
-                      onDelete={() => handleDeleteDataJournal(row.id)}
-                      description={`Hapus Transaksi ${row.description}?`}
-                      size={2.2}
-                    />
-                  </Flex>
-                );
-              },
-            },
-          ]}
+          columns={columns}
         />
       </Box>
       <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType={transactionType} />

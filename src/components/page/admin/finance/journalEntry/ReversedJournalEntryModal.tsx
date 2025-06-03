@@ -39,8 +39,6 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
         repayment_date: newEntry.repayment_date || null,
       };
       const payload = [updatedData, newEntry];
-      // console.log("updatedData", updatedData);
-      // console.log("newEntry", newEntry);
       submitJournal(payload);
     },
     [initialData, submitJournal]

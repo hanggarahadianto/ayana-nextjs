@@ -137,7 +137,6 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
                 width: 10,
                 minWidth: 10,
                 render: (row: IExpenseSummaryItem) => {
-                  // console.log("row", row);
                   return (
                     <Flex gap="lg" justify="center">
                       <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />

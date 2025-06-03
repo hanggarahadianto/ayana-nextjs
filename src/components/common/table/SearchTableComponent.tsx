@@ -1,7 +1,7 @@
 // components/SearchTable.tsx
 import { ActionIcon, Group, Stack, TextInput, Tooltip } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
-import { IconCalendar } from "@tabler/icons-react";
+import { IconCalendar, IconX } from "@tabler/icons-react";
 import { MdClose } from "react-icons/md";
 import { useState } from "react";
 import SelectCategoryFilter from "../select/SelectCategoryFilter";
@@ -48,7 +48,14 @@ export default function SearchTable({
         label="Cari Data Asset"
         placeholder="Cari data asset..."
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={(e) => setSearchTerm(e.currentTarget.value)}
+        rightSection={
+          searchTerm ? (
+            <ActionIcon onClick={() => setSearchTerm("")} variant="subtle" color="gray">
+              <IconX size={16} />
+            </ActionIcon>
+          ) : null
+        }
       />
 
       {isMobile ? (

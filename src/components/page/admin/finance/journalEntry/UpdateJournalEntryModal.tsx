@@ -17,23 +17,16 @@ const UpdateJournalEntryModal: React.FC<IUpdateJournalEntryModalProps> = ({ tran
   const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
 
   const { mutate: submitJournal, isPending: isLoadingUpdateJournalEntry } = useSubmitJournalEntryUpdate(closeModal);
-
-  // 3. useCallback for handleSubmit
   const handleSubmit = ({ journalEntries }: { journalEntries: IJournalEntryUpdate[] }) => {
     if (!journalEntries?.length) {
       console.warn("Tidak ada entri jurnal yang dikirim.");
       return;
     }
-
     const [entry] = journalEntries;
-
     const transformedEntry: IJournalEntryUpdate = {
       ...entry,
       due_date: entry.due_date || null,
     };
-
-    console.log("Transformed Entry:", transformedEntry);
-
     submitJournal(transformedEntry); // kirim objek langsung, bukan array
   };
 
@@ -42,7 +35,18 @@ const UpdateJournalEntryModal: React.FC<IUpdateJournalEntryModalProps> = ({ tran
 
   return (
     <>
-      <Modal opened={opened} onClose={closeModal} size={"60%"}>
+      <Modal
+        opened={opened}
+        onClose={closeModal}
+        size="60%"
+        overlayProps={{
+          style: {
+            backgroundColor: "rgba(0, 0, 0, 0.2)", // transparan tipis, bukan gelap
+          },
+        }}
+        withCloseButton
+        // centered
+      >
         <Formik
           initialValues={initialValuesJournalEntryUpdate(initialData, companyId, transactionType)}
           validationSchema={validationSchemaJournalEntry(transactionType)}

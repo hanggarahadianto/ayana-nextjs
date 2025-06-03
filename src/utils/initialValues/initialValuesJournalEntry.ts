@@ -40,7 +40,7 @@ export const initialValuesJournalEntryUpdate = (
         partner: initialValues?.partner || "",
         date_inputed: initialValues?.date_inputed || "",
         due_date: initialValues?.due_date || "",
-        repayment_date: "",
+        repayment_date: null,
         installment: 0,
         is_repaid: initialValues?.is_repaid || false,
         note: initialValues?.note || "",
