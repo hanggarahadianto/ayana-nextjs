@@ -1,4 +1,4 @@
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatCurrency } from "@/helper/formatCurrency";
 import { ScrollArea, Flex, Divider, Text, Table, Stack, Grid } from "@mantine/core";
 
 interface CashFlowReportTableProps {

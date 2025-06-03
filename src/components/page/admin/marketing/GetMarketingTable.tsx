@@ -12,8 +12,8 @@ import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
 import EditCustomerModal from "./UpdateMarketingModal";
 import AddMarketingModal from "./AddMarketingModal";
-import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
+import { formatCurrency } from "@/helper/formatCurrency";
 
 export const CustomerTable = () => {
   const { getToken } = useCookies();

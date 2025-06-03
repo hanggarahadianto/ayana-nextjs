@@ -9,7 +9,7 @@ import { useDeleteDataProject } from "@/api/project/deleteDataProject";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { parseISO, differenceInDays, addDays } from "date-fns";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
+import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import AddProjectModal from "@/components/page/admin/project/AddProjectModal";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 

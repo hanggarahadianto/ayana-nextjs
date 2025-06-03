@@ -1,10 +1,10 @@
 import { getOutstandingDebt } from "@/api/finance/getOutstandingDebt";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Badge, Group, Flex, Box, TextInput } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Badge, Group, Flex, Box } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { formatCurrency } from "@/utils/formatCurrency";
-import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
+import { formatCurrency } from "@/helper/formatCurrency";
+import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import TableComponent from "@/components/common/table/TableComponent";
 import {
   calculateDaysLeft,
@@ -12,15 +12,15 @@ import {
   formatEarlyOrLateTransaction,
   getColorForPaidStatus,
   getStatusColor,
-} from "@/utils/debtStatus";
+} from "@/helper/debtStatus";
 import ReversedJournalEntryModal from "../journalEntry/ReversedJournalEntryModal";
-import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 import ButtonReversedJournal from "@/components/common/button/buttonReversedJournal";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
+import SearchTable from "@/components/common/table/SearchTableComponent";
 
 interface GetOutStandingDebtDataProps {
   companyId: string;
@@ -35,6 +35,8 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
   const [pageOutstandingDebt, setPageOutstandingDebt] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
   const [selectedDebt, setSelectedDebt] = useState<IDebtSummaryItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -93,28 +95,24 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
           <Text size="xl" fw={600}>
             {title} {companyName}
           </Text>
-
-          <Group>
-            <SelectCategoryFilter
-              companyId={companyId}
-              value={selectedCategory}
-              onChange={(value) => {
-                setSelectedCategory(value);
-              }}
-            />
-            <TextInput
-              w={400}
-              label="Cari Data Asset"
-              placeholder="Cari data asset..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </Group>
         </Stack>
         <Text size="xl" fw={800} c={"red"} mt={20}>
           -{formatCurrency(outstandingDebtData?.data.total_debt ?? 0)}
         </Text>
       </Group>
+      <SearchTable
+        companyId={companyId}
+        category=""
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
+        readonly={false}
+      />
       <TableComponent
         startIndex={startIndex}
         data={debtList}

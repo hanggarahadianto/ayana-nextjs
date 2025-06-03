@@ -1,19 +1,19 @@
-import { Card, Text, Group, Stack, Pagination, Flex, TextInput } from "@mantine/core";
+import { Card, Text, Group, Stack, Pagination, Flex } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatCurrency } from "@/helper/formatCurrency";
 import CreateJournalEntryModal from "../../journalEntry/CreateJournalEntryModal";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
-import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
-import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
+import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconPencil } from "@tabler/icons-react";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
+import SearchTable from "@/components/common/table/SearchTableComponent";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -27,6 +27,8 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
   const limit = 10;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
   const { data: cashinSummaryData, isPending: isLoadingCashinData } = useQuery({
     queryKey: ["getCashinData", companyId, page, assetType, selectedCategory, searchTerm],
@@ -60,39 +62,38 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
   };
 
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
+    <Card shadow="sm" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingCashinData || isLoadingDeleteCashIn} />
-      <Group justify="space-between">
-        <Stack>
-          <Text size="xl" fw={600}>
-            Uang Masuk {companyName}
-          </Text>
-          <Group>
-            <SelectCategoryFilter
-              companyId={companyId}
-              value={"Kas & Bank"} // Hardcoded for Receivable Asset
-              onChange={(value) => {
-                setSelectedCategory(value);
-              }}
-              readonly
-            />
-            <TextInput
-              w={400}
-              label="Cari Data Asset"
-              placeholder="Cari data asset..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="input-class"
-            />
-          </Group>
+      <Stack>
+        <Group justify="space-between">
+          <Stack>
+            <Text size="xl" fw={600}>
+              Uang Masuk {companyName}
+            </Text>
+          </Stack>
+          <Stack align="flex-end">
+            <CreateJournalEntryModal companyId={companyId} transactionType={"payin"} />
+            <Text size="xl" fw={800} c={"teal"} mt={20}>
+              {formatCurrency(cashinSummaryData?.data.total_asset ?? 0)}
+            </Text>
+          </Stack>
+        </Group>
+        <Stack mb={12}>
+          <SearchTable
+            companyId={companyId}
+            category="Kas & Bank"
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            startDate={startDate}
+            setStartDate={setStartDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+            readonly
+          />
         </Stack>
-        <Stack align="flex-end" mb={16}>
-          <CreateJournalEntryModal companyId={companyId} transactionType={"payin"} />
-          <Text size="xl" fw={800} c={"teal"} mt={20}>
-            {formatCurrency(cashinSummaryData?.data.total_asset ?? 0)}
-          </Text>
-        </Stack>
-      </Group>
+      </Stack>
 
       <TableComponent
         startIndex={startIndex}

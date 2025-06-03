@@ -1,18 +1,18 @@
-import { Card, Text, Group, Stack, Pagination, Flex, TextInput } from "@mantine/core";
+import { Card, Text, Group, Stack, Pagination, Flex } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatCurrency } from "@/helper/formatCurrency";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
-import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
-import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
+import { formatDateIndonesia, formatDateRange } from "@/helper/formatDateIndonesia";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
+import SearchTable from "@/components/common/table/SearchTableComponent";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -26,9 +26,21 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
   const limit = 10;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
   const { data: fixAssetSummaryData, isPending: isLoadingAssetData } = useQuery({
-    queryKey: ["getFixedAssetData", companyId, page, assetType, selectedCategory, searchTerm],
+    queryKey: [
+      "getFixedAssetData",
+      companyId,
+      page,
+      assetType,
+      selectedCategory,
+      searchTerm,
+      formattedStartDate ?? null,
+      formattedEndDate ?? null,
+    ],
     queryFn: () =>
       getAssetSummary({
         companyId,
@@ -37,6 +49,8 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         assetType,
         category: "Aset Tetap",
         search: searchTerm,
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -68,29 +82,24 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
           <Text size="xl" fw={600}>
             Aset Tetap {companyName}
           </Text>
-
-          <Group>
-            <SelectCategoryFilter
-              companyId={companyId}
-              readonly
-              value={"Aset Tetap"}
-              onChange={(value) => {
-                setSelectedCategory(value);
-              }}
-            />
-            <TextInput
-              w={400}
-              label="Cari Data Asset"
-              placeholder="Cari data asset..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </Group>
         </Stack>
         <Text size="xl" fw={800} c={"teal"} mt={20}>
           {formatCurrency(fixAssetSummaryData?.data.total_asset ?? 0)}
         </Text>
       </Group>
+      <SearchTable
+        companyId={companyId}
+        category="Aset Tetap"
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
+        readonly
+      />
       <TableComponent
         startIndex={startIndex}
         data={assetList}

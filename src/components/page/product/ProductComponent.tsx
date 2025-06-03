@@ -9,7 +9,7 @@ import { generateSlug } from "@/utils/slug";
 import { getDataProduct } from "@/api/products/getDataProduct";
 import { getImages } from "@/api/products/getImagesProduct";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatCurrency } from "@/helper/formatCurrency";
 
 const ProductComponent = () => {
   // Responsive breakpoints

@@ -2,7 +2,7 @@
 
 import { IconArrowDownRight, IconArrowUpRight, IconCoin, IconDiscount2, IconHome, IconReceipt2, IconUserPlus } from "@tabler/icons-react";
 import { Flex, Group, Paper, Stack, Text } from "@mantine/core";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatCurrency } from "@/helper/formatCurrency";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import LoadingGlobal from "@/styles/loading/loading-global";
 

@@ -5,7 +5,7 @@ import { Formik, Form, Field } from "formik";
 import { getInitialValuesReservationForm } from "../../../utils/initialValues/InitialValuesReservationForm";
 import { useMediaQuery } from "@mantine/hooks";
 import { useSubmitReservationForm } from "@/api/reservation/postDataReservationForm";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatCurrency } from "@/helper/formatCurrency";
 
 interface ReservationFormProps {
   id: string;

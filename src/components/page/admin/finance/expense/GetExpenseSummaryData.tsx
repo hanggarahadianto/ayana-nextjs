@@ -1,19 +1,19 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Box, Group, Flex, TextInput } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Box, Group, Flex } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatCurrency } from "@/helper/formatCurrency";
 import { getExpenseSummary } from "@/api/finance/getExpenseSummary";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import TableComponent from "@/components/common/table/TableComponent";
-import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
-import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
+import { formatDateIndonesia, formatDateRange } from "@/helper/formatDateIndonesia";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../journalEntry/UpdateJournalEntryModal";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconPencil } from "@tabler/icons-react";
+import SearchTable from "@/components/common/table/SearchTableComponent";
 
 interface GetExpenseDataProps {
   companyId: string;
@@ -24,6 +24,9 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
   const [pageExpense, setPageExpense] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
   const status = "base";
   const {
@@ -31,7 +34,16 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
     isLoading: isLoadingExpense,
     refetch: refetchExpenseData,
   } = useQuery({
-    queryKey: ["getExpenseSummaryData", companyId, pageExpense, limit, status, searchTerm],
+    queryKey: [
+      "getExpenseSummaryData",
+      companyId,
+      pageExpense,
+      limit,
+      status,
+      searchTerm,
+      formattedStartDate ?? null,
+      formattedEndDate ?? null,
+    ],
     queryFn: async () => {
       if (!companyId) return null;
 
@@ -41,6 +53,8 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
         status,
         limit,
         search: searchTerm,
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
       });
     },
     enabled: Boolean(companyId),
@@ -73,27 +87,23 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
             <Text size="xl" fw={600}>
               Pengeluaran {companyName}
             </Text>
-            <Group>
-              <SelectCategoryFilter
-                companyId={companyId}
-                value={selectedCategory}
-                onChange={(value) => {
-                  setSelectedCategory(value);
-                }}
-              />
-              <TextInput
-                w={400}
-                label="Cari Data Asset"
-                placeholder="Cari data asset..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </Group>
           </Stack>
           <Text size="xl" fw={800} c={"red"} mt={20}>
             -{formatCurrency(expenseData?.data.total_expense ?? 0)}
           </Text>
         </Group>
+        <SearchTable
+          companyId={companyId}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          readonly
+        />
 
         <Box style={{ flex: 1 }}>
           <TableComponent

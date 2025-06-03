@@ -1,19 +1,19 @@
-import { Card, Text, Group, Box, Pagination, Stack, Flex, TextInput } from "@mantine/core";
+import { Card, Text, Group, Box, Pagination, Stack, Flex } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatCurrency } from "@/helper/formatCurrency";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
-import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
+import { formatDateIndonesia, formatDateRange } from "@/helper/formatDateIndonesia";
 import CreateJournalEntryModal from "../../journalEntry/CreateJournalEntryModal";
-import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
+import SearchTable from "@/components/common/table/SearchTableComponent";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -27,9 +27,21 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   const limit = 10;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
   const { data: cashOutSummaryData, isPending: isLoadingcashOutData } = useQuery({
-    queryKey: ["getCashOutData", companyId, page, assetType, selectedCategory, searchTerm],
+    queryKey: [
+      "getCashOutData",
+      companyId,
+      page,
+      assetType,
+      selectedCategory,
+      searchTerm,
+      formattedStartDate ?? null,
+      formattedEndDate ?? null,
+    ],
     queryFn: () =>
       getAssetSummary({
         companyId,
@@ -38,6 +50,8 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
         assetType,
         category: selectedCategory ?? "",
         search: searchTerm,
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -65,23 +79,6 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
           <Text size="xl" fw={600}>
             Uang Keluar {companyName}
           </Text>
-
-          <Group>
-            <SelectCategoryFilter
-              companyId={companyId}
-              value={selectedCategory}
-              onChange={(value) => {
-                setSelectedCategory(value);
-              }}
-            />
-            <TextInput
-              w={400}
-              label="Cari Data Asset"
-              placeholder="Cari data asset..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </Group>
         </Stack>
 
         <Stack align="flex-end" mb={16}>
@@ -91,6 +88,18 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
           </Text>
         </Stack>
       </Group>
+      <SearchTable
+        companyId={companyId}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
+        readonly
+      />
       <Box style={{ flex: 1 }}>
         <TableComponent
           startIndex={startIndex}

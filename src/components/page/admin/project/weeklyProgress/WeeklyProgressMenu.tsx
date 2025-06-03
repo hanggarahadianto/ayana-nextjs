@@ -5,7 +5,7 @@ import { useDeleteDataWeeklyProgress } from "@/api/weekly-progress/deleteDataWee
 import EditWeeklyProgressModal from "./EditWeeklyProgressModal";
 import { useState } from "react";
 import { useMediaQuery } from "@mantine/hooks";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatCurrency } from "@/helper/formatCurrency";
 
 const WeeklyProgressMenu = ({ refetchWeeklyProgressData, projectDataDetail, weeklyProgressData }) => {
   const isSmallScreen = useMediaQuery("(max-width: 767px)"); // Mobile

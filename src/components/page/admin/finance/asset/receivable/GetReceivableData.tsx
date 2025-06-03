@@ -1,16 +1,14 @@
-import { Card, Text, Group, Stack, Box, Pagination, Flex, Badge, TextInput } from "@mantine/core";
+import { Card, Text, Group, Stack, Box, Pagination, Flex, Badge } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { formatCurrency } from "@/utils/formatCurrency";
+import { formatCurrency } from "@/helper/formatCurrency";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
-import { formatDateIndonesia } from "@/utils/formatDateIndonesia";
-import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
+import { formatDateIndonesia, formatDateRange } from "@/helper/formatDateIndonesia";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
-import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
 import ButtonReversedJournal from "@/components/common/button/buttonReversedJournal";
@@ -21,7 +19,10 @@ import {
   formatEarlyOrLateTransaction,
   getColorForPaidStatus,
   getStatusColor,
-} from "@/utils/debtStatus";
+} from "@/helper/debtStatus";
+import SearchTable from "@/components/common/table/SearchTableComponent";
+import { IconPencil } from "@tabler/icons-react";
+import { endOfDay, format } from "date-fns";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -36,12 +37,24 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
   const limit = 10;
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
   const [selectedReceivableAsset, setSelectedReceivableAsset] = useState<IAssetSummaryItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: receivableAssetSummaryData, isPending: isLoadingReceivableAsset } = useQuery({
-    queryKey: ["getReceivableAssetData", companyId, page, assetType, selectedCategory, searchTerm],
+    queryKey: [
+      "getReceivableAssetData",
+      companyId,
+      page,
+      assetType,
+      selectedCategory,
+      searchTerm,
+      formattedStartDate ?? null,
+      formattedEndDate ?? null,
+    ],
     queryFn: () =>
       getAssetSummary({
         companyId,
@@ -50,6 +63,8 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         assetType,
         category: "Piutang", // Hardcoded for Receivable Asset
         search: searchTerm, // 🔍
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -86,29 +101,24 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
           <Text size="xl" fw={600}>
             {title} {companyName}
           </Text>
-          <Group>
-            <SelectCategoryFilter
-              companyId={companyId}
-              value={"Piutang"} // Hardcoded for Receivable Asset
-              onChange={(value) => {
-                setSelectedCategory(value);
-              }}
-              readonly
-            />
-
-            <TextInput
-              w={400}
-              label="Cari Data Asset"
-              placeholder="Cari data asset..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </Group>
         </Stack>
         <Text size="xl" fw={800} c={"teal"} mt={20}>
           {formatCurrency(receivableAssetSummaryData?.data.total_asset ?? 0)}
         </Text>
       </Group>
+      <SearchTable
+        companyId={companyId}
+        category="Piutang"
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
+        readonly
+      />
 
       <Box style={{ flex: 1 }}>
         <TableComponent

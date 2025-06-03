@@ -8,6 +8,8 @@ interface GetAssetSummaryParams {
   summaryOnly?: boolean;
   category?: string;
   search?: string; // 🔍 Tambahkan ini
+  startDate?: string; // 👈 tambahkan
+  endDate?: string; // 👈 tambahkan
 }
 
 export const getAssetSummary = async ({
@@ -18,6 +20,8 @@ export const getAssetSummary = async ({
   summaryOnly,
   category,
   search, // 🔍
+  startDate, // 👈 tambahkan
+  endDate, // 👈 tambahkan
 }: GetAssetSummaryParams): Promise<IAssetSummaryResponse> => {
   if (!companyId) throw new Error("Company ID is required");
 
@@ -31,6 +35,8 @@ export const getAssetSummary = async ({
   if (summaryOnly) queryParams.append("summary_only", "true");
   if (category) queryParams.append("category", category);
   if (search) queryParams.append("search", search); // 🔍
+  if (startDate) queryParams.append("start_date", startDate); // <- gunakan format YYYY-MM-DD
+  if (endDate) queryParams.append("end_date", endDate);
 
   const url = `finance/get-asset-summary?${queryParams.toString()}`;
 
