@@ -1,5 +1,3 @@
-// columnsReceivableAsset.ts
-
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import ButtonReversedJournal from "@/components/common/button/buttonReversedJournal";
@@ -23,13 +21,12 @@ export const columnsBaseReceivableAsset = (
     handleDeleteDataJournal: (id: string) => void;
   }
 ) => {
-  // Cek apakah ada item dengan status "done"
   const hasDone = assetList.some((item) => item.status === "done");
 
   return [
     { key: "transaction_id", title: "Transaction ID", width: 120, minWidth: 120 },
     { key: "invoice", title: "Invoice", width: 120, minWidth: 120 },
-    { key: "partner", title: "Partner", width: 160, minWidth: 160 },
+    { key: "partner", title: "Partner", width: 200, minWidth: 200 },
     {
       key: "amount",
       title: "Nominal",
@@ -40,15 +37,15 @@ export const columnsBaseReceivableAsset = (
     {
       key: "date_inputed",
       title: "Tanggal Transaksi",
-      width: 160,
-      minWidth: 160,
+      width: 120,
+      minWidth: 120,
       render: (item: IAssetSummaryItem) => formatDateIndonesia(item.date_inputed),
     },
     {
       key: "due_date",
       title: "Jatuh Tempo",
-      width: 160,
-      minWidth: 160,
+      width: 120,
+      minWidth: 120,
       render: (item: IAssetSummaryItem) => formatDateIndonesia(item.due_date),
     },
 
@@ -58,8 +55,8 @@ export const columnsBaseReceivableAsset = (
           {
             key: "repayment_date",
             title: "Tanggal Pelunasan",
-            width: 160,
-            minWidth: 160,
+            width: 120,
+            minWidth: 120,
             render: (row: IAssetSummaryItem) => formatDateIndonesia(row.repayment_date),
           },
         ]
@@ -70,8 +67,8 @@ export const columnsBaseReceivableAsset = (
     {
       key: "status",
       title: "Status",
-      width: 320,
-      minWidth: 220,
+      width: 200,
+      minWidth: 200,
       render: (item: IAssetSummaryItem) => {
         const isPaid = item.status === "done";
         const earlyLate = formatEarlyOrLateTransaction(item.repayment_date, item.due_date);
@@ -80,7 +77,7 @@ export const columnsBaseReceivableAsset = (
           const color = getColorForPaidStatus(item.repayment_date, item.due_date);
 
           return (
-            <Box style={{ width: 200 }}>
+            <Box>
               <Badge color={color} p={8}>
                 <Text fw={700} size="xs">
                   {earlyLate}
@@ -92,7 +89,7 @@ export const columnsBaseReceivableAsset = (
 
         const daysLeft = calculateDaysLeft(item.due_date);
         return (
-          <Box style={{ width: 320 }}>
+          <Box style={{ width: 280 }}>
             <Badge color={getStatusColor(daysLeft)} p={8}>
               <Text fw={700} size="xs">
                 {formatDaysToDueMessage(daysLeft)}
@@ -108,6 +105,7 @@ export const columnsBaseReceivableAsset = (
       title: "Aksi",
       width: 1,
       minWidth: 1,
+      maxWidth: 4,
       render: (row: IAssetSummaryItem) => (
         <Flex gap="lg" justify="center">
           {row.status !== "paid" && <ButtonReversedJournal size={2.2} onClick={() => handlers.handleSendClick(row)} />}

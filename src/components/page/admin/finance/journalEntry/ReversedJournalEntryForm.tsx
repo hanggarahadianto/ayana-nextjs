@@ -27,7 +27,6 @@ interface JournalFormProps {
 }
 
 const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, initialData }: JournalFormProps) => {
-  // console.log("transactionType,", transactionType);
   const { values, setFieldValue, handleBlur } = useFormikContext<{
     transactionType: "payin" | "payout";
     journalEntries: IJournalEntryCreate[];

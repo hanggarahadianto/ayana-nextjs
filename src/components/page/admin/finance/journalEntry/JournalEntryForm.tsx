@@ -252,8 +252,15 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                           rightSection={<IconCalendar size={18} />}
                           value={entry.date_inputed ? new Date(entry.date_inputed) : null}
                           onChange={(date) => {
-                            handleJournalChange(index, "date_inputed", date ? date.toISOString() : null);
-                            handleJournalChange(index, "repayment_date", date ? date.toISOString() : null);
+                            const isoDate = date ? date.toISOString() : null;
+
+                            handleJournalChange(index, "date_inputed", isoDate);
+                            handleJournalChange(index, "repayment_date", isoDate);
+
+                            // Jika status paid atau done, atur due_date dari date_inputed
+                            if (entry.status === "paid" || entry.status === "done") {
+                              handleJournalChange(index, "due_date", isoDate);
+                            }
                           }}
                         />
 

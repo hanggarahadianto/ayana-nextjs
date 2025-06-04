@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { Modal, Button, Group, Stack, Alert, SimpleGrid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form } from "formik";
@@ -18,16 +18,18 @@ const CreateJournalEntryModal: React.FC<ICreateJournalEntryModalProps> = ({ tran
   const [opened, { open, close }] = useDisclosure(false);
   const { mutate: submitJournal, isPending: isLoadingSubmitJournalEntry } = useSubmitJournalEntry(close, companyId);
 
-  // 3. useCallback for handleSubmit
-  const handleSubmit = (values: { journalEntries: IJournalEntryCreate[] }) => {
-    const transformedEntries = values.journalEntries.map((entry: any) => ({
-      ...entry,
-      date_inputed: entry.date_inputed,
-      due_date: entry.due_date || null,
-    }));
+  const handleSubmit = useCallback(
+    (values: { journalEntries: IJournalEntryCreate[] }) => {
+      const transformedEntries = values.journalEntries.map((entry: any) => ({
+        ...entry,
+        date_inputed: entry.date_inputed,
+        due_date: entry.due_date || null,
+      }));
 
-    submitJournal(transformedEntries);
-  };
+      submitJournal(transformedEntries);
+    },
+    [submitJournal]
+  );
   return (
     <>
       <ButtonAdd onClick={open} size={"3.5rem"} />

@@ -13,6 +13,7 @@ import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
 import SearchTable from "@/components/common/table/SearchTableComponent";
+import { columnsBaseFixAsset } from "./FixAssetColumn";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -74,6 +75,12 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
     useModalStore.getState().openModal("editFixAssetData", fixAssetSummaryData);
   };
 
+  const columns = columnsBaseFixAsset(assetList, {
+    // handleSendClick,
+    openEditModal,
+    handleDeleteDataJournal,
+  });
+
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingAssetData || isLoadingDeleteFixAsset} />
@@ -106,46 +113,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         totalAmount={totalAssetIn}
         transactionType={transactionType}
         height={"580"}
-        columns={[
-          { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
-          { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
-          { key: "partner", title: "Partner", width: 80, minWidth: 80 },
-          {
-            key: "amount",
-            title: "Nominal",
-            width: 120,
-            minWidth: 120,
-            render: (item) => formatCurrency(item.amount),
-          },
-          {
-            key: "date_inputed",
-            title: "Tanggal Transaksi",
-            width: 120,
-            minWidth: 120,
-            render: (item) => formatDateIndonesia(item.date_inputed),
-          },
-
-          { key: "note", title: "Keterangan", width: 220, minWidth: 220 },
-          {
-            key: "aksi",
-            title: "Aksi",
-            width: 10,
-            minWidth: 10,
-            render: (row: IAssetSummaryItem) => {
-              return (
-                <Flex gap="lg" justify="center">
-                  <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
-                  <ButtonDeleteWithConfirmation
-                    id={row.id} // Gunakan id customer
-                    onDelete={() => handleDeleteDataJournal(row.id)}
-                    description={`Hapus Transaksi ${row.description}?`}
-                    size={2.2}
-                  />
-                </Flex>
-              );
-            },
-          },
-        ]}
+        columns={columns}
       />
 
       <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payin" />

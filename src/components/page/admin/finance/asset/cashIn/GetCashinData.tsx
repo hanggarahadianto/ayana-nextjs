@@ -6,14 +6,11 @@ import { formatCurrency } from "@/helper/formatCurrency";
 import CreateJournalEntryModal from "../../journalEntry/CreateJournalEntryModal";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
-import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
-import { IconPencil } from "@tabler/icons-react";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
 import SearchTable from "@/components/common/table/SearchTableComponent";
+import { columnsBaseCashIn } from "./CashInColumn";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -61,6 +58,8 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
     mutateDeleteDataJournal(idToDelete);
   };
 
+  const columns = columnsBaseCashIn(openEditModal, handleDeleteAccount);
+
   return (
     <Card shadow="sm" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingCashinData || isLoadingDeleteCashIn} />
@@ -101,46 +100,7 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         totalAmount={cashinSummaryData?.data.total_asset}
         transactionType={transactionType}
         height={"580"}
-        columns={[
-          { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
-          { key: "invoice", title: "Invoice", width: 120, minWidth: 120 },
-          { key: "category", title: "Kategori", width: 120, minWidth: 120 },
-          { key: "partner", title: "Partner", width: 120, minWidth: 120 },
-          {
-            key: "amount",
-            title: "Nominal",
-            width: 120,
-            minWidth: 120,
-            render: (item) => formatCurrency(item.amount),
-          },
-          {
-            key: "date_inputed",
-            title: "Tanggal Transaksi",
-            width: 160,
-            minWidth: 160,
-            render: (item) => formatDateIndonesia(item.date_inputed),
-          },
-          { key: "note", title: "Keterangan", width: 220, minWidth: 220 },
-          {
-            key: "aksi",
-            title: "Aksi",
-            width: 8,
-            minWidth: 8,
-            render: (row: IAssetSummaryItem) => {
-              return (
-                <Flex gap="lg" justify="center">
-                  <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
-                  <ButtonDeleteWithConfirmation
-                    id={row.transaction_category_id} // Gunakan id customer
-                    onDelete={() => handleDeleteAccount(row.id)}
-                    description={`Hapus Transaksi ${row.description}?`}
-                    size={2.2}
-                  />
-                </Flex>
-              );
-            },
-          },
-        ]}
+        columns={columns}
       />
 
       <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payin" />

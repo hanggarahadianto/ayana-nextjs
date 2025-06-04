@@ -73,7 +73,7 @@ export default function TableComponent<T>({
           </Group>
         </Card>
       </Box>
-      <ScrollXWrapper minWidth={`${columns.length * 300}px`} height={height || "400px"}>
+      <ScrollXWrapper minWidth={`${columns.length * 220}px`} height={height || "400px"}>
         <Table highlightOnHover withColumnBorders striped>
           <Table.Thead>
             <Table.Tr>

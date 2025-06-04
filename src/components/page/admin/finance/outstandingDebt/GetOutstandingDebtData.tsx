@@ -21,6 +21,7 @@ import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
 import SearchTable from "@/components/common/table/SearchTableComponent";
+import { columnsBaseDebt } from "./OutstandingDebtColumn";
 
 interface GetOutStandingDebtDataProps {
   companyId: string;
@@ -87,6 +88,8 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
     useModalStore.getState().openModal("editExpenseData", expenseData);
   };
 
+  const columns = columnsBaseDebt(handleSendClick, openEditModal, handleDeleteDataJournal, shouldShowPaymentStatus);
+
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingOutstandingDebt || isLoadingDeleteDebt} />
@@ -119,102 +122,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
         totalAmount={outstandingDebtData?.data.total_debt}
         transactionType={transactionType}
         height={"580"}
-        columns={[
-          { key: "transaction_id", title: "Transaction ID", width: 140, minWidth: 140 },
-          { key: "invoice", title: "Invoice", width: 160, minWidth: 160 },
-          { key: "partner", title: "Partner", width: 160, minWidth: 160 },
-          {
-            key: "amount",
-            title: "Nominal",
-            width: 180,
-            minWidth: 180,
-            render: (item) => formatCurrency(item.amount),
-          },
-          {
-            key: "date_inputed",
-            title: "Tanggal Transaksi",
-            width: 180,
-            minWidth: 180,
-            render: (item) => formatDateIndonesia(item.date_inputed),
-          },
-          {
-            key: "due_date",
-            title: "Tanggal Jatuh Tempo",
-            width: 180,
-            minWidth: 180,
-            render: (item) => formatDateIndonesia(item.due_date),
-          },
-
-          {
-            key: "status",
-            title: "Status",
-            width: 320,
-            minWidth: 220,
-            render: (item) => {
-              const isPaid = item.status === "done";
-              const earlyLate = formatEarlyOrLateTransaction(item.date_inputed, item.due_date);
-
-              if (isPaid) {
-                const color = getColorForPaidStatus(item.date_inputed, item.due_date);
-
-                return (
-                  <Box style={{ width: 200 }}>
-                    <Badge color={color} p={8}>
-                      <Text fw={700} size="xs">
-                        {earlyLate}
-                      </Text>
-                    </Badge>
-                  </Box>
-                );
-              }
-
-              const daysLeft = calculateDaysLeft(item.due_date);
-              return (
-                <Box style={{ width: 320 }}>
-                  <Badge color={getStatusColor(daysLeft)} p={8}>
-                    <Text fw={700} size="xs">
-                      {formatDaysToDueMessage(daysLeft)}
-                    </Text>
-                  </Badge>
-                </Box>
-              );
-            },
-          },
-          ...(shouldShowPaymentStatus
-            ? [
-                {
-                  key: "payment_date_status",
-                  title: "Keterangan Pembayaran",
-                  width: 400,
-                  minWidth: 400,
-                  render: (row: { payment_date_status: string }) => row.payment_date_status,
-                },
-              ]
-            : []),
-          { key: "description", title: "Deskripsi", width: 400, minWidth: 400 },
-
-          {
-            key: "aksi",
-            title: "Aksi",
-            width: 10,
-            minWidth: 10,
-            render: (row: IDebtSummaryItem) => {
-              return (
-                <Flex gap="lg" justify="center">
-                  {row.status !== "done" && <ButtonReversedJournal size={2.2} onClick={() => handleSendClick(row)} />}
-                  <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
-
-                  <ButtonDeleteWithConfirmation
-                    id={row.id} // Gunakan id customer
-                    onDelete={() => handleDeleteDataJournal(row.id)}
-                    description={`Hapus Transaksi ${row.description}?`}
-                    size={2.2}
-                  />
-                </Flex>
-              );
-            },
-          },
-        ]}
+        columns={columns}
       />
 
       {totalPages > 0 && (

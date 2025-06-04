@@ -25,10 +25,9 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
   const handleSubmit = useCallback(
     (values: { journalEntries: IJournalEntryCreate[] }) => {
       if (!initialData?.id) return;
-
       const newEntry: IJournalEntryCreate = {
         ...values.journalEntries[0],
-        date_inputed: values.journalEntries[0].date_inputed || null,
+        date_inputed: initialData.date_inputed,
         due_date: values.journalEntries[0].due_date || null,
       };
 
