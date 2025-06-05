@@ -4,7 +4,6 @@ import { Group, Text, Stack } from "@mantine/core";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { useState } from "react";
 import { CustomerTable } from "./GetMarketingTable";
-import AddMarketingModal from "./AddMarketingModal";
 
 const MarketingAdminCard = () => {
   const [page, setPage] = useState(1);

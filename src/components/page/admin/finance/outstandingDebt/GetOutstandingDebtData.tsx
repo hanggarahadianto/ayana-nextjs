@@ -1,24 +1,12 @@
 import { getOutstandingDebt } from "@/api/finance/getOutstandingDebt";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Badge, Group, Flex, Box } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Group } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { formatCurrency } from "@/helper/formatCurrency";
-import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import TableComponent from "@/components/common/table/TableComponent";
-import {
-  calculateDaysLeft,
-  formatDaysToDueMessage,
-  formatEarlyOrLateTransaction,
-  getColorForPaidStatus,
-  getStatusColor,
-} from "@/helper/debtStatus";
 import ReversedJournalEntryModal from "../journalEntry/ReversedJournalEntryModal";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
-import ButtonReversedJournal from "@/components/common/button/buttonReversedJournal";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
-import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import { columnsBaseDebt } from "./OutstandingDebtColumn";

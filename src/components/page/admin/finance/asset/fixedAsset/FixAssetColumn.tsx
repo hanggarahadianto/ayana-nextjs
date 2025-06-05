@@ -2,7 +2,7 @@ import BreathingActionIcon from "@/components/common/button/buttonAction";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { formatCurrency } from "@/helper/formatCurrency";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
-import { Box, Flex } from "@mantine/core";
+import { Flex } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 
 export const columnsBaseFixAsset = (

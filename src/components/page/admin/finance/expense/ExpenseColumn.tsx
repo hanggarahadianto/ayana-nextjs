@@ -1,4 +1,3 @@
-// columnsBaseExpense.ts
 import { formatCurrency } from "@/helper/formatCurrency";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import BreathingActionIcon from "@/components/common/button/buttonAction";

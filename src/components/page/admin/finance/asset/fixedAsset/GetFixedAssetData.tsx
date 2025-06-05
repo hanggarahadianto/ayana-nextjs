@@ -1,15 +1,12 @@
-import { Card, Text, Group, Stack, Pagination, Flex } from "@mantine/core";
+import { Card, Text, Group, Stack, Pagination } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { formatCurrency } from "@/helper/formatCurrency";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
-import { formatDateIndonesia, formatDateRange } from "@/helper/formatDateIndonesia";
+import { formatDateRange } from "@/helper/formatDateIndonesia";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
-import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
 import SearchTable from "@/components/common/table/SearchTableComponent";
