@@ -11,6 +11,8 @@ import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import { columnsBaseFixAsset } from "./FixAssetColumn";
+import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
+import { useDebounce } from "use-debounce";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -21,9 +23,11 @@ interface AssetSummaryCardProps {
 
 export const GetFixedAssetData = ({ companyId, companyName, assetType, transactionType }: AssetSummaryCardProps) => {
   const [page, setPage] = useState(1);
-  const limit = 10;
+  const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
+
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
@@ -35,7 +39,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
       page,
       assetType,
       selectedCategory,
-      searchTerm,
+      debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
     ],
@@ -46,7 +50,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         limit,
         assetType,
         category: "Aset Tetap",
-        search: searchTerm,
+        search: debouncedSearch,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
       }),
@@ -56,9 +60,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
 
   const assetList = fixAssetSummaryData?.data?.assetList ?? [];
   const totalData = fixAssetSummaryData?.data?.total ?? 0;
-  const totalPages = Math.ceil(totalData / limit);
   const totalAssetIn = fixAssetSummaryData?.data?.total_asset ?? 0;
-
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, totalData);
 
@@ -115,14 +117,18 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
 
       <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payin" />
 
-      {totalPages > 0 && (
-        <Stack gap="xs" mt="40" style={{ paddingBottom: "16px" }}>
-          <Pagination total={totalPages} value={page} onChange={setPage} />
-          <Text size="sm" c="dimmed">
-            Menampilkan {startIndex} sampai {endIndex} dari {fixAssetSummaryData?.data.total} data
-          </Text>
-        </Stack>
-      )}
+      <PaginationWithLimit
+        total={fixAssetSummaryData?.data.total ?? 0}
+        page={page}
+        limit={limit}
+        startIndex={startIndex}
+        endIndex={endIndex}
+        onPageChange={setPage}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setPage(1);
+        }}
+      />
     </Card>
   );
 };

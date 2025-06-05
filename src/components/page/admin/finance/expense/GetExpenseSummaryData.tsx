@@ -12,21 +12,26 @@ import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../journalEntry/UpdateJournalEntryModal";
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import { columnsBaseExpense } from "./ExpenseColumn";
+import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
+import { useDebounce } from "use-debounce";
 
 interface GetExpenseDataProps {
   companyId: string;
   companyName?: string;
 }
 export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseDataProps) => {
-  const limit = 10;
-  const [pageExpense, setPageExpense] = useState(1);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
+
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
   const status = "base";
+
   const {
     data: expenseData,
     isLoading: isLoadingExpense,
@@ -35,40 +40,35 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
     queryKey: [
       "getExpenseSummaryData",
       companyId,
-      pageExpense,
+      page,
       limit,
       status,
-      searchTerm,
+      debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
     ],
-    queryFn: async () => {
-      if (!companyId) return null;
-
-      return await getExpenseSummary({
-        companyId,
-        page: pageExpense,
-        status,
-        limit,
-        search: searchTerm,
-        startDate: formattedStartDate,
-        endDate: formattedEndDate,
-      });
-    },
-    enabled: Boolean(companyId),
+    queryFn: () =>
+      companyId
+        ? getExpenseSummary({
+            companyId,
+            page,
+            limit,
+            status,
+            search: debouncedSearch,
+            startDate: formattedStartDate,
+            endDate: formattedEndDate,
+          })
+        : null,
+    enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
 
   const expenseList = expenseData?.data.expenseList ?? [];
-
-  const totalPages = Math.ceil((expenseData?.data?.total ?? 0) / limit);
-
-  const startIndex = (pageExpense - 1) * limit + 1;
-  const endIndex = Math.min(pageExpense * limit, expenseData?.data.total || 0);
+  const startIndex = (page - 1) * limit + 1;
+  const endIndex = Math.min(page * limit, expenseData?.data.total || 0);
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteExpense } = useDeleteDataJournalEntry();
   const handleDeleteDataJournal = (idToDelete: string) => {
-    console.log("idToDelete", idToDelete);
     mutateDeleteDataJournal(idToDelete);
   };
 
@@ -117,15 +117,18 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
 
         <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />
 
-        {/* Bagian Paginasi */}
-        {totalPages > 0 && (
-          <Stack gap="xs" style={{ paddingBottom: "16px" }}>
-            <Pagination total={totalPages} value={pageExpense} onChange={setPageExpense} />
-            <Text size="sm" c="dimmed">
-              Menampilkan {startIndex} sampai {endIndex} dari {expenseData?.data.total} data
-            </Text>
-          </Stack>
-        )}
+        <PaginationWithLimit
+          total={expenseData?.data.total ?? 0}
+          page={page}
+          limit={limit}
+          startIndex={startIndex}
+          endIndex={endIndex}
+          onPageChange={setPage}
+          onLimitChange={(newLimit) => {
+            setLimit(newLimit);
+            setPage(1);
+          }}
+        />
       </Card>
     </SimpleGridGlobal>
   );

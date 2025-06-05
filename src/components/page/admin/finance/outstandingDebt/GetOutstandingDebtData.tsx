@@ -1,6 +1,6 @@
 import { getOutstandingDebt } from "@/api/finance/getOutstandingDebt";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Group } from "@mantine/core";
+import { Card, Text, Stack, Group } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { formatCurrency } from "@/helper/formatCurrency";
@@ -10,6 +10,9 @@ import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry"
 import { useModalStore } from "@/store/modalStore";
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import { columnsBaseDebt } from "./OutstandingDebtColumn";
+import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
+import { useDebounce } from "use-debounce";
+import { formatDateRange } from "@/helper/formatDateIndonesia";
 
 interface GetOutStandingDebtDataProps {
   companyId: string;
@@ -20,13 +23,15 @@ interface GetOutStandingDebtDataProps {
 }
 
 export const GetOutstandingDebtData = ({ companyId, companyName, title, status, transactionType }: GetOutStandingDebtDataProps) => {
-  const limit = 10;
-  const [pageOutstandingDebt, setPageOutstandingDebt] = useState(1);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
+
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-
+  const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
   const [selectedDebt, setSelectedDebt] = useState<IDebtSummaryItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -35,29 +40,35 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
     isLoading: isLoadingOutstandingDebt,
     refetch: refetchOutstandingDebtData,
   } = useQuery({
-    queryKey: ["getOutstandingDebtByCompanyId", companyId, pageOutstandingDebt, limit, status, searchTerm],
-    queryFn: async () => {
-      if (!companyId) return null;
-
-      return await getOutstandingDebt({
-        companyId,
-        page: pageOutstandingDebt,
-        status,
-        limit,
-        search: searchTerm,
-      });
-    },
-    enabled: Boolean(companyId),
+    queryKey: [
+      "getOutstandingDebtByCompanyId",
+      companyId,
+      page,
+      limit,
+      status,
+      debouncedSearch,
+      formattedStartDate ?? null,
+      formattedEndDate ?? null,
+    ],
+    queryFn: () =>
+      companyId
+        ? getOutstandingDebt({
+            companyId,
+            page,
+            limit,
+            status,
+            search: debouncedSearch,
+            startDate: formattedStartDate,
+            endDate: formattedEndDate,
+          })
+        : null,
+    enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
 
-  const totalData = outstandingDebtData?.data?.total ?? 0;
-  const totalPages = Math.ceil(totalData / limit);
-
   const debtList = outstandingDebtData?.data.debtList ?? [];
-
-  const startIndex = (pageOutstandingDebt - 1) * limit + 1;
-  const endIndex = Math.min(pageOutstandingDebt * limit, outstandingDebtData?.data.total || 0);
+  const startIndex = (page - 1) * limit + 1;
+  const endIndex = Math.min(page * limit, outstandingDebtData?.data.total || 0);
 
   const handleSendClick = (debt: IDebtSummaryItem) => {
     setSelectedDebt(debt);
@@ -113,14 +124,18 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
         columns={columns}
       />
 
-      {totalPages > 0 && (
-        <Stack gap="xs" mt={"md"} style={{ paddingBottom: "16px" }}>
-          <Pagination total={totalPages} value={pageOutstandingDebt} onChange={setPageOutstandingDebt} />
-          <Text size="sm" c="dimmed">
-            Menampilkan {startIndex} sampai {endIndex} dari {outstandingDebtData?.data.total} data
-          </Text>
-        </Stack>
-      )}
+      <PaginationWithLimit
+        total={outstandingDebtData?.data.total ?? 0}
+        page={page}
+        limit={limit}
+        startIndex={startIndex}
+        endIndex={endIndex}
+        onPageChange={setPage}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setPage(1);
+        }}
+      />
 
       {selectedDebt && companyId && (
         <ReversedJournalEntryModal

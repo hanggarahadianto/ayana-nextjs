@@ -12,6 +12,7 @@ import { useDeleteDataAccount } from "@/api/account/deleteDataAccount";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import UpdateAccountModal from "./UpdateAccountModal";
 import { accountTypeOptions } from "@/constants/dictionary";
+import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 
 interface AccountCardProps {
   companyId: string;
@@ -20,7 +21,7 @@ interface AccountCardProps {
 
 export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
   const [page, setPage] = useState(1);
-  const limit = 10;
+  const [limit, setLimit] = useState(10);
   const [selectedType, setSelectedType] = useState<string | null>(null);
 
   const {
@@ -42,14 +43,6 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
   });
 
   const accountList = accountData?.data ?? [];
-
-  const totalPages = useMemo(() => {
-    return accountData?.total ? Math.ceil(accountData.total / limit) : 1;
-  }, [accountData]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [selectedType]);
 
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, accountData?.total || 0);
@@ -120,14 +113,18 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
 
       <UpdateAccountModal initialValues={useModalStore((state) => state.modalData)} />
 
-      {totalPages > 0 && (
-        <Stack gap="xs" mt="40" style={{ paddingBottom: "16px" }}>
-          <Pagination total={totalPages} value={page} onChange={setPage} />
-          <Text size="sm" c="dimmed">
-            Menampilkan {startIndex} sampai {endIndex} dari {accountData?.total} data
-          </Text>
-        </Stack>
-      )}
+      <PaginationWithLimit
+        total={accountData?.total ?? 0}
+        page={page}
+        limit={limit}
+        startIndex={startIndex}
+        endIndex={endIndex}
+        onPageChange={setPage}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setPage(1);
+        }}
+      />
     </Card>
   );
 };

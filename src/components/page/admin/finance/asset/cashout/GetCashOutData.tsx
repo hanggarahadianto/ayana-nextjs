@@ -12,6 +12,8 @@ import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import { columnsBaseCashoutAsset } from "./CashOutColumn";
+import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
+import { useDebounce } from "use-debounce";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -22,9 +24,11 @@ interface CashSummaryCardProps {
 
 export const GetCashOutData = ({ companyId, companyName, assetType, transactionType }: CashSummaryCardProps) => {
   const [page, setPage] = useState(1);
-  const limit = 10;
+  const [limit, setLimit] = useState(10);
+
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
@@ -34,9 +38,10 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
       "getCashOutData",
       companyId,
       page,
+      limit,
       assetType,
       selectedCategory,
-      searchTerm,
+      debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
     ],
@@ -47,7 +52,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
         limit,
         assetType,
         category: selectedCategory ?? "",
-        search: searchTerm,
+        search: debouncedSearch,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
       }),
@@ -116,14 +121,18 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
 
       <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />
 
-      {totalPages > 0 && (
-        <Stack gap="xs" mt={"md"} style={{ paddingBottom: "16px" }}>
-          <Pagination total={totalPages} value={page} onChange={setPage} />
-          <Text size="sm" c="dimmed">
-            Menampilkan {startIndex} sampai {endIndex} dari {cashOutSummaryData?.data.total} data
-          </Text>
-        </Stack>
-      )}
+      <PaginationWithLimit
+        total={cashOutSummaryData?.data.total ?? 0}
+        page={page}
+        limit={limit}
+        startIndex={startIndex}
+        endIndex={endIndex}
+        onPageChange={setPage}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setPage(1);
+        }}
+      />
     </Card>
   );
 };

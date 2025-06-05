@@ -1,7 +1,7 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Group, Stack, Pagination, Select } from "@mantine/core";
+import { Card, Text, Group, Stack, Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import TableComponent from "@/components/common/table/TableComponent";
 import AddTransactionCategoryModal from "./AddTransactionCategoryModal";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
@@ -13,6 +13,7 @@ import UpdateTransactionCategory from "./UpdateTransactionCategory";
 import { getDataTransactionCategory } from "@/api/transaction-category/getDataTransactionCategory";
 import { paymentStatus, transactionTypeOptions } from "@/constants/dictionary";
 import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
+import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 
 interface AccountCardProps {
   companyId: string;
@@ -21,7 +22,7 @@ interface AccountCardProps {
 
 export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardProps) => {
   const [page, setPage] = useState(1);
-  const limit = 10;
+  const [limit, setLimit] = useState(10);
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string | null>("");
@@ -31,7 +32,7 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
     isPending: isLoadingGetTransactionCategory,
     refetch: refetchTransactionCategoryData,
   } = useQuery({
-    queryKey: ["getTransactionCategory", companyId, page, selectedType, selectedCategory, selectedStatus],
+    queryKey: ["getTransactionCategory", companyId, page, limit, selectedType, selectedCategory, selectedStatus],
     queryFn: () =>
       getDataTransactionCategory({
         companyId: companyId as string,
@@ -44,12 +45,6 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
-
-  // console.log("transaction category", transactionCategoryData);
-
-  const totalPages = useMemo(() => {
-    return transactionCategoryData?.total ? Math.ceil(transactionCategoryData.total / limit) : 1;
-  }, [transactionCategoryData]);
 
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, transactionCategoryData?.total || 0);
@@ -165,14 +160,18 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
 
       <UpdateTransactionCategory companyId={companyId} initialValues={useModalStore((state) => state.modalData)} />
 
-      {totalPages > 0 && (
-        <Stack gap="xs" mt="40" style={{ paddingBottom: "16px" }}>
-          <Pagination total={totalPages} value={page} onChange={setPage} />
-          <Text size="sm" c="dimmed">
-            Menampilkan {startIndex} sampai {endIndex} dari {transactionCategoryData?.total} data
-          </Text>
-        </Stack>
-      )}
+      <PaginationWithLimit
+        total={transactionCategoryData?.total ?? 0}
+        page={page}
+        limit={limit}
+        startIndex={startIndex}
+        endIndex={endIndex}
+        onPageChange={setPage}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setPage(1);
+        }}
+      />
     </Card>
   );
 };

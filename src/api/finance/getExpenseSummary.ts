@@ -4,11 +4,11 @@ interface GetExpenseSummaryParams {
   companyId: string;
   page?: number;
   limit?: number;
-  summaryOnly?: boolean; // ✅ dibuat optional
+  summaryOnly?: boolean;
   status: string;
-  search?: string; // ✅ untuk pencarian
-  startDate?: string; // 👈 tambahkan
-  endDate?: string; // 👈 tambahkan
+  search?: string;
+  startDate?: string; // format: YYYY-MM-DD
+  endDate?: string; // format: YYYY-MM-DD
 }
 
 export const getExpenseSummary = async ({
@@ -18,23 +18,22 @@ export const getExpenseSummary = async ({
   summaryOnly,
   status,
   search,
-  startDate, // 👈 tambahkan
-  endDate, // 👈 tambahkan
+  startDate,
+  endDate,
 }: GetExpenseSummaryParams): Promise<IExpenseSummaryResponse> => {
   if (!companyId) {
     throw new Error("Company ID is required");
   }
 
-  const queryParams = new URLSearchParams({
-    company_id: companyId,
-    page: page.toString(),
-    limit: limit.toString(),
-  });
+  const queryParams = new URLSearchParams();
 
-  if (summaryOnly) queryParams.append("summary_only", "true"); // ✅ hanya kirim jika true
-  if (status) queryParams.append("status", status); // ✅ hanya kirim jika true
-  if (search) queryParams.append("search", search); // 🔍
-  if (startDate) queryParams.append("start_date", startDate); // <- gunakan format YYYY-MM-DD
+  queryParams.append("company_id", companyId);
+  queryParams.append("page", String(page));
+  queryParams.append("limit", String(limit));
+  if (summaryOnly) queryParams.append("summary_only", "true");
+  if (status) queryParams.append("status", status);
+  if (search) queryParams.append("search", search);
+  if (startDate) queryParams.append("start_date", startDate);
   if (endDate) queryParams.append("end_date", endDate);
 
   const url = `finance/get-expense-summary?${queryParams.toString()}`;

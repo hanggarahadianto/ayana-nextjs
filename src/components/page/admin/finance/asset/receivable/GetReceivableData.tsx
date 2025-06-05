@@ -13,6 +13,7 @@ import ReversedJournalEntryModal from "../../journalEntry/ReversedJournalEntryMo
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import { columnsBaseReceivableAsset } from "./ReceivableAssetColumn";
 import { useDebounce } from "use-debounce";
+import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -24,14 +25,13 @@ interface AssetSummaryCardProps {
 
 export const GetReceivableAssetData = ({ companyId, companyName, assetType, transactionType, title }: AssetSummaryCardProps) => {
   const [page, setPage] = useState(1);
-  const limit = 10;
+  const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
-
   const [selectedReceivableAsset, setSelectedReceivableAsset] = useState<IAssetSummaryItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -129,14 +129,18 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
       </Box>
       <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType={transactionType} />
 
-      {totalPages > 0 && (
-        <Stack gap="xs" mt={"md"} style={{ paddingBottom: "16px" }}>
-          <Pagination total={totalPages} value={page} onChange={setPage} />
-          <Text size="sm" c="dimmed">
-            Menampilkan {startIndex} sampai {endIndex} dari {receivableAssetSummaryData?.data.total} data
-          </Text>
-        </Stack>
-      )}
+      <PaginationWithLimit
+        total={receivableAssetSummaryData?.data.total ?? 0}
+        page={page}
+        limit={limit}
+        startIndex={startIndex}
+        endIndex={endIndex}
+        onPageChange={setPage}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setPage(1);
+        }}
+      />
       {selectedReceivableAsset && companyId && (
         <ReversedJournalEntryModal
           companyId={companyId}

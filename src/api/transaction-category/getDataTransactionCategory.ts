@@ -1,5 +1,3 @@
-// src/api/transaction-category/getDataTransactionCategory.ts
-
 import { APIAxiosInstance } from "@/lib";
 
 export interface GetTransactionCategoryParams {
@@ -26,26 +24,29 @@ export const getDataTransactionCategory = async ({
     return;
   }
 
-  let url = `transaction-category/get?company_id=${companyId}`;
+  const params = new URLSearchParams();
+  params.append("company_id", companyId);
 
   if (select) {
-    url += `&select=true`;
+    params.append("select", "true");
   } else {
-    url += `&page=${page}&limit=${limit}`;
+    params.append("page", String(page));
+    params.append("limit", String(limit));
   }
 
   if (transactionType) {
-    url += `&transaction_type=${encodeURIComponent(transactionType)}`;
+    params.append("transaction_type", transactionType);
   }
 
   if (category) {
-    url += `&category=${encodeURIComponent(category)}`;
+    params.append("category", category);
   }
 
   if (status) {
-    url += `&status=${encodeURIComponent(status)}`;
+    params.append("status", status);
   }
 
+  const url = `transaction-category/get?${params.toString()}`;
   const response = await APIAxiosInstance.get(url);
   return response.data as ITransactionCategoryResponse;
 };

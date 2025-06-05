@@ -11,6 +11,8 @@ import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import { columnsBaseCashIn } from "./CashInColumn";
+import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
+import { useDebounce } from "use-debounce";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -21,14 +23,15 @@ interface CashSummaryCardProps {
 
 export const GetCashinData = ({ companyId, companyName, assetType, transactionType }: CashSummaryCardProps) => {
   const [page, setPage] = useState(1);
-  const limit = 10;
+  const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
   const { data: cashinSummaryData, isPending: isLoadingCashinData } = useQuery({
-    queryKey: ["getCashinData", companyId, page, assetType, selectedCategory, searchTerm],
+    queryKey: ["getCashinData", companyId, page, limit, assetType, selectedCategory, debouncedSearch],
     queryFn: () =>
       getAssetSummary({
         companyId,
@@ -36,15 +39,12 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         limit,
         assetType,
         category: "Kas & Bank", // Hardcoded for Cash In
-        search: searchTerm, // 🔍
+        search: debouncedSearch, // 🔍
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
   const cashInList = cashinSummaryData?.data.assetList ?? [];
-
-  const totalPages = Math.ceil((cashinSummaryData?.data?.total ?? 0) / limit);
-
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, cashinSummaryData?.data.total || 0);
 
@@ -105,14 +105,18 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
 
       <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payin" />
 
-      {totalPages > 0 && (
-        <Stack gap="xs" mt="40" style={{ paddingBottom: "16px" }}>
-          <Pagination total={totalPages} value={page} onChange={setPage} />
-          <Text size="sm" c="dimmed">
-            Menampilkan {startIndex} sampai {endIndex} dari {cashinSummaryData?.data.total} data
-          </Text>
-        </Stack>
-      )}
+      <PaginationWithLimit
+        total={cashinSummaryData?.data.total ?? 0}
+        page={page}
+        limit={limit}
+        startIndex={startIndex}
+        endIndex={endIndex}
+        onPageChange={setPage}
+        onLimitChange={(newLimit) => {
+          setLimit(newLimit);
+          setPage(1);
+        }}
+      />
     </Card>
   );
 };

@@ -8,22 +8,24 @@ interface GetOutstandingDebtParams {
   status: string;
   summaryOnly?: boolean;
   search?: string;
+  startDate?: string; // 👈 tambahkan
+  endDate?: string; // 👈 tambahkan
 }
 
 export const getOutstandingDebt = async ({
   companyId,
-
   page = 1,
   limit = 10,
   status,
   summaryOnly,
   search,
+  startDate, // 👈 tambahkan
+  endDate, // 👈 tambahkan
 }: GetOutstandingDebtParams): Promise<IDebtSummaryResponse | undefined> => {
   if (!companyId) {
     console.error("Company ID tidak tersedia!");
     return;
   }
-
   const queryParams = new URLSearchParams({
     company_id: companyId,
     page: page.toString(),
@@ -33,6 +35,8 @@ export const getOutstandingDebt = async ({
   if (summaryOnly) queryParams.append("summary_only", "true");
   if (status) queryParams.append("status", status);
   if (search) queryParams.append("search", search); // 🔍
+  if (startDate) queryParams.append("start_date", startDate); // <- gunakan format YYYY-MM-DD
+  if (endDate) queryParams.append("end_date", endDate);
 
   const url = `/finance/get-outstanding-debt?${queryParams.toString()}`;
 
