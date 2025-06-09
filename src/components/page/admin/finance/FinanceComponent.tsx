@@ -6,6 +6,8 @@ import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import GlobalTab from "@/components/common/tab/TabGlobal";
+import { Flex, Group, SimpleGrid } from "@mantine/core";
+import { GetEquitySummaryData } from "./equity/GetEquitySummaryData";
 
 export default function FinanceComponent() {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
@@ -14,6 +16,11 @@ export default function FinanceComponent() {
     <SimpleGridGlobal cols={1}>
       <LoadingGlobal visible={isLoadingCompanies} />
       <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
+      <SimpleGrid cols={2} spacing="20px">
+        <GetEquitySummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} equityType="setor" />
+        <GetEquitySummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} equityType="tarik" />
+      </SimpleGrid>
+
       <SimpleGridGlobal cols={1} gap="20px">
         <TransactionCategoryCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
         <AccountCard companyId={activeTab?.id || ""} companyName={activeTab?.title} />
