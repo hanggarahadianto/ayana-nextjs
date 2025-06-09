@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from "react";
-import { Modal, Button, Group, Stack, Alert, SimpleGrid } from "@mantine/core";
+import { Modal, Button, Group, Stack, SimpleGrid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form } from "formik";
 import ButtonAdd from "@/components/common/button/buttonAdd";

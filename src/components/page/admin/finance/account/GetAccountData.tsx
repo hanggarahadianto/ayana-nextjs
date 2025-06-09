@@ -1,8 +1,8 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Group, Flex, Select } from "@mantine/core";
+import { Card, Text, Stack, Group, Flex, Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { getDataAccount } from "@/api/account/getDataAccount";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import AddAccountModal from "./AddAccountModal";
 import TableComponent from "@/components/common/table/TableComponent";
 import { useModalStore } from "@/store/modalStore";

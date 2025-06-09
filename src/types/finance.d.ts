@@ -138,3 +138,38 @@ interface IEquitySummaryResponse {
   message: string;
   status: string;
 }
+interface IRevenueSummaryItem {
+  id: string;
+  transaction_id: string;
+  invoice: string;
+  description: string;
+  partner: string;
+  amount: number;
+  partner: string;
+  transaction_type: "payin" | "payout"; // bisa disesuaikan kalau ada lebih dari dua tipe
+  status: "paid" | "unpaid" | "completed" | "cancelled" | "done"; // sesuaikan dengan status yang valid di sistem
+  company_id: string;
+  date_inputed: string;
+  due_date: string;
+  repayment_date: string;
+  is_repaid: boolean;
+  installment: number;
+  note: string;
+  transaction_category_id: string;
+  payment_date_status: string;
+  label: string;
+}
+
+interface IRevenueSummaryData {
+  revenueList: IRevenueSummaryItem[];
+  total_revenue: number;
+  page: number;
+  limit: number;
+  total: number;
+}
+
+interface IRevenueSummaryResponse {
+  data: IRevenueSummaryData;
+  message: string;
+  status: string;
+}

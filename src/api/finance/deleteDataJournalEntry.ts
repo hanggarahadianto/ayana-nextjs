@@ -3,12 +3,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import { APIAxiosInstance } from "../../lib";
 
-// Function to delete a project
 const handleDeleteJournalEntry = async (idToDelete: string): Promise<AxiosResponse<any>> => {
   return APIAxiosInstance.delete(`journal-entry/delete/${idToDelete}`);
 };
 
-// Mutation function for deleting a project
 export const useDeleteDataJournalEntry = () => {
   const queryClient = useQueryClient();
 

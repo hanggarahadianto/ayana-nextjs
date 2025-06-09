@@ -12,8 +12,8 @@ import UpdateJournalEntryModal from "../journalEntry/UpdateJournalEntryModal";
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import { useDebounce } from "use-debounce";
-import { columnsBaseEquity } from "./EquityData";
 import { getEquitySummary } from "@/api/finance/getEquitySummary";
+import { columnsBaseEquity } from "./EquityColumn";
 
 interface GetEquityDataProps {
   companyId: string;

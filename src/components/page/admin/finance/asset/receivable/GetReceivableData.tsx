@@ -1,4 +1,4 @@
-import { Card, Text, Group, Stack, Box, Pagination, Flex, Badge } from "@mantine/core";
+import { Card, Text, Group, Stack, Box } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";

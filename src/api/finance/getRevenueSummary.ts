@@ -1,27 +1,27 @@
 import { APIAxiosInstance } from "@/lib";
 
 // ✅ update fungsi ini
-interface EquityParams {
+interface RevenueParams {
   companyId: string;
   page?: number;
   limit?: number;
-  equityType?: string; // 👈 tambahkan jika perlu
+  revenueType?: string; // 👈 tambahkan jika perlu
   summaryOnly?: boolean;
   search?: string;
   startDate?: string; // 👈 tambahkan
   endDate?: string; // 👈 tambahkan
 }
 
-export const getEquitySummary = async ({
+export const getRevenueSummary = async ({
   companyId,
   page = 1,
   limit = 10,
   summaryOnly,
-  equityType,
+  revenueType,
   search,
   startDate, // 👈 tambahkan
   endDate, // 👈 tambahkan
-}: EquityParams): Promise<IEquitySummaryResponse | undefined> => {
+}: RevenueParams): Promise<IRevenueSummaryResponse | undefined> => {
   if (!companyId) {
     console.error("Company ID tidak tersedia!");
     return;
@@ -31,19 +31,19 @@ export const getEquitySummary = async ({
     page: page.toString(),
     limit: limit.toString(),
   });
-  if (equityType) queryParams.append("equity_type", equityType); // 👈 tambahkan jika perlu
+  if (revenueType) queryParams.append("revenue_type", revenueType); // 👈 tambahkan jika perlu
   if (summaryOnly) queryParams.append("summary_only", "true");
   if (search) queryParams.append("search", search); // 🔍
   if (startDate) queryParams.append("start_date", startDate); // <- gunakan format YYYY-MM-DD
   if (endDate) queryParams.append("end_date", endDate);
 
-  const url = `/finance/get-equity-summary?${queryParams.toString()}`;
+  const url = `/finance/get-revenue-summary?${queryParams.toString()}`;
 
   try {
     const response = await APIAxiosInstance.get(url);
-    return response.data as IEquitySummaryResponse;
+    return response.data as IRevenueSummaryResponse;
   } catch (error: any) {
-    console.error("Gagal mengambil data equity:", error.message || error);
+    console.error("Gagal mengambil data revenue:", error.message || error);
     throw error;
   }
 };

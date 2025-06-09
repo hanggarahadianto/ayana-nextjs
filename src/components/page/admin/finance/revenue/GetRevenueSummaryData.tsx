@@ -3,7 +3,6 @@ import { Card, Text, Stack, Box, Group } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { formatCurrency } from "@/helper/formatCurrency";
-import { getExpenseSummary } from "@/api/finance/getExpenseSummary";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
@@ -11,15 +10,17 @@ import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry"
 import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../journalEntry/UpdateJournalEntryModal";
 import SearchTable from "@/components/common/table/SearchTableComponent";
-import { columnsBaseExpense } from "./ExpenseColumn";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import { useDebounce } from "use-debounce";
+import { getRevenueSummary } from "@/api/finance/getRevenueSummary";
+import { columnsBaseRevenue } from "./RevenueColumn";
 
-interface GetExpenseDataProps {
+interface GetRevenueDataProps {
   companyId: string;
   companyName?: string;
+  revenueType?: string;
 }
-export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseDataProps) => {
+export const GetRevenueSummaryData = ({ companyId, companyName, revenueType }: GetRevenueDataProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -30,30 +31,28 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
   const [endDate, setEndDate] = useState<Date | null>(null);
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
-  const status = "base";
-
   const {
-    data: expenseData,
-    isLoading: isLoadingExpense,
-    refetch: refetchExpenseData,
+    data: revenueData,
+    isLoading: isLoadingRevenue,
+    refetch: refetchRquityData,
   } = useQuery({
     queryKey: [
-      "getExpenseSummaryData",
+      "getRevenueSummaryData",
       companyId,
       page,
       limit,
-      status,
+      revenueType,
       debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
     ],
     queryFn: () =>
       companyId
-        ? getExpenseSummary({
+        ? getRevenueSummary({
             companyId,
             page,
             limit,
-            status,
+            revenueType: revenueType ?? "",
             search: debouncedSearch,
             startDate: formattedStartDate,
             endDate: formattedEndDate,
@@ -63,33 +62,37 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
     refetchOnWindowFocus: false,
   });
 
-  const expenseList = expenseData?.data.expenseList ?? [];
-  const startIndex = (page - 1) * limit + 1;
-  const endIndex = Math.min(page * limit, expenseData?.data.total || 0);
+  //   console.log("RevenueData", RevenueData);
 
-  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteExpense } = useDeleteDataJournalEntry();
+  const RevenueList = revenueData?.data.revenueList ?? [];
+
+  //   console.log("RevenueList", RevenueList);
+  const startIndex = (page - 1) * limit + 1;
+  const endIndex = Math.min(page * limit, revenueData?.data.total || 0);
+
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteRevenue } = useDeleteDataJournalEntry();
   const handleDeleteDataJournal = (idToDelete: string) => {
     mutateDeleteDataJournal(idToDelete);
   };
 
-  const openEditModal = (expenseData: IExpenseSummaryItem) => {
-    useModalStore.getState().openModal("editExpenseData", expenseData);
+  const openEditModal = (RevenueData: IRevenueSummaryItem) => {
+    useModalStore.getState().openModal("editRevenueData", RevenueData);
   };
 
-  const columns = columnsBaseExpense(openEditModal, handleDeleteDataJournal);
+  const columns = columnsBaseRevenue(openEditModal, handleDeleteDataJournal);
 
   return (
     <SimpleGridGlobal cols={1}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
-        <LoadingGlobal visible={isLoadingExpense || isLoadingDeleteExpense} />
+        <LoadingGlobal visible={isLoadingRevenue || isLoadingDeleteRevenue} />
         <Group justify="space-between">
           <Stack>
             <Text size="xl" fw={600}>
-              Pengeluaran {companyName}
+              Pendapatan {companyName}
             </Text>
           </Stack>
-          <Text size="xl" fw={800} c={"red"} mt={20}>
-            -{formatCurrency(expenseData?.data.total_expense ?? 0)}
+          <Text size="xl" fw={800} c={"teal"} mt={20}>
+            {formatCurrency(revenueData?.data.total_revenue ?? 0)}
           </Text>
         </Group>
         <SearchTable
@@ -108,8 +111,8 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
         <Box style={{ flex: 1 }}>
           <TableComponent
             startIndex={startIndex}
-            data={expenseList}
-            totalAmount={expenseData?.data?.total_expense ?? 0}
+            data={RevenueList}
+            totalAmount={revenueData?.data?.total_revenue ?? 0}
             height={"580"}
             columns={columns}
           />
@@ -118,7 +121,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
         <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />
 
         <PaginationWithLimit
-          total={expenseData?.data.total ?? 0}
+          total={revenueData?.data.total ?? 0}
           page={page}
           limit={limit}
           startIndex={startIndex}
