@@ -28,7 +28,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
+  const [debouncedSearch] = useDebounce(searchTerm, 500);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
@@ -60,7 +60,6 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
     refetchOnWindowFocus: false,
   });
   const assetList = cashOutSummaryData?.data.assetList ?? [];
-  const totalPages = Math.ceil((cashOutSummaryData?.data?.total ?? 0) / limit);
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, cashOutSummaryData?.data.total || 0);
 
@@ -92,7 +91,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
         <Stack align="flex-end" mb={16}>
           <CreateJournalEntryModal companyId={companyId} transactionType={"payout"} />
           <Text size="xl" fw={800} c={"red"} mt={20}>
-            -{formatCurrency(cashOutSummaryData?.data.total_asset ?? 0)}
+            {formatCurrency(cashOutSummaryData?.data.total_asset ?? 0)}
           </Text>
         </Stack>
       </Group>

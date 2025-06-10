@@ -7,6 +7,7 @@ interface GetOutstandingDebtParams {
   limit?: number;
   status: string;
   summaryOnly?: boolean;
+  selectedCategory?: string;
   search?: string;
   startDate?: string; // 👈 tambahkan
   endDate?: string; // 👈 tambahkan
@@ -18,6 +19,7 @@ export const getOutstandingDebt = async ({
   limit = 10,
   status,
   summaryOnly,
+  selectedCategory,
   search,
   startDate, // 👈 tambahkan
   endDate, // 👈 tambahkan
@@ -35,6 +37,7 @@ export const getOutstandingDebt = async ({
   if (summaryOnly) queryParams.append("summary_only", "true");
   if (status) queryParams.append("status", status);
   if (search) queryParams.append("search", search); // 🔍
+  if (selectedCategory) queryParams.append("category", selectedCategory);
   if (startDate) queryParams.append("start_date", startDate); // <- gunakan format YYYY-MM-DD
   if (endDate) queryParams.append("end_date", endDate);
 

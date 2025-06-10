@@ -44,10 +44,6 @@ export default function SearchTable({
     setEndDate(null);
   };
 
-  // useEffect(() => {
-  //   console.log("Received debitAccountType:", debitAccountType);
-  // }, [debitAccountType]);
-
   return (
     <Group>
       <SelectCategoryFilter

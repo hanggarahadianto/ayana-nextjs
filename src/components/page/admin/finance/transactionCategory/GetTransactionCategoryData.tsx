@@ -11,7 +11,7 @@ import { useModalStore } from "@/store/modalStore";
 import { useDeleteDataTransactionCategory } from "@/api/transaction-category/deleteDataTransactionCategory";
 import UpdateTransactionCategory from "./UpdateTransactionCategory";
 import { getDataTransactionCategory } from "@/api/transaction-category/getDataTransactionCategory";
-import { paymentStatus, transactionTypeOptions } from "@/constants/dictionary";
+import { accountTypeOptions, paymentStatus, transactionTypeOptions } from "@/constants/dictionary";
 import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 
@@ -24,7 +24,11 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedType, setSelectedType] = useState<string | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  // const [selectedDebitCategory, setSelectedDebitCategory] = useState<string | null>(null);
+  // const [selectedCreditCategory, setSelectedCreditCategory] = useState<string | null>(null);
+  const [selectedDebitAccount, setSelectedDebitAccount] = useState<string | null>(null);
+  const [selectedCreditAccount, setSelectedCreditAccount] = useState<string | null>(null);
+
   const [selectedStatus, setSelectedStatus] = useState<string | null>("");
 
   const {
@@ -32,14 +36,28 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
     isPending: isLoadingGetTransactionCategory,
     refetch: refetchTransactionCategoryData,
   } = useQuery({
-    queryKey: ["getTransactionCategory", companyId, page, limit, selectedType, selectedCategory, selectedStatus],
+    queryKey: [
+      "getTransactionCategory",
+      companyId,
+      page,
+      limit,
+      selectedType,
+      selectedDebitAccount,
+      selectedCreditAccount,
+      // selectedDebitCategory,
+      // selectedCreditCategory,
+      selectedStatus,
+    ],
     queryFn: () =>
       getDataTransactionCategory({
         companyId: companyId as string,
         page,
         limit,
         transactionType: selectedType,
-        category: selectedCategory,
+        selectedDebitAccount,
+        selectedCreditAccount,
+        // selectedDebitCategory,
+        // selectedCreditCategory,
         status: selectedStatus, // bisa juga dihapus kalau tidak dipakai
       }),
     enabled: !!companyId,
@@ -61,48 +79,80 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingGetTransactionCategory || isLoadingDeleteTransactionCategory} />
-      <Group justify="space-between">
-        <Stack>
+      <Stack>
+        <Group justify="space-between">
           <Text size="xl" fw={600}>
             Transaksi Kategori {companyName}
           </Text>
-          <Group>
+          <Stack align="flex-end" mb={16}>
+            <AddTransactionCategoryModal companyId={companyId} refetchTransactionCategoryData={refetchTransactionCategoryData} />
+          </Stack>
+        </Group>
+        <Group>
+          {/* <SelectCategoryFilter
+              companyId={companyId}
+              value={selectedDebitCategory}
+              onChange={(value) => {
+                setSelectedDebitCategory(value);
+              }}
+              transactionType={null}
+              debitAccountType={null}
+              creditAccountType={null}
+            />
             <SelectCategoryFilter
               companyId={companyId}
-              value={selectedCategory}
+              value={selectedCreditCategory}
               onChange={(value) => {
-                setSelectedCategory(value);
+                setSelectedCreditCategory(value);
               }}
-            />
-            <Select
-              label="Filter Berdasarkan Tipe Transaksi"
-              placeholder="Pilih Type"
-              data={transactionTypeOptions}
-              value={selectedType}
-              onChange={(value) => {
-                setSelectedType(value);
-              }}
-              clearable
-              style={{ width: 250 }}
-            />
+              transactionType={null}
+              debitAccountType={null}
+              creditAccountType={null}
+            /> */}
+          <Select
+            label="Filter Berdasarkan Tipe Akun (Debit)"
+            placeholder="Pilih Type"
+            data={accountTypeOptions}
+            value={selectedDebitAccount}
+            onChange={(value) => setSelectedDebitAccount(value)} // value: string | null
+            clearable
+            style={{ width: 250 }}
+          />
 
-            <Select
-              label="Filter Status Pembayaran"
-              placeholder="Pilih Status"
-              data={paymentStatus}
-              value={selectedStatus}
-              onChange={(value) => {
-                setSelectedStatus(value);
-              }}
-              clearable
-              style={{ width: 250 }}
-            />
-          </Group>
-        </Stack>
-        <Stack align="flex-end" mb={16}>
-          <AddTransactionCategoryModal companyId={companyId} refetchTransactionCategoryData={refetchTransactionCategoryData} />
-        </Stack>
-      </Group>
+          <Select
+            label="Filter Berdasarkan Tipe Akun (Kredit)"
+            placeholder="Pilih Type"
+            data={accountTypeOptions}
+            value={selectedCreditAccount}
+            onChange={(value) => setSelectedCreditAccount(value)} // value: string | null
+            clearable
+            style={{ width: 250 }}
+          />
+          <Select
+            label="Filter Berdasarkan Tipe Transaksi"
+            placeholder="Pilih Type"
+            data={transactionTypeOptions}
+            value={selectedType}
+            onChange={(value) => {
+              setSelectedType(value);
+            }}
+            clearable
+            style={{ width: 250 }}
+          />
+
+          <Select
+            label="Filter Status Pembayaran"
+            placeholder="Pilih Status"
+            data={paymentStatus}
+            value={selectedStatus}
+            onChange={(value) => {
+              setSelectedStatus(value);
+            }}
+            clearable
+            style={{ width: 250 }}
+          />
+        </Group>
+      </Stack>
 
       <TableComponent<ITransactionCategory>
         startIndex={startIndex}
@@ -122,7 +172,8 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
               return `${row.transaction_label} ${row.name} ( ${statusLabel} )`;
             },
           },
-          { key: "category", title: "Kategori", width: 160, minWidth: 160 },
+          { key: "debit_category", title: "Debit Kategori", width: 160, minWidth: 160 },
+          { key: "credit_category", title: "Kredit Kategori", width: 160, minWidth: 160 },
           {
             key: "status",
             title: "Status",

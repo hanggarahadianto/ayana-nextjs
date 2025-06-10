@@ -23,7 +23,6 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  // console.log("selected category", selectedCategory);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
 
@@ -42,6 +41,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
     queryKey: [
       "getExpenseSummaryData",
       companyId,
+      selectedCategory,
       page,
       limit,
       status,
@@ -53,6 +53,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
       companyId
         ? getExpenseSummary({
             companyId,
+            selectedCategory: selectedCategory ?? undefined,
             page,
             limit,
             status,
@@ -107,7 +108,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
           transactionType={transactionType}
           debitAccountType={"Expense"}
           creditAccountType={""}
-          // readonly
+          readonly={false}
         />
 
         <Box style={{ flex: 1 }}>

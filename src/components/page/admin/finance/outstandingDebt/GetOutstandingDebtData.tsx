@@ -43,6 +43,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
     queryKey: [
       "getOutstandingDebtByCompanyId",
       companyId,
+      selectedCategory,
       page,
       limit,
       status,
@@ -54,6 +55,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
       companyId
         ? getOutstandingDebt({
             companyId,
+            selectedCategory: selectedCategory ?? undefined,
             page,
             limit,
             status,
@@ -104,7 +106,6 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
       </Group>
       <SearchTable
         companyId={companyId}
-        category=""
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         selectedCategory={selectedCategory}
@@ -113,6 +114,9 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
         setStartDate={setStartDate}
         endDate={endDate}
         setEndDate={setEndDate}
+        transactionType={transactionType}
+        debitAccountType={"Liability"}
+        creditAccountType={""}
         readonly={false}
       />
       <TableComponent

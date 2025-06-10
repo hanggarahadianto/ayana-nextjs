@@ -5,6 +5,7 @@ interface GetExpenseSummaryParams {
   page?: number;
   limit?: number;
   summaryOnly?: boolean;
+  selectedCategory?: string;
   status: string;
   search?: string;
   startDate?: string; // format: YYYY-MM-DD
@@ -16,6 +17,7 @@ export const getExpenseSummary = async ({
   page = 1,
   limit = 10,
   summaryOnly,
+  selectedCategory,
   status,
   search,
   startDate,
@@ -32,6 +34,7 @@ export const getExpenseSummary = async ({
   queryParams.append("limit", String(limit));
   if (summaryOnly) queryParams.append("summary_only", "true");
   if (status) queryParams.append("status", status);
+  if (selectedCategory) queryParams.append("category", selectedCategory);
   if (search) queryParams.append("search", search);
   if (startDate) queryParams.append("start_date", startDate);
   if (endDate) queryParams.append("end_date", endDate);

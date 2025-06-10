@@ -19,8 +19,9 @@ interface GetRevenueDataProps {
   companyId: string;
   companyName?: string;
   revenueType?: string;
+  title: string;
 }
-export const GetRevenueSummaryData = ({ companyId, companyName, revenueType }: GetRevenueDataProps) => {
+export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, title }: GetRevenueDataProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -88,7 +89,8 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType }: G
         <Group justify="space-between">
           <Stack>
             <Text size="xl" fw={600}>
-              Pendapatan {companyName}
+              Pendapatan {title} {""}
+              {companyName}
             </Text>
           </Stack>
           <Text size="xl" fw={800} c={"teal"} mt={20}>
@@ -105,7 +107,10 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType }: G
           setStartDate={setStartDate}
           endDate={endDate}
           setEndDate={setEndDate}
-          readonly
+          readonly={false}
+          transactionType={null}
+          debitAccountType={null}
+          creditAccountType={null}
         />
 
         <Box style={{ flex: 1 }}>

@@ -119,7 +119,7 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
                       onSelect={(selected) => {
                         setFieldValue("debit_account_id", selected?.id);
                         setFieldValue("debit_account_type", selected?.type);
-                        setFieldValue("category", selected?.category);
+                        setFieldValue("debit_category", selected?.category);
                       }}
                       all={true}
                       label={"Tipe Akun Debit"}
@@ -131,6 +131,7 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
                       onSelect={(selected) => {
                         setFieldValue("credit_account_id", selected?.id);
                         setFieldValue("credit_account_type", selected?.type);
+                        setFieldValue("credit_category", selected?.category);
                       }}
                       all={true}
                       label={"Tipe Akun Kredit"}
@@ -138,10 +139,18 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
                     />
 
                     <TextInput
-                      label="Kategori "
-                      error={touched.category && errors.category}
+                      label="Debit Kategori "
+                      error={touched.debit_category && errors.credit_category}
                       placeholder="Kategori"
-                      value={values.category}
+                      value={values.debit_category}
+                      onBlur={handleBlur}
+                      readOnly
+                    />
+                    <TextInput
+                      label="Kredit Kategori "
+                      error={touched.credit_category && errors.credit_category}
+                      placeholder="Kredit Kategori"
+                      value={values.credit_category}
                       onBlur={handleBlur}
                       readOnly
                     />

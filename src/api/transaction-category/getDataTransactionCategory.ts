@@ -5,7 +5,10 @@ export interface GetTransactionCategoryParams {
   page?: number;
   limit?: number;
   transactionType?: string | null;
-  category?: string | null;
+  selectedDebitAccount: string | null;
+  selectedCreditAccount: string | null;
+  selectedDebitCategory?: string | null;
+  selectedCreditCategory?: string | null;
   status?: string | null;
   select?: boolean;
 }
@@ -15,7 +18,10 @@ export const getDataTransactionCategory = async ({
   page = 1,
   limit = 10,
   transactionType,
-  category,
+  selectedDebitAccount,
+  selectedCreditAccount,
+  selectedDebitCategory,
+  selectedCreditCategory,
   status,
   select = false,
 }: GetTransactionCategoryParams) => {
@@ -33,15 +39,21 @@ export const getDataTransactionCategory = async ({
     params.append("page", String(page));
     params.append("limit", String(limit));
   }
-
   if (transactionType) {
     params.append("transaction_type", transactionType);
   }
-
-  if (category) {
-    params.append("category", category);
+  if (selectedDebitAccount) {
+    params.append("debit_account_type", selectedDebitAccount);
   }
-
+  if (selectedCreditAccount) {
+    params.append("credit_account_type", selectedCreditAccount);
+  }
+  if (selectedDebitCategory) {
+    params.append("debit_category", selectedDebitCategory);
+  }
+  if (selectedCreditCategory) {
+    params.append("credit_category", selectedCreditCategory);
+  }
   if (status) {
     params.append("status", status);
   }

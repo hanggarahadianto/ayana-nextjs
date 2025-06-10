@@ -8,8 +8,6 @@ interface SelectCategoryFilterProps {
   companyId: string;
   value: string | null;
   transactionType: string | null;
-  // selectedCategory: string | null;
-
   debitAccountType: string | null;
   creditAccountType: string | null;
   onChange: (value: string | null) => void;
@@ -20,7 +18,6 @@ const SelectCategoryFilter: React.FC<SelectCategoryFilterProps> = ({
   companyId,
   value,
   transactionType,
-  // selectedCategory,
   debitAccountType,
   creditAccountType,
   onChange,
@@ -31,6 +28,8 @@ const SelectCategoryFilter: React.FC<SelectCategoryFilterProps> = ({
     queryFn: () => getTransactionCategoryByCategoryOnly(companyId, transactionType, debitAccountType, creditAccountType),
     enabled: !!companyId,
   });
+
+  console.log("data", transactionCategoryData);
 
   // data structure: { data: string[]; status: string }
   const options =

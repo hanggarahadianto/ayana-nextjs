@@ -9,6 +9,7 @@ export const validationSchemaTransactionCategory = yup.object().shape({
   debit_account_id: yup.string().required("Akun debit wajib diisi"),
   credit_account_id: yup.string().required("Akun kredit wajib diisi"),
   transaction_type: yup.string().required("Tipe Transaksi wajib diisi"),
-  category: yup.string().required("Kategori wajib diisi"),
+  debit_category: yup.string().required("Kategori debit wajib diisi"),
+  credit_category: yup.string().required("Kategori kredit wajib diisi"),
   description: yup.string().required("Deskripsi harus diisi"),
 });

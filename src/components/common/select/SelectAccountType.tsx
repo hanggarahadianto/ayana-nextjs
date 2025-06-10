@@ -11,7 +11,7 @@ interface ISelectFinanceAccountProps {
   onSelect: (selected: { id: string; category: string; code?: string; type?: string; name?: string } | null) => void;
   label: string;
   error: any;
-  value?: string | null; // Tambahan
+  value?: string | null;
 }
 
 export default function SelectFinanceAccount({
@@ -52,7 +52,6 @@ export default function SelectFinanceAccount({
       } else {
         onSelect({
           id: selected.id,
-
           type: selected.type,
           category: selected.category,
           name: selected.name,
@@ -88,7 +87,7 @@ export default function SelectFinanceAccount({
         clearable
         label={label}
         placeholder={`Pilih ${label ?? ""}`}
-        onChange={handleSelect} // Handle change and reset to null
+        onChange={handleSelect}
         data={accountOptions}
         disabled={isLoading}
         styles={{

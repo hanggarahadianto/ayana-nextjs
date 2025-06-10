@@ -23,7 +23,6 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedType, setSelectedType] = useState<string | null>(null);
-
   const {
     data: accountData,
     isPending: isLoadingGetAccount,

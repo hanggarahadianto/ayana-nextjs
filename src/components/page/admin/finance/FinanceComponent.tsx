@@ -18,8 +18,18 @@ export default function FinanceComponent() {
       <LoadingGlobal visible={isLoadingCompanies} />
       <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
       <SimpleGrid cols={1}>
-        <GetRevenueSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} revenueType="realized" />
-        <GetRevenueSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} revenueType="unrealized" />
+        <GetRevenueSummaryData
+          companyId={activeTab?.id || ""}
+          companyName={activeTab?.title}
+          revenueType="realized"
+          title={"Terealisasi"}
+        />
+        <GetRevenueSummaryData
+          companyId={activeTab?.id || ""}
+          companyName={activeTab?.title}
+          revenueType="unrealized"
+          title={"Belum Terealisasi"}
+        />
       </SimpleGrid>
       <SimpleGrid cols={2} spacing="20px">
         <GetEquitySummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} equityType="setor" />
