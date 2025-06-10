@@ -92,7 +92,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
         <Stack align="flex-end" mb={16}>
           <CreateJournalEntryModal companyId={companyId} transactionType={"payout"} />
           <Text size="xl" fw={800} c={"red"} mt={20}>
-            {formatCurrency(cashOutSummaryData?.data.total_asset ?? 0)}
+            -{formatCurrency(cashOutSummaryData?.data.total_asset ?? 0)}
           </Text>
         </Stack>
       </Group>
@@ -106,7 +106,10 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
         setStartDate={setStartDate}
         endDate={endDate}
         setEndDate={setEndDate}
-        readonly
+        // readonly
+        transactionType={null}
+        debitAccountType={null}
+        creditAccountType={null}
       />
       <Box style={{ flex: 1 }}>
         <TableComponent

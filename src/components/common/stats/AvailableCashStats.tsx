@@ -35,10 +35,6 @@ export const AvailableCashStats = ({ companyId }: AvailableCashStatsProps) => {
   const totalCashOut = cashOutData?.data?.total_asset ?? 0;
   const availableCash = totalCashIn - Math.abs(totalCashOut);
 
-  // console.log("Total Cash In:", totalCashIn);
-  // console.log("Total Cash Out:", totalCashOut);
-  // console.log("Available Cash:", availableCash);
-
   const statsData: StatItem[] = [
     {
       title: "Available Cash",

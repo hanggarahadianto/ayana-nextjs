@@ -7,14 +7,28 @@ import React from "react";
 interface SelectCategoryFilterProps {
   companyId: string;
   value: string | null;
+  transactionType: string | null;
+  // selectedCategory: string | null;
+
+  debitAccountType: string | null;
+  creditAccountType: string | null;
   onChange: (value: string | null) => void;
   readonly?: boolean;
 }
 
-const SelectCategoryFilter: React.FC<SelectCategoryFilterProps> = ({ companyId, value, onChange, readonly = false }) => {
+const SelectCategoryFilter: React.FC<SelectCategoryFilterProps> = ({
+  companyId,
+  value,
+  transactionType,
+  // selectedCategory,
+  debitAccountType,
+  creditAccountType,
+  onChange,
+  readonly = false,
+}) => {
   const { data: transactionCategoryData, isLoading } = useQuery({
-    queryKey: ["getTransactionCategoryByCategoryOnly", companyId],
-    queryFn: () => getTransactionCategoryByCategoryOnly(companyId),
+    queryKey: ["getTransactionCategoryByCategoryOnly", companyId, , transactionType, debitAccountType, creditAccountType],
+    queryFn: () => getTransactionCategoryByCategoryOnly(companyId, transactionType, debitAccountType, creditAccountType),
     enabled: !!companyId,
   });
 

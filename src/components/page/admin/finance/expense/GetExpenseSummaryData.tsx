@@ -23,6 +23,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  // console.log("selected category", selectedCategory);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
 
@@ -31,6 +32,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
   const status = "base";
+  const transactionType = "payout";
 
   const {
     data: expenseData,
@@ -102,7 +104,10 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
           setStartDate={setStartDate}
           endDate={endDate}
           setEndDate={setEndDate}
-          readonly
+          transactionType={transactionType}
+          debitAccountType={"Expense"}
+          creditAccountType={""}
+          // readonly
         />
 
         <Box style={{ flex: 1 }}>

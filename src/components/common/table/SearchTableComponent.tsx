@@ -3,34 +3,39 @@ import { ActionIcon, Group, Stack, TextInput, Tooltip } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar, IconX } from "@tabler/icons-react";
 import { MdClose } from "react-icons/md";
-import { useState } from "react";
 import SelectCategoryFilter from "../select/SelectCategoryFilter";
 import { useMediaQuery } from "@mantine/hooks";
+import { useEffect } from "react";
 
 interface SearchTableProps {
   companyId: string;
-  category?: string;
   searchTerm: string;
   setSearchTerm: (value: string) => void;
-  selectedCategory: string | null;
+  selectedCategory?: string | null;
   setSelectedCategory: (value: string | null) => void;
   startDate: Date | null;
   setStartDate: (value: Date | null) => void;
   endDate: Date | null;
   setEndDate: (value: Date | null) => void;
+  transactionType: string | null;
+  debitAccountType: string | null;
+  creditAccountType: string | null;
   readonly?: boolean;
 }
 
 export default function SearchTable({
   companyId,
-  category,
   searchTerm,
   setSearchTerm,
+  selectedCategory,
   setSelectedCategory,
   startDate,
   setStartDate,
   endDate,
   setEndDate,
+  transactionType,
+  debitAccountType,
+  creditAccountType,
   readonly = false,
 }: SearchTableProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -39,9 +44,21 @@ export default function SearchTable({
     setEndDate(null);
   };
 
+  // useEffect(() => {
+  //   console.log("Received debitAccountType:", debitAccountType);
+  // }, [debitAccountType]);
+
   return (
     <Group>
-      <SelectCategoryFilter companyId={companyId} value={category ?? null} onChange={setSelectedCategory} readonly={readonly} />
+      <SelectCategoryFilter
+        companyId={companyId}
+        value={selectedCategory ?? null}
+        onChange={setSelectedCategory}
+        readonly={readonly}
+        transactionType={transactionType}
+        debitAccountType={debitAccountType}
+        creditAccountType={creditAccountType}
+      />
 
       <TextInput
         w={400}

@@ -52,7 +52,7 @@ export const StatsGrid = ({ data }: StatsGridProps) => {
             </Group>
           </Flex>
 
-          <Group gap="xs" mt={40}>
+          <Group gap="xs" mt={12}>
             <Text
               c={Number(stat.value) < 0 ? "red.7" : stat.color}
               style={{
@@ -65,7 +65,6 @@ export const StatsGrid = ({ data }: StatsGridProps) => {
             </Text>
           </Group>
 
-          {/* Comparison Text */}
           <Group>
             <Text fz="xs" c="dimmed" w="100%">
               Compared to previous month
@@ -78,8 +77,6 @@ export const StatsGrid = ({ data }: StatsGridProps) => {
 
   return (
     <div>
-      {/* <div style={{ padding: "calc(var(--mantine-spacing-xl) * 1.5)" }}> */}
-      {/* Pass total number of items (data.length) to SimpleGridGlobal */}
       <Stack>{stats}</Stack>
     </div>
   );
