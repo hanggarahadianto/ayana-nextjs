@@ -34,7 +34,7 @@ export const getExpenseSummary = async ({
   queryParams.append("limit", String(limit));
   if (summaryOnly) queryParams.append("summary_only", "true");
   if (status) queryParams.append("status", status);
-  if (selectedCategory) queryParams.append("category", selectedCategory);
+  if (selectedCategory) queryParams.append("debit_category", selectedCategory);
   if (search) queryParams.append("search", search);
   if (startDate) queryParams.append("start_date", startDate);
   if (endDate) queryParams.append("end_date", endDate);

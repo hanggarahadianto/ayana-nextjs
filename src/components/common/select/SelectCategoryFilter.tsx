@@ -29,7 +29,7 @@ const SelectCategoryFilter: React.FC<SelectCategoryFilterProps> = ({
     enabled: !!companyId,
   });
 
-  console.log("data", transactionCategoryData);
+  // console.log("data", transactionCategoryData);
 
   // data structure: { data: string[]; status: string }
   const options =

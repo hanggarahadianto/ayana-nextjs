@@ -12,7 +12,6 @@ import { useDeleteDataTransactionCategory } from "@/api/transaction-category/del
 import UpdateTransactionCategory from "./UpdateTransactionCategory";
 import { getDataTransactionCategory } from "@/api/transaction-category/getDataTransactionCategory";
 import { accountTypeOptions, paymentStatus, transactionTypeOptions } from "@/constants/dictionary";
-import SelectCategoryFilter from "@/components/common/select/SelectCategoryFilter";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 
 interface AccountCardProps {
@@ -24,11 +23,8 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedType, setSelectedType] = useState<string | null>(null);
-  // const [selectedDebitCategory, setSelectedDebitCategory] = useState<string | null>(null);
-  // const [selectedCreditCategory, setSelectedCreditCategory] = useState<string | null>(null);
   const [selectedDebitAccount, setSelectedDebitAccount] = useState<string | null>(null);
   const [selectedCreditAccount, setSelectedCreditAccount] = useState<string | null>(null);
-
   const [selectedStatus, setSelectedStatus] = useState<string | null>("");
 
   const {

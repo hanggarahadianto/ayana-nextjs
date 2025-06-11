@@ -12,7 +12,7 @@ export const columnsBaseCashoutAsset = (handlers: {
   { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
   { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
   { key: "partner", title: "Partner", width: 80, minWidth: 80 },
-  { key: "category", title: "Kategori", width: 120, minWidth: 120 },
+  // { key: "category", title: "Kategori", width: 120, minWidth: 120 },
   {
     key: "amount",
     title: "Nominal",

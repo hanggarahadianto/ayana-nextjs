@@ -38,7 +38,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
       companyId,
       page,
       assetType,
-      selectedCategory,
+      // selectedCategory,
       debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
@@ -49,7 +49,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         page,
         limit,
         assetType,
-        category: "Aset Tetap",
+        // category: "Aset Tetap",
         search: debouncedSearch,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
@@ -66,7 +66,6 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteFixAsset } = useDeleteDataJournalEntry();
   const handleDeleteDataJournal = (idToDelete: string) => {
-    console.log("idToDelete", idToDelete);
     mutateDeleteDataJournal(idToDelete);
   };
 
@@ -95,7 +94,6 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
       </Group>
       <SearchTable
         companyId={companyId}
-        category="Aset Tetap"
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         selectedCategory={selectedCategory}
@@ -105,6 +103,9 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         endDate={endDate}
         setEndDate={setEndDate}
         readonly
+        transactionType={null}
+        debitAccountType={null}
+        creditAccountType={null}
       />
       <TableComponent
         startIndex={startIndex}

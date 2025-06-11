@@ -5,8 +5,8 @@ export interface GetTransactionCategoryParams {
   page?: number;
   limit?: number;
   transactionType?: string | null;
-  selectedDebitAccount: string | null;
-  selectedCreditAccount: string | null;
+  selectedDebitAccount?: string | null;
+  selectedCreditAccount?: string | null;
   selectedDebitCategory?: string | null;
   selectedCreditCategory?: string | null;
   status?: string | null;

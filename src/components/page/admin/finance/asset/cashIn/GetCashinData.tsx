@@ -38,7 +38,7 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         page,
         limit,
         assetType,
-        category: "Kas & Bank", // Hardcoded for Cash In
+        // category: "Kas & Bank", // Hardcoded for Cash In
         search: debouncedSearch, // 🔍
       }),
     enabled: !!companyId,
@@ -80,7 +80,6 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         <Stack mb={12}>
           <SearchTable
             companyId={companyId}
-            category="Kas & Bank"
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             selectedCategory={selectedCategory}
@@ -89,7 +88,10 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
             setStartDate={setStartDate}
             endDate={endDate}
             setEndDate={setEndDate}
-            readonly
+            readonly={false}
+            transactionType={null}
+            debitAccountType={"Asset"}
+            creditAccountType={null}
           />
         </Stack>
       </Stack>

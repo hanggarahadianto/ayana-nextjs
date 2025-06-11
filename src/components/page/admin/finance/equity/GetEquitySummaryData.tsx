@@ -106,6 +106,9 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType }: Get
           endDate={endDate}
           setEndDate={setEndDate}
           readonly
+          transactionType={null}
+          debitAccountType={null}
+          creditAccountType={null}
         />
 
         <Box style={{ flex: 1 }}>

@@ -41,7 +41,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
       companyId,
       page,
       assetType,
-      selectedCategory,
+      // selectedCategory,
       debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
@@ -52,7 +52,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         page,
         limit,
         assetType,
-        category: "Piutang", // Hardcoded for Receivable Asset
+        // category: "Piutang", // Hardcoded for Receivable Asset
         search: debouncedSearch, // 🔍
         startDate: formattedStartDate,
         endDate: formattedEndDate,
@@ -105,7 +105,6 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
       </Group>
       <SearchTable
         companyId={companyId}
-        category="Piutang"
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         selectedCategory={selectedCategory}
@@ -115,6 +114,9 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         endDate={endDate}
         setEndDate={setEndDate}
         readonly
+        transactionType={null}
+        debitAccountType={null}
+        creditAccountType={null}
       />
 
       <Box style={{ flex: 1 }}>
