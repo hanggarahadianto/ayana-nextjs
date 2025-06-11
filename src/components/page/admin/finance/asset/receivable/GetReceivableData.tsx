@@ -41,7 +41,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
       companyId,
       page,
       assetType,
-      // selectedCategory,
+      selectedCategory,
       debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
@@ -52,7 +52,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         page,
         limit,
         assetType,
-        // category: "Piutang", // Hardcoded for Receivable Asset
+        selectedCategory: selectedCategory ?? undefined,
         search: debouncedSearch, // 🔍
         startDate: formattedStartDate,
         endDate: formattedEndDate,
@@ -107,15 +107,15 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         companyId={companyId}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
-        selectedCategory={selectedCategory}
+        selectedCategory={"Piutang"}
         setSelectedCategory={setSelectedCategory}
         startDate={startDate}
         setStartDate={setStartDate}
         endDate={endDate}
         setEndDate={setEndDate}
-        readonly
+        readonly={true}
         transactionType={null}
-        debitAccountType={null}
+        debitAccountType={"Asset"}
         creditAccountType={null}
       />
 

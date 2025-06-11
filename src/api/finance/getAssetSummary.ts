@@ -6,7 +6,7 @@ interface GetAssetSummaryParams {
   limit?: number;
   assetType?: string | null;
   summaryOnly?: boolean;
-  category?: string;
+  selectedCategory?: string;
   search?: string; // 🔍 Tambahkan ini
   startDate?: string; // 👈 tambahkan
   endDate?: string; // 👈 tambahkan
@@ -18,7 +18,7 @@ export const getAssetSummary = async ({
   limit = 10,
   assetType = null,
   summaryOnly,
-  category,
+  selectedCategory,
   search, // 🔍
   startDate, // 👈 tambahkan
   endDate, // 👈 tambahkan
@@ -33,7 +33,7 @@ export const getAssetSummary = async ({
 
   if (assetType) queryParams.append("asset_type", assetType);
   if (summaryOnly) queryParams.append("summary_only", "true");
-  if (category) queryParams.append("category", category);
+  if (selectedCategory) queryParams.append("category", selectedCategory);
   if (search) queryParams.append("search", search); // 🔍
   if (startDate) queryParams.append("start_date", startDate); // <- gunakan format YYYY-MM-DD
   if (endDate) queryParams.append("end_date", endDate);

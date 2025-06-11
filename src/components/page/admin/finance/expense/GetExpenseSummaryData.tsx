@@ -92,7 +92,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
             </Text>
           </Stack>
           <Text size="xl" fw={800} c={"red"} mt={20}>
-            -{formatCurrency(expenseData?.data.total_expense ?? 0)}
+            {formatCurrency(expenseData?.data.total_expense ?? 0)}
           </Text>
         </Group>
         <SearchTable

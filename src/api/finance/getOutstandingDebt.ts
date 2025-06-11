@@ -37,7 +37,7 @@ export const getOutstandingDebt = async ({
   if (summaryOnly) queryParams.append("summary_only", "true");
   if (status) queryParams.append("status", status);
   if (search) queryParams.append("search", search); // 🔍
-  if (selectedCategory) queryParams.append("category", selectedCategory);
+  if (selectedCategory) queryParams.append("credit_category", selectedCategory);
   if (startDate) queryParams.append("start_date", startDate); // <- gunakan format YYYY-MM-DD
   if (endDate) queryParams.append("end_date", endDate);
 

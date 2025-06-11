@@ -38,7 +38,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
       companyId,
       page,
       assetType,
-      // selectedCategory,
+      selectedCategory,
       debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
@@ -49,7 +49,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         page,
         limit,
         assetType,
-        // category: "Aset Tetap",
+        selectedCategory: "Aset Tetap",
         search: debouncedSearch,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
@@ -96,15 +96,15 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         companyId={companyId}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
-        selectedCategory={selectedCategory}
+        selectedCategory={"Aset Tetap"}
         setSelectedCategory={setSelectedCategory}
         startDate={startDate}
         setStartDate={setStartDate}
         endDate={endDate}
         setEndDate={setEndDate}
-        readonly
+        readonly={true}
         transactionType={null}
-        debitAccountType={null}
+        debitAccountType={"Asset"}
         creditAccountType={null}
       />
       <TableComponent

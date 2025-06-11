@@ -8,8 +8,9 @@ import { IconPencil } from "@tabler/icons-react";
 export const columnsBaseCashIn = (openEditModal: (item: IAssetSummaryItem) => void, handleDeleteAccount: (id: string) => void) => [
   { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
   { key: "invoice", title: "Invoice", width: 120, minWidth: 120 },
-  { key: "category", title: "Kategori", width: 120, minWidth: 120 },
   { key: "partner", title: "Partner", width: 120, minWidth: 120 },
+  { key: "debit_category", title: "Kategori", width: 120, minWidth: 120 },
+
   {
     key: "amount",
     title: "Nominal",

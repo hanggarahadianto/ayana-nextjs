@@ -19,8 +19,9 @@ interface GetEquityDataProps {
   companyId: string;
   companyName?: string;
   equityType?: string;
+  title?: string;
 }
-export const GetEquitySummaryData = ({ companyId, companyName, equityType }: GetEquityDataProps) => {
+export const GetEquitySummaryData = ({ companyId, companyName, equityType, title }: GetEquityDataProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -62,11 +63,7 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType }: Get
     refetchOnWindowFocus: false,
   });
 
-  //   console.log("equityData", equityData);
-
   const equityList = equityData?.data.equityList ?? [];
-
-  //   console.log("equityList", equityList);
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, equityData?.data.total || 0);
 
@@ -81,6 +78,8 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType }: Get
 
   const columns = columnsBaseEquity(openEditModal, handleDeleteDataJournal);
 
+  const textColor = equityType === "setor" ? "teal" : equityType === "tarik" ? "red" : "gray";
+
   return (
     <SimpleGridGlobal cols={1}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -88,10 +87,10 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType }: Get
         <Group justify="space-between">
           <Stack>
             <Text size="xl" fw={600}>
-              Modal {companyName}
+              Modal {companyName} {title}
             </Text>
           </Stack>
-          <Text size="xl" fw={800} c={"teal"} mt={20}>
+          <Text size="xl" fw={800} c={textColor} mt={20}>
             {formatCurrency(equityData?.data.total_equity ?? 0)}
           </Text>
         </Group>

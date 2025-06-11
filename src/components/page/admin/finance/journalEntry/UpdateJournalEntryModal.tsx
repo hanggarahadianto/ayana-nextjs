@@ -30,7 +30,14 @@ const UpdateJournalEntryModal: React.FC<IUpdateJournalEntryModalProps> = ({ tran
     submitJournal(transformedEntry); // kirim objek langsung, bukan array
   };
 
-  const validModals = ["editCashInData", "editReceivableAssetData", "editFixAssetData", "editCashOutData", "editExpenseData"];
+  const validModals = [
+    "editCashInData",
+    "editReceivableAssetData",
+    "editFixAssetData",
+    "editCashOutData",
+    "editExpenseData",
+    "editEquityData",
+  ];
   if (!modalName || !validModals.includes(modalName) || !opened || !initialData) return null;
 
   return (

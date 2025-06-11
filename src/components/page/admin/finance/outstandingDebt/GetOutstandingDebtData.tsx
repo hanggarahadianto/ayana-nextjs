@@ -114,9 +114,9 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
         setStartDate={setStartDate}
         endDate={endDate}
         setEndDate={setEndDate}
-        transactionType={transactionType}
-        debitAccountType={"Liability"}
-        creditAccountType={""}
+        transactionType={null}
+        debitAccountType={null}
+        creditAccountType={"Liability"}
         readonly={false}
       />
       <TableComponent

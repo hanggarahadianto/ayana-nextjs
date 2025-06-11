@@ -32,8 +32,8 @@ export default function FinanceComponent() {
         />
       </SimpleGrid>
       <SimpleGrid cols={2} spacing="20px">
-        <GetEquitySummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} equityType="setor" />
-        <GetEquitySummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} equityType="tarik" />
+        <GetEquitySummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} equityType="setor" title="Di Setor"/>
+        <GetEquitySummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} equityType="tarik" title ="Di Tarik"/>
       </SimpleGrid>
 
       <SimpleGridGlobal cols={1} gap="20px">

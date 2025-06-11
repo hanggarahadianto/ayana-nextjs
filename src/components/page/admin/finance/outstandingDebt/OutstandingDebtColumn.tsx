@@ -22,6 +22,8 @@ export const columnsBaseDebt = (
   { key: "transaction_id", title: "Transaction ID", width: 140, minWidth: 140 },
   { key: "invoice", title: "Invoice", width: 160, minWidth: 160 },
   { key: "partner", title: "Partner", width: 160, minWidth: 160 },
+  { key: "credit_category", title: "Kategori", width: 120, minWidth: 120 },
+
   {
     key: "amount",
     title: "Nominal",
