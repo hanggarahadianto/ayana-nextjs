@@ -21,6 +21,7 @@ interface SearchTableProps {
   debitAccountType: string | null;
   creditAccountType: string | null;
   readonly?: boolean;
+  useCategory?: boolean;
 }
 
 export default function SearchTable({
@@ -37,6 +38,7 @@ export default function SearchTable({
   debitAccountType,
   creditAccountType,
   readonly = false,
+  useCategory = false,
 }: SearchTableProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const clearDates = () => {
@@ -46,20 +48,22 @@ export default function SearchTable({
 
   return (
     <Group>
-      <SelectCategoryFilter
-        companyId={companyId}
-        value={selectedCategory ?? null}
-        onChange={setSelectedCategory}
-        readonly={readonly}
-        transactionType={transactionType}
-        debitAccountType={debitAccountType}
-        creditAccountType={creditAccountType}
-      />
+      {useCategory ?? (
+        <SelectCategoryFilter
+          companyId={companyId}
+          value={selectedCategory ?? null}
+          onChange={setSelectedCategory}
+          readonly={readonly}
+          transactionType={transactionType}
+          debitAccountType={debitAccountType}
+          creditAccountType={creditAccountType}
+        />
+      )}
 
       <TextInput
-        w={400}
-        label="Cari Data Asset"
-        placeholder="Cari data asset..."
+        w={useCategory ? 400 : 800}
+        label="Cari Data Transaksi"
+        placeholder="Cari data transaksi..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.currentTarget.value)}
         rightSection={

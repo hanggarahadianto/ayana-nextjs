@@ -29,9 +29,6 @@ const SelectCategoryFilter: React.FC<SelectCategoryFilterProps> = ({
     enabled: !!companyId,
   });
 
-  // console.log("data", transactionCategoryData);
-
-  // data structure: { data: string[]; status: string }
   const options =
     transactionCategoryData?.data?.map((category: string) => ({
       label: category,

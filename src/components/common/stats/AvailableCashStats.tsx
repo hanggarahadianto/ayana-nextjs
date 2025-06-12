@@ -14,7 +14,7 @@ export const AvailableCashStats = ({ companyId }: AvailableCashStatsProps) => {
         companyId: companyId!,
         assetType: "cashin",
         summaryOnly: true,
-        category: "Kas & Bank",
+        selectedCategory: "Kas & Bank",
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,

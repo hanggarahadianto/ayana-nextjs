@@ -1,4 +1,4 @@
-interface IJournalEntry {
+interface IJournalEntryItem {
   id: string;
   transaction_id: string;
   invoice: string;
@@ -54,11 +54,15 @@ interface IJournalEntryUpdate {
   company_id: string;
 }
 
+interface IJournalEntryData {
+  journalEntryList: IJournalEntryItem[];
+  page: number;
+  limit: number;
+  total: number;
+}
+
 interface IJournalEntryResponse {
-  data: IJournalEntry[];
+  data: IJournalEntryData;
+  message: string;
   status: string;
-  limit?: number; // Optional jika tidak selalu ada
-  page?: number; // Optional jika tidak selalu ada
-  total?: number; // Optional jika tidak selalu ada
-  message?: string; // Optional jika tidak selalu ada
 }

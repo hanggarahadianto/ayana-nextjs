@@ -17,7 +17,7 @@ export const CashOutStats = ({ companyId, assetType, category }: CashInStatsProp
         companyId: companyId!,
         assetType,
         summaryOnly: true,
-        category,
+        selectedCategory: "Kas & Bank",
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,

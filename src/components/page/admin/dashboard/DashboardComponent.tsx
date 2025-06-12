@@ -1,6 +1,6 @@
 "use client";
 
-import { Paper, Card, Text, Group, Flex, Grid, Stack } from "@mantine/core";
+import { Paper, Card, Text, Group, Flex, Grid, Stack, Divider } from "@mantine/core";
 
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import { ExpenseStats } from "../../../common/stats/ExpenseStats";
@@ -17,6 +17,7 @@ import { ReceivableAssetStats } from "@/components/common/stats/ReceivableAssetS
 import { RevenueStats } from "@/components/common/stats/RenevueStats";
 import { useState } from "react";
 import { formatCurrency } from "@/helper/formatCurrency";
+import { GetJournalEntryData } from "./journalEntryData";
 
 export const DashboardComponent = () => {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
@@ -89,6 +90,8 @@ export const DashboardComponent = () => {
           </Paper>
         </Grid.Col>
       </Grid>
+      <Divider />
+      <GetJournalEntryData companyId={activeTab?.id ?? ""} />
     </SimpleGridGlobal>
   );
 };

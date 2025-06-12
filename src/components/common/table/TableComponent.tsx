@@ -10,10 +10,9 @@ interface ScrollXWrapperProps {
   height: string | number; // ← bukan lagi optional
 }
 
-// Komponen ScrollXWrapper untuk membungkus konten dan memberikan scroll horizontal
 function ScrollXWrapper({ children, minWidth = "1000px", height }: ScrollXWrapperProps) {
   return (
-    <div style={{ width: "100%", overflowX: "auto", height }}>
+    <div style={{ width: "100%", overflowX: "auto", height: height }}>
       <div style={{ minWidth, height: "100%", minHeight: 600 }}>{children}</div>
     </div>
   );
