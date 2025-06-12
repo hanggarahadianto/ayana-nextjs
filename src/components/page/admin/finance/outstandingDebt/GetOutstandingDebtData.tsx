@@ -118,6 +118,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
         debitAccountType={null}
         creditAccountType={"Liability"}
         readonly={false}
+        useCategory={true}
       />
       <TableComponent
         startIndex={startIndex}

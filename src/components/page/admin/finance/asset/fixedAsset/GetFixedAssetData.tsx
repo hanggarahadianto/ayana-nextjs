@@ -106,6 +106,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         transactionType={null}
         debitAccountType={"Asset"}
         creditAccountType={null}
+        useCategory={true}
       />
       <TableComponent
         startIndex={startIndex}

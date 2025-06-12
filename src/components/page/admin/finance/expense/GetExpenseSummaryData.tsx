@@ -109,6 +109,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
           debitAccountType={"Expense"}
           creditAccountType={""}
           readonly={false}
+          useCategory={true}
         />
 
         <Box style={{ flex: 1 }}>

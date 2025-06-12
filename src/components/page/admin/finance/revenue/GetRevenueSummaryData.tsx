@@ -113,6 +113,7 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
           transactionType={null}
           debitAccountType={null}
           creditAccountType={"Revenue"}
+          useCategory={true}
         />
 
         <Box style={{ flex: 1 }}>

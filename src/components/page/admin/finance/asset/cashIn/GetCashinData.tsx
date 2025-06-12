@@ -92,6 +92,7 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
             transactionType={null}
             debitAccountType={"Asset"}
             creditAccountType={null}
+            useCategory={true}
           />
         </Stack>
       </Stack>

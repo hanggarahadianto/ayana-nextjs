@@ -109,6 +109,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
         transactionType={transactionType}
         debitAccountType={null}
         creditAccountType={"Asset"}
+        useCategory={true}
       />
       <Box style={{ flex: 1 }}>
         <TableComponent

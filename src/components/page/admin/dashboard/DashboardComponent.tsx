@@ -90,7 +90,7 @@ export const DashboardComponent = () => {
           </Paper>
         </Grid.Col>
       </Grid>
-      <Divider />
+      <Divider mt={12} />
       <GetJournalEntryData companyId={activeTab?.id ?? ""} />
     </SimpleGridGlobal>
   );

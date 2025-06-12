@@ -24,7 +24,7 @@ export const initialValuesJournalEntry = (companyId?: string | null, transaction
 };
 
 export const initialValuesJournalEntryUpdate = (
-  initialValues?: IJournalEntry,
+  initialValues?: IJournalEntryItem,
   companyId?: string | null,
   transactionType?: string | null
 ) => {

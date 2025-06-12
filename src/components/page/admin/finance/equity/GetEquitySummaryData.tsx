@@ -109,6 +109,7 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
           transactionType={null}
           debitAccountType={null}
           creditAccountType={"Equity"}
+          useCategory={true}
         />
 
         <Box style={{ flex: 1 }}>

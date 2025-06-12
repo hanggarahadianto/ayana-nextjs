@@ -5,7 +5,7 @@ import { IconCalendar } from "@tabler/icons-react";
 import { useFormikContext, FieldArray } from "formik";
 
 interface JournalFormProps {
-  initialData: IJournalEntry;
+  initialData: IJournalEntryItem;
 
   error?: Array<{
     transaction_id?: string;
@@ -25,7 +25,7 @@ interface JournalFormProps {
 const JournalEntryForm = ({ initialData, error, touched }: JournalFormProps) => {
   const { values, setFieldValue, handleBlur } = useFormikContext<{
     transactionType: "payin" | "payout";
-    journalEntries: IJournalEntry[];
+    journalEntries: IJournalEntryItem[];
   }>();
 
   const handleJournalChange = useCallback(
@@ -41,7 +41,7 @@ const JournalEntryForm = ({ initialData, error, touched }: JournalFormProps) => 
     <FieldArray name="journalEntries">
       {() => (
         <Stack gap="xl">
-          {values?.journalEntries?.map((entry: IJournalEntry, index) => {
+          {values?.journalEntries?.map((entry: IJournalEntryItem, index) => {
             // console.log("values", values);
 
             return (
