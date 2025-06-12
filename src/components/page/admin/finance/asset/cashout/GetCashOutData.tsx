@@ -51,7 +51,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
         page,
         limit,
         assetType,
-        category: selectedCategory ?? "",
+        selectedCategory: selectedCategory ?? "",
         search: debouncedSearch,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
@@ -99,16 +99,16 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
         companyId={companyId}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
-        selectedCategory={selectedCategory}
+        selectedCategory={"Kas & Bank"}
         setSelectedCategory={setSelectedCategory}
         startDate={startDate}
         setStartDate={setStartDate}
         endDate={endDate}
         setEndDate={setEndDate}
-        // readonly
-        transactionType={null}
+        readonly={true}
+        transactionType={transactionType}
         debitAccountType={null}
-        creditAccountType={null}
+        creditAccountType={"Asset"}
       />
       <Box style={{ flex: 1 }}>
         <TableComponent

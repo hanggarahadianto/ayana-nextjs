@@ -7,6 +7,7 @@ interface RevenueParams {
   limit?: number;
   revenueType?: string; // 👈 tambahkan jika perlu
   summaryOnly?: boolean;
+  selectedCategory?: string;
   search?: string;
   startDate?: string; // 👈 tambahkan
   endDate?: string; // 👈 tambahkan
@@ -17,6 +18,7 @@ export const getRevenueSummary = async ({
   page = 1,
   limit = 10,
   summaryOnly,
+  selectedCategory,
   revenueType,
   search,
   startDate, // 👈 tambahkan
@@ -33,6 +35,7 @@ export const getRevenueSummary = async ({
   });
   if (revenueType) queryParams.append("revenue_type", revenueType); // 👈 tambahkan jika perlu
   if (summaryOnly) queryParams.append("summary_only", "true");
+  if (selectedCategory) queryParams.append("credit_category", selectedCategory);
   if (search) queryParams.append("search", search); // 🔍
   if (startDate) queryParams.append("start_date", startDate); // <- gunakan format YYYY-MM-DD
   if (endDate) queryParams.append("end_date", endDate);

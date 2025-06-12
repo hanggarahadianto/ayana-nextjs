@@ -9,6 +9,7 @@ export const columnsBaseRevenue = (openEditModal: (row: IRevenueSummaryItem) => 
   { key: "transaction_id", title: "Transaction ID", width: 40, minWidth: 40 },
   { key: "invoice", title: "Invoice", width: 100, minWidth: 100 },
   { key: "partner", title: "Partner", width: 120, minWidth: 120 },
+  { key: "credit_category", title: "Kategori", width: 120, minWidth: 120 },
   {
     key: "amount",
     title: "Nominal",

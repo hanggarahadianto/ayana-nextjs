@@ -40,6 +40,7 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
     queryKey: [
       "getRevenueSummaryData",
       companyId,
+      selectedCategory,
       page,
       limit,
       revenueType,
@@ -51,6 +52,7 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
       companyId
         ? getRevenueSummary({
             companyId,
+            selectedCategory: selectedCategory ?? undefined,
             page,
             limit,
             revenueType: revenueType ?? "",
@@ -110,7 +112,7 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
           readonly={false}
           transactionType={null}
           debitAccountType={null}
-          creditAccountType={null}
+          creditAccountType={"Revenue"}
         />
 
         <Box style={{ flex: 1 }}>

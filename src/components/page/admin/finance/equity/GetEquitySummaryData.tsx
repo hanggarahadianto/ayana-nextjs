@@ -87,7 +87,8 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
         <Group justify="space-between">
           <Stack>
             <Text size="xl" fw={600}>
-              Modal {companyName} {title}
+              Modal {title} {""}
+              {companyName}
             </Text>
           </Stack>
           <Text size="xl" fw={800} c={textColor} mt={20}>
@@ -98,16 +99,16 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
           companyId={companyId}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
-          selectedCategory={selectedCategory}
+          selectedCategory={"Modal"}
           setSelectedCategory={setSelectedCategory}
           startDate={startDate}
           setStartDate={setStartDate}
           endDate={endDate}
           setEndDate={setEndDate}
-          readonly
+          readonly={true}
           transactionType={null}
           debitAccountType={null}
-          creditAccountType={null}
+          creditAccountType={"Equity"}
         />
 
         <Box style={{ flex: 1 }}>
