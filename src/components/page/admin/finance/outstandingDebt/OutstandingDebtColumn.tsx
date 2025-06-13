@@ -58,7 +58,7 @@ export const columnsBaseDebt = (
         const color = getColorForPaidStatus(item.date_inputed, item.due_date);
 
         return (
-          <Box style={{ width: 200 }}>
+          <Box style={{ width: 300 }}>
             <Badge color={color} p={8}>
               <Text fw={700} size="xs">
                 {earlyLate}

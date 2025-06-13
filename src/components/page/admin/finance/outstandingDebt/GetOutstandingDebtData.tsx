@@ -101,7 +101,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
           </Text>
         </Stack>
         <Text size="xl" fw={800} c={"red"} mt={20}>
-          -{formatCurrency(outstandingDebtData?.data.total_debt ?? 0)}
+          {formatCurrency(outstandingDebtData?.data.total_debt ?? 0)}
         </Text>
       </Group>
       <SearchTable

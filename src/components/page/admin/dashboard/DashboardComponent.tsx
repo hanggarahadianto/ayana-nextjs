@@ -46,7 +46,7 @@ export const DashboardComponent = () => {
                 <Text size="sm" c="dimmed" fw={500}>
                   Gross Profit
                 </Text>
-                <Text size="24px" fw={700} c="green">
+                <Text size="24px" fw={700} c={grossProfit >= 0 ? "green" : "red"}>
                   {formatCurrency(grossProfit)}
                 </Text>
               </Stack>

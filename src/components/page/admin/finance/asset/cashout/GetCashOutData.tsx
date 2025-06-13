@@ -80,7 +80,6 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingcashOutData || isLoadingDeleteCashout} />
-
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>
@@ -88,29 +87,32 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
           </Text>
         </Stack>
 
-        <Stack align="flex-end" mb={16}>
+        <Stack align="flex-end">
           <CreateJournalEntryModal companyId={companyId} transactionType={"payout"} />
           <Text size="xl" fw={800} c={"red"} mt={20}>
             {formatCurrency(cashOutSummaryData?.data.total_asset ?? 0)}
           </Text>
         </Stack>
       </Group>
-      <SearchTable
-        companyId={companyId}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        selectedCategory={"Kas & Bank"}
-        setSelectedCategory={setSelectedCategory}
-        startDate={startDate}
-        setStartDate={setStartDate}
-        endDate={endDate}
-        setEndDate={setEndDate}
-        readonly={true}
-        transactionType={transactionType}
-        debitAccountType={null}
-        creditAccountType={"Asset"}
-        useCategory={true}
-      />
+      <Stack mb={12}>
+        <SearchTable
+          companyId={companyId}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedCategory={"Kas & Bank"}
+          setSelectedCategory={setSelectedCategory}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          readonly={true}
+          transactionType={transactionType}
+          debitAccountType={null}
+          creditAccountType={"Asset"}
+          useCategory={true}
+        />
+      </Stack>
+
       <Box style={{ flex: 1 }}>
         <TableComponent
           startIndex={startIndex}

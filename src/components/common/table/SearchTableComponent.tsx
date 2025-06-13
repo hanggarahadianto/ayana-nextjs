@@ -48,7 +48,7 @@ export default function SearchTable({
 
   return (
     <Group>
-      {useCategory ?? (
+      {useCategory && (
         <SelectCategoryFilter
           companyId={companyId}
           value={selectedCategory ?? null}

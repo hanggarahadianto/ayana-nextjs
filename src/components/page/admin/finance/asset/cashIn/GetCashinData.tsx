@@ -61,40 +61,38 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
   const columns = columnsBaseCashIn(openEditModal, handleDeleteAccount);
 
   return (
-    <Card shadow="sm" radius="md" withBorder>
+    <Card padding="lg" shadow="sm" radius="md" withBorder>
       <LoadingGlobal visible={isLoadingCashinData || isLoadingDeleteCashIn} />
-      <Stack>
-        <Group justify="space-between">
-          <Stack>
-            <Text size="xl" fw={600}>
-              Uang Masuk {companyName}
-            </Text>
-          </Stack>
-          <Stack align="flex-end">
-            <CreateJournalEntryModal companyId={companyId} transactionType={"payin"} />
-            <Text size="xl" fw={800} c={"teal"} mt={20}>
-              {formatCurrency(cashinSummaryData?.data.total_asset ?? 0)}
-            </Text>
-          </Stack>
-        </Group>
-        <Stack mb={12}>
-          <SearchTable
-            companyId={companyId}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            startDate={startDate}
-            setStartDate={setStartDate}
-            endDate={endDate}
-            setEndDate={setEndDate}
-            readonly={false}
-            transactionType={null}
-            debitAccountType={"Asset"}
-            creditAccountType={null}
-            useCategory={true}
-          />
+      <Group justify="space-between">
+        <Stack>
+          <Text size="xl" fw={600}>
+            Uang Masuk {companyName}
+          </Text>
         </Stack>
+        <Stack align="flex-end">
+          <CreateJournalEntryModal companyId={companyId} transactionType={"payin"} />
+          <Text size="xl" fw={800} c={"teal"} mt={20}>
+            {formatCurrency(cashinSummaryData?.data.total_asset ?? 0)}
+          </Text>
+        </Stack>
+      </Group>
+      <Stack mb={12}>
+        <SearchTable
+          companyId={companyId}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          readonly={false}
+          transactionType={null}
+          debitAccountType={"Asset"}
+          creditAccountType={null}
+          useCategory={true}
+        />
       </Stack>
 
       <TableComponent
