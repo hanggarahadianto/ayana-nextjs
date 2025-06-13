@@ -39,14 +39,14 @@ export const columnsBaseReceivableAsset = (
       title: "Tanggal Transaksi",
       width: 120,
       minWidth: 120,
-      render: (item: IAssetSummaryItem) => formatDateIndonesia(item.date_inputed),
+      render: (item: IAssetSummaryItem) => (item.date_inputed ? formatDateIndonesia(item.date_inputed) : " - "),
     },
     {
       key: "due_date",
       title: "Jatuh Tempo",
       width: 120,
       minWidth: 120,
-      render: (item: IAssetSummaryItem) => formatDateIndonesia(item.due_date),
+      render: (item: IAssetSummaryItem) => (item.due_date ? formatDateIndonesia(item.due_date) : " - "),
     },
 
     // Jika ada yang status "done", tambahkan kolom repayment_date di sini
@@ -57,7 +57,7 @@ export const columnsBaseReceivableAsset = (
             title: "Tanggal Pelunasan",
             width: 120,
             minWidth: 120,
-            render: (row: IAssetSummaryItem) => formatDateIndonesia(row.repayment_date),
+            render: (item: IAssetSummaryItem) => (item.repayment_date ? formatDateIndonesia(item.repayment_date) : " - "),
           },
         ]
       : []),

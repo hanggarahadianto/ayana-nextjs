@@ -56,6 +56,8 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         search: debouncedSearch, // 🔍
         startDate: formattedStartDate,
         endDate: formattedEndDate,
+        sortBy: "due_date",
+        sortOrder: "asc",
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,

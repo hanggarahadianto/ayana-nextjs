@@ -9,51 +9,34 @@ interface APIErrorResponse {
   status?: string;
 }
 
-interface IJournalEntryCreate {
-  // Define your journal entry interface properties here
-}
-
 const handleSubmitJournalEntry = async (values: IJournalEntryCreate[]) => {
   const response = await APIAxiosInstance.post("journal-entry/post", values);
   return response.data;
 };
 
-export const useSubmitJournalEntry = (closeModal: () => void, companyId?: string) => {
+export const useSubmitJournalEntry = (closeModal: () => void, companyId?: string, transactionType?: string) => {
   const queryClient = useQueryClient();
 
   return useMutation<void, AxiosError<APIErrorResponse>, IJournalEntryCreate[]>({
     mutationFn: handleSubmitJournalEntry,
     onSuccess: async () => {
       try {
-        // Refetch all related queries in parallel
         if (companyId) {
-          await Promise.all([
-            queryClient.refetchQueries({
-              queryKey: ["getCashinData", companyId],
-              exact: false,
-            }),
-            queryClient.refetchQueries({
-              queryKey: ["getCashOutData", companyId],
-
-              exact: false,
-            }),
-            queryClient.refetchQueries({
-              queryKey: ["getExpenseSummaryData", companyId],
-              exact: false,
-            }),
-            queryClient.refetchQueries({
-              queryKey: ["getOutstandingDebtByCompanyId", companyId],
-              exact: false,
-            }),
-            queryClient.refetchQueries({
-              queryKey: ["getFixedAssetData", companyId],
-              exact: false,
-            }),
-            queryClient.refetchQueries({
-              queryKey: ["getReceivableAssetData", companyId],
-              exact: false,
-            }),
-          ]);
+          if (transactionType === "payin") {
+            // Hanya refetch asset-related queries
+            await Promise.all([
+              queryClient.refetchQueries({ queryKey: ["getCashinData", companyId], exact: false }),
+              queryClient.refetchQueries({ queryKey: ["getFixedAssetData", companyId], exact: false }),
+              queryClient.refetchQueries({ queryKey: ["getReceivableAssetData", companyId], exact: false }),
+            ]);
+          } else {
+            // Refetch semua
+            await Promise.all([
+              queryClient.refetchQueries({ queryKey: ["getCashOutData", companyId], exact: false }),
+              queryClient.refetchQueries({ queryKey: ["getExpenseSummaryData", companyId], exact: false }),
+              queryClient.refetchQueries({ queryKey: ["getOutstandingDebtByCompanyId", companyId], exact: false }),
+            ]);
+          }
         }
 
         closeModal?.();

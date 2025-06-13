@@ -16,7 +16,7 @@ interface ICreateJournalEntryModalProps {
 
 const CreateJournalEntryModal: React.FC<ICreateJournalEntryModalProps> = ({ transactionType, companyId }) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const { mutate: submitJournal, isPending: isLoadingSubmitJournalEntry } = useSubmitJournalEntry(close, companyId);
+  const { mutate: submitJournal, isPending: isLoadingSubmitJournalEntry } = useSubmitJournalEntry(close, companyId, transactionType);
 
   const handleSubmit = useCallback(
     (values: { journalEntries: IJournalEntryCreate[] }) => {

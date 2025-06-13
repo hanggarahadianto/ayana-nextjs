@@ -3,7 +3,7 @@ import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 export const columnsBaseJournalEntry = () => {
   return [
     { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
-    { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
+    { key: "invoice", title: "Invoice", width: 120, minWidth: 120 },
     { key: "partner", title: "Partner", width: 80, minWidth: 80 },
     {
       key: "amount",

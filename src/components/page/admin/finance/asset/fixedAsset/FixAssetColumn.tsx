@@ -28,7 +28,7 @@ export const columnsBaseFixAsset = (
       title: "Tanggal Transaksi",
       width: 120,
       minWidth: 120,
-      render: (item: IAssetSummaryItem) => formatDateIndonesia(item.date_inputed),
+      render: (item: IAssetSummaryItem) => (item.date_inputed ? formatDateIndonesia(item.date_inputed) : " - "),
     },
     {
       key: "note",

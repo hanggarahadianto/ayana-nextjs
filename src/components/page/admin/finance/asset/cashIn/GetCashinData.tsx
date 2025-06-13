@@ -13,6 +13,7 @@ import SearchTable from "@/components/common/table/SearchTableComponent";
 import { columnsBaseCashIn } from "./CashInColumn";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import { useDebounce } from "use-debounce";
+import { formatDateRange } from "@/helper/formatDateIndonesia";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -30,16 +31,33 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
+  const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
+
   const { data: cashinSummaryData, isPending: isLoadingCashinData } = useQuery({
-    queryKey: ["getCashinData", companyId, page, limit, assetType, selectedCategory, debouncedSearch],
+    queryKey: [
+      "getCashinData",
+      companyId,
+      page,
+      limit,
+      assetType,
+      selectedCategory,
+      debouncedSearch,
+      formattedStartDate ?? null,
+      formattedEndDate ?? null,
+    ],
     queryFn: () =>
       getAssetSummary({
         companyId,
         page,
         limit,
         assetType,
-        // category: "Kas & Bank", // Hardcoded for Cash In
+        selectedCategory: selectedCategory ?? undefined,
+        summaryOnly: false,
         search: debouncedSearch, // 🔍
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
+        sortBy: "inputed_date",
+        sortOrder: "asc",
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,

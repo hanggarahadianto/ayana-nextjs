@@ -23,14 +23,7 @@ export const columnsBaseCashIn = (openEditModal: (item: IAssetSummaryItem) => vo
     title: "Tanggal Transaksi",
     width: 160,
     minWidth: 160,
-    render: (item: IAssetSummaryItem) => formatDateIndonesia(item.date_inputed),
-  },
-  {
-    key: "repayment_date",
-    title: "Tanggal Pelunasan",
-    width: 160,
-    minWidth: 160,
-    render: (item: IAssetSummaryItem) => formatDateIndonesia(item.repayment_date),
+    render: (item: IAssetSummaryItem) => (item.date_inputed ? formatDateIndonesia(item.date_inputed) : " - "),
   },
   { key: "note", title: "Keterangan", width: 220, minWidth: 220 },
   {

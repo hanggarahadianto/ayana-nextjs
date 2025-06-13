@@ -25,7 +25,7 @@ export const columnsBaseCashoutAsset = (handlers: {
     title: "Tanggal Transaksi",
     width: 100,
     minWidth: 100,
-    render: (item: IAssetSummaryItem) => formatDateIndonesia(item.date_inputed),
+    render: (item: IAssetSummaryItem) => (item.date_inputed ? formatDateIndonesia(item.date_inputed) : " - "),
   },
   {
     key: "note",
