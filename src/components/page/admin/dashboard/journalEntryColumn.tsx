@@ -1,6 +1,8 @@
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { formatCurrency } from "@/helper/formatCurrency";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
-export const columnsBaseJournalEntry = () => {
+import { Flex } from "@mantine/core";
+export const columnsBaseJournalEntry = (handleDeleteJournalEntry: (id: string) => void) => {
   return [
     { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
     { key: "invoice", title: "Invoice", width: 120, minWidth: 120 },
@@ -24,6 +26,22 @@ export const columnsBaseJournalEntry = () => {
       title: "Keterangan",
       width: 220,
       minWidth: 220,
+    },
+    {
+      key: "aksi",
+      title: "Aksi",
+      width: 8,
+      minWidth: 8,
+      render: (item: IJournalEntryItem) => (
+        <Flex gap="lg" justify="center">
+          <ButtonDeleteWithConfirmation
+            id={item.transaction_category_id}
+            onDelete={() => handleDeleteJournalEntry(item.id)}
+            description={`Hapus Transaksi ${item.description}?`}
+            size={2.2}
+          />
+        </Flex>
+      ),
     },
   ];
 };

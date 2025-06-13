@@ -29,8 +29,6 @@ export const getAssetSummary = async ({
 }: GetAssetSummaryParams): Promise<IAssetSummaryResponse> => {
   if (!companyId) throw new Error("Company ID is required");
 
-  console.log("sort by dan sortOrder", sortBy, sortOrder);
-
   const queryParams = new URLSearchParams({
     company_id: companyId,
     page: page.toString(),

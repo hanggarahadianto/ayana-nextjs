@@ -64,7 +64,6 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
   });
 
   const assetList = receivableAssetSummaryData?.data?.assetList ?? [];
-  const totalData = receivableAssetSummaryData?.data?.total ?? 0;
   const totalAssetIn = receivableAssetSummaryData?.data?.total_asset ?? 0;
 
   const startIndex = (page - 1) * limit + 1;

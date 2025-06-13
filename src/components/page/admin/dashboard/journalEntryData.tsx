@@ -10,6 +10,7 @@ import PaginationWithLimit from "@/components/common/pagination/PaginationWithLi
 import { useDebounce } from "use-debounce";
 import { columnsBaseJournalEntry } from "./journalEntryColumn";
 import { getJournalEntryData } from "@/api/finance/getJournalEntryData";
+import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 
 interface GetJournalEntryDataProps {
   companyId: string;
@@ -60,7 +61,12 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, totalItems);
 
-  const columns = columnsBaseJournalEntry();
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteRecivableAsset } = useDeleteDataJournalEntry();
+  const handleDeleteDataJournal = (idToDelete: string) => {
+    mutateDeleteDataJournal(idToDelete);
+  };
+
+  const columns = columnsBaseJournalEntry(handleDeleteDataJournal);
 
   return (
     <SimpleGridGlobal cols={1}>
