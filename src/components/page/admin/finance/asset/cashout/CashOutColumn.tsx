@@ -5,10 +5,7 @@ import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import { Flex } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 
-export const columnsBaseCashoutAsset = (handlers: {
-  openEditModal: (row: IAssetSummaryItem) => void;
-  handleDeleteDataJournal: (id: string) => void;
-}) => [
+export const columnsBaseCashout = (openEditModal: (item: IAssetSummaryItem) => void, handleDeleteJournalEntry: (id: string) => void) => [
   { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
   { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
   { key: "partner", title: "Partner", width: 80, minWidth: 80 },
@@ -36,14 +33,14 @@ export const columnsBaseCashoutAsset = (handlers: {
   {
     key: "aksi",
     title: "Aksi",
-    width: 10,
-    minWidth: 10,
+    width: 8,
+    minWidth: 8,
     render: (row: IAssetSummaryItem) => (
       <Flex gap="lg" justify="center">
-        <BreathingActionIcon onClick={() => handlers.openEditModal(row)} icon={<IconPencil size="2rem" />} size="2.2rem" />
+        <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size="2.2rem" />
         <ButtonDeleteWithConfirmation
-          id={row.id}
-          onDelete={() => handlers.handleDeleteDataJournal(row.id)}
+          id={row.transaction_category_id}
+          onDelete={() => handleDeleteJournalEntry(row.id)}
           description={`Hapus Transaksi ${row.description}?`}
           size={2.2}
         />

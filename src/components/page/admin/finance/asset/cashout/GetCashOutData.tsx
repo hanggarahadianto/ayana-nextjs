@@ -11,18 +11,19 @@ import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry"
 import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
 import SearchTable from "@/components/common/table/SearchTableComponent";
-import { columnsBaseCashoutAsset } from "./CashOutColumn";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import { useDebounce } from "use-debounce";
+import { columnsBaseCashout } from "./CashOutColumn";
 
 interface CashSummaryCardProps {
   companyId: string;
   companyName?: string;
   assetType?: string;
   transactionType: string;
+  title: string;
 }
 
-export const GetCashOutData = ({ companyId, companyName, assetType, transactionType }: CashSummaryCardProps) => {
+export const GetCashOutData = ({ companyId, companyName, assetType, transactionType, title }: CashSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
@@ -65,17 +66,14 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteCashout } = useDeleteDataJournalEntry();
   const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal(idToDelete);
+    mutateDeleteDataJournal([idToDelete]); // <-- bungkus dalam array
   };
 
   const openEditModal = (cashOutAsset: IAssetSummaryItem) => {
     useModalStore.getState().openModal("editCashOutData", cashOutAsset);
   };
 
-  const columns = columnsBaseCashoutAsset({
-    openEditModal,
-    handleDeleteDataJournal,
-  });
+  const columns = columnsBaseCashout(openEditModal, handleDeleteDataJournal);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -83,7 +81,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>
-            Uang Keluar {companyName}
+            {title} {companyName}
           </Text>
         </Stack>
 

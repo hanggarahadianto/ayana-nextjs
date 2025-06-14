@@ -69,9 +69,8 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteEquity } = useDeleteDataJournalEntry();
   const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal(idToDelete);
+    mutateDeleteDataJournal([idToDelete]); // <-- bungkus dalam array
   };
-
   const openEditModal = (equityData: IEquitySummaryItem) => {
     useModalStore.getState().openModal("editEquityData", equityData);
   };

@@ -91,7 +91,7 @@ export const DashboardComponent = () => {
         </Grid.Col>
       </Grid>
       <Divider mt={12} />
-      <GetJournalEntryData companyId={activeTab?.id ?? ""} />
+      <GetJournalEntryData companyId={activeTab?.id ?? ""} title="JournalEntry" />
     </SimpleGridGlobal>
   );
 };

@@ -20,9 +20,10 @@ interface CashSummaryCardProps {
   companyName?: string;
   assetType?: string;
   transactionType: string;
+  title: string;
 }
 
-export const GetCashinData = ({ companyId, companyName, assetType, transactionType }: CashSummaryCardProps) => {
+export const GetCashinData = ({ companyId, companyName, assetType, transactionType, title }: CashSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -71,12 +72,11 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
   };
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteCashIn } = useDeleteDataJournalEntry();
-  const handleDeleteAccount = (idToDelete: string) => {
-    console.log("idToDelete", idToDelete);
-    mutateDeleteDataJournal(idToDelete);
+  const handleDeleteDataJournal = (idToDelete: string) => {
+    mutateDeleteDataJournal([idToDelete]);
   };
 
-  const columns = columnsBaseCashIn(openEditModal, handleDeleteAccount);
+  const columns = columnsBaseCashIn(openEditModal, handleDeleteDataJournal);
 
   return (
     <Card padding="lg" shadow="sm" radius="md" withBorder>
@@ -84,7 +84,7 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>
-            Uang Masuk {companyName}
+            {title} {companyName}
           </Text>
         </Stack>
         <Stack align="flex-end">

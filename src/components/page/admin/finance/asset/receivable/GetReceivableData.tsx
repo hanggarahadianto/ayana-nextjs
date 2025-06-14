@@ -69,10 +69,9 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, totalAssetIn);
 
-  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteRecivableAsset } = useDeleteDataJournalEntry();
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteReceivableAsset } = useDeleteDataJournalEntry();
   const handleDeleteDataJournal = (idToDelete: string) => {
-    console.log("idToDelete", idToDelete);
-    mutateDeleteDataJournal(idToDelete);
+    mutateDeleteDataJournal([idToDelete]); // <-- bungkus dalam array
   };
 
   const openEditModal = (receivableAssetSummaryData: IAssetSummaryItem) => {
@@ -92,7 +91,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <LoadingGlobal visible={isLoadingReceivableAsset || isLoadingDeleteRecivableAsset} />
+      <LoadingGlobal visible={isLoadingReceivableAsset || isLoadingDeleteReceivableAsset} />
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>

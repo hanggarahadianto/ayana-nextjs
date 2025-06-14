@@ -19,9 +19,10 @@ interface AssetSummaryCardProps {
   companyName?: string;
   assetType?: string;
   transactionType: string;
+  title;
 }
 
-export const GetFixedAssetData = ({ companyId, companyName, assetType, transactionType }: AssetSummaryCardProps) => {
+export const GetFixedAssetData = ({ companyId, companyName, assetType, transactionType, title }: AssetSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -66,7 +67,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteFixAsset } = useDeleteDataJournalEntry();
   const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal(idToDelete);
+    mutateDeleteDataJournal([idToDelete]); // <-- bungkus dalam array
   };
 
   const openEditModal = (fixAssetSummaryData: IAssetSummaryItem) => {
@@ -74,7 +75,6 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
   };
 
   const columns = columnsBaseFixAsset(assetList, {
-    // handleSendClick,
     openEditModal,
     handleDeleteDataJournal,
   });
@@ -85,7 +85,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>
-            Aset Tetap {companyName}
+            {title} {companyName}
           </Text>
         </Stack>
         <Text size="xl" fw={800} c={"teal"} mt={20}>

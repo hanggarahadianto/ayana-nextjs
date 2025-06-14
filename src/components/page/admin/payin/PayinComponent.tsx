@@ -23,6 +23,7 @@ export default function PayinComponent() {
           companyName={activeTab?.title}
           assetType="cashin"
           transactionType={transactionType}
+          title="Uang Masuk"
         />
 
         <GetReceivableAssetData
@@ -44,6 +45,7 @@ export default function PayinComponent() {
           companyName={activeTab?.title}
           assetType="fixed_asset"
           transactionType={transactionType}
+          title="Aset Tetap"
         />
       </SimpleGridGlobal>
     </SimpleGridGlobal>

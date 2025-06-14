@@ -23,9 +23,10 @@ export default function PayoutComponent() {
           companyName={activeTab?.title}
           assetType="cashout"
           transactionType={transactionType}
+          title="Uang Keluar"
         />
 
-        <GetExpenseSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} />
+        <GetExpenseSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} title="Pengeluaran" />
 
         <GetOutstandingDebtData
           companyId={activeTab?.id || ""}

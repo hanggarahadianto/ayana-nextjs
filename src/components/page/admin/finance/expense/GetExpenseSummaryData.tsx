@@ -18,8 +18,9 @@ import { useDebounce } from "use-debounce";
 interface GetExpenseDataProps {
   companyId: string;
   companyName?: string;
+  title: string;
 }
-export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseDataProps) => {
+export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpenseDataProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -72,9 +73,8 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteExpense } = useDeleteDataJournalEntry();
   const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal(idToDelete);
+    mutateDeleteDataJournal([idToDelete]); // <-- bungkus dalam array
   };
-
   const openEditModal = (expenseData: IExpenseSummaryItem) => {
     useModalStore.getState().openModal("editExpenseData", expenseData);
   };
@@ -88,7 +88,8 @@ export const GetExpenseSummaryData = ({ companyId, companyName }: GetExpenseData
         <Group justify="space-between">
           <Stack>
             <Text size="xl" fw={600}>
-              Pengeluaran {companyName}
+              {title}
+              {companyName}
             </Text>
           </Stack>
           <Text size="xl" fw={800} c={"red"} mt={20}>

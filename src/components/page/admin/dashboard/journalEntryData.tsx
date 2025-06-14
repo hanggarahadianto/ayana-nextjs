@@ -1,7 +1,7 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Box, Group } from "@mantine/core";
+import { Card, Text, Stack, Box, Group, Button, Checkbox } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
@@ -11,6 +11,8 @@ import { useDebounce } from "use-debounce";
 import { columnsBaseJournalEntry } from "./journalEntryColumn";
 import { getJournalEntryData } from "@/api/finance/getJournalEntryData";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
+import { useListState, randomId } from "@mantine/hooks";
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 
 interface GetJournalEntryDataProps {
   companyId: string;
@@ -27,7 +29,6 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
 
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
   const { data: journalEntryData, isLoading: isLoadingJournalEntry } = useQuery({
@@ -61,17 +62,37 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, totalItems);
 
-  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteRecivableAsset } = useDeleteDataJournalEntry();
+  const { mutate: mutateDeleteDataJournal } = useDeleteDataJournalEntry(title);
+
   const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal(idToDelete);
+    mutateDeleteDataJournal([idToDelete]); // kirim dalam array juga
   };
 
-  const columns = columnsBaseJournalEntry(handleDeleteDataJournal);
+  const [checkboxStates, checkboxHandlers] = useListState<{ id: string; checked: boolean; key: string }>([]);
+  const total = checkboxStates.length;
+  const selectedCount = checkboxStates.filter((c) => c.checked).length;
+  const allChecked = selectedCount === total && total > 0;
+  const indeterminate = selectedCount > 0 && selectedCount < total;
+
+  useEffect(() => {
+    if (journalList.length > 0) {
+      checkboxHandlers.setState(
+        journalList.map((item) => ({
+          id: item.id,
+          checked: false,
+          key: randomId(),
+        }))
+      );
+    }
+  }, [journalList]);
+
+  const columns = columnsBaseJournalEntry(handleDeleteDataJournal, checkboxStates, checkboxHandlers);
 
   return (
     <SimpleGridGlobal cols={1}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <LoadingGlobal visible={isLoadingJournalEntry} />
+
         <Group justify="space-between">
           <Stack>
             <Text size="xl" fw={600}>
@@ -96,6 +117,37 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
           creditAccountType={null}
           useCategory={false}
         />
+
+        <Stack mt={"16px"} p={10}>
+          <Group justify="space-between">
+            <Checkbox
+              checked={allChecked}
+              indeterminate={indeterminate}
+              label="Pilih semua transaksi"
+              mb="sm"
+              onChange={() =>
+                checkboxHandlers.setState((current) =>
+                  current.map((value) => ({
+                    ...value,
+                    checked: !allChecked,
+                  }))
+                )
+              }
+            />
+            <ButtonDeleteWithConfirmation
+              size={2.5}
+              id={""}
+              onDelete={() => {
+                const selectedIds = checkboxStates.filter((c) => c.checked).map((c) => c.id);
+
+                if (selectedIds.length === 0) return;
+
+                mutateDeleteDataJournal(selectedIds);
+              }}
+              description={"Hapus yang ditandai"}
+            />
+          </Group>
+        </Stack>
 
         <Box style={{ flex: 1 }}>
           <TableComponent startIndex={startIndex} data={journalList} height="400" columns={columns} />
