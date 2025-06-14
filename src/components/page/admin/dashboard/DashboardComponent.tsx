@@ -1,7 +1,6 @@
 "use client";
 
 import { Paper, Card, Text, Group, Flex, Grid, Stack, Divider } from "@mantine/core";
-
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import { ExpenseStats } from "../../../common/stats/ExpenseStats";
 import LoadingGlobal from "@/styles/loading/loading-global";
@@ -18,6 +17,7 @@ import { RevenueStats } from "@/components/common/stats/RenevueStats";
 import { useState } from "react";
 import { formatCurrency } from "@/helper/formatCurrency";
 import { GetJournalEntryData } from "./journalEntryData";
+import { EquityStats } from "@/components/common/stats/EquityStatus";
 
 export const DashboardComponent = () => {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
@@ -44,7 +44,7 @@ export const DashboardComponent = () => {
 
               <Stack gap={4} align="end">
                 <Text size="sm" c="dimmed" fw={500}>
-                  Gross Profit
+                  Laba Kotor
                 </Text>
                 <Text size="24px" fw={700} c={grossProfit >= 0 ? "green" : "red"}>
                   {formatCurrency(grossProfit)}
@@ -53,7 +53,7 @@ export const DashboardComponent = () => {
             </Group>
 
             <Paper shadow="sm" radius="md" p="md" withBorder>
-              <AvailableCashStats companyId={activeTab?.id} />
+              <AvailableCashStats companyId={activeTab?.id} title="Saldo Tersedia" />
             </Paper>
 
             <Flex gap={"12px"}>
@@ -88,15 +88,17 @@ export const DashboardComponent = () => {
               </Card>
             </Stack>
           </Paper>
-          <Flex gap={"12px"}>
-            <Paper shadow="sm" radius="md" p="md" withBorder w="100%">
-              <CashinStats companyId={activeTab?.id} assetType="cashin" category="Kas & Bank" />
-            </Paper>
+          <Paper shadow="sm" radius="md" p="md" withBorder mt={20}>
+            <Flex gap={"12px"}>
+              <Paper shadow="sm" radius="md" p="md" withBorder w="100%">
+                <EquityStats companyId={activeTab?.id} equityType="setor" title="Modal Di Setor" />
+              </Paper>
 
-            <Paper shadow="sm" radius="md" p="md" withBorder w="100%">
-              <CashOutStats companyId={activeTab?.id} assetType="cashout" />
-            </Paper>
-          </Flex>
+              <Paper shadow="sm" radius="md" p="md" withBorder w="100%">
+                <EquityStats companyId={activeTab?.id} equityType="tarik" title="Modal Di Tarik" />
+              </Paper>
+            </Flex>
+          </Paper>
         </Grid.Col>
       </Grid>
       <Divider mt={12} />

@@ -5,9 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 
 type OutstandingDebtStatsProps = {
   companyId?: string;
+  title?: string;
 };
 
-export const OutstandingDebtStats = ({ companyId }: OutstandingDebtStatsProps) => {
+export const OutstandingDebtStats = ({ companyId, title }: OutstandingDebtStatsProps) => {
   const { data: OutstandingDebtSummaryOnlyData, isPending: isLoadingDebt } = useQuery({
     queryKey: ["getOutstandingDebtOnlyData", companyId],
     queryFn: () =>
@@ -26,7 +27,7 @@ export const OutstandingDebtStats = ({ companyId }: OutstandingDebtStatsProps) =
 
   const statsData: StatItem[] = [
     {
-      title: "Total Outstanding Debt",
+      title: title ?? "Hutang",
       icon: "receipt",
       value: totalOutstandingDebt,
       color: "orange",

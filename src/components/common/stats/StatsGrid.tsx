@@ -1,6 +1,6 @@
 "use client";
 
-import { IconArrowDownRight, IconArrowUpRight, IconCoin, IconDiscount2, IconHome, IconReceipt2, IconUserPlus } from "@tabler/icons-react";
+import { IconCoin, IconDiscount2, IconHome, IconReceipt2, IconUserPlus } from "@tabler/icons-react";
 import { Flex, Group, Paper, Stack, Text } from "@mantine/core";
 import { formatCurrency } from "@/helper/formatCurrency";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";

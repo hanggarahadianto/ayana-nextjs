@@ -4,9 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 
 type AssetStatsProps = {
   companyId?: string;
+  title?: string;
 };
 
-export const ReceivableAssetStats = ({ companyId }: AssetStatsProps) => {
+export const ReceivableAssetStats = ({ companyId, title }: AssetStatsProps) => {
   const { data: receivableAssetSummaryOnly, isPending: isLoadingReceivableAsset } = useQuery({
     queryKey: ["getReceivableAsset", companyId],
     queryFn: () =>
@@ -25,7 +26,7 @@ export const ReceivableAssetStats = ({ companyId }: AssetStatsProps) => {
 
   const statsData: StatItem[] = [
     {
-      title: "Receivable Asset",
+      title: title ?? "Piutang",
       icon: "home", // <-- pakai string "home" sesuai dengan key di icons
       value: totalAsset,
       color: "violet",

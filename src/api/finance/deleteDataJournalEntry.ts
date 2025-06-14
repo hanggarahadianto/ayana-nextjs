@@ -9,7 +9,6 @@ const handleDeleteJournalEntry = async (ids: string[]): Promise<AxiosResponse<an
 
 export const useDeleteDataJournalEntry = (title?: string) => {
   const queryClient = useQueryClient();
-  console.log("RECEIVED TITLE:", title);
 
   return useMutation({
     mutationFn: (ids: string[]) => handleDeleteJournalEntry(ids),

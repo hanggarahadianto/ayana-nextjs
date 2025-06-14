@@ -5,9 +5,10 @@ import { useEffect } from "react";
 
 type AssetStatsProps = {
   companyId?: string;
+  title?: string;
 };
 
-export const FixedAssetStats = ({ companyId }: AssetStatsProps) => {
+export const FixedAssetStats = ({ companyId, title }: AssetStatsProps) => {
   const { data: fixedAssetSummaryOnly, isPending: isLoadingFixedAsset } = useQuery({
     queryKey: ["getFixedAsset", companyId],
     queryFn: () =>
@@ -24,7 +25,7 @@ export const FixedAssetStats = ({ companyId }: AssetStatsProps) => {
 
   const statsData: StatItem[] = [
     {
-      title: "Fixed Asset",
+      title: title ?? "Aset Tetap",
       icon: "home", // <-- pakai string "home" sesuai dengan key di icons
       value: totalAsset,
       color: "blue",

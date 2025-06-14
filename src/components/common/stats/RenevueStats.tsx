@@ -7,9 +7,10 @@ type RevenueStatsProps = {
   companyId?: string;
   revenueType?: string;
   onLoaded?: (val: number) => void; // <--- tambahkan ini
+  title?: string;
 };
 
-export const RevenueStats = ({ companyId, revenueType, onLoaded }: RevenueStatsProps) => {
+export const RevenueStats = ({ companyId, revenueType, onLoaded, title }: RevenueStatsProps) => {
   const { data: revenueData, isPending: isLoadingCashinData } = useQuery({
     queryKey: ["getRevenueData", companyId, revenueType],
     queryFn: () =>
@@ -30,7 +31,7 @@ export const RevenueStats = ({ companyId, revenueType, onLoaded }: RevenueStatsP
 
   const statsData: StatItem[] = [
     {
-      title: "Total Revenue",
+      title: title ?? "Pendapatan",
       icon: "receipt",
       value: totalRevenue,
       color: "teal",

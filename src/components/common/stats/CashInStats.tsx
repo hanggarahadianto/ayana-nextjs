@@ -6,9 +6,10 @@ type CashInStatsProps = {
   companyId?: string;
   assetType?: string;
   category?: string;
+  title?: string;
 };
 
-export const CashinStats = ({ companyId, assetType, category }: CashInStatsProps) => {
+export const CashinStats = ({ companyId, assetType, category, title }: CashInStatsProps) => {
   const { data: cashinData, isPending: isLoadingCashinData } = useQuery({
     queryKey: ["getCashinData", companyId, assetType, category],
     queryFn: () =>
@@ -26,7 +27,7 @@ export const CashinStats = ({ companyId, assetType, category }: CashInStatsProps
 
   const statsData: StatItem[] = [
     {
-      title: "Total Cash In",
+      title: title ?? "Uang Masuk",
       icon: "receipt",
       value: totalCashIn,
       color: "green",

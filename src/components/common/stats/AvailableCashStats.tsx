@@ -4,9 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 
 type AvailableCashStatsProps = {
   companyId?: string;
+  title?: string;
 };
 
-export const AvailableCashStats = ({ companyId }: AvailableCashStatsProps) => {
+export const AvailableCashStats = ({ companyId, title }: AvailableCashStatsProps) => {
   const { data: cashInData, isLoading: loadingIn } = useQuery({
     queryKey: ["getCashIn", companyId],
     queryFn: () =>
@@ -37,7 +38,7 @@ export const AvailableCashStats = ({ companyId }: AvailableCashStatsProps) => {
 
   const statsData: StatItem[] = [
     {
-      title: "Available Cash",
+      title: title ?? "Saldo Tersedia",
       icon: "receipt",
       value: availableCash,
       color: "blue",
