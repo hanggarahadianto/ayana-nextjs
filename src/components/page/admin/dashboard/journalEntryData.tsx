@@ -62,7 +62,7 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, totalItems);
 
-  const { mutate: mutateDeleteDataJournal } = useDeleteDataJournalEntry(title);
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteJournalEntry } = useDeleteDataJournalEntry(title);
 
   const handleDeleteDataJournal = (idToDelete: string) => {
     mutateDeleteDataJournal([idToDelete]); // kirim dalam array juga
@@ -91,12 +91,12 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
   return (
     <SimpleGridGlobal cols={1}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
-        <LoadingGlobal visible={isLoadingJournalEntry} />
+        <LoadingGlobal visible={isLoadingJournalEntry || isLoadingDeleteJournalEntry} />
 
         <Group justify="space-between">
           <Stack>
             <Text size="xl" fw={600}>
-              Transaksi {title} {companyName}
+              {title} {companyName}
             </Text>
           </Stack>
         </Group>

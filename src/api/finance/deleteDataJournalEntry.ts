@@ -9,46 +9,52 @@ const handleDeleteJournalEntry = async (ids: string[]): Promise<AxiosResponse<an
 
 export const useDeleteDataJournalEntry = (title?: string) => {
   const queryClient = useQueryClient();
+  console.log("RECEIVED TITLE:", title);
 
   return useMutation({
     mutationFn: (ids: string[]) => handleDeleteJournalEntry(ids),
 
     onSuccess: async (data) => {
       if (data.status === 200) {
-        switch (title?.toLowerCase()) {
-          case "Aset Tetap":
-            await queryClient.refetchQueries({ queryKey: ["getFixedAssetData"], exact: false });
+        const lowerTitle = title?.toLowerCase();
+
+        switch (lowerTitle) {
+          case "aset tetap":
+            await queryClient.invalidateQueries({ queryKey: ["getFixedAssetData"], exact: false });
             break;
-          case "Uang Masuk":
-            await queryClient.refetchQueries({ queryKey: ["getCashinData"], exact: false });
+          case "uang masuk":
+            await queryClient.invalidateQueries({ queryKey: ["getCashinData"], exact: false });
             break;
-          case "Piuatang":
-            await queryClient.refetchQueries({ queryKey: ["getReceivableAssetData"], exact: false });
+          case "piuatang":
+            await queryClient.invalidateQueries({ queryKey: ["getReceivableAssetData"], exact: false });
             break;
-          case "Uang Keluar":
-            await queryClient.refetchQueries({ queryKey: ["getCashOutData"], exact: false });
+          case "uang keluar":
+            await queryClient.invalidateQueries({ queryKey: ["getCashOutData"], exact: false });
             break;
-          case "Pengeluaran":
-            await queryClient.refetchQueries({ queryKey: ["getExpenseSummaryData"], exact: false });
+          case "pengeluaran":
+            await queryClient.invalidateQueries({ queryKey: ["getExpenseSummaryData"], exact: false });
             break;
-          case "Hutang Berjaan":
-            await queryClient.refetchQueries({ queryKey: ["getOutstandingDebtByCompanyId"], exact: false });
+          case "hutang berjaan":
+            await queryClient.invalidateQueries({ queryKey: ["getOutstandingDebtByCompanyId"], exact: false });
             break;
-          case "Transaksi":
-            await queryClient.refetchQueries({ queryKey: ["getJournalEntryData"], exact: false });
+          case "transaksi":
+            await queryClient.invalidateQueries({
+              predicate: (query) => Array.isArray(query.queryKey) && query.queryKey[0] === "getJournalEntryData",
+            });
             break;
           default:
-            // Jika tidak ada kecocokan, refetch semua sebagai fallback
+            // fallback refetch semua
             await Promise.all([
-              queryClient.refetchQueries({ queryKey: ["getCashinData"], exact: false }),
-              queryClient.refetchQueries({ queryKey: ["getReceivableAssetData"], exact: false }),
-              queryClient.refetchQueries({ queryKey: ["getFixedAssetData"], exact: false }),
-              queryClient.refetchQueries({ queryKey: ["getCashOutData"], exact: false }),
-              queryClient.refetchQueries({ queryKey: ["getExpenseSummaryData"], exact: false }),
-              queryClient.refetchQueries({ queryKey: ["getOutstandingDebtByCompanyId"], exact: false }),
+              queryClient.invalidateQueries({ queryKey: ["getCashinData"], exact: false }),
+              queryClient.invalidateQueries({ queryKey: ["getReceivableAssetData"], exact: false }),
+              queryClient.invalidateQueries({ queryKey: ["getFixedAssetData"], exact: false }),
+              queryClient.invalidateQueries({ queryKey: ["getCashOutData"], exact: false }),
+              queryClient.invalidateQueries({ queryKey: ["getExpenseSummaryData"], exact: false }),
+              queryClient.invalidateQueries({ queryKey: ["getOutstandingDebtByCompanyId"], exact: false }),
             ]);
             break;
         }
+
         showNotification({
           title: "Data Berhasil Dihapus",
           message: undefined,

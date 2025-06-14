@@ -88,10 +88,19 @@ export const DashboardComponent = () => {
               </Card>
             </Stack>
           </Paper>
+          <Flex gap={"12px"}>
+            <Paper shadow="sm" radius="md" p="md" withBorder w="100%">
+              <CashinStats companyId={activeTab?.id} assetType="cashin" category="Kas & Bank" />
+            </Paper>
+
+            <Paper shadow="sm" radius="md" p="md" withBorder w="100%">
+              <CashOutStats companyId={activeTab?.id} assetType="cashout" />
+            </Paper>
+          </Flex>
         </Grid.Col>
       </Grid>
       <Divider mt={12} />
-      <GetJournalEntryData companyId={activeTab?.id ?? ""} title="JournalEntry" />
+      <GetJournalEntryData companyId={activeTab?.id ?? ""} title="Transaksi" />
     </SimpleGridGlobal>
   );
 };

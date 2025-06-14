@@ -75,7 +75,7 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteRevenue } = useDeleteDataJournalEntry();
   const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal(idToDelete);
+    mutateDeleteDataJournal([idToDelete]); // <-- bungkus dalam array
   };
 
   const openEditModal = (RevenueData: IRevenueSummaryItem) => {

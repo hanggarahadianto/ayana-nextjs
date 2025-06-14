@@ -79,7 +79,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteDebt } = useDeleteDataJournalEntry();
   const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal(idToDelete);
+    mutateDeleteDataJournal([idToDelete]); // <-- bungkus dalam array
   };
 
   // console.log("debitList", debtList);
