@@ -1,4 +1,4 @@
-import { Card, Text, Group, Stack, Box } from "@mantine/core";
+import { Card, Text, Group, Stack, Box, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
@@ -63,11 +63,9 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
     refetchOnWindowFocus: false,
   });
 
-  const assetList = receivableAssetSummaryData?.data?.assetList ?? [];
-  const totalAssetIn = receivableAssetSummaryData?.data?.total_asset ?? 0;
-
+  const receivableList = receivableAssetSummaryData?.data?.assetList ?? [];
   const startIndex = (page - 1) * limit + 1;
-  const endIndex = Math.min(page * limit, totalAssetIn);
+  const endIndex = Math.min(page * limit, receivableAssetSummaryData?.data.total || 0);
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteReceivableAsset } = useDeleteDataJournalEntry();
   const handleDeleteDataJournal = (idToDelete: string) => {
@@ -83,7 +81,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
     setIsModalOpen(true);
   };
 
-  const columns = columnsBaseReceivableAsset(assetList, {
+  const columns = columnsBaseReceivableAsset(receivableList, {
     handleSendClick,
     openEditModal,
     handleDeleteDataJournal,
@@ -91,7 +89,6 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <LoadingGlobal visible={isLoadingReceivableAsset || isLoadingDeleteReceivableAsset} />
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>
@@ -119,30 +116,39 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         useCategory={true}
       />
 
-      <Box style={{ flex: 1 }}>
-        <TableComponent
-          startIndex={startIndex}
-          data={assetList}
-          totalAmount={totalAssetIn}
-          transactionType={transactionType}
-          height={"580"}
-          columns={columns}
-        />
+      <Box style={{ position: "relative" }}>
+        {isLoadingReceivableAsset ? (
+          <Skeleton height={limit * 60} />
+        ) : (
+          <TableComponent
+            startIndex={startIndex}
+            data={receivableList}
+            totalAmount={receivableAssetSummaryData?.data.total_asset}
+            transactionType={transactionType}
+            height={"580"}
+            columns={columns}
+          />
+        )}
+
+        <LoadingGlobal visible={isLoadingReceivableAsset || isLoadingDeleteReceivableAsset} />
       </Box>
       <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType={transactionType} />
 
-      <PaginationWithLimit
-        total={receivableAssetSummaryData?.data.total ?? 0}
-        page={page}
-        limit={limit}
-        startIndex={startIndex}
-        endIndex={endIndex}
-        onPageChange={setPage}
-        onLimitChange={(newLimit) => {
-          setLimit(newLimit);
-          setPage(1);
-        }}
-      />
+      {!isLoadingReceivableAsset && (
+        <PaginationWithLimit
+          total={receivableAssetSummaryData?.data.total ?? 0}
+          page={page}
+          limit={limit}
+          startIndex={startIndex}
+          endIndex={endIndex}
+          onPageChange={setPage}
+          onLimitChange={(newLimit) => {
+            setLimit(newLimit);
+            setPage(1);
+          }}
+        />
+      )}
+
       {selectedReceivableAsset && companyId && (
         <ReversedJournalEntryModal
           companyId={companyId}

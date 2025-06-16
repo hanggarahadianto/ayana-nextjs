@@ -1,6 +1,6 @@
 import { getOutstandingDebt } from "@/api/finance/getOutstandingDebt";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Group } from "@mantine/core";
+import { Card, Text, Stack, Group, Box, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { formatCurrency } from "@/helper/formatCurrency";
@@ -90,7 +90,6 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <LoadingGlobal visible={isLoadingOutstandingDebt || isLoadingDeleteDebt} />
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>
@@ -117,27 +116,38 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
         readonly={false}
         useCategory={true}
       />
-      <TableComponent
-        startIndex={startIndex}
-        data={debtList}
-        totalAmount={outstandingDebtData?.data.total_debt}
-        transactionType={transactionType}
-        height={"580"}
-        columns={columns}
-      />
 
-      <PaginationWithLimit
-        total={outstandingDebtData?.data.total ?? 0}
-        page={page}
-        limit={limit}
-        startIndex={startIndex}
-        endIndex={endIndex}
-        onPageChange={setPage}
-        onLimitChange={(newLimit) => {
-          setLimit(newLimit);
-          setPage(1);
-        }}
-      />
+      <Box style={{ position: "relative" }}>
+        {isLoadingOutstandingDebt ? (
+          <Skeleton height={limit * 60} />
+        ) : (
+          <TableComponent
+            startIndex={startIndex}
+            data={debtList}
+            totalAmount={outstandingDebtData?.data.total_debt}
+            transactionType={transactionType}
+            height={"580"}
+            columns={columns}
+          />
+        )}
+
+        <LoadingGlobal visible={isLoadingOutstandingDebt || isLoadingDeleteDebt} />
+      </Box>
+
+      {!isLoadingOutstandingDebt && (
+        <PaginationWithLimit
+          total={outstandingDebtData?.data.total ?? 0}
+          page={page}
+          limit={limit}
+          startIndex={startIndex}
+          endIndex={endIndex}
+          onPageChange={setPage}
+          onLimitChange={(newLimit) => {
+            setLimit(newLimit);
+            setPage(1);
+          }}
+        />
+      )}
 
       {selectedDebt && companyId && (
         <ReversedJournalEntryModal

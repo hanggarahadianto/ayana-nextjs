@@ -65,11 +65,11 @@ export const StatsGrid = ({ data }: StatsGridProps) => {
             </Text>
           </Group>
 
-          <Group>
+          {/* <Group>
             <Text fz="xs" c="dimmed" w="100%">
               Compared to previous month
             </Text>
-          </Group>
+          </Group> */}
         </SimpleGridGlobal>
       </div>
     );

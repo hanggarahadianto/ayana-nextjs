@@ -1,5 +1,5 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Box, Group, Button, Checkbox } from "@mantine/core";
+import { Card, Text, Stack, Box, Group, Button, Checkbox, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
@@ -91,8 +91,6 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
   return (
     <SimpleGridGlobal cols={1}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
-        <LoadingGlobal visible={isLoadingJournalEntry || isLoadingDeleteJournalEntry} />
-
         <Group justify="space-between">
           <Stack>
             <Text size="xl" fw={600}>
@@ -139,9 +137,7 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
               id={""}
               onDelete={() => {
                 const selectedIds = checkboxStates.filter((c) => c.checked).map((c) => c.id);
-
                 if (selectedIds.length === 0) return;
-
                 mutateDeleteDataJournal(selectedIds);
               }}
               description={"Hapus yang ditandai"}
@@ -149,12 +145,17 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
           </Group>
         </Stack>
 
-        <Box style={{ flex: 1 }}>
-          <TableComponent startIndex={startIndex} data={journalList} height="400" columns={columns} />
+        <Box style={{ position: "relative" }}>
+          {isLoadingJournalEntry ? (
+            <Skeleton height={limit * 60} />
+          ) : (
+            <TableComponent startIndex={startIndex} data={journalList} height="400" columns={columns} />
+          )}
+          <LoadingGlobal visible={isLoadingJournalEntry || isLoadingDeleteJournalEntry} />
         </Box>
 
         <PaginationWithLimit
-          total={totalItems}
+          total={isLoadingJournalEntry ? limit : totalItems}
           page={page}
           limit={limit}
           startIndex={startIndex}

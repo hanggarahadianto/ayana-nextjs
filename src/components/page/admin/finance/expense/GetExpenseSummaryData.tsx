@@ -1,5 +1,5 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Box, Group } from "@mantine/core";
+import { Card, Text, Stack, Box, Group, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { formatCurrency } from "@/helper/formatCurrency";
@@ -84,13 +84,10 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
   return (
     <SimpleGridGlobal cols={1}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
-        <LoadingGlobal visible={isLoadingExpense || isLoadingDeleteExpense} />
         <Group justify="space-between">
           <Stack>
             <Text size="xl" fw={600}>
-              {title}
-              {""}
-              {companyName}
+              {title} {""} {companyName}
             </Text>
           </Stack>
           <Text size="xl" fw={800} c={"red"} mt={20}>
@@ -114,30 +111,39 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
           useCategory={true}
         />
 
-        <Box style={{ flex: 1 }}>
-          <TableComponent
-            startIndex={startIndex}
-            data={expenseList}
-            totalAmount={expenseData?.data?.total_expense ?? 0}
-            height={"580"}
-            columns={columns}
-          />
+        <Box style={{ position: "relative" }}>
+          {isLoadingExpense ? (
+            <Skeleton height={limit * 60} />
+          ) : (
+            <TableComponent
+              startIndex={startIndex}
+              data={expenseList}
+              totalAmount={expenseData?.data?.total_expense ?? 0}
+              height={"580"}
+              columns={columns}
+            />
+          )}
+
+          <LoadingGlobal visible={isLoadingExpense || isLoadingDeleteExpense} />
         </Box>
+        <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />
 
         <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />
 
-        <PaginationWithLimit
-          total={expenseData?.data.total ?? 0}
-          page={page}
-          limit={limit}
-          startIndex={startIndex}
-          endIndex={endIndex}
-          onPageChange={setPage}
-          onLimitChange={(newLimit) => {
-            setLimit(newLimit);
-            setPage(1);
-          }}
-        />
+        {!isLoadingExpense && (
+          <PaginationWithLimit
+            total={expenseData?.data.total ?? 0}
+            page={page}
+            limit={limit}
+            startIndex={startIndex}
+            endIndex={endIndex}
+            onPageChange={setPage}
+            onLimitChange={(newLimit) => {
+              setLimit(newLimit);
+              setPage(1);
+            }}
+          />
+        )}
       </Card>
     </SimpleGridGlobal>
   );

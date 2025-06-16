@@ -1,4 +1,4 @@
-import { Card, Text, Group, Box, Stack } from "@mantine/core";
+import { Card, Text, Group, Box, Stack, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
@@ -34,7 +34,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   const [endDate, setEndDate] = useState<Date | null>(null);
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
-  const { data: cashOutSummaryData, isPending: isLoadingcashOutData } = useQuery({
+  const { data: cashOutSummaryData, isPending: isLoadingCashOutData } = useQuery({
     queryKey: [
       "getCashOutData",
       companyId,
@@ -60,7 +60,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
-  const assetList = cashOutSummaryData?.data.assetList ?? [];
+  const cashOutList = cashOutSummaryData?.data.assetList ?? [];
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, cashOutSummaryData?.data.total || 0);
 
@@ -77,7 +77,6 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <LoadingGlobal visible={isLoadingcashOutData || isLoadingDeleteCashout} />
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>
@@ -111,31 +110,39 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
         />
       </Stack>
 
-      <Box style={{ flex: 1 }}>
-        <TableComponent
-          startIndex={startIndex}
-          data={assetList}
-          totalAmount={cashOutSummaryData?.data.total_asset}
-          transactionType={transactionType}
-          height={"580"}
-          columns={columns}
-        />
+      <Box style={{ position: "relative" }}>
+        {isLoadingCashOutData ? (
+          <Skeleton height={limit * 60} />
+        ) : (
+          <TableComponent
+            startIndex={startIndex}
+            data={cashOutList}
+            totalAmount={cashOutSummaryData?.data.total_asset}
+            transactionType={transactionType}
+            height={"580"}
+            columns={columns}
+          />
+        )}
+
+        <LoadingGlobal visible={isLoadingCashOutData || isLoadingDeleteCashout} />
       </Box>
 
       <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />
 
-      <PaginationWithLimit
-        total={cashOutSummaryData?.data.total ?? 0}
-        page={page}
-        limit={limit}
-        startIndex={startIndex}
-        endIndex={endIndex}
-        onPageChange={setPage}
-        onLimitChange={(newLimit) => {
-          setLimit(newLimit);
-          setPage(1);
-        }}
-      />
+      {!isLoadingCashOutData && (
+        <PaginationWithLimit
+          total={cashOutSummaryData?.data.total ?? 0}
+          page={page}
+          limit={limit}
+          startIndex={startIndex}
+          endIndex={endIndex}
+          onPageChange={setPage}
+          onLimitChange={(newLimit) => {
+            setLimit(newLimit);
+            setPage(1);
+          }}
+        />
+      )}
     </Card>
   );
 };

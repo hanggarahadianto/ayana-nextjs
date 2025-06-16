@@ -1,5 +1,5 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Box, Group } from "@mantine/core";
+import { Card, Text, Stack, Box, Group, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { formatCurrency } from "@/helper/formatCurrency";
@@ -82,7 +82,6 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
   return (
     <SimpleGridGlobal cols={1}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
-        <LoadingGlobal visible={isLoadingEquity || isLoadingDeleteEquity} />
         <Group justify="space-between">
           <Stack>
             <Text size="xl" fw={600}>
@@ -111,30 +110,37 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
           useCategory={true}
         />
 
-        <Box style={{ flex: 1 }}>
-          <TableComponent
-            startIndex={startIndex}
-            data={equityList}
-            totalAmount={equityData?.data?.total_equity ?? 0}
-            height={"580"}
-            columns={columns}
-          />
-        </Box>
+        <Box style={{ position: "relative" }}>
+          {isLoadingEquity ? (
+            <Skeleton height={limit * 60} />
+          ) : (
+            <TableComponent
+              startIndex={startIndex}
+              data={equityList}
+              totalAmount={equityData?.data.total_equity}
+              height={"580"}
+              columns={columns}
+            />
+          )}
 
+          <LoadingGlobal visible={isLoadingEquity || isLoadingDeleteEquity} />
+        </Box>
         <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />
 
-        <PaginationWithLimit
-          total={equityData?.data.total ?? 0}
-          page={page}
-          limit={limit}
-          startIndex={startIndex}
-          endIndex={endIndex}
-          onPageChange={setPage}
-          onLimitChange={(newLimit) => {
-            setLimit(newLimit);
-            setPage(1);
-          }}
-        />
+        {!isLoadingEquity && (
+          <PaginationWithLimit
+            total={equityData?.data.total ?? 0}
+            page={page}
+            limit={limit}
+            startIndex={startIndex}
+            endIndex={endIndex}
+            onPageChange={setPage}
+            onLimitChange={(newLimit) => {
+              setLimit(newLimit);
+              setPage(1);
+            }}
+          />
+        )}
       </Card>
     </SimpleGridGlobal>
   );

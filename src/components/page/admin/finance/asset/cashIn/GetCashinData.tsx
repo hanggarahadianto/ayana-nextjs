@@ -1,4 +1,4 @@
-import { Card, Text, Group, Stack } from "@mantine/core";
+import { Card, Text, Group, Stack, Box, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import LoadingGlobal from "@/styles/loading/loading-global";
@@ -31,7 +31,8 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
   const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const sortBy = "inputed_date"; // bisa juga dari Select nanti
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
   const { data: cashinSummaryData, isPending: isLoadingCashinData } = useQuery({
@@ -45,6 +46,8 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
       debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
+      sortBy,
+      sortOrder,
     ],
     queryFn: () =>
       getAssetSummary({
@@ -57,8 +60,8 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         search: debouncedSearch, // 🔍
         startDate: formattedStartDate,
         endDate: formattedEndDate,
-        sortBy: "inputed_date",
-        sortOrder: "asc",
+        sortBy,
+        sortOrder,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -80,7 +83,6 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
 
   return (
     <Card padding="lg" shadow="sm" radius="md" withBorder>
-      <LoadingGlobal visible={isLoadingCashinData || isLoadingDeleteCashIn} />
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>
@@ -113,29 +115,42 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         />
       </Stack>
 
-      <TableComponent
-        startIndex={startIndex}
-        data={cashInList}
-        totalAmount={cashinSummaryData?.data.total_asset}
-        transactionType={transactionType}
-        height={"580"}
-        columns={columns}
-      />
+      <Box style={{ position: "relative" }}>
+        {isLoadingCashinData ? (
+          <Skeleton height={limit * 60} />
+        ) : (
+          <TableComponent
+            startIndex={startIndex}
+            data={cashInList}
+            totalAmount={cashinSummaryData?.data.total_asset}
+            transactionType={transactionType}
+            height={"580"}
+            columns={columns}
+          />
+        )}
+
+        <LoadingGlobal visible={isLoadingCashinData || isLoadingDeleteCashIn} />
+      </Box>
 
       <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payin" />
 
-      <PaginationWithLimit
-        total={cashinSummaryData?.data.total ?? 0}
-        page={page}
-        limit={limit}
-        startIndex={startIndex}
-        endIndex={endIndex}
-        onPageChange={setPage}
-        onLimitChange={(newLimit) => {
-          setLimit(newLimit);
-          setPage(1);
-        }}
-      />
+      {!isLoadingCashinData && (
+        <PaginationWithLimit
+          total={cashinSummaryData?.data.total ?? 0}
+          page={page}
+          limit={limit}
+          startIndex={startIndex}
+          endIndex={endIndex}
+          onPageChange={setPage}
+          onLimitChange={(newLimit) => {
+            setLimit(newLimit);
+            setPage(1);
+          }}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          onSortChange={setSortOrder}
+        />
+      )}
     </Card>
   );
 };

@@ -1,5 +1,5 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Box, Group } from "@mantine/core";
+import { Card, Text, Stack, Box, Group, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { formatCurrency } from "@/helper/formatCurrency";
@@ -87,7 +87,6 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
   return (
     <SimpleGridGlobal cols={1}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
-        <LoadingGlobal visible={isLoadingRevenue || isLoadingDeleteRevenue} />
         <Group justify="space-between">
           <Stack>
             <Text size="xl" fw={600}>
@@ -116,30 +115,40 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
           useCategory={true}
         />
 
-        <Box style={{ flex: 1 }}>
-          <TableComponent
-            startIndex={startIndex}
-            data={RevenueList}
-            totalAmount={revenueData?.data?.total_revenue ?? 0}
-            height={"580"}
-            columns={columns}
-          />
+        <Box style={{ position: "relative" }}>
+          {isLoadingRevenue ? (
+            <Skeleton height={limit * 60} />
+          ) : (
+            <Box style={{ flex: 1 }}>
+              <TableComponent
+                startIndex={startIndex}
+                data={RevenueList}
+                totalAmount={revenueData?.data?.total_revenue ?? 0}
+                height={"580"}
+                columns={columns}
+              />
+            </Box>
+          )}
+
+          <LoadingGlobal visible={isLoadingRevenue || isLoadingDeleteRevenue} />
         </Box>
 
         <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />
 
-        <PaginationWithLimit
-          total={revenueData?.data.total ?? 0}
-          page={page}
-          limit={limit}
-          startIndex={startIndex}
-          endIndex={endIndex}
-          onPageChange={setPage}
-          onLimitChange={(newLimit) => {
-            setLimit(newLimit);
-            setPage(1);
-          }}
-        />
+        {!isLoadingRevenue && (
+          <PaginationWithLimit
+            total={revenueData?.data.total ?? 0}
+            page={page}
+            limit={limit}
+            startIndex={startIndex}
+            endIndex={endIndex}
+            onPageChange={setPage}
+            onLimitChange={(newLimit) => {
+              setLimit(newLimit);
+              setPage(1);
+            }}
+          />
+        )}
       </Card>
     </SimpleGridGlobal>
   );
