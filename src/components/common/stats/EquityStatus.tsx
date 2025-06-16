@@ -15,6 +15,7 @@ export const EquityStats = ({ companyId, equityType, title }: EquityStatsProps) 
       getEquitySummary({
         companyId: companyId!,
         summaryOnly: true,
+        equityType,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,

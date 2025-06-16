@@ -89,6 +89,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
           <Stack>
             <Text size="xl" fw={600}>
               {title}
+              {""}
               {companyName}
             </Text>
           </Stack>

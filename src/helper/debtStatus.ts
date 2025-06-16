@@ -1,12 +1,5 @@
 import { differenceInDays } from "date-fns";
 
-export const calculateDaysLeft = (dueDate: string): number => {
-  // console.log("due data", dueDate);
-  const due = new Date(dueDate);
-  const today = new Date();
-  return differenceInDays(due, today);
-};
-
 export const formatDaysToDueMessage = (daysLeft: number): string => {
   if (isNaN(daysLeft)) return "Tanggal Tidak Valid";
 
@@ -56,27 +49,6 @@ export const formatPaidStatusMessage = (daysLeft: number): string => {
   const sisaHari = daysLeft % 30;
 
   return `Lebih Cepat ${months} bulan${sisaHari > 0 ? ` ${sisaHari} hari` : ""}`;
-};
-
-export const formatEarlyOrLateTransaction = (transactionDate: string, dueDate: string): string => {
-  const daysDiff = differenceInDays(new Date(dueDate), new Date(transactionDate));
-
-  if (daysDiff < 0) {
-    return `Terlambat ${Math.abs(daysDiff)} hari`;
-  }
-
-  if (daysDiff <= 5) {
-    return "Tepat Waktu";
-  }
-
-  if (daysDiff > 10) {
-    const months = Math.floor(daysDiff / 30);
-    const days = daysDiff % 30;
-    return `Lebih Cepat ${months > 0 ? `${months} bulan${days > 0 ? ` ${days} hari` : ""}` : `${days} hari`}`;
-  }
-
-  // Default fallback (contoh: 6–10 hari dianggap tetap tepat waktu)
-  return `Tepat Waktu`;
 };
 
 export const getStatusColor = (daysLeft: number): "red" | "orange" | "green" => {

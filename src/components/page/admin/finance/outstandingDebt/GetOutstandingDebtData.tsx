@@ -82,14 +82,11 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
     mutateDeleteDataJournal([idToDelete]); // <-- bungkus dalam array
   };
 
-  // console.log("debitList", debtList);
-  const shouldShowPaymentStatus = debtList.some((item) => item.status === "done" || item.status === "paid");
-
-  const openEditModal = (expenseData: IExpenseSummaryItem) => {
-    useModalStore.getState().openModal("editExpenseData", expenseData);
+  const openEditModal = (outstandingDebtData: IDebtSummaryItem) => {
+    useModalStore.getState().openModal("editOutstadingData", outstandingDebtData);
   };
 
-  const columns = columnsBaseDebt(handleSendClick, openEditModal, handleDeleteDataJournal, shouldShowPaymentStatus);
+  const columns = columnsBaseDebt(handleSendClick, openEditModal, handleDeleteDataJournal, status);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -97,7 +94,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>
-            {title} {companyName}
+            {title} {""} {companyName}
           </Text>
         </Stack>
         <Text size="xl" fw={800} c={"red"} mt={20}>

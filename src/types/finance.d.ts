@@ -30,6 +30,8 @@ interface IDebtSummaryItem {
   partner: string;
   amount: number;
   partner: string;
+  debit_category: string;
+  credit_category: string;
   transaction_type: "payin" | "payout"; // bisa disesuaikan kalau ada lebih dari dua tipe
   status: "paid" | "unpaid" | "completed" | "cancelled" | "done"; // sesuaikan dengan status yang valid di sistem
   company_id: string;
@@ -40,8 +42,8 @@ interface IDebtSummaryItem {
   installment: number;
   note: string;
   transaction_category_id: string;
-  payment_date_status: string;
-  label: string;
+  payment_note: string;
+  payment_note_color;
 }
 
 interface IDebtSummaryData {

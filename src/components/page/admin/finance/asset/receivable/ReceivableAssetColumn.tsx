@@ -1,16 +1,9 @@
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import ButtonReversedJournal from "@/components/common/button/buttonReversedJournal";
-import {
-  calculateDaysLeft,
-  formatDaysToDueMessage,
-  formatEarlyOrLateTransaction,
-  getColorForPaidStatus,
-  getStatusColor,
-} from "@/helper/debtStatus";
 import { formatCurrency } from "@/helper/formatCurrency";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
-import { Box, Badge, Text, Flex } from "@mantine/core";
+import { Flex } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 
 export const columnsBaseReceivableAsset = (
@@ -47,57 +40,6 @@ export const columnsBaseReceivableAsset = (
       width: 120,
       minWidth: 120,
       render: (item: IAssetSummaryItem) => (item.due_date ? formatDateIndonesia(item.due_date) : " - "),
-    },
-
-    // Jika ada yang status "done", tambahkan kolom repayment_date di sini
-    ...(hasDone
-      ? [
-          {
-            key: "repayment_date",
-            title: "Tanggal Pelunasan",
-            width: 120,
-            minWidth: 120,
-            render: (item: IAssetSummaryItem) => (item.repayment_date ? formatDateIndonesia(item.repayment_date) : " - "),
-          },
-        ]
-      : []),
-
-    { key: "note", title: "Keterangan", width: 220, minWidth: 220 },
-
-    {
-      key: "status",
-      title: "Status",
-      width: 200,
-      minWidth: 200,
-      render: (item: IAssetSummaryItem) => {
-        const isPaid = item.status === "done";
-        const earlyLate = formatEarlyOrLateTransaction(item.repayment_date, item.due_date);
-
-        if (isPaid) {
-          const color = getColorForPaidStatus(item.repayment_date, item.due_date);
-
-          return (
-            <Box>
-              <Badge color={color} p={8}>
-                <Text fw={700} size="xs">
-                  {earlyLate}
-                </Text>
-              </Badge>
-            </Box>
-          );
-        }
-
-        const daysLeft = calculateDaysLeft(item.due_date);
-        return (
-          <Box style={{ width: 280 }}>
-            <Badge color={getStatusColor(daysLeft)} p={8}>
-              <Text fw={700} size="xs">
-                {formatDaysToDueMessage(daysLeft)}
-              </Text>
-            </Badge>
-          </Box>
-        );
-      },
     },
 
     {
