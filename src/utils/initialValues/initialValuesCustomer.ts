@@ -8,9 +8,10 @@ export const initialValuesCustomer: ICustomerCreate = {
   date_inputed: "",
   marketer: "",
   home_id: null,
+  product_unit: "",
 };
 
-export const getInitialValuesUpdateCustomer = (customer?: Partial<ICustomer>): ICustomer => ({
+export const getInitialValuesUpdateCustomer = (customer?: Partial<ICustomerItem>): ICustomerItem => ({
   id: customer?.id || "",
   name: customer?.name || "",
   address: customer?.address || "",
@@ -24,4 +25,5 @@ export const getInitialValuesUpdateCustomer = (customer?: Partial<ICustomer>): I
   created_at: customer?.created_at || new Date().toISOString(),
   updated_at: customer?.updated_at || new Date().toISOString(),
   home: customer?.home ?? null,
+  product_unit: customer?.product_unit || "",
 });

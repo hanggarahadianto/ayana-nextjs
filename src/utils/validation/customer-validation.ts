@@ -42,4 +42,5 @@ export const validationSchemaCustomer = Yup.object({
   marketer: Yup.string().required("Nama marketer wajib diisi"),
 
   home_id: Yup.string().required("Produk wajib diisi"),
+  product_unit: Yup.string().required("Unit wajib diisi"),
 });

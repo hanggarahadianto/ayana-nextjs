@@ -30,6 +30,9 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
 
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const sortBy = "date_inputed"; // bisa juga dari Select nanti
+
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
   const {
@@ -46,6 +49,8 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
       debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
+      sortBy,
+      sortOrder,
     ],
     queryFn: () =>
       companyId
@@ -57,6 +62,8 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
             search: debouncedSearch,
             startDate: formattedStartDate,
             endDate: formattedEndDate,
+            sortBy,
+            sortOrder,
           })
         : null,
     enabled: !!companyId,
@@ -139,6 +146,9 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
               setLimit(newLimit);
               setPage(1);
             }}
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            onSortChange={setSortOrder}
           />
         )}
       </Card>

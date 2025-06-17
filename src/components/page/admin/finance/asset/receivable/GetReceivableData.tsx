@@ -31,6 +31,9 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
   const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const sortBy = "due_date"; // bisa juga dari Select nanti
+
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
   const [selectedReceivableAsset, setSelectedReceivableAsset] = useState<IAssetSummaryItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,6 +48,8 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
       debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
+      sortBy,
+      sortOrder,
     ],
     queryFn: () =>
       getAssetSummary({
@@ -56,8 +61,8 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         search: debouncedSearch, // 🔍
         startDate: formattedStartDate,
         endDate: formattedEndDate,
-        sortBy: "due_date",
-        sortOrder: "asc",
+        sortBy,
+        sortOrder,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -146,6 +151,9 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
             setLimit(newLimit);
             setPage(1);
           }}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          onSortChange={setSortOrder}
         />
       )}
 

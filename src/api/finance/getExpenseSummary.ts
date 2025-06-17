@@ -10,6 +10,8 @@ interface GetExpenseSummaryParams {
   search?: string;
   startDate?: string; // format: YYYY-MM-DD
   endDate?: string; // format: YYYY-MM-DD
+  sortBy?: string | null;
+  sortOrder?: string | null;
 }
 
 export const getExpenseSummary = async ({
@@ -22,6 +24,8 @@ export const getExpenseSummary = async ({
   search,
   startDate,
   endDate,
+  sortBy,
+  sortOrder,
 }: GetExpenseSummaryParams): Promise<IExpenseSummaryResponse> => {
   if (!companyId) {
     throw new Error("Company ID is required");
@@ -38,6 +42,8 @@ export const getExpenseSummary = async ({
   if (search) queryParams.append("search", search);
   if (startDate) queryParams.append("start_date", startDate);
   if (endDate) queryParams.append("end_date", endDate);
+  if (sortBy) queryParams.append("sort_by", sortBy);
+  if (sortOrder) queryParams.append("sort_order", sortOrder);
 
   const url = `finance/get-expense-summary?${queryParams.toString()}`;
 

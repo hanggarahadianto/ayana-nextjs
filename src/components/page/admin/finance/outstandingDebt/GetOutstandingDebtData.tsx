@@ -34,6 +34,8 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
   const [selectedDebt, setSelectedDebt] = useState<IDebtSummaryItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const sortBy = "repayment_date"; // bisa juga dari Select nanti
 
   const {
     data: outstandingDebtData,
@@ -146,6 +148,9 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
             setLimit(newLimit);
             setPage(1);
           }}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          onSortChange={setSortOrder}
         />
       )}
 

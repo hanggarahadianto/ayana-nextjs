@@ -10,6 +10,8 @@ interface EquityParams {
   search?: string;
   startDate?: string; // 👈 tambahkan
   endDate?: string; // 👈 tambahkan
+  sortBy?: string | null;
+  sortOrder?: string | null;
 }
 
 export const getEquitySummary = async ({
@@ -21,6 +23,8 @@ export const getEquitySummary = async ({
   search,
   startDate, // 👈 tambahkan
   endDate, // 👈 tambahkan
+  sortBy,
+  sortOrder,
 }: EquityParams): Promise<IEquitySummaryResponse | undefined> => {
   if (!companyId) {
     console.error("Company ID tidak tersedia!");
@@ -36,6 +40,8 @@ export const getEquitySummary = async ({
   if (search) queryParams.append("search", search); // 🔍
   if (startDate) queryParams.append("start_date", startDate); // <- gunakan format YYYY-MM-DD
   if (endDate) queryParams.append("end_date", endDate);
+  if (sortBy) queryParams.append("sort_by", sortBy);
+  if (sortOrder) queryParams.append("sort_order", sortOrder);
 
   const url = `/finance/get-equity-summary?${queryParams.toString()}`;
 

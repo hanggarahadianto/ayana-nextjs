@@ -29,24 +29,23 @@ export const availabilityOptions = [
 ];
 
 export const houseSaleStatuses = [
-  { value: "booking", label: "Booking" },
-  { value: "bank_processing", label: "Bank Processing" },
-  { value: "approved_by_bank", label: "Approved by Bank" },
-  { value: "rejected_by_bank", label: "Rejected by Bank" }, // alternatif jalur gagal
-  { value: "credit_agreement", label: "Credit Agreement (Akad)" },
-  { value: "under_construction", label: "Under Construction" },
-  { value: "construction_completed", label: "Construction Completed" },
-  { value: "handover", label: "Handover to Buyer" },
-  { value: "canceled", label: "Canceled" }, // bisa terjadi kapan saja
+  { value: "booking", label: "Pengajuan Pesanan (Booking)" },
+  { value: "approved_by_bank", label: "Disetujui Bank (Approved By Bank)" },
+  { value: "bank_processing", label: "Proses Bank (Bank Processing)" },
+  { value: "rejected_by_bank", label: "Ditolak Bank (Rejected By Bank)" },
+  { value: "credit_agreement", label: "Akad Kredit (Credit Aggrement)" },
+  { value: "under_construction", label: "Dalam Pembangunan (Under Construction)" },
+  { value: "construction_completed", label: "Pembangunan Selesai (Construction Completed)" },
+  { value: "handover", label: "Serah Terima ke Pembeli (Handover)" },
+  { value: "canceled", label: "Dibatalkan (Cenceled)" },
 ];
 
 export const paymentMethods = [
-  { value: "cash", label: "Cash" },
-  { value: "cash_installment", label: "Cash Installment" }, // cicilan langsung ke developer
-  { value: "kpr", label: "KPR (Mortgage)" },
-  { value: "kpr_subsidized", label: "KPR Subsidized" }, // KPR FLPP atau subsidi pemerintah
-  { value: "construction_progress", label: "Progress-Based Payment (Termin)" },
-  { value: "inhouse", label: "In-House Financing" },
+  { value: "cash", label: "Tunai" },
+  { value: "cash_installment", label: "Cicilan" }, // cicilan langsung ke developer
+  { value: "kpr", label: "KPR" },
+  { value: "kpr_subsidized", label: "KPR Subsidi" }, // KPR FLPP atau subsidi pemerintah
+  { value: "construction_progress", label: "Termin" },
 ];
 
 export const satuan: string[] = [

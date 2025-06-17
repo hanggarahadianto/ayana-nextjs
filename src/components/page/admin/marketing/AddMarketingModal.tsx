@@ -112,6 +112,12 @@ const AddMarketingModal = () => {
                       onChange={(value) => setFieldValue("home_id", value)}
                       error={touched.home_id && errors.home_id ? errors.home_id : undefined}
                     />
+                    <TextInput
+                      error={touched.product_unit && errors.product_unit ? errors.product_unit : undefined}
+                      label="Unit"
+                      placeholder="Masukkan Unit"
+                      onChange={(e) => handleChangeCustomer("product_unit", e.currentTarget.value, setFieldValue)}
+                    />
 
                     <Select
                       error={touched.status && errors.status ? errors.status : undefined}

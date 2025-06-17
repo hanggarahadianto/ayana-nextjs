@@ -1,48 +1,50 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Pagination, Badge, Group, Select } from "@mantine/core";
+import { Card, Text, Stack, Pagination, Badge, Group, Select, Box, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useEffect, useMemo, useState } from "react";
 import TableComponent from "@/components/common/table/TableComponent";
 import { getDataCustomer } from "@/api/customer/getDataCustomer";
 import { useCookies } from "@/utils/hook/useCookies";
 import { useDeleteDataCustomer } from "@/api/customer/deleteDataCustomer";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
-import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
 import EditCustomerModal from "./UpdateMarketingModal";
 import AddMarketingModal from "./AddMarketingModal";
-import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
-import { formatCurrency } from "@/helper/formatCurrency";
+import { formatDateRange } from "@/helper/formatDateIndonesia";
+import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
+import { columnsBaseMarketing } from "./MarketingColumn";
 
 export const CustomerTable = () => {
   const { getToken } = useCookies();
   const token = getToken();
 
   const [page, setPage] = useState(1);
-  const limit = 10;
+  const [limit, setLimit] = useState(10);
   const [selectedType, setSelectedType] = useState<string | null>(null);
+
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const sortBy = "repayment_date"; // bisa juga dari Select nanti
 
   const {
     data: customerData,
     isLoading: isLoadingCustomerData,
     refetch: refetchCustomerData,
   } = useQuery({
-    queryKey: ["getCustomerData", page, limit, selectedType],
+    queryKey: ["getCustomerData", page, limit, selectedType, formattedStartDate ?? null, formattedEndDate ?? null],
     queryFn: () =>
       getDataCustomer({
         page,
         limit,
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
       }),
     enabled: !!token,
     refetchOnWindowFocus: false,
   });
 
-  const customerList = customerData?.data ?? [];
-
-  const totalPages = useMemo(() => {
-    return customerData?.total ? Math.ceil(customerData.total / limit) : 1;
-  }, [customerData]);
+  // console.log("customer list", customerList);
 
   useEffect(() => {
     setPage(1);
@@ -50,8 +52,9 @@ export const CustomerTable = () => {
 
   // console.log("data", customerData);
 
+  const customerList = customerData?.data.customerList ?? [];
   const startIndex = (page - 1) * limit + 1;
-  const endIndex = Math.min(page * limit, customerData?.total || 0);
+  const endIndex = Math.min(page * limit, customerData?.data.total || 0);
 
   const { mutate: mutateDeleteDataCustomer, isPending: isLoadingDeleteCustomer } = useDeleteDataCustomer(refetchCustomerData);
   const handleDeleteCustomer = (idToDelete: string) => {
@@ -61,6 +64,7 @@ export const CustomerTable = () => {
   const openEditModal = (customer: any) => {
     useModalStore.getState().openModal("editCustomer", customer);
   };
+  const columns = columnsBaseMarketing(openEditModal, handleDeleteCustomer);
 
   return (
     <Card shadow="sm" padding="lg">
@@ -74,7 +78,6 @@ export const CustomerTable = () => {
           <Select
             label="Filter berdasarkan Type"
             placeholder="Pilih Type"
-            // data={accountTypeOptions}
             value={selectedType}
             onChange={(value) => {
               setSelectedType(value);
@@ -87,10 +90,10 @@ export const CustomerTable = () => {
           <AddMarketingModal />
         </Stack>
       </Group>
-      <TableComponent
+      {/* <TableComponent
         startIndex={startIndex}
         data={customerList}
-        totalAmount={customerData?.total}
+        totalAmount={customerData?.data.total_customer}
         height={"580"}
         columns={[
           { key: "name", title: "Nama", width: 200, minWidth: 200 },
@@ -103,6 +106,21 @@ export const CustomerTable = () => {
             width: 260,
             minWidth: 260,
             render: (row: ICustomer) => row.home?.title ?? "-",
+          },
+
+          {
+            key: "home.type",
+            title: "Tipe",
+            width: 90,
+            minWidth: 90,
+            render: (row: ICustomer) => row.home?.type ?? "-",
+          },
+          {
+            key: "product_unit",
+            title: "Unit",
+            width: 90,
+            minWidth: 90,
+            render: (row: ICustomer) => row.product_unit ?? "-",
           },
           {
             key: "date_inputed",
@@ -128,8 +146,8 @@ export const CustomerTable = () => {
           {
             key: "status",
             title: "Status",
-            width: 180,
-            minWidth: 180,
+            width: 280,
+            minWidth: 280,
             render: (row: ICustomer) => {
               const colorMap: Record<string, string> = {
                 booking: "yellow",
@@ -142,14 +160,14 @@ export const CustomerTable = () => {
                 handover: "teal",
                 canceled: "gray",
               };
+
               const color = colorMap[row.status] ?? "gray";
-              const label = row.status
-                ?.split("_")
-                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(" ");
+
+              const statusLabel = houseSaleStatuses.find((s) => s.value === row.status)?.label ?? row.status;
+
               return (
                 <Badge color={color} variant="filled" radius="sm">
-                  {label}
+                  {statusLabel}
                 </Badge>
               );
             },
@@ -172,16 +190,42 @@ export const CustomerTable = () => {
             ),
           },
         ]}
-      />
+      /> */}
+
+      <Box style={{ position: "relative" }}>
+        {isLoadingCustomerData ? (
+          <Skeleton height={limit * 60} />
+        ) : (
+          <TableComponent
+            startIndex={startIndex}
+            data={customerList}
+            totalAmount={customerData?.data.total_customer}
+            // transactionType={transactionType}
+            height={"580"}
+            columns={columns}
+          />
+        )}
+
+        <LoadingGlobal visible={isLoadingCustomerData || isLoadingDeleteCustomer} />
+      </Box>
       <EditCustomerModal initialData={useModalStore((state) => state.modalData)} />
 
-      {totalPages > 0 && (
-        <Stack gap="xs" mt="md" style={{ paddingBottom: "16px" }}>
-          <Pagination total={totalPages} value={page} onChange={setPage} />
-          <Text size="sm" c="dimmed">
-            Menampilkan {startIndex} sampai {endIndex} dari {customerData?.total} data
-          </Text>
-        </Stack>
+      {!isLoadingCustomerData && (
+        <PaginationWithLimit
+          total={customerData?.data.total ?? 0}
+          page={page}
+          limit={limit}
+          startIndex={startIndex}
+          endIndex={endIndex}
+          onPageChange={setPage}
+          onLimitChange={(newLimit) => {
+            setLimit(newLimit);
+            setPage(1);
+          }}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          onSortChange={setSortOrder}
+        />
       )}
     </Card>
   );

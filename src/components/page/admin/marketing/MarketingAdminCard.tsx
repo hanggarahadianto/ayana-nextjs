@@ -3,7 +3,7 @@
 import { Group, Text, Stack } from "@mantine/core";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { useState } from "react";
-import { CustomerTable } from "./GetMarketingTable";
+import { CustomerTable } from "./GetMarketingData";
 
 const MarketingAdminCard = () => {
   const [page, setPage] = useState(1);
