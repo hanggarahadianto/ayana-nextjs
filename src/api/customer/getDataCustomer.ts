@@ -3,11 +3,12 @@ import { APIAxiosInstance } from "@/lib";
 interface GetDataCustomerParams {
   page?: number;
   limit?: number;
+  search?: string;
   startDate?: string; // 👈 tambahkan
   endDate?: string; // 👈 tambahkan
 }
 
-export const getDataCustomer = async ({ page = 1, limit = 10, startDate, endDate }: GetDataCustomerParams) => {
+export const getDataCustomer = async ({ page = 1, limit = 10, search, startDate, endDate }: GetDataCustomerParams) => {
   const params = new URLSearchParams({});
 
   const queryParams = new URLSearchParams({
@@ -15,11 +16,11 @@ export const getDataCustomer = async ({ page = 1, limit = 10, startDate, endDate
     limit: limit.toString(),
   });
 
+  if (search) queryParams.append("search", search); // 🔍
   if (startDate) queryParams.append("start_date", startDate); // <- gunakan format YYYY-MM-DD
   if (endDate) queryParams.append("end_date", endDate);
 
-  const url = `customer/get?${params.toString()}`;
-  // console.log("URL request:", url);
+  const url = `customer/get?${queryParams.toString()}`;
 
   const response = await APIAxiosInstance.get(url);
   return response.data as ICustomerResponse;
