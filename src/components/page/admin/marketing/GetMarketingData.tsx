@@ -15,7 +15,11 @@ import { columnsBaseMarketing } from "./MarketingColumn";
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import { useDebounce } from "use-debounce";
 
-export const CustomerTable = () => {
+interface CustomerTableProps {
+  companyId: string;
+  companyName?: string;
+}
+export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) => {
   const { getToken } = useCookies();
   const token = getToken();
   const [page, setPage] = useState(1);
@@ -28,7 +32,7 @@ export const CustomerTable = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const sortBy = "repayment_date"; // bisa juga dari Select nanti
+  const sortBy = "inputed_date"; // bisa juga dari Select nanti
 
   const {
     data: customerData,
@@ -65,7 +69,6 @@ export const CustomerTable = () => {
     useModalStore.getState().openModal("editCustomer", customer);
   };
   const columns = columnsBaseMarketing(openEditModal, handleDeleteCustomer);
-  // console.log("customer list", customerList);
 
   return (
     <Card shadow="sm" padding="lg">

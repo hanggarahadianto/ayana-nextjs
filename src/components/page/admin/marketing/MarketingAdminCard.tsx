@@ -2,24 +2,26 @@
 
 import { Group, Text, Stack } from "@mantine/core";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
-import { useState } from "react";
 import { CustomerTable } from "./GetMarketingData";
+import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
+import GlobalTab from "@/components/common/tab/TabGlobal";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 const MarketingAdminCard = () => {
-  const [page, setPage] = useState(1);
-  const limit = 10;
-  const offset = (page - 1) * limit;
+  const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
+  const customerCompanies = companies?.filter((company: ICompany) => company.has_customer === true) || [];
 
   return (
     <>
       <SimpleGridGlobal cols={1}>
-        {/* <LoadingGlobal visible={isLoadingProductData || isLoadingDeleteProduct} /> */}
+        <GlobalTab data={customerCompanies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
+        <LoadingGlobal visible={isLoadingCompanies} />
         <Group justify="space-between" mb={20}>
           <Text fw={900} size="2rem">
             Daftar Konsumen
           </Text>
         </Group>
-        <CustomerTable />
+        <CustomerTable companyId={activeTab?.id || ""} />
       </SimpleGridGlobal>
     </>
   );
