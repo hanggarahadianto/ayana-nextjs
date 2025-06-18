@@ -11,6 +11,8 @@ interface ICustomerItem {
   home_id?: string | null; // UUID atau null
   home?: IProduct | null; // Optional relasi
   product_unit: string | null;
+  bank_name: string;
+  company_id: string;
   created_at: string; // ISO string dari Date
   updated_at: string; // ISO string dari Date
 }
@@ -26,6 +28,8 @@ interface ICustomerCreate {
   marketer: string;
   home_id?: string | null; // UUID atau null
   product_unit: string | null;
+  bank_name: string;
+  company_id: string;
 }
 interface ICustomerUpdate {
   id: string;
@@ -39,6 +43,8 @@ interface ICustomerUpdate {
   marketer: string;
   home_id?: string | null; // UUID atau null
   product_unit: string | null;
+  bank_name: string;
+  company_id: string;
 }
 
 interface ICustomerData {

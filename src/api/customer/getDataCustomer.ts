@@ -1,6 +1,7 @@
 import { APIAxiosInstance } from "@/lib";
 
 interface GetDataCustomerParams {
+  companyId: string;
   page?: number;
   limit?: number;
   search?: string;
@@ -8,10 +9,13 @@ interface GetDataCustomerParams {
   endDate?: string; // 👈 tambahkan
 }
 
-export const getDataCustomer = async ({ page = 1, limit = 10, search, startDate, endDate }: GetDataCustomerParams) => {
-  const params = new URLSearchParams({});
-
+export const getDataCustomer = async ({ companyId, page = 1, limit = 10, search, startDate, endDate }: GetDataCustomerParams) => {
+  if (!companyId) {
+    console.error("Company ID tidak tersedia!");
+    return;
+  }
   const queryParams = new URLSearchParams({
+    company_id: companyId,
     page: page.toString(),
     limit: limit.toString(),
   });

@@ -10,6 +10,7 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 const MarketingAdminCard = () => {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
   const customerCompanies = companies?.filter((company: ICompany) => company.has_customer === true) || [];
+  // console.log("active tab", activeTab?.id);
 
   return (
     <>

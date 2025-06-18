@@ -34,21 +34,33 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "inputed_date"; // bisa juga dari Select nanti
 
+  const queryEnabled = !!token && !!companyId;
+
   const {
     data: customerData,
     isLoading: isLoadingCustomerData,
     refetch: refetchCustomerData,
   } = useQuery({
-    queryKey: ["getCustomerData", page, limit, selectedCategory, debouncedSearch, formattedStartDate ?? null, formattedEndDate ?? null],
+    queryKey: [
+      "getCustomerData",
+      companyId,
+      page,
+      limit,
+      selectedCategory,
+      debouncedSearch,
+      formattedStartDate ?? null,
+      formattedEndDate ?? null,
+    ],
     queryFn: () =>
       getDataCustomer({
+        companyId: companyId!,
         page,
         limit,
         search: debouncedSearch,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
       }),
-    enabled: !!token,
+    enabled: queryEnabled,
     refetchOnWindowFocus: false,
   });
 
@@ -78,7 +90,7 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
             Daftar Konsumen
           </Text>
           <Stack align="flex-end" mb={16}>
-            <AddMarketingModal />
+            <AddMarketingModal companyId={companyId} />
           </Stack>
         </Group>
 

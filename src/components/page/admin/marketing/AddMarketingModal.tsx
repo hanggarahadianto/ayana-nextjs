@@ -6,15 +6,19 @@ import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
-import { initialValuesCustomer } from "@/utils/initialValues/initialValuesCustomer";
 import { useSubmitCustomerForm } from "@/api/customer/postDataCustomer";
 import SelectProduct from "@/components/common/select/SelectProduct";
 import { validationSchemaCustomer } from "@/utils/validation/customer-validation";
 import { houseSaleStatuses, paymentMethods } from "@/constants/dictionary";
 import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar } from "@tabler/icons-react";
+import { getInitialValuesCreateCustomer, getInitialValuesUpdateCustomer } from "@/utils/initialValues/initialValuesCustomer";
 
-const AddMarketingModal = () => {
+interface AddMarketingModalProps {
+  companyId: string;
+}
+
+const AddMarketingModal = ({ companyId }: AddMarketingModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const { mutate: postDataCustomer, isPending: isLoadingSubmitCustomerData } = useSubmitCustomerForm();
@@ -67,7 +71,11 @@ const AddMarketingModal = () => {
       <ButtonAdd onClick={open} size="3.5rem" />
 
       <Modal opened={opened} onClose={close} size={"60%"} yOffset="100px">
-        <Formik initialValues={initialValuesCustomer} validationSchema={validationSchemaCustomer} onSubmit={handleSubmit}>
+        <Formik
+          initialValues={getInitialValuesCreateCustomer(companyId)}
+          validationSchema={validationSchemaCustomer}
+          onSubmit={handleSubmit}
+        >
           {({ values, errors, touched, setFieldValue }) => {
             // console.log("values", values);
             // console.log("error", errors);
@@ -145,6 +153,12 @@ const AddMarketingModal = () => {
                         const numeric = Number(raw) || 0;
                         handleChangeCustomer("amount", numeric, setFieldValue);
                       }}
+                    />
+                    <TextInput
+                      error={touched.name && errors.name ? errors.name : undefined}
+                      label="Nama Bank"
+                      placeholder="Masukan Nama Bank "
+                      onChange={(e) => handleChangeCustomer("bank_name", e.currentTarget.value, setFieldValue)}
                     />
                     <Divider p={12} mt={16} />
                     <DatePickerInput
