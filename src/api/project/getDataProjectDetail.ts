@@ -7,7 +7,7 @@ export const getDataProjectDetail = async (id: string) => {
     const response = await APIAxiosInstance.get(url);
 
     console.log("Response:", response.data.data);
-    return response.data.data as IProject;
+    return response.data.data as IProjectItem;
   } catch (error: any) {
     console.error("Error fetching data:", error.message || error);
     throw error;

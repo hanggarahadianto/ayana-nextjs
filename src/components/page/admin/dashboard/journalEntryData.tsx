@@ -24,7 +24,7 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500);
 
   const [startDate, setStartDate] = useState<Date | null>(null);

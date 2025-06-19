@@ -25,7 +25,7 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
 
   const [startDate, setStartDate] = useState<Date | null>(null);

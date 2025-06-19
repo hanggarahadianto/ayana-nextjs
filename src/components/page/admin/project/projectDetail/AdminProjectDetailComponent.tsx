@@ -15,7 +15,7 @@ import { progressProject, totalMaterialCost, totalWorkerCost } from "@/lib/proje
 
 interface ProjectDetailProps {
   projectId: string;
-  initialData?: IProject; // Optional untuk data yang sudah di-fetch di server
+  initialData?: IProjectItem; // Optional untuk data yang sudah di-fetch di server
 }
 
 const AdminProjectDetailComponent: FC<ProjectDetailProps> = ({ projectId, initialData }) => {

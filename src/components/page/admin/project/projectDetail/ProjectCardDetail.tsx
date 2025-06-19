@@ -6,7 +6,7 @@ import { FC } from "react";
 import EditProjectModal from "./EditProjectModal";
 
 const ProjectCardDetail: FC<{
-  projectDataDetail?: IProject;
+  projectDataDetail?: IProjectItem;
   cashFlowData?: ICashFlowResponse;
   refetchProjectData: () => void;
   refetchCashFlowData: () => void;
