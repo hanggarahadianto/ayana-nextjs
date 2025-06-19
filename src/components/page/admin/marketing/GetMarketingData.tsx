@@ -32,7 +32,7 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
   const [endDate, setEndDate] = useState<Date | null>(null);
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const sortBy = "inputed_date"; // bisa juga dari Select nanti
+  const sortBy = "date_inputed";
 
   const queryEnabled = !!token && !!companyId;
 
@@ -50,6 +50,8 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
       debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
+      sortBy,
+      sortOrder,
     ],
     queryFn: () =>
       getDataCustomer({
@@ -59,6 +61,8 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
         search: debouncedSearch,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
+        sortBy,
+        sortOrder,
       }),
     enabled: queryEnabled,
     refetchOnWindowFocus: false,
@@ -95,6 +99,7 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
         </Group>
 
         <SearchTable
+          label={"Cari Data Konsumen"}
           companyId={""}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}

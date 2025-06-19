@@ -2,7 +2,9 @@ import * as Yup from "yup";
 
 export const validationSchemaProduct = Yup.object({
   title: Yup.string().required("Title is required"),
-  type: Yup.string().required("Type is required"),
+  type: Yup.string()
+    .required("Tipe wajib diisi")
+    .matches(/^\d{2,3} \/ \d{2,3}$/, "Format harus seperti 45 / 72"),
   content: Yup.string().required("Content is required"),
   bathroom: Yup.number().min(0, "Minimum 0").required("Bathroom is required"),
   bedroom: Yup.number().min(0, "Minimum 0").required("Bedroom is required"),

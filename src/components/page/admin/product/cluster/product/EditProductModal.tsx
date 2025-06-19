@@ -6,7 +6,7 @@ import { showNotification } from "@mantine/notifications";
 import { useEditProductForm } from "@/api/products/editDataProduct";
 import { validationSchemaProduct } from "@/utils/validation/product-validation";
 import { getInitialValuesUpdateProduct } from "@/utils/initialValues/initialValuesProduct";
-import { availabilityOptions, typeOptions } from "@/constants/dictionary";
+import { availabilityOptions } from "@/constants/dictionary";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { useQuery } from "@tanstack/react-query";
 import { getImages } from "@/api/products/getImagesProduct";
@@ -164,14 +164,10 @@ const UpdateProductModal = ({
                       error={touched.title && errors.title}
                       onChange={(e) => setFieldValue("title", e.currentTarget.value)}
                     />
-                    <Select
-                      w={"40px"}
-                      value={values.type}
+                    <TextInput
+                      error={touched.type && errors.type ? errors.type : undefined}
                       label="Tipe"
-                      placeholder="Pilih tipe"
-                      clearable
-                      data={typeOptions}
-                      error={touched.type && errors.type}
+                      placeholder="Pilih Tipe"
                       onChange={(value) => setFieldValue("type", value || "")}
                     />
                   </Group>

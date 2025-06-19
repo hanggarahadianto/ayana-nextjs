@@ -6,7 +6,7 @@ import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
-import { availabilityOptions, typeOptions } from "@/constants/dictionary";
+import { availabilityOptions } from "@/constants/dictionary";
 import { initialValuesClusterCreate } from "@/utils/initialValues/initialValuesCluster";
 import { validationSchemaClusterCreate } from "@/utils/validation/cluster-validation";
 import { useSubmitClusterForm } from "@/api/cluster/postCluster";

@@ -6,67 +6,62 @@ import Link from "next/link";
 import { getDataProject } from "@/api/project/getDataProject";
 import { useDeleteDataProject } from "@/api/project/deleteDataProject";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
-import { parseISO, differenceInDays, addDays } from "date-fns";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
+import { formatDateIndonesia, formatDateRange } from "@/helper/formatDateIndonesia";
 import AddProjectModal from "@/components/page/admin/project/AddProjectModal";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import useScreenSize from "@/lib/hook/useScreenSize";
+import { getProjectStatusDateWithColor } from "@/helper/formatStatusPorject";
+import { useState } from "react";
+import SearchTable from "@/components/common/table/SearchTableComponent";
+import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 
 interface ProjectAdminDataProps {
   companyId: string;
   companyName?: string;
 }
 const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) => {
-  const { isSmallScreen, isMediumScreen, isLaptopScreen, isWideScreen } = useScreenSize();
+  const { isSmallScreen, isMediumScreen, isLaptopScreen } = useScreenSize();
+
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+
+  const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+
+  const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
   const {
     data: projectData,
     isLoading: isLoadingGetProjectData,
     refetch: refetchProjectData,
   } = useQuery({
-    queryKey: ["getProjectData"],
-    queryFn: () => getDataProject(),
+    queryKey: ["getProjectData", companyId, selectedCategory, page, limit, formattedStartDate, formattedEndDate, searchTerm],
+    queryFn: () =>
+      getDataProject({
+        companyId,
+        selectedCategory: selectedCategory ?? undefined,
+        page,
+        limit,
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
+        searchTerm: searchTerm ?? undefined,
+      }),
+    enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
+
+  const projectList = projectData?.data.projectList ?? [];
+  const startIndex = (page - 1) * limit + 1;
+  const endIndex = Math.min(page * limit, projectData?.data.total || 0);
 
   const { mutate: mutateDeleteDataProject, isPending: isLoadingDeleteDataProject } = useDeleteDataProject(refetchProjectData);
 
   const handleDeleteProject = (idToDelete: string) => {
     mutateDeleteDataProject(idToDelete);
   };
-
-  function getProjectStatusDateWithColor(projectStart: string, projectTime: string) {
-    const startDate = parseISO(projectStart);
-    const duration = parseInt(projectTime, 10);
-    const plannedEndDate = addDays(startDate, duration);
-    const today = new Date();
-
-    const diffStartToNow = differenceInDays(today, startDate);
-    const diffEndToNow = differenceInDays(today, plannedEndDate);
-
-    if (diffStartToNow < 0) {
-      return {
-        text: `Belum mulai (mulai dalam ${Math.abs(diffStartToNow)} hari)`,
-        color: "gray",
-      };
-    }
-
-    if (diffEndToNow > 0) {
-      return {
-        text: `Terlambat ${diffEndToNow} hari`,
-        sisaWaktu: null,
-        color: "red",
-      };
-    }
-
-    const sisaHari = Math.abs(diffEndToNow);
-    return {
-      text: `Berjalan ${diffStartToNow} hari`,
-      sisaWaktu: `Sisa ${sisaHari} hari lagi`,
-      color: "green",
-    };
-  }
 
   return (
     <>
@@ -75,8 +70,25 @@ const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) 
           <Text fw={900} size="2rem">
             Daftar Project
           </Text>
+          <SearchTable
+            label={"Cari Data Transaksi"}
+            companyId={companyId}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            startDate={startDate}
+            setStartDate={setStartDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+            readonly={false}
+            transactionType={null}
+            debitAccountType={null}
+            creditAccountType={"Revenue"}
+            useCategory={true}
+          />
           <Stack>
-            <AddProjectModal refetchProjectData={refetchProjectData} />
+            <AddProjectModal refetchProjectData={refetchProjectData} companyId={companyId} />
           </Stack>
         </Group>
         <LoadingGlobal visible={isLoadingDeleteDataProject || isLoadingGetProjectData} />
@@ -87,7 +99,7 @@ const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) 
           }
           style={{ gap: "24px" }}
         >
-          {projectData?.data.map((project) => {
+          {projectList.map((project) => {
             const { text, sisaWaktu, color } = getProjectStatusDateWithColor(project.project_start, project.project_time);
 
             return (
@@ -155,6 +167,20 @@ const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) 
             );
           })}
         </SimpleGrid>
+        {!isLoadingGetProjectData && (
+          <PaginationWithLimit
+            total={projectData?.data.total ?? 0}
+            page={page}
+            limit={limit}
+            startIndex={startIndex}
+            endIndex={endIndex}
+            onPageChange={setPage}
+            onLimitChange={(newLimit) => {
+              setLimit(newLimit);
+              setPage(1);
+            }}
+          />
+        )}
       </SimpleGridGlobal>
     </>
   );

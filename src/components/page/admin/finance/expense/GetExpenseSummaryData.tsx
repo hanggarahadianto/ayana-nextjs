@@ -102,6 +102,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
           </Text>
         </Group>
         <SearchTable
+          label={"Cari Data Transaksi"}
           companyId={companyId}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}

@@ -103,6 +103,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
         </Text>
       </Group>
       <SearchTable
+        label={"Cari Data Transaksi"}
         companyId={companyId}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}

@@ -25,7 +25,7 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
 
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -65,11 +65,7 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
     refetchOnWindowFocus: false,
   });
 
-  //   console.log("RevenueData", RevenueData);
-
   const RevenueList = revenueData?.data.revenueList ?? [];
-
-  //   console.log("RevenueList", RevenueList);
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, revenueData?.data.total || 0);
 
@@ -99,6 +95,7 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
           </Text>
         </Group>
         <SearchTable
+          label={"Cari Data Transaksi"}
           companyId={companyId}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}

@@ -5,12 +5,12 @@ import { IconCalendar, IconX } from "@tabler/icons-react";
 import { MdClose } from "react-icons/md";
 import SelectCategoryFilter from "../select/SelectCategoryFilter";
 import { useMediaQuery } from "@mantine/hooks";
-import { useEffect } from "react";
 
 interface SearchTableProps {
+  label: string;
   companyId: string;
-  searchTerm: string;
-  setSearchTerm: (value: string) => void;
+  searchTerm?: string;
+  setSearchTerm: (value: string | undefined) => void;
   selectedCategory?: string | null;
   setSelectedCategory: (value: string | null) => void;
   startDate: Date | null;
@@ -23,8 +23,8 @@ interface SearchTableProps {
   readonly?: boolean;
   useCategory?: boolean;
 }
-
 export default function SearchTable({
+  label,
   companyId,
   searchTerm,
   setSearchTerm,
@@ -46,6 +46,8 @@ export default function SearchTable({
     setEndDate(null);
   };
 
+  const clearSearch = () => setSearchTerm(undefined);
+
   return (
     <Group>
       {useCategory && (
@@ -62,13 +64,13 @@ export default function SearchTable({
 
       <TextInput
         w={useCategory ? 400 : 800}
-        label="Cari Data Transaksi"
+        label={label}
         placeholder="Cari data transaksi..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.currentTarget.value)}
+        value={searchTerm ?? ""}
+        onChange={(e) => setSearchTerm(e.currentTarget.value || undefined)}
         rightSection={
           searchTerm ? (
-            <ActionIcon onClick={() => setSearchTerm("")} variant="subtle" color="gray">
+            <ActionIcon onClick={clearSearch} variant="subtle" color="gray">
               <IconX size={16} />
             </ActionIcon>
           ) : null
@@ -87,7 +89,7 @@ export default function SearchTable({
             onChange={setStartDate}
             valueFormat="DD MMMM YYYY"
             rightSection={<IconCalendar size={18} />}
-            w={"200"}
+            w={200}
           />
           <DatePickerInput
             label="Tanggal Akhir"
@@ -99,7 +101,7 @@ export default function SearchTable({
             onChange={setEndDate}
             valueFormat="DD MMMM YYYY"
             rightSection={<IconCalendar size={18} />}
-            w={"200"}
+            w={200}
           />
           <Tooltip label="Hapus Tanggal" withArrow>
             <ActionIcon variant="subtle" color="gray" onClick={clearDates} size="lg" radius="xl">
@@ -119,7 +121,7 @@ export default function SearchTable({
             onChange={setStartDate}
             valueFormat="DD MMMM YYYY"
             rightSection={<IconCalendar size={18} />}
-            w={"240"}
+            w={240}
           />
           <DatePickerInput
             label="Tanggal Akhir"
@@ -131,11 +133,11 @@ export default function SearchTable({
             onChange={setEndDate}
             valueFormat="DD MMMM YYYY"
             rightSection={<IconCalendar size={18} />}
-            w={"240"}
+            w={240}
           />
           <Tooltip label="Hapus Tanggal" withArrow>
-            <ActionIcon variant="subtle" color="slate" onClick={clearDates} radius="xl" mt={24} maw={16}>
-              <MdClose size={24} width={11} />
+            <ActionIcon variant="subtle" color="slate" onClick={clearDates} radius="xl" mt={24}>
+              <MdClose size={24} />
             </ActionIcon>
           </Tooltip>
         </Group>

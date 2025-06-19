@@ -4,28 +4,41 @@ import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import { IconCalendar, IconPlus } from "@tabler/icons-react";
-import { useSubmitProjectForm } from "@/api/project/postDataProject";
-import { locationOptions, projectDuration, typeOptions } from "@/constants/dictionary";
-import { initialValueProjectCreate, validationSchemaProject } from "@/utils/initialValues/initialValuesProject";
+import { locationOptions, projectDuration } from "@/constants/dictionary";
+import { getInitialValuesCreateProject, validationSchemaProject } from "@/utils/initialValues/initialValuesProject";
+import { useSubmitProjectCreate } from "@/api/project/postDataProject";
 
-const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => void }) => {
+interface AddProjectModalProps {
+  refetchProjectData: () => void;
+  companyId: string;
+}
+
+const AddProjectModal = ({ refetchProjectData, companyId }: AddProjectModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const { mutate: postData, isPending: isLoadingSubmitProjectData } = useSubmitProjectForm(refetchProjectData, close);
+  const { mutate: postData, isPending: isLoadingCreateProject } = useSubmitProjectCreate({
+    onSuccess: refetchProjectData,
+    onClose: close,
+    companyId,
+  });
 
-  const handleSubmit = (values: IProjectCreate, { setSubmitting }: any) => {
-    const projectName =
-      values.location && values.unit && values.type ? `${values.location} - ${values.unit} - ${values.type}` : "Unnamed Project";
+  const handleSubmit = useCallback(
+    (values: IProjectCreate, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
+      const projectName =
+        values.location && values.unit && values.type ? `${values.location} - ${values.unit} - ${values.type}` : "Unnamed Project";
 
-    const updatedValues = {
-      ...values,
-      project_name: projectName, // Auto-generate project name
-    };
+      const updatedValues: IProjectCreate = {
+        ...values,
+        project_name: projectName,
+        company_id: companyId,
+      };
 
-    console.log("Form values submitted:", updatedValues);
-    postData(updatedValues);
-    setSubmitting(false);
-  };
+      console.log("Form values submitted:", updatedValues);
+      postData(updatedValues);
+      setSubmitting(false);
+    },
+    [companyId, postData]
+  );
 
   return (
     <>
@@ -39,7 +52,7 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
         yOffset="100px" // Moves modal down
       >
         <Formik
-          initialValues={initialValueProjectCreate}
+          initialValues={getInitialValuesCreateProject(companyId)}
           validationSchema={validationSchemaProject}
           validateOnBlur={false}
           enableReinitialize={true}
@@ -78,15 +91,16 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
                         onChange={(event) => setFieldValue("unit", event.currentTarget.value.toUpperCase())}
                       />
 
-                      <InputWrapper required error={touched.type && errors.type ? errors.type : undefined}>
-                        <Select
-                          label="Tipe"
-                          placeholder="Pilih Tipe"
-                          onChange={(value: any) => setFieldValue("type", value)}
-                          data={typeOptions}
-                          required
-                        />
-                      </InputWrapper>
+                      <TextInput
+                        error={touched.type && errors.type ? errors.type : undefined}
+                        label="Tipe"
+                        placeholder="Contoh: 45 / 72"
+                        value={values.type}
+                        onChange={(e) => {
+                          const inputValue = e.currentTarget.value;
+                          setFieldValue("type", inputValue);
+                        }}
+                      />
                     </Group>
                     <Stack gap={20}>
                       <InputWrapper label="Investor" withAsterisk error={touched.investor && errors.investor ? errors.investor : undefined}>
@@ -199,7 +213,7 @@ const AddProjectModal = ({ refetchProjectData }: { refetchProjectData: () => voi
                       <Button onClick={close} variant="default">
                         Cancel
                       </Button>
-                      <Button type="submit" loading={isLoadingSubmitProjectData}>
+                      <Button type="submit" loading={isLoadingCreateProject}>
                         Tambah Proyek
                       </Button>
                     </Group>

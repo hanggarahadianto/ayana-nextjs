@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback } from "react";
-import { Modal, TextInput, Button, Group, Select, NumberInput, SimpleGrid, Divider, Stack, Text } from "@mantine/core";
+import { Modal, TextInput, Button, Group, Select, SimpleGrid, Divider, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
@@ -12,7 +12,7 @@ import { validationSchemaCustomer } from "@/utils/validation/customer-validation
 import { houseSaleStatuses, paymentMethods } from "@/constants/dictionary";
 import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar } from "@tabler/icons-react";
-import { getInitialValuesCreateCustomer, getInitialValuesUpdateCustomer } from "@/utils/initialValues/initialValuesCustomer";
+import { getInitialValuesCreateCustomer } from "@/utils/initialValues/initialValuesCustomer";
 
 interface AddMarketingModalProps {
   companyId: string;

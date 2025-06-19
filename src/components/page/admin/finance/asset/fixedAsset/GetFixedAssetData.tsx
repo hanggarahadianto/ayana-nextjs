@@ -93,6 +93,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         </Text>
       </Group>
       <SearchTable
+        label={"Cari Data Transaksi"}
         companyId={companyId}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}

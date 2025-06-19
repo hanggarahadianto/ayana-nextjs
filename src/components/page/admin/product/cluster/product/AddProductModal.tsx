@@ -5,7 +5,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
 import { useSubmitProductForm } from "@/api/products/postDataProduct";
-import { availabilityOptions, typeOptions } from "@/constants/dictionary";
+import { availabilityOptions } from "@/constants/dictionary";
 import { validationSchemaProduct } from "@/utils/validation/product-validation";
 import { initialValueProductCreate } from "@/utils/initialValues/initialValuesProduct";
 import ButtonAdd from "@/components/common/button/buttonAdd";
@@ -125,13 +125,15 @@ const AddProductModal = ({ clusterId }: Props) => {
                         onChange={(e) => handleChangeProduct("title", e.currentTarget.value, setFieldValue)}
                       />
 
-                      <Select
+                      <TextInput
                         error={touched.type && errors.type ? errors.type : undefined}
                         label="Tipe"
-                        data={typeOptions}
-                        placeholder="Pilih Tipe"
-                        clearable
-                        onChange={(value) => handleChangeProduct("type", value || "", setFieldValue)}
+                        placeholder="Contoh: 45 / 72"
+                        value={values.type}
+                        onChange={(e) => {
+                          const inputValue = e.currentTarget.value;
+                          setFieldValue("type", inputValue);
+                        }}
                       />
                     </Group>
 

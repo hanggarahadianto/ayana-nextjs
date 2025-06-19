@@ -105,6 +105,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         </Text>
       </Group>
       <SearchTable
+        label={"Cari Data Transaksi"}
         companyId={companyId}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}

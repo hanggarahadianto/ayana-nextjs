@@ -1,4 +1,4 @@
-interface IProject {
+interface IProjectItem {
   id: string;
   project_name: string;
   project_leader: string;
@@ -9,6 +9,7 @@ interface IProject {
   project_end: string;
   type: string;
   note: string;
+  company_id: string;
   created_at: string;
   updated_at: string;
 }
@@ -25,6 +26,7 @@ interface IProjectCreate {
   project_end: string;
   type: string;
   note: string;
+  company_id: string;
 }
 interface IProjectUpdate {
   id: string;
@@ -37,9 +39,19 @@ interface IProjectUpdate {
   project_end: string | Date | null; // Allow null values
   type: string;
   note: string;
+  company_id: string;
+}
+
+interface IProjectData {
+  projectList: IProjectItem[];
+  total_project: number;
+  page: number;
+  limit: number;
+  total: number;
 }
 
 interface IProjectResponse {
-  data: IProject[];
+  data: IProjectData;
+  message: string;
   status: string;
 }

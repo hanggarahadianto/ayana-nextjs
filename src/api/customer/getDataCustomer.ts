@@ -7,9 +7,20 @@ interface GetDataCustomerParams {
   search?: string;
   startDate?: string; // 👈 tambahkan
   endDate?: string; // 👈 tambahkan
+  sortBy?: string | null;
+  sortOrder?: string | null;
 }
 
-export const getDataCustomer = async ({ companyId, page = 1, limit = 10, search, startDate, endDate }: GetDataCustomerParams) => {
+export const getDataCustomer = async ({
+  companyId,
+  page = 1,
+  limit = 10,
+  search,
+  startDate,
+  endDate,
+  sortBy,
+  sortOrder,
+}: GetDataCustomerParams) => {
   if (!companyId) {
     console.error("Company ID tidak tersedia!");
     return;
@@ -23,6 +34,8 @@ export const getDataCustomer = async ({ companyId, page = 1, limit = 10, search,
   if (search) queryParams.append("search", search); // 🔍
   if (startDate) queryParams.append("start_date", startDate); // <- gunakan format YYYY-MM-DD
   if (endDate) queryParams.append("end_date", endDate);
+  if (sortBy) queryParams.append("sort_by", sortBy);
+  if (sortOrder) queryParams.append("sort_order", sortOrder);
 
   const url = `customer/get?${queryParams.toString()}`;
 

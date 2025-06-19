@@ -100,6 +100,7 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
         </Group>
 
         <SearchTable
+          label={"Cari Data Transaksi"}
           companyId={companyId}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}

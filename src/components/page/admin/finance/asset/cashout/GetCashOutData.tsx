@@ -99,6 +99,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
       </Group>
       <Stack mb={12}>
         <SearchTable
+          label={"Cari Data Transaksi"}
           companyId={companyId}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}

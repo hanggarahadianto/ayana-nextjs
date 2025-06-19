@@ -101,6 +101,7 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
           </Text>
         </Group>
         <SearchTable
+          label={"Cari Data Transaksi"}
           companyId={companyId}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
