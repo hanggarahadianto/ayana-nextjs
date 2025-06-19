@@ -103,11 +103,13 @@ export default function SearchTable({
             rightSection={<IconCalendar size={18} />}
             w={200}
           />
-          <Tooltip label="Hapus Tanggal" withArrow>
-            <ActionIcon variant="subtle" color="gray" onClick={clearDates} size="lg" radius="xl">
-              <MdClose size={24} />
-            </ActionIcon>
-          </Tooltip>
+          <Stack>
+            <Tooltip label="Hapus Tanggal" withArrow>
+              <ActionIcon variant="subtle" color="gray" onClick={clearDates} size="lg" radius="xl">
+                <MdClose size={24} />
+              </ActionIcon>
+            </Tooltip>
+          </Stack>
         </Stack>
       ) : (
         <Group grow>
@@ -121,7 +123,7 @@ export default function SearchTable({
             onChange={setStartDate}
             valueFormat="DD MMMM YYYY"
             rightSection={<IconCalendar size={18} />}
-            w={240}
+            w={440}
           />
           <DatePickerInput
             label="Tanggal Akhir"
@@ -133,13 +135,32 @@ export default function SearchTable({
             onChange={setEndDate}
             valueFormat="DD MMMM YYYY"
             rightSection={<IconCalendar size={18} />}
-            w={240}
+            w={440}
           />
-          <Tooltip label="Hapus Tanggal" withArrow>
-            <ActionIcon variant="subtle" color="slate" onClick={clearDates} radius="xl" mt={24}>
-              <MdClose size={24} />
-            </ActionIcon>
-          </Tooltip>
+          <Stack w={12}>
+            <Tooltip label="Hapus Tanggal" withArrow>
+              <ActionIcon
+                onClick={clearDates}
+                radius="xl"
+                mt={24}
+                variant="default"
+                color="gray"
+                size={32}
+                styles={{
+                  root: {
+                    width: 32,
+                    height: 32,
+                    padding: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  },
+                }}
+              >
+                <MdClose size={18} />
+              </ActionIcon>
+            </Tooltip>
+          </Stack>
         </Group>
       )}
     </Group>
