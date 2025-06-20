@@ -10,7 +10,7 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 const MarketingAdminCard = () => {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
   const customerCompanies = companies?.filter((company: ICompany) => company.has_customer === true) || [];
-  // console.log("active tab", activeTab?.id);
+  // console.log("customer companies", customerCompanies);
 
   return (
     <>
@@ -18,7 +18,7 @@ const MarketingAdminCard = () => {
         <GlobalTab data={customerCompanies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
         <LoadingGlobal visible={isLoadingCompanies} />
         <Group justify="space-between" mb={20}></Group>
-        <CustomerTable companyId={activeTab?.id || ""} />
+        {activeTab && <CustomerTable companyId={activeTab.id} />}
       </SimpleGridGlobal>
     </>
   );
