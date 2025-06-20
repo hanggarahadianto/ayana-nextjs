@@ -133,6 +133,7 @@ const AddMarketingModal = ({ companyId }: AddMarketingModalProps) => {
                       data={houseSaleStatuses}
                       placeholder="Pilih Status"
                       clearable
+                      searchable
                       onChange={(val) => handleChangeCustomer("status", val || "", setFieldValue)}
                     />
                     <Select

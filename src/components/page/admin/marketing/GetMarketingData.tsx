@@ -23,10 +23,10 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
   const { getToken } = useCookies();
   const token = getToken();
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(20);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
-  const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
+  const [debouncedSearch] = useDebounce(searchTerm, 500);
 
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -91,7 +91,7 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
       <Stack>
         <Group justify="space-between">
           <Text size="xl" fw={600}>
-            Daftar Konsumen
+            Daftar Konsumen {""} {companyName}
           </Text>
           <Stack align="flex-end" mb={16}>
             <AddMarketingModal companyId={companyId} />
@@ -111,7 +111,7 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
           setEndDate={setEndDate}
           transactionType={null}
           debitAccountType={null}
-          creditAccountType={"Liability"}
+          creditAccountType={null}
           readonly={false}
           useCategory={false}
         />
@@ -133,7 +133,7 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
 
         <LoadingGlobal visible={isLoadingCustomerData || isLoadingDeleteCustomer} />
       </Box>
-      <EditCustomerModal initialData={useModalStore((state) => state.modalData)} />
+      <EditCustomerModal companyId={companyId} initialData={useModalStore((state) => state.modalData)} />
 
       {!isLoadingCustomerData && (
         <PaginationWithLimit

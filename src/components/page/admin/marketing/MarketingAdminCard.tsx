@@ -17,11 +17,7 @@ const MarketingAdminCard = () => {
       <SimpleGridGlobal cols={1}>
         <GlobalTab data={customerCompanies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
         <LoadingGlobal visible={isLoadingCompanies} />
-        <Group justify="space-between" mb={20}>
-          <Text fw={900} size="2rem">
-            Daftar Konsumen
-          </Text>
-        </Group>
+        <Group justify="space-between" mb={20}></Group>
         <CustomerTable companyId={activeTab?.id || ""} />
       </SimpleGridGlobal>
     </>

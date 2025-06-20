@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback } from "react";
-import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleGrid, Divider, Text, Stack } from "@mantine/core";
+import { Modal, TextInput, Button, Group, Select, SimpleGrid, Divider, Text, Stack } from "@mantine/core";
 import { Formik, Form, FormikHelpers } from "formik";
 import { houseSaleStatuses, paymentMethods } from "@/constants/dictionary";
 import { getInitialValuesUpdateCustomer } from "@/utils/initialValues/initialValuesCustomer";
@@ -12,12 +12,13 @@ import { IconCalendar } from "@tabler/icons-react";
 import { DatePickerInput } from "@mantine/dates";
 
 interface EditCustomerModalProps {
+  companyId: string;
   initialData: ICustomerUpdate;
 }
 
-const EditCustomerModal: React.FC<EditCustomerModalProps> = () => {
+const EditCustomerModal: React.FC<EditCustomerModalProps> = ({ companyId }) => {
   const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
-  //   console.log("MODAL DATA", initialData);
+  // console.log("MODAL DATA", initialData);
 
   const { mutate: updateCustomer, isPending: isLoadingUpdateCustomer } = useUpdateCustomerData(closeModal);
 
@@ -41,13 +42,13 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = () => {
   return (
     <Modal opened={opened} onClose={closeModal} size="70%" yOffset="100px">
       <Formik<ICustomerUpdate>
-        initialValues={getInitialValuesUpdateCustomer(initialData)}
+        initialValues={getInitialValuesUpdateCustomer(companyId, initialData)}
         validationSchema={validationSchemaCustomer}
         onSubmit={handleSubmit}
         enableReinitialize
       >
         {({ values, errors, touched, setFieldValue }) => {
-          //   console.log("values", values);
+          // console.log("values", values);
           // console.log("error", errors);
           return (
             <SimpleGrid>
