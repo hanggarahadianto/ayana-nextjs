@@ -27,8 +27,8 @@ export const columnsBaseDebt = (
     {
       key: "kategori",
       title: "Kategori",
-      width: 120,
-      minWidth: 120,
+      width: 180,
+      minWidth: 180,
       render: (item) => (status === "going" ? item.debit_category || "-" : item.credit_category || "-"),
     },
     {

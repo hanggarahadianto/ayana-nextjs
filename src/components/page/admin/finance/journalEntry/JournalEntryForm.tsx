@@ -1,11 +1,25 @@
 import React, { memo, useCallback, useState } from "react";
-import { Stack, Group, TextInput, NumberInput, Textarea, Button, SimpleGrid, Badge, Switch, Select, Divider, Flex } from "@mantine/core";
+import {
+  Stack,
+  Group,
+  TextInput,
+  NumberInput,
+  Textarea,
+  Button,
+  SimpleGrid,
+  Badge,
+  Switch,
+  Select,
+  Divider,
+  Flex,
+  InputWrapper,
+} from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar, IconTrash } from "@tabler/icons-react";
 import { useFormikContext, FieldArray } from "formik";
 import SelectFinanceTransactionCategory from "@/components/common/select/SelectTransactiontCategory";
 import ButtonAdd from "@/components/common/button/buttonAdd";
-import { differenceInMonths } from "date-fns";
+import { calculateTotalBagiHasil } from "@/helper/calculateBagiHasil";
 
 interface JournalFormProps {
   companyId?: string;
@@ -88,22 +102,6 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
             // console.log("Status", entry.status);
             // console.log("entry", entry);
 
-            const calculateTotalBagiHasil = (entry: any, percentage: number) => {
-              const startDate = new Date(entry.date_inputed);
-              const endDate = new Date(entry.due_date);
-
-              let selisihBulan = 0;
-              if (startDate && endDate) {
-                selisihBulan = differenceInMonths(endDate, startDate);
-                if (selisihBulan < 1) selisihBulan = 1; // Minimal 1 bulan
-              }
-
-              const bagiHasilPerBulan = entry.amount * (percentage / 100);
-              const totalBagiHasil = bagiHasilPerBulan * selisihBulan;
-
-              return { totalBagiHasil, selisihBulan };
-            };
-
             const percentage = percentages[index] ?? 1; // Default percentage 1%
             const { totalBagiHasil, selisihBulan } = calculateTotalBagiHasil(entry, percentage);
 
@@ -134,6 +132,7 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                     {/* {entry.transaction_type !== "payin" && ( */}
                     <Group w="100%" grow>
                       <Select
+                        error={touched?.[index]?.status && error?.[index]?.status}
                         clearable
                         withAsterisk
                         label="Status Pembayaran"
@@ -158,16 +157,18 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                     {/* )} */}
 
                     {entry.status && (
-                      <SelectFinanceTransactionCategory
-                        companyId={companyId}
-                        transactionType={entry.transaction_type}
-                        label="Kategori Transaksi"
-                        onSelect={(selected) => {
-                          handleJournalChange(index, "description", selected.description);
-                          handleJournalChange(index, "transaction_category_id", selected.id);
-                        }}
-                        status={entry.status}
-                      />
+                      <InputWrapper error={touched?.[index]?.transaction_category_id && error?.[index]?.transaction_category_id}>
+                        <SelectFinanceTransactionCategory
+                          companyId={companyId}
+                          transactionType={entry.transaction_type}
+                          label="Kategori Transaksi"
+                          onSelect={(selected) => {
+                            handleJournalChange(index, "description", selected.description);
+                            handleJournalChange(index, "transaction_category_id", selected.id);
+                          }}
+                          status={entry.status}
+                        />
+                      </InputWrapper>
                     )}
 
                     <Group w="100%" grow>
@@ -332,6 +333,7 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                     )}
 
                     <Textarea
+                      h={140}
                       error={touched?.[index]?.note && error?.[index]?.note}
                       label="Keterangan"
                       placeholder="Masukkan Keterangan"

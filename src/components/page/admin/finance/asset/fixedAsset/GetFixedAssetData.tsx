@@ -31,6 +31,8 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
 
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const sortBy = "inputed_date"; // bisa juga dari Select nanti
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
   const { data: fixAssetSummaryData, isPending: isLoadingAssetData } = useQuery({
@@ -131,6 +133,9 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
           setLimit(newLimit);
           setPage(1);
         }}
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        onSortChange={setSortOrder}
       />
     </Card>
   );

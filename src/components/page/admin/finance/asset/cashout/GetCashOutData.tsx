@@ -32,7 +32,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   const [debouncedSearch] = useDebounce(searchTerm, 500);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "inputed_date"; // bisa juga dari Select nanti
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 

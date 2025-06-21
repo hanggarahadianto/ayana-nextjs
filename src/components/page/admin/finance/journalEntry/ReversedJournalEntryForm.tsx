@@ -51,7 +51,7 @@ const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, 
             return (
               <SimpleGrid key={index} p={20} spacing="md">
                 <Text>
-                  Pelunasan Untuk {initialData.label} {initialData.transaction_category_name}{" "}
+                  Pelunasan Untuk {initialData.transaction_category_name}{" "}
                   {initialData?.description?.toLowerCase().replace(/\b\w/g, (char: string) => char.toUpperCase())}
                 </Text>
 

@@ -48,7 +48,7 @@ const UpdateAccountModal = ({ companyId, initialValues }: UpdateAccountModalProp
             return (
               <Form>
                 <SimpleGrid p={20}>
-                  <Text fw={600}>Ubah Akun {values?.name}</Text>
+                  <Text fw={600}>Ubah Akun {initialValues?.name}</Text>
 
                   <Stack gap={20}>
                     <NumberInput

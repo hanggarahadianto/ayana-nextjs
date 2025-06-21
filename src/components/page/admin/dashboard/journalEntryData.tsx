@@ -133,16 +133,17 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
                 )
               }
             />
-            <ButtonDeleteWithConfirmation
-              size={2.5}
-              id={""}
-              onDelete={() => {
-                const selectedIds = checkboxStates.filter((c) => c.checked).map((c) => c.id);
-                if (selectedIds.length === 0) return;
-                mutateDeleteDataJournal(selectedIds);
-              }}
-              description={"Hapus yang ditandai"}
-            />
+            {selectedCount > 0 && (
+              <ButtonDeleteWithConfirmation
+                size={2.5}
+                id={""}
+                onDelete={() => {
+                  const selectedIds = checkboxStates.filter((c) => c.checked).map((c) => c.id);
+                  mutateDeleteDataJournal(selectedIds);
+                }}
+                description={"Hapus yang ditandai"}
+              />
+            )}
           </Group>
         </Stack>
 
