@@ -5,7 +5,8 @@ interface GetAssetSummaryParams {
   page?: number;
   limit?: number;
   assetType?: string | null;
-  selectedCategory?: string;
+  debitCategory: string | null;
+  creditCategory: string | null;
   summaryOnly?: boolean;
   search?: string; // 🔍 Tambahkan ini
   startDate?: string; // 👈 tambahkan
@@ -19,7 +20,8 @@ export const getAssetSummary = async ({
   page = 1,
   limit = 10,
   assetType = null,
-  selectedCategory,
+  debitCategory,
+  creditCategory,
   summaryOnly,
   search, // 🔍
   startDate, // 👈 tambahkan
@@ -37,7 +39,8 @@ export const getAssetSummary = async ({
 
   if (assetType) queryParams.append("asset_type", assetType);
   queryParams.append("summary_only", summaryOnly ? "true" : "false");
-  if (selectedCategory) queryParams.append("category", selectedCategory);
+  if (debitCategory) queryParams.append("debit_category", debitCategory);
+  if (creditCategory) queryParams.append("credit_category", creditCategory);
   if (search) queryParams.append("search", search); // 🔍
   if (startDate) queryParams.append("start_date", startDate); // <- gunakan format YYYY-MM-DD
   if (endDate) queryParams.append("end_date", endDate);
@@ -45,6 +48,8 @@ export const getAssetSummary = async ({
   if (sortOrder) queryParams.append("sort_order", sortOrder);
 
   const url = `finance/get-asset-summary?${queryParams.toString()}`;
+
+  console.log("url", url);
 
   try {
     const response = await APIAxiosInstance.get(url);

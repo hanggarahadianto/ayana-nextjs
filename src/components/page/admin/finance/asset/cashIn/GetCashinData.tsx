@@ -26,13 +26,13 @@ interface CashSummaryCardProps {
 export const GetCashinData = ({ companyId, companyName, assetType, transactionType, title }: CashSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>("Kas & Bank");
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const sortBy = "inputed_date"; // bisa juga dari Select nanti
+  const sortBy = "inputed_date";
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
   const { data: cashinSummaryData, isPending: isLoadingCashinData } = useQuery({
@@ -55,9 +55,9 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         page,
         limit,
         assetType,
-        selectedCategory: selectedCategory ?? undefined,
-        summaryOnly: false,
-        search: debouncedSearch, // 🔍
+        debitCategory: selectedCategory,
+        creditCategory: null,
+        search: debouncedSearch,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
         sortBy,
@@ -80,6 +80,8 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
   };
 
   const columns = columnsBaseCashIn(openEditModal, handleDeleteDataJournal);
+
+  console.log("cash in summary", cashinSummaryData);
 
   return (
     <Card padding="lg" shadow="sm" radius="md" withBorder>
@@ -108,7 +110,7 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
           setStartDate={setStartDate}
           endDate={endDate}
           setEndDate={setEndDate}
-          readonly={false}
+          readonly={true}
           transactionType={null}
           debitAccountType={"Asset"}
           creditAccountType={null}

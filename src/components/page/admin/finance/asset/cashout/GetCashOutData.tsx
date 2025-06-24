@@ -27,7 +27,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>("Kas & Bank");
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500);
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -56,7 +56,8 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
         page,
         limit,
         assetType,
-        selectedCategory: selectedCategory ?? "",
+        debitCategory: null,
+        creditCategory: selectedCategory,
         search: debouncedSearch,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
@@ -78,6 +79,8 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   const openEditModal = (cashOutAsset: IAssetSummaryItem) => {
     useModalStore.getState().openModal("editCashOutData", cashOutAsset);
   };
+
+  // console.log("cashout", cashOutSummaryData);
 
   const columns = columnsBaseCashout(openEditModal, handleDeleteDataJournal);
 
@@ -103,7 +106,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
           companyId={companyId}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
-          selectedCategory={"Kas & Bank"}
+          selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
           startDate={startDate}
           setStartDate={setStartDate}
