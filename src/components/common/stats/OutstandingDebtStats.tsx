@@ -16,7 +16,7 @@ export const OutstandingDebtStats = ({ companyId, title }: OutstandingDebtStatsP
         companyId: companyId || "",
         page: 1,
         limit: 10,
-        status: "going",
+        debtType: "going",
         summaryOnly: true,
       }),
     enabled: !!companyId,

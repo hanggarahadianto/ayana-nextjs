@@ -15,11 +15,13 @@ export const AvailableCashStats = ({ companyId, title }: AvailableCashStatsProps
         companyId: companyId!,
         assetType: "cashin",
         summaryOnly: true,
-        selectedCategory: "Kas & Bank",
+        debitCategory: "Kas & Bank",
+        creditCategory: null,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
+
   const { data: cashOutData, isLoading: loadingOut } = useQuery({
     queryKey: ["getCashOut", companyId],
     queryFn: () =>
@@ -27,6 +29,8 @@ export const AvailableCashStats = ({ companyId, title }: AvailableCashStatsProps
         companyId: companyId!,
         assetType: "cashout",
         summaryOnly: true,
+        debitCategory: null,
+        creditCategory: null,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,

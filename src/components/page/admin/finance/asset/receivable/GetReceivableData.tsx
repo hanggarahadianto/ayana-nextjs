@@ -57,7 +57,8 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         page,
         limit,
         assetType,
-        selectedCategory: selectedCategory ?? undefined,
+        debitCategory: selectedCategory,
+        creditCategory: null,
         search: debouncedSearch, // 🔍
         startDate: formattedStartDate,
         endDate: formattedEndDate,

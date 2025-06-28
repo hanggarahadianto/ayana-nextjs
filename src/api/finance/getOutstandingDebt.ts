@@ -1,11 +1,9 @@
 import { APIAxiosInstance } from "@/lib";
-
-// ✅ update fungsi ini
 interface GetOutstandingDebtParams {
   companyId: string;
   page?: number;
   limit?: number;
-  status: string;
+  debtType: string;
   summaryOnly?: boolean;
   selectedCategory?: string;
   search?: string;
@@ -17,7 +15,7 @@ export const getOutstandingDebt = async ({
   companyId,
   page = 1,
   limit = 10,
-  status,
+  debtType,
   summaryOnly,
   selectedCategory,
   search,
@@ -35,7 +33,7 @@ export const getOutstandingDebt = async ({
   });
 
   if (summaryOnly) queryParams.append("summary_only", "true");
-  if (status) queryParams.append("status", status);
+  if (debtType) queryParams.append("debt_type", debtType);
   if (search) queryParams.append("search", search); // 🔍
   if (selectedCategory) queryParams.append("credit_category", selectedCategory);
   if (startDate) queryParams.append("start_date", startDate); // <- gunakan format YYYY-MM-DD

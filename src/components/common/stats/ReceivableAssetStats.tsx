@@ -17,6 +17,8 @@ export const ReceivableAssetStats = ({ companyId, title }: AssetStatsProps) => {
         limit: 10,
         assetType: "receivable",
         summaryOnly: true,
+        debitCategory: null,
+        creditCategory: null,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,

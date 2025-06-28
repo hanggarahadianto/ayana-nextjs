@@ -81,8 +81,6 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
 
   const columns = columnsBaseCashIn(openEditModal, handleDeleteDataJournal);
 
-  console.log("cash in summary", cashinSummaryData);
-
   return (
     <Card padding="lg" shadow="sm" radius="md" withBorder>
       <Group justify="space-between">

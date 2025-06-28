@@ -25,13 +25,14 @@ interface AssetSummaryCardProps {
 export const GetFixedAssetData = ({ companyId, companyName, assetType, transactionType, title }: AssetSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>("Aset Tetap");
+
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
 
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "inputed_date"; // bisa juga dari Select nanti
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
@@ -45,6 +46,8 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
       debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
+      sortBy,
+      sortOrder,
     ],
     queryFn: () =>
       getAssetSummary({
@@ -52,10 +55,13 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         page,
         limit,
         assetType,
-        selectedCategory: "Aset Tetap",
+        debitCategory: selectedCategory,
+        creditCategory: null,
         search: debouncedSearch,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
+        sortBy,
+        sortOrder,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
@@ -99,7 +105,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         companyId={companyId}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
-        selectedCategory={"Aset Tetap"}
+        selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
         startDate={startDate}
         setStartDate={setStartDate}

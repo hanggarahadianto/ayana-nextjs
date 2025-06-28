@@ -16,6 +16,8 @@ export const FixedAssetStats = ({ companyId, title }: AssetStatsProps) => {
         companyId: companyId || "",
         assetType: "fixed_asset",
         summaryOnly: true,
+        debitCategory: null,
+        creditCategory: null,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,

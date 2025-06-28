@@ -32,14 +32,14 @@ export default function PayoutComponent() {
           companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
           title="Hutang Berjalan"
-          status="going"
+          debtType="going"
           transactionType={transactionType}
         />
         <GetOutstandingDebtData
           companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
           title="Hutang Lunas"
-          status="done"
+          debtType="done"
           transactionType={transactionType}
         />
       </SimpleGridGlobal>

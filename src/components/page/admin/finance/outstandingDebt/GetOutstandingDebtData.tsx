@@ -18,11 +18,11 @@ interface GetOutStandingDebtDataProps {
   companyId: string;
   companyName?: string;
   title: string;
-  status: string;
+  debtType: string;
   transactionType: string;
 }
 
-export const GetOutstandingDebtData = ({ companyId, companyName, title, status, transactionType }: GetOutStandingDebtDataProps) => {
+export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType, transactionType }: GetOutStandingDebtDataProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -48,7 +48,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
       selectedCategory,
       page,
       limit,
-      status,
+      debtType,
       debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
@@ -60,7 +60,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, status, 
             selectedCategory: selectedCategory ?? undefined,
             page,
             limit,
-            status,
+            debtType,
             search: debouncedSearch,
             startDate: formattedStartDate,
             endDate: formattedEndDate,

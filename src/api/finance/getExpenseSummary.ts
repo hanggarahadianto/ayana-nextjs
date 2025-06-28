@@ -4,9 +4,10 @@ interface GetExpenseSummaryParams {
   companyId: string;
   page?: number;
   limit?: number;
+  debitCategory: string | null;
+  creditCategory: string | null;
   summaryOnly?: boolean;
-  selectedCategory?: string;
-  status: string;
+  expenseType: string;
   search?: string;
   startDate?: string; // format: YYYY-MM-DD
   endDate?: string; // format: YYYY-MM-DD
@@ -18,9 +19,10 @@ export const getExpenseSummary = async ({
   companyId,
   page = 1,
   limit = 10,
+  debitCategory,
+  creditCategory,
   summaryOnly,
-  selectedCategory,
-  status,
+  expenseType,
   search,
   startDate,
   endDate,
@@ -31,14 +33,17 @@ export const getExpenseSummary = async ({
     throw new Error("Company ID is required");
   }
 
-  const queryParams = new URLSearchParams();
+  const queryParams = new URLSearchParams({
+    company_id: companyId,
+    page: page.toString(),
+    limit: limit.toString(),
+  });
 
-  queryParams.append("company_id", companyId);
-  queryParams.append("page", String(page));
-  queryParams.append("limit", String(limit));
-  if (summaryOnly) queryParams.append("summary_only", "true");
-  if (status) queryParams.append("status", status);
-  if (selectedCategory) queryParams.append("debit_category", selectedCategory);
+  queryParams.append("summary_only", summaryOnly ? "true" : "false");
+  if (expenseType) queryParams.append("expense_type", expenseType);
+  if (creditCategory) queryParams.append("credit_category", creditCategory);
+  if (debitCategory) queryParams.append("debit_category", debitCategory);
+  if (creditCategory) queryParams.append("credit_category", creditCategory);
   if (search) queryParams.append("search", search);
   if (startDate) queryParams.append("start_date", startDate);
   if (endDate) queryParams.append("end_date", endDate);

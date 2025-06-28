@@ -34,7 +34,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
 
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
-  const status = "base";
+  const expenseType = "base";
   const transactionType = "payout";
 
   const {
@@ -48,7 +48,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
       selectedCategory,
       page,
       limit,
-      status,
+      expenseType,
       debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
@@ -59,10 +59,11 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
       companyId
         ? getExpenseSummary({
             companyId,
-            selectedCategory: selectedCategory ?? undefined,
+            debitCategory: selectedCategory,
+            creditCategory: null,
             page,
             limit,
-            status,
+            expenseType,
             search: debouncedSearch,
             startDate: formattedStartDate,
             endDate: formattedEndDate,

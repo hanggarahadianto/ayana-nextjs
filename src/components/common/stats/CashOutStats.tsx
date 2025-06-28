@@ -12,13 +12,14 @@ type CashInStatsProps = {
 
 export const CashOutStats = ({ companyId, assetType, category, title }: CashInStatsProps) => {
   const { data: cashOutData, isPending: isLoadingCashOutData } = useQuery({
-    queryKey: ["getCashinData", companyId, assetType, category],
+    queryKey: ["getCashOutData", companyId, assetType, category],
     queryFn: () =>
       getAssetSummary({
         companyId: companyId!,
         assetType,
         summaryOnly: true,
-        selectedCategory: "Kas & Bank",
+        debitCategory: null,
+        creditCategory: "Kas & Bank",
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
