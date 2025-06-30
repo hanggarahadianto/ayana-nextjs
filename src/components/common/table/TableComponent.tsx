@@ -10,10 +10,18 @@ interface ScrollXWrapperProps {
   height: string | number; // ← bukan lagi optional
 }
 
+// function ScrollXWrapper({ children, minWidth = "1000px", height }: ScrollXWrapperProps) {
+//   return (
+//     <div style={{ width: "100%", overflowX: "auto", height: height }}>
+//       <div style={{ minWidth, height: "100%", minHeight: 600 }}>{children}</div>
+//     </div>
+//   );
+// }
+
 function ScrollXWrapper({ children, minWidth = "1000px", height }: ScrollXWrapperProps) {
   return (
-    <div style={{ width: "100%", overflowX: "auto", height: height }}>
-      <div style={{ minWidth, height: "100%", minHeight: 600 }}>{children}</div>
+    <div style={{ width: "100%", overflowX: "auto", height }}>
+      <div style={{ minWidth, height: "100%", minHeight: 600, paddingBottom: 18 }}>{children}</div>
     </div>
   );
 }

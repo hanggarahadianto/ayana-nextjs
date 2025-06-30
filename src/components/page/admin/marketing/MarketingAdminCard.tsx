@@ -1,6 +1,6 @@
 "use client";
 
-import { Group, Text, Stack } from "@mantine/core";
+import { Group } from "@mantine/core";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { CustomerTable } from "./GetMarketingData";
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
@@ -8,17 +8,15 @@ import GlobalTab from "@/components/common/tab/TabGlobal";
 import LoadingGlobal from "@/styles/loading/loading-global";
 
 const MarketingAdminCard = () => {
-  const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
-  const customerCompanies = companies?.filter((company: ICompany) => company.has_customer === true) || [];
-  // console.log("customer companies", customerCompanies);
+  const { filteredCompanies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs({ has_customer: true });
 
   return (
     <>
       <SimpleGridGlobal cols={1}>
-        <GlobalTab data={customerCompanies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
+        <GlobalTab data={filteredCompanies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
         <LoadingGlobal visible={isLoadingCompanies} />
         <Group justify="space-between" mb={20}></Group>
-        {activeTab && <CustomerTable companyId={activeTab.id} />}
+        <CustomerTable companyId={activeTab?.id || ""} />
       </SimpleGridGlobal>
     </>
   );

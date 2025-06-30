@@ -125,7 +125,6 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
             startIndex={startIndex}
             data={customerList}
             totalAmount={customerData?.data.total_customer}
-            // transactionType={transactionType}
             height={"580"}
             columns={columns}
           />
