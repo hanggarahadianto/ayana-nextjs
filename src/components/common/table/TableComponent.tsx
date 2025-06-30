@@ -2,26 +2,16 @@ import { formatCurrency } from "@/helper/formatCurrency";
 import { Table, Card, Text, Group, Box } from "@mantine/core";
 import React, { ReactNode } from "react";
 
-// Tipe untuk props ScrollXWrapper
-
 interface ScrollXWrapperProps {
   children: ReactNode;
   minWidth?: string | number;
   height: string | number; // ← bukan lagi optional
 }
 
-// function ScrollXWrapper({ children, minWidth = "1000px", height }: ScrollXWrapperProps) {
-//   return (
-//     <div style={{ width: "100%", overflowX: "auto", height: height }}>
-//       <div style={{ minWidth, height: "100%", minHeight: 600 }}>{children}</div>
-//     </div>
-//   );
-// }
-
 function ScrollXWrapper({ children, minWidth = "1000px", height }: ScrollXWrapperProps) {
   return (
     <div style={{ width: "100%", overflowX: "auto", height }}>
-      <div style={{ minWidth, height: "100%", minHeight: 600, paddingBottom: 18 }}>{children}</div>
+      <div style={{ minWidth, height: "100%", minHeight: 600, paddingBottom: 24 }}>{children}</div>
     </div>
   );
 }

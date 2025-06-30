@@ -21,6 +21,6 @@ export const menuItems: MenuItem[] = [
   { label: "Payout", icon: <FaMoneyBill />, href: "/admin/sidebar/payout" },
   { label: "Project", icon: <FaProjectDiagram />, href: "/admin/sidebar/project" },
   { label: "Transaction", icon: <TbTransactionDollar />, href: "/admin/sidebar/transaction" },
-  { label: "Profile", icon: <FaUser />, href: "/admin/sidebar/profile" },
+  { label: "HR", icon: <FaUser />, href: "/admin/sidebar/hr" },
   { label: "Setting", icon: <FaCog />, href: "/admin/sidebar/setting" },
 ];

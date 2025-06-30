@@ -122,7 +122,6 @@ export default function InternalLayoutClient({ children }: { children: React.Rea
                     label: {
                       whiteSpace: "nowrap",
                     },
-                    // Atur style aktif via `active` key, bukan &[data-active]
                   })}
                 />
               </motion.div>

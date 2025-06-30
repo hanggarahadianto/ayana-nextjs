@@ -129,3 +129,87 @@ export const transactionLabel = [
   { value: "Pembayaran", label: "Pembayaran" },
   { value: "Pengeluaran", label: "Pengeluaran" },
 ];
+
+export const departmentOptions = [
+  { label: "Marketing", value: "Marketing" },
+  { label: "Sales", value: "Sales" },
+  { label: "Teknik", value: "Teknik" },
+  { label: "Keuangan", value: "Keuangan" },
+  { label: "HRD", value: "HRD" },
+  { label: "Produksi", value: "Produksi" },
+];
+
+export const jabatanOptions = [
+  { label: "Staff", value: "Staff" },
+  { label: "Senior Staff", value: "Senior Staff" },
+  { label: "Supervisor", value: "Supervisor" },
+  { label: "Assistant Manager", value: "Assistant Manager" },
+  { label: "Manager", value: "Manager" },
+  { label: "General Manager", value: "General Manager" },
+  { label: "Direktur", value: "Direktur" },
+];
+export const employeeStatusOptions = [
+  { label: "Aktif", value: "Aktif" },
+  { label: "Cuti", value: "Cuti" },
+  { label: "Resign", value: "Resign" },
+  { label: "Diberhentikan", value: "Diberhentikan" },
+  { label: "Pensiun", value: "Pensiun" },
+];
+export const employeeTypeOptions = [
+  { label: "Tetap", value: "Tetap" },
+  { label: "Kontrak", value: "Kontrak" },
+  { label: "Magang", value: "Magang" },
+  { label: "Freelance", value: "Freelance" },
+];
+export const employeeGenderOptions = [
+  { label: "Laki-laki", value: "Laki-laki" },
+  { label: "Perempuan", value: "Perempuan" },
+  { label: "Lainnya", value: "Lainnya" },
+];
+export const employeeReligionOptions = [
+  { label: "Islam", value: "Islam" },
+  { label: "Kristen", value: "Kristen" },
+  { label: "Katolik", value: "Katolik" },
+  { label: "Hindu", value: "Hindu" },
+  { label: "Buddha", value: "Buddha" },
+  { label: "Konghucu", value: "Konghucu" },
+  { label: "Lainnya", value: "Lainnya" },
+];
+export const employeeMaritalStatusOptions = [
+  { label: "Belum Menikah", value: "Belum Menikah" },
+  { label: "Menikah", value: "Menikah" },
+  { label: "Cerai Hidup", value: "Cerai Hidup" },
+  { label: "Cerai Mati", value: "Cerai Mati" },
+];
+
+export const employeeEducationOptions = [
+  { label: "SD", value: "SD" },
+  { label: "SMP", value: "SMP" },
+  { label: "SMA/SMK", value: "SMA/SMK" },
+  { label: "D3", value: "D3" },
+  { label: "S1", value: "S1" },
+  { label: "S2", value: "S2" },
+  { label: "S3", value: "S3" },
+];
+export const employeeJobLevelOptions = [
+  { label: "Entry Level", value: "Entry Level" },
+  { label: "Mid Level", value: "Mid Level" },
+  { label: "Senior Level", value: "Senior Level" },
+  { label: "Executive", value: "Executive" },
+  { label: "Director", value: "Director" },
+  { label: "C-Level", value: "C-Level" }, // CEO, CFO, COO, etc.
+];
+export const employeeContractTypeOptions = [
+  { label: "Full-Time", value: "Full-Time" },
+  { label: "Part-Time", value: "Part-Time" },
+  { label: "Freelance", value: "Freelance" },
+  { label: "Internship", value: "Internship" },
+  { label: "Contract", value: "Contract" },
+];
+export const employeePerformanceRatingOptions = [
+  { label: "Sangat Baik", value: "Sangat Baik" },
+  { label: "Baik", value: "Baik" },
+  { label: "Cukup", value: "Cukup" },
+  { label: "Kurang", value: "Kurang" },
+  { label: "Sangat Kurang", value: "Sangat Kurang" },
+];

@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useCallback } from "react";
 import { Modal, TextInput, Button, Group, Select, SimpleGrid, Divider, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -42,9 +43,7 @@ const AddMarketingModal = ({ companyId }: AddMarketingModalProps) => {
               });
               return;
             }
-
             resetForm();
-
             close();
           },
           onError: (error: any) => {
@@ -84,7 +83,7 @@ const AddMarketingModal = ({ companyId }: AddMarketingModalProps) => {
                 <Form>
                   <SimpleGrid p="40px" spacing="md">
                     <Stack>
-                      <Text fw={700} mb={40}>
+                      <Text fw={700} mb={10}>
                         Tambah Konsumen
                       </Text>
                     </Stack>
@@ -98,7 +97,7 @@ const AddMarketingModal = ({ companyId }: AddMarketingModalProps) => {
                       />
                     </Group>
                     <TextInput
-                      error={touched.name && errors.name ? errors.name : undefined}
+                      error={touched.address && errors.address ? errors.address : undefined}
                       label="Alamat Konsumen"
                       placeholder="Masukkan Alamat "
                       onChange={(e) => handleChangeCustomer("address", e.currentTarget.value, setFieldValue)}
