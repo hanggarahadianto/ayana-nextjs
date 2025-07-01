@@ -38,7 +38,12 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
   const [selectedReceivableAsset, setSelectedReceivableAsset] = useState<IAssetSummaryItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: receivableAssetSummaryData, isPending: isLoadingReceivableAsset } = useQuery({
+  const {
+    data: receivableAssetSummaryData,
+    isPending: isLoadingReceivableAsset,
+    refetch: isRefetchReceivableAsset,
+    isFetched: isFetchingReceivableAsset,
+  } = useQuery({
     queryKey: [
       "getReceivableAssetData",
       companyId,
@@ -121,6 +126,8 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         debitAccountType={"Asset"}
         creditAccountType={null}
         useCategory={true}
+        onRefresh={isRefetchReceivableAsset}
+        isFetching={isFetchingReceivableAsset}
       />
 
       <Box style={{ position: "relative" }}>

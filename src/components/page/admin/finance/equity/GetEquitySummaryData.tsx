@@ -32,14 +32,15 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const sortBy = "date_inputed"; // bisa juga dari Select nanti
+  const sortBy = "date_inputed";
 
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
   const {
     data: equityData,
     isLoading: isLoadingEquity,
-    refetch: refetchRquityData,
+    refetch: isRefetchEquityData,
+    isFetched: isFetchingEquityData, // untuk setiap refetch
   } = useQuery({
     queryKey: [
       "getEquitySummaryData",
@@ -117,6 +118,8 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
           debitAccountType={null}
           creditAccountType={"Equity"}
           useCategory={true}
+          onRefresh={isRefetchEquityData}
+          isFetching={isFetchingEquityData}
         />
 
         <Box style={{ position: "relative" }}>

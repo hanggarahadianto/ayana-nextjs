@@ -35,7 +35,8 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
   const {
     data: revenueData,
     isLoading: isLoadingRevenue,
-    refetch: refetchRquityData,
+    refetch: isRefetchRevenueData,
+    isFetched: isFetchingRevenueData, // untuk setiap refetch
   } = useQuery({
     queryKey: [
       "getRevenueSummaryData",
@@ -110,6 +111,8 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
           debitAccountType={null}
           creditAccountType={"Revenue"}
           useCategory={true}
+          onRefresh={isRefetchRevenueData}
+          isFetching={isFetchingRevenueData}
         />
 
         <Box style={{ position: "relative" }}>

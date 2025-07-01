@@ -35,12 +35,13 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType
   const [selectedDebt, setSelectedDebt] = useState<IDebtSummaryItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const sortBy = "repayment_date"; // bisa juga dari Select nanti
+  const sortBy = "repayment_date";
 
   const {
     data: outstandingDebtData,
     isLoading: isLoadingOutstandingDebt,
-    refetch: refetchOutstandingDebtData,
+    refetch: isRefetchOutstandingDebtData,
+    isFetched: isFetchingOutstandingDebtData, // untuk setiap refetch
   } = useQuery({
     queryKey: [
       "getOutstandingDebtByCompanyId",
@@ -118,6 +119,8 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType
         creditAccountType={"Liability"}
         readonly={false}
         useCategory={true}
+        onRefresh={isRefetchOutstandingDebtData}
+        isFetching={isFetchingOutstandingDebtData}
       />
 
       <Box style={{ position: "relative" }}>

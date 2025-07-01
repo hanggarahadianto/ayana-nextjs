@@ -1,23 +1,21 @@
 import { Card, Text, Stack, Group } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useEffect, useState } from "react";
-import TableComponent from "@/components/common/table/TableComponent";
-import { getDataCustomer } from "@/api/customer/getDataCustomer";
 import { useCookies } from "@/utils/hook/useCookies";
-import { useDeleteDataCustomer } from "@/api/customer/deleteDataCustomer";
 import { useModalStore } from "@/store/modalStore";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
-
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import { useDebounce } from "use-debounce";
 import AddEmployeeModal from "./AddEmployeeModal";
+import { getDataEmployee } from "@/api/employee/getDataEmployee";
+import { useDeleteDataEmployee } from "@/api/employee/deleteDataEmployee";
 
-interface CustomerTableProps {
+interface EmployeeTableProps {
   companyId: string;
   companyName?: string;
 }
-export const HumanResourceTable = ({ companyId, companyName }: CustomerTableProps) => {
+export const HumanResourceTable = ({ companyId, companyName }: EmployeeTableProps) => {
   const { getToken } = useCookies();
   const token = getToken();
   const [page, setPage] = useState(1);
@@ -25,7 +23,6 @@ export const HumanResourceTable = ({ companyId, companyName }: CustomerTableProp
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500);
-
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
@@ -35,12 +32,13 @@ export const HumanResourceTable = ({ companyId, companyName }: CustomerTableProp
   const queryEnabled = !!token && !!companyId;
 
   const {
-    data: customerData,
-    isLoading: isLoadingCustomerData,
-    refetch: refetchCustomerData,
+    data: EmployeeData,
+    isLoading: isLoadingEmployeeData,
+    refetch: isRefetchEmployeeData,
+    isFetched: isFetchingEmployeeData, // untuk setiap refetch
   } = useQuery({
     queryKey: [
-      "getCustomerData",
+      "getEmployeeData",
       companyId,
       page,
       limit,
@@ -52,7 +50,7 @@ export const HumanResourceTable = ({ companyId, companyName }: CustomerTableProp
       sortOrder,
     ],
     queryFn: () =>
-      getDataCustomer({
+      getDataEmployee({
         companyId: companyId!,
         page,
         limit,
@@ -70,19 +68,19 @@ export const HumanResourceTable = ({ companyId, companyName }: CustomerTableProp
     setPage(1);
   }, [selectedCategory]);
 
-  const customerList = customerData?.data.customerList ?? [];
+  const employeeList = EmployeeData?.data.employeeList ?? [];
   const startIndex = (page - 1) * limit + 1;
-  const endIndex = Math.min(page * limit, customerData?.data.total || 0);
+  const endIndex = Math.min(page * limit, EmployeeData?.data.total || 0);
 
-  const { mutate: mutateDeleteDataCustomer, isPending: isLoadingDeleteCustomer } = useDeleteDataCustomer(refetchCustomerData);
-  const handleDeleteCustomer = (idToDelete: string) => {
-    mutateDeleteDataCustomer(idToDelete);
+  const { mutate: mutateDeleteDataEmployee, isPending: isLoadingDeleteEmployee } = useDeleteDataEmployee(isRefetchEmployeeData);
+  const handleDeleteEmployee = (idToDelete: string) => {
+    mutateDeleteDataEmployee(idToDelete);
   };
 
-  const openEditModal = (customer: any) => {
-    useModalStore.getState().openModal("editCustomer", customer);
+  const openEditModal = (Employee: any) => {
+    useModalStore.getState().openModal("editEmployee", Employee);
   };
-  //   const columns = columnsBaseMarketing(openEditModal, handleDeleteCustomer);
+  //   const columns = columnsBaseMarketing(openEditModal, handleDeleteEmployee);
 
   return (
     <Card shadow="sm" padding="lg">
@@ -112,29 +110,31 @@ export const HumanResourceTable = ({ companyId, companyName }: CustomerTableProp
           creditAccountType={null}
           readonly={false}
           useCategory={false}
+          onRefresh={isRefetchEmployeeData}
+          isFetching={isFetchingEmployeeData}
         />
       </Stack>
 
       {/* <Box style={{ position: "relative" }}>
-        {isLoadingCustomerData ? (
+        {isLoadingEmployeeData ? (
           <Skeleton height={limit * 60} />
         ) : (
           <TableComponent
             startIndex={startIndex}
-            data={customerList}
-            totalAmount={customerData?.data.total_customer}
+            data={EmployeeList}
+            totalAmount={EmployeeData?.data.total_Employee}
             height={"580"}
             columns={columns}
           />
         )}
 
-        <LoadingGlobal visible={isLoadingCustomerData || isLoadingDeleteCustomer} />
+        <LoadingGlobal visible={isLoadingEmployeeData || isLoadingDeleteEmployee} />
       </Box> */}
-      {/* <EditCustomerModal companyId={companyId} initialData={useModalStore((state) => state.modalData)} /> */}
+      {/* <EditEmployeeModal companyId={companyId} initialData={useModalStore((state) => state.modalData)} /> */}
 
-      {!isLoadingCustomerData && (
+      {!isLoadingEmployeeData && (
         <PaginationWithLimit
-          total={customerData?.data.total ?? 0}
+          total={EmployeeData?.data.total ?? 0}
           page={page}
           limit={limit}
           startIndex={startIndex}

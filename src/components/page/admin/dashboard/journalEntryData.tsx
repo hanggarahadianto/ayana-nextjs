@@ -31,7 +31,12 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
   const [endDate, setEndDate] = useState<Date | null>(null);
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
-  const { data: journalEntryData, isLoading: isLoadingJournalEntry } = useQuery({
+  const {
+    data: journalEntryData,
+    isLoading: isLoadingJournalEntry,
+    refetch: isRefetchJournalEntry,
+    isFetched: isFetchingJournalEntry,
+  } = useQuery({
     queryKey: [
       "getJournalEntryData",
       companyId,
@@ -115,6 +120,8 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
           debitAccountType={null}
           creditAccountType={null}
           useCategory={false}
+          onRefresh={isRefetchJournalEntry}
+          isFetching={isFetchingJournalEntry}
         />
 
         <Stack mt={"16px"} p={10}>

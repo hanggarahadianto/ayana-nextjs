@@ -40,7 +40,8 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
   const {
     data: expenseData,
     isLoading: isLoadingExpense,
-    refetch: refetchExpenseData,
+    refetch: isRefetchExpenseData,
+    isFetched: isFetchingExpenseData, // untuk setiap refetch
   } = useQuery({
     queryKey: [
       "getExpenseSummaryData",
@@ -118,6 +119,8 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
           creditAccountType={""}
           readonly={false}
           useCategory={true}
+          onRefresh={isRefetchExpenseData}
+          isFetching={isFetchingExpenseData}
         />
 
         <Box style={{ position: "relative" }}>

@@ -22,8 +22,8 @@ interface SearchTableProps {
   creditAccountType: string | null;
   readonly?: boolean;
   useCategory?: boolean;
-  onRefresh?: () => void;
-  isFetching?: boolean;
+  onRefresh: () => void;
+  isFetching: boolean;
 }
 export default function SearchTable({
   label,

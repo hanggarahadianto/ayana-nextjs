@@ -35,7 +35,12 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
   const sortBy = "inputed_date";
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
-  const { data: cashinSummaryData, isPending: isLoadingCashinData } = useQuery({
+  const {
+    data: cashinSummaryData,
+    isPending: isLoadingCashinData,
+    refetch: isRefetchCashinData,
+    isFetched: isFetchingCashinData, // untuk setiap refetch
+  } = useQuery({
     queryKey: [
       "getCashinData",
       companyId,
@@ -113,6 +118,8 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
           debitAccountType={"Asset"}
           creditAccountType={null}
           useCategory={true}
+          onRefresh={isRefetchCashinData}
+          isFetching={isFetchingCashinData}
         />
       </Stack>
 

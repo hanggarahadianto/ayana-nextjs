@@ -19,7 +19,7 @@ interface AssetSummaryCardProps {
   companyName?: string;
   assetType?: string;
   transactionType: string;
-  title;
+  title: string;
 }
 
 export const GetFixedAssetData = ({ companyId, companyName, assetType, transactionType, title }: AssetSummaryCardProps) => {
@@ -36,7 +36,12 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
   const sortBy = "inputed_date"; // bisa juga dari Select nanti
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
-  const { data: fixAssetSummaryData, isPending: isLoadingAssetData } = useQuery({
+  const {
+    data: fixAssetSummaryData,
+    isPending: isLoadingAssetData,
+    refetch: isRefetchFixedAsset,
+    isFetched: isFetchingFixedAsset, // untuk setiap refetch
+  } = useQuery({
     queryKey: [
       "getFixedAssetData",
       companyId,
@@ -116,6 +121,8 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         debitAccountType={"Asset"}
         creditAccountType={null}
         useCategory={true}
+        onRefresh={isRefetchFixedAsset}
+        isFetching={isFetchingFixedAsset}
       />
       <TableComponent
         startIndex={startIndex}
