@@ -36,7 +36,12 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   const sortBy = "date_inputed"; // bisa juga dari Select nanti
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
-  const { data: cashOutSummaryData, isPending: isLoadingCashOutData } = useQuery({
+  const {
+    data: cashOutSummaryData,
+    isPending: isLoadingCashOutData,
+    isFetching: isRefetchingCashOutData, // untuk setiap refetch
+    refetch: refetchCashOutData,
+  } = useQuery({
     queryKey: [
       "getCashOutData",
       companyId,
@@ -95,6 +100,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
 
         <Stack align="flex-end">
           <CreateJournalEntryModal companyId={companyId} transactionType={"payout"} />
+
           <Text size="xl" fw={800} c={"red"} mt={20}>
             {formatCurrency(cashOutSummaryData?.data.total_asset ?? 0)}
           </Text>
@@ -117,6 +123,8 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
           debitAccountType={null}
           creditAccountType={"Asset"}
           useCategory={true}
+          onRefresh={refetchCashOutData}
+          isFetching={isRefetchingCashOutData}
         />
       </Stack>
 

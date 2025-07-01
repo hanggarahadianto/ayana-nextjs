@@ -130,6 +130,12 @@ export const transactionLabel = [
   { value: "Pengeluaran", label: "Pengeluaran" },
 ];
 
+export const employeeGenderOptions = [
+  { label: "Laki-laki", value: "Laki-laki" },
+  { label: "Perempuan", value: "Perempuan" },
+  { label: "Lainnya", value: "Lainnya" },
+];
+
 export const departmentOptions = [
   { label: "Marketing", value: "Marketing" },
   { label: "Sales", value: "Sales" },
@@ -161,11 +167,7 @@ export const employeeTypeOptions = [
   { label: "Magang", value: "Magang" },
   { label: "Freelance", value: "Freelance" },
 ];
-export const employeeGenderOptions = [
-  { label: "Laki-laki", value: "Laki-laki" },
-  { label: "Perempuan", value: "Perempuan" },
-  { label: "Lainnya", value: "Lainnya" },
-];
+
 export const employeeReligionOptions = [
   { label: "Islam", value: "Islam" },
   { label: "Kristen", value: "Kristen" },
@@ -191,14 +193,7 @@ export const employeeEducationOptions = [
   { label: "S2", value: "S2" },
   { label: "S3", value: "S3" },
 ];
-export const employeeJobLevelOptions = [
-  { label: "Entry Level", value: "Entry Level" },
-  { label: "Mid Level", value: "Mid Level" },
-  { label: "Senior Level", value: "Senior Level" },
-  { label: "Executive", value: "Executive" },
-  { label: "Director", value: "Director" },
-  { label: "C-Level", value: "C-Level" }, // CEO, CFO, COO, etc.
-];
+
 export const employeeContractTypeOptions = [
   { label: "Full-Time", value: "Full-Time" },
   { label: "Part-Time", value: "Part-Time" },

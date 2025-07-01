@@ -2,16 +2,26 @@ export const getInitialValuesEmployeeCreate = (companyId: string): IEmployeeCrea
   name: "",
   address: "",
   phone: "",
+  gender: "",
   date_birth: "",
+  religion: "", // Optional field for religion
   department: "",
+  position: "",
+  employee_education: "", // Optional field for education
+  employee_status: "", // Default status
   company_id: companyId,
 });
 
 export const getInitialValuesUpdateEmployeeUpdate = (companyId: string, employee?: Partial<IEmployeeItem>): IEmployeeUpdate => ({
   id: employee?.id || "",
   name: employee?.name || "",
+  gender: employee?.gender || "",
   address: employee?.address || "",
+  religion: employee?.religion || "", // Optional field for religion
   phone: employee?.phone || "",
+  position: employee?.position || "",
+  employee_education: employee?.employee_education || "", // Optional field for education
+  employee_status: employee?.employee_status || "", // Default status
   company_id: employee?.company_id || companyId,
   date_birth: employee?.date_birth || "",
   department: employee?.department || "",

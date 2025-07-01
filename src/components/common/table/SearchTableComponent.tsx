@@ -1,7 +1,7 @@
 // components/SearchTable.tsx
 import { ActionIcon, Group, Stack, TextInput, Tooltip } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
-import { IconCalendar, IconX } from "@tabler/icons-react";
+import { IconCalendar, IconRefresh, IconX } from "@tabler/icons-react";
 import { MdClose } from "react-icons/md";
 import SelectCategoryFilter from "../select/SelectCategoryFilter";
 import { useMediaQuery } from "@mantine/hooks";
@@ -22,6 +22,8 @@ interface SearchTableProps {
   creditAccountType: string | null;
   readonly?: boolean;
   useCategory?: boolean;
+  onRefresh?: () => void;
+  isFetching?: boolean;
 }
 export default function SearchTable({
   label,
@@ -39,6 +41,8 @@ export default function SearchTable({
   creditAccountType,
   readonly = false,
   useCategory = false,
+  onRefresh = () => {},
+  isFetching = false,
 }: SearchTableProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const clearDates = () => {
@@ -138,28 +142,34 @@ export default function SearchTable({
             w={440}
           />
           <Stack w={12}>
-            <Tooltip label="Hapus Tanggal" withArrow>
-              <ActionIcon
-                onClick={clearDates}
-                radius="xl"
-                mt={24}
-                variant="default"
-                color="gray"
-                size={32}
-                styles={{
-                  root: {
-                    width: 32,
-                    height: 32,
-                    padding: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  },
-                }}
-              >
-                <MdClose size={18} />
-              </ActionIcon>
-            </Tooltip>
+            <Group mt={22} gap={20}>
+              <Tooltip label="Hapus Tanggal" withArrow>
+                <ActionIcon
+                  onClick={clearDates}
+                  radius="xl"
+                  variant="default"
+                  color="gray"
+                  size={32}
+                  styles={{
+                    root: {
+                      width: 32,
+                      height: 32,
+                      padding: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    },
+                  }}
+                >
+                  <MdClose size={18} />
+                </ActionIcon>
+              </Tooltip>
+              <Tooltip label="Refresh Data" withArrow>
+                <ActionIcon variant="subtle" color="green" onClick={onRefresh} size="lg" radius="xl" loading={isFetching}>
+                  <IconRefresh size={24} />
+                </ActionIcon>
+              </Tooltip>
+            </Group>
           </Stack>
         </Group>
       )}
