@@ -18,6 +18,7 @@ interface ISelectFinanceTransactionCategoryProps {
   label: string;
   transactionType?: string;
   status?: string;
+  error?: string | null;
 }
 
 export default function SelectFinanceTransactionCategory({
@@ -26,6 +27,7 @@ export default function SelectFinanceTransactionCategory({
   label,
   transactionType,
   status,
+  error,
 }: ISelectFinanceTransactionCategoryProps) {
   const { data: TransactionCategoryData, isLoading } = useQuery({
     queryKey: ["getTransactionCategorySelect", companyId, transactionType, status],
@@ -60,6 +62,7 @@ export default function SelectFinanceTransactionCategory({
 
   return (
     <Select
+      error={error}
       searchable
       clearable
       label={label}

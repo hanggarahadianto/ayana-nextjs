@@ -1,6 +1,6 @@
 import { Card, Text, Stack, Group, Box, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useCookies } from "@/utils/hook/useCookies";
 import { useModalStore } from "@/store/modalStore";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
@@ -71,17 +71,19 @@ export const HumanResourceTable = ({ companyId, companyName }: EmployeeTableProp
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, EmployeeData?.data.total || 0);
 
-  console.log("employee list", employeeList);
-
   const { mutate: mutateDeleteDataEmployee, isPending: isLoadingDeleteEmployee } = useDeleteDataEmployee(isRefetchEmployeeData);
-  const handleDeleteEmployee = (idToDelete: string) => {
-    mutateDeleteDataEmployee(idToDelete);
-  };
+  const handleDeleteEmployee = useCallback(
+    (idToDelete: string) => {
+      mutateDeleteDataEmployee(idToDelete);
+    },
+    [mutateDeleteDataEmployee]
+  );
 
-  const openEditModal = (Employee: any) => {
+  const openEditModal = useCallback((Employee: any) => {
     useModalStore.getState().openModal("editEmployee", Employee);
-  };
-  const columns = columnsBaseEmployee(openEditModal, handleDeleteEmployee);
+  }, []);
+  // const columns = columnsBaseEmployee(openEditModal, handleDeleteEmployee);
+  const columns = useMemo(() => columnsBaseEmployee(openEditModal, handleDeleteEmployee), [openEditModal, handleDeleteEmployee]);
 
   return (
     <Card shadow="sm" padding="lg">

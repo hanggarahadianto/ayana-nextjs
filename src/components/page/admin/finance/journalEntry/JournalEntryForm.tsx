@@ -1,19 +1,5 @@
 import React, { memo, useCallback, useState } from "react";
-import {
-  Stack,
-  Group,
-  TextInput,
-  NumberInput,
-  Textarea,
-  Button,
-  SimpleGrid,
-  Badge,
-  Switch,
-  Select,
-  Divider,
-  Flex,
-  InputWrapper,
-} from "@mantine/core";
+import { Stack, Group, TextInput, NumberInput, Textarea, Button, SimpleGrid, Badge, Switch, Select, Divider, Flex } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar, IconTrash } from "@tabler/icons-react";
 import { useFormikContext, FieldArray } from "formik";
@@ -157,18 +143,17 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                     {/* )} */}
 
                     {entry.status && (
-                      <InputWrapper error={touched?.[index]?.transaction_category_id && error?.[index]?.transaction_category_id}>
-                        <SelectFinanceTransactionCategory
-                          companyId={companyId}
-                          transactionType={entry.transaction_type}
-                          label="Kategori Transaksi"
-                          onSelect={(selected) => {
-                            handleJournalChange(index, "description", selected.description);
-                            handleJournalChange(index, "transaction_category_id", selected.id);
-                          }}
-                          status={entry.status}
-                        />
-                      </InputWrapper>
+                      <SelectFinanceTransactionCategory
+                        companyId={companyId}
+                        transactionType={entry.transaction_type}
+                        label="Kategori Transaksi"
+                        onSelect={(selected) => {
+                          handleJournalChange(index, "description", selected.description);
+                          handleJournalChange(index, "transaction_category_id", selected.id);
+                        }}
+                        status={entry.status}
+                        error={touched?.[index]?.transaction_category_id && error?.[index]?.transaction_category_id}
+                      />
                     )}
 
                     <Group w="100%" grow>

@@ -10,6 +10,8 @@ export const getInitialValuesEmployeeCreate = (companyId: string): IEmployeeCrea
   employee_education: "", // Optional field for education
   employee_status: "", // Default status
   company_id: companyId,
+  marital_status: "",
+  employee_contract_type: "",
 });
 
 export const getInitialValuesUpdateEmployeeUpdate = (companyId: string, employee?: Partial<IEmployeeItem>): IEmployeeUpdate => ({

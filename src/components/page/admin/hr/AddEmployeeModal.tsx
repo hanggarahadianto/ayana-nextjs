@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Modal, TextInput, Button, Group, Select, SimpleGrid, Divider, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
@@ -20,6 +20,7 @@ import {
   employeeTypeOptions,
   jabatanOptions,
 } from "@/constants/dictionary";
+import { stat } from "fs";
 
 interface AddMarketingModalProps {
   companyId: string;
@@ -69,6 +70,14 @@ const AddEmployeeModal = ({ companyId }: AddMarketingModalProps) => {
     setFieldValue(field, value);
   };
 
+  const genderOptionsMemo = useMemo(() => employeeGenderOptions, []);
+  const maritalOptionsMemo = useMemo(() => employeeMaritalStatusOptions, []);
+  const religionOptionsMemo = useMemo(() => employeeReligionOptions, []);
+  const departmentOptionsMemo = useMemo(() => departmentOptions, []);
+  const jabatanOptionsMemo = useMemo(() => jabatanOptions, []);
+  const statusOptionsMemo = useMemo(() => employeeStatusOptions, []);
+  const contractTypeOptionsMemo = useMemo(() => employeeTypeOptions, []);
+
   return (
     <SimpleGridGlobal cols={1}>
       <ButtonAdd onClick={open} size="3.5rem" />
@@ -113,7 +122,7 @@ const AddEmployeeModal = ({ companyId }: AddMarketingModalProps) => {
                       <Select
                         label="Jenis Kelamin"
                         placeholder="Masukkan Jenis Kelamin"
-                        data={employeeGenderOptions}
+                        data={genderOptionsMemo}
                         value={values.gender}
                         onChange={(value) => setFieldValue("gender", value)}
                         error={touched.gender && errors.gender ? errors.gender : undefined}
@@ -146,15 +155,15 @@ const AddEmployeeModal = ({ companyId }: AddMarketingModalProps) => {
                       <Select
                         label="Status Pernikahan"
                         placeholder="Masukkan Status Pernikahan"
-                        data={employeeMaritalStatusOptions}
+                        data={maritalOptionsMemo}
                         onChange={(value) => setFieldValue("marital_status", value)}
-                        error={errors.marital_status}
+                        error={touched.marital_status && errors.marital_status ? errors.marital_status : undefined}
                       />
 
                       <Select
                         placeholder="Masukkan Agama"
                         label="Agama"
-                        data={employeeReligionOptions}
+                        data={religionOptionsMemo}
                         value={values.religion}
                         onChange={(value) => setFieldValue("religion", value)}
                         error={touched.religion && errors.religion ? errors.religion : undefined}
@@ -165,7 +174,7 @@ const AddEmployeeModal = ({ companyId }: AddMarketingModalProps) => {
                     <Select
                       placeholder="Masukkan Divisi"
                       label="Divisi"
-                      data={departmentOptions}
+                      data={departmentOptionsMemo}
                       value={values.department}
                       onChange={(value) => setFieldValue("department", value)}
                       error={touched.department && errors.department ? errors.department : undefined}
@@ -173,7 +182,7 @@ const AddEmployeeModal = ({ companyId }: AddMarketingModalProps) => {
                     <Select
                       placeholder="Masukkan Jabatan"
                       label="Jabatan"
-                      data={jabatanOptions}
+                      data={jabatanOptionsMemo}
                       value={values.position}
                       onChange={(value) => setFieldValue("position", value)}
                       error={touched.position && errors.position ? errors.position : undefined}
@@ -181,16 +190,17 @@ const AddEmployeeModal = ({ companyId }: AddMarketingModalProps) => {
                     <Select
                       label="Status"
                       placeholder="Masukkan Status Pekerja "
-                      data={employeeStatusOptions}
+                      data={statusOptionsMemo}
                       value={values.employee_status}
                       onChange={(value) => setFieldValue("employee_status", value)}
                       error={touched.employee_status && errors.employee_status ? errors.employee_status : undefined}
                     />
                     <Select
-                      error={errors.employee_contract_type}
+                      // error={errors.employee_contract_type}
+                      error={touched.employee_contract_type && errors.employee_contract_type ? errors.employee_contract_type : undefined}
                       label="Status Kontrak Karyawan"
                       placeholder="Masukkan Status Kontrak Karyawan"
-                      data={employeeTypeOptions}
+                      data={contractTypeOptionsMemo}
                       onChange={(value) => setFieldValue("employee_contract_type", value)}
                     />
 
