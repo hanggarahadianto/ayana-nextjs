@@ -145,6 +145,7 @@ export default function SearchTable({
             <Group mt={22} gap={20}>
               <Tooltip label="Hapus Tanggal" withArrow>
                 <ActionIcon
+                  bg={"orange"}
                   onClick={clearDates}
                   radius="xl"
                   variant="default"
@@ -154,18 +155,18 @@ export default function SearchTable({
                     root: {
                       width: 32,
                       height: 32,
-                      padding: 0,
+                      padding: 5,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                     },
                   }}
                 >
-                  <MdClose size={18} />
+                  <MdClose size={24} />
                 </ActionIcon>
               </Tooltip>
-              <Tooltip label="Refresh Data" withArrow>
-                <ActionIcon variant="subtle" color="green" onClick={onRefresh} size="lg" radius="xl" loading={isFetching}>
+              <Tooltip label="Refresh Data" withArrow bg={"teal"}>
+                <ActionIcon variant="subtle" color="orange" onClick={onRefresh} size="lg" radius="xl" loading={isFetching} bg={"teal"}>
                   <IconRefresh size={24} />
                 </ActionIcon>
               </Tooltip>

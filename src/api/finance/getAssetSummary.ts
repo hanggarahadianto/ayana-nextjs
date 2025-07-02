@@ -49,8 +49,6 @@ export const getAssetSummary = async ({
 
   const url = `finance/get-asset-summary?${queryParams.toString()}`;
 
-  console.log("url", url);
-
   try {
     const response = await APIAxiosInstance.get(url);
     return response.data as IAssetSummaryResponse;

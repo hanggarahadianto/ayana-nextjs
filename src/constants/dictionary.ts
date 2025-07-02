@@ -194,13 +194,6 @@ export const employeeEducationOptions = [
   { label: "S3", value: "S3" },
 ];
 
-export const employeeContractTypeOptions = [
-  { label: "Full-Time", value: "Full-Time" },
-  { label: "Part-Time", value: "Part-Time" },
-  { label: "Freelance", value: "Freelance" },
-  { label: "Internship", value: "Internship" },
-  { label: "Contract", value: "Contract" },
-];
 export const employeePerformanceRatingOptions = [
   { label: "Sangat Baik", value: "Sangat Baik" },
   { label: "Baik", value: "Baik" },

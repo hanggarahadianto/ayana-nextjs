@@ -1,6 +1,6 @@
-import { Card, Text, Stack, Group } from "@mantine/core";
+import { Card, Text, Stack, Group, Box, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useCookies } from "@/utils/hook/useCookies";
 import { useModalStore } from "@/store/modalStore";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
@@ -10,6 +10,9 @@ import { useDebounce } from "use-debounce";
 import AddEmployeeModal from "./AddEmployeeModal";
 import { getDataEmployee } from "@/api/employee/getDataEmployee";
 import { useDeleteDataEmployee } from "@/api/employee/deleteDataEmployee";
+import TableComponent from "@/components/common/table/TableComponent";
+import { columnsBaseEmployee } from "./EmployeeColumn";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 interface EmployeeTableProps {
   companyId: string;
@@ -35,7 +38,7 @@ export const HumanResourceTable = ({ companyId, companyName }: EmployeeTableProp
     data: EmployeeData,
     isLoading: isLoadingEmployeeData,
     refetch: isRefetchEmployeeData,
-    isFetched: isFetchingEmployeeData, // untuk setiap refetch
+    isFetching: isFetchingEmployeeData, // untuk setiap refetch
   } = useQuery({
     queryKey: [
       "getEmployeeData",
@@ -64,13 +67,11 @@ export const HumanResourceTable = ({ companyId, companyName }: EmployeeTableProp
     refetchOnWindowFocus: false,
   });
 
-  useEffect(() => {
-    setPage(1);
-  }, [selectedCategory]);
-
   const employeeList = EmployeeData?.data.employeeList ?? [];
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, EmployeeData?.data.total || 0);
+
+  console.log("employee list", employeeList);
 
   const { mutate: mutateDeleteDataEmployee, isPending: isLoadingDeleteEmployee } = useDeleteDataEmployee(isRefetchEmployeeData);
   const handleDeleteEmployee = (idToDelete: string) => {
@@ -80,7 +81,7 @@ export const HumanResourceTable = ({ companyId, companyName }: EmployeeTableProp
   const openEditModal = (Employee: any) => {
     useModalStore.getState().openModal("editEmployee", Employee);
   };
-  //   const columns = columnsBaseMarketing(openEditModal, handleDeleteEmployee);
+  const columns = columnsBaseEmployee(openEditModal, handleDeleteEmployee);
 
   return (
     <Card shadow="sm" padding="lg">
@@ -115,21 +116,21 @@ export const HumanResourceTable = ({ companyId, companyName }: EmployeeTableProp
         />
       </Stack>
 
-      {/* <Box style={{ position: "relative" }}>
+      <Box style={{ position: "relative" }}>
         {isLoadingEmployeeData ? (
           <Skeleton height={limit * 60} />
         ) : (
           <TableComponent
             startIndex={startIndex}
-            data={EmployeeList}
-            totalAmount={EmployeeData?.data.total_Employee}
+            data={employeeList}
+            totalAmount={EmployeeData?.data.total_employee}
             height={"580"}
             columns={columns}
           />
         )}
 
         <LoadingGlobal visible={isLoadingEmployeeData || isLoadingDeleteEmployee} />
-      </Box> */}
+      </Box>
       {/* <EditEmployeeModal companyId={companyId} initialData={useModalStore((state) => state.modalData)} /> */}
 
       {!isLoadingEmployeeData && (

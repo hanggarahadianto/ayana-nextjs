@@ -39,8 +39,8 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   const {
     data: cashOutSummaryData,
     isPending: isLoadingCashOutData,
-    isFetching: isRefetchingCashOutData, // untuk setiap refetch
-    refetch: refetchCashOutData,
+    refetch: isRefetchCashOutData,
+    isFetching: isFetchingCashOutData, // untuk setiap refetch
   } = useQuery({
     queryKey: [
       "getCashOutData",
@@ -123,8 +123,8 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
           debitAccountType={null}
           creditAccountType={"Asset"}
           useCategory={true}
-          onRefresh={refetchCashOutData}
-          isFetching={isRefetchingCashOutData}
+          onRefresh={isRefetchCashOutData}
+          isFetching={isFetchingCashOutData}
         />
       </Stack>
 

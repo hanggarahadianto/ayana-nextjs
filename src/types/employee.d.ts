@@ -23,11 +23,11 @@ interface IEmployeeCreate {
   gender: string;
   date_birth: string;
   religion: string; // Optional field for religion
-  marital_status?: string; // Optional field for marital status
+  marital_status: string; // Optional field for marital status
   phone: string;
   department: string;
   employee_education?: string; // Optional field for education
-  employee_contract_type?: string; // Optional field for contract type
+  employee_contract_type: string; // Optional field for contract type
   position: string;
   employee_status: string; // Status karyawan, misalnya "active", "inactive", dll.
   company_id: string;

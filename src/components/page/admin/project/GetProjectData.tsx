@@ -34,7 +34,8 @@ const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) 
   const {
     data: projectData,
     isLoading: isLoadingGetProjectData,
-    refetch: refetchProjectData,
+    refetch: isRefetchProjectData,
+    isFetched: isFetchingProjectData, // untuk setiap refetch
   } = useQuery({
     queryKey: ["getProjectData", companyId, selectedCategory, page, limit, formattedStartDate, formattedEndDate, searchTerm],
     queryFn: () =>
@@ -55,7 +56,7 @@ const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) 
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, projectData?.data.total || 0);
 
-  const { mutate: mutateDeleteDataProject, isPending: isLoadingDeleteDataProject } = useDeleteDataProject(refetchProjectData);
+  const { mutate: mutateDeleteDataProject, isPending: isLoadingDeleteDataProject } = useDeleteDataProject(isRefetchProjectData);
 
   const handleDeleteProject = (idToDelete: string) => {
     mutateDeleteDataProject(idToDelete);
@@ -70,7 +71,7 @@ const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) 
               Daftar Project {""} {companyName}
             </Text>
             <Stack>
-              <AddProjectModal refetchProjectData={refetchProjectData} companyId={companyId} />
+              <AddProjectModal refetchProjectData={isRefetchProjectData} companyId={companyId} />
             </Stack>
           </Group>
           <Stack mt={40} mb={20}>
@@ -90,6 +91,8 @@ const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) 
               debitAccountType={null}
               creditAccountType={null}
               useCategory={false}
+              onRefresh={isRefetchProjectData}
+              isFetching={isFetchingProjectData}
             />
           </Stack>
         </Card>

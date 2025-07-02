@@ -39,7 +39,8 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
   const {
     data: customerData,
     isLoading: isLoadingCustomerData,
-    refetch: refetchCustomerData,
+    refetch: isRefetchCustomerData,
+    isFetched: isFetchingCustomerData, // untuk setiap refetch
   } = useQuery({
     queryKey: [
       "getCustomerData",
@@ -76,7 +77,7 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, customerData?.data.total || 0);
 
-  const { mutate: mutateDeleteDataCustomer, isPending: isLoadingDeleteCustomer } = useDeleteDataCustomer(refetchCustomerData);
+  const { mutate: mutateDeleteDataCustomer, isPending: isLoadingDeleteCustomer } = useDeleteDataCustomer(isRefetchCustomerData);
   const handleDeleteCustomer = (idToDelete: string) => {
     mutateDeleteDataCustomer(idToDelete);
   };
@@ -114,6 +115,8 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
           creditAccountType={null}
           readonly={false}
           useCategory={false}
+          onRefresh={isRefetchCustomerData}
+          isFetching={isFetchingCustomerData}
         />
       </Stack>
 

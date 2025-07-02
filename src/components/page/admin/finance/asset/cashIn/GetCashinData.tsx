@@ -39,7 +39,7 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
     data: cashinSummaryData,
     isPending: isLoadingCashinData,
     refetch: isRefetchCashinData,
-    isFetched: isFetchingCashinData, // untuk setiap refetch
+    isFetching: isFetchingCashinData, // untuk setiap refetch
   } = useQuery({
     queryKey: [
       "getCashinData",

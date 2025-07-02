@@ -13,11 +13,11 @@ import { getInitialValuesEmployeeCreate } from "@/utils/initialValues/initialVal
 import { validationSchemaEmployee } from "@/utils/validation/employee-validation";
 import {
   departmentOptions,
-  employeeContractTypeOptions,
   employeeGenderOptions,
   employeeMaritalStatusOptions,
   employeeReligionOptions,
   employeeStatusOptions,
+  employeeTypeOptions,
   jabatanOptions,
 } from "@/constants/dictionary";
 
@@ -91,14 +91,13 @@ const AddEmployeeModal = ({ companyId }: AddMarketingModalProps) => {
                         Tambah Karyawan
                       </Text>
                     </Stack>
-
+                    <TextInput
+                      error={touched.name && errors.name ? errors.name : undefined}
+                      label="Nama Karyawan"
+                      placeholder="Masukkan Nama Karyawan"
+                      onChange={(e) => handleChangeEmployee("name", e.currentTarget.value, setFieldValue)}
+                    />
                     <Group grow>
-                      <TextInput
-                        error={touched.name && errors.name ? errors.name : undefined}
-                        label="Nama Karyawan"
-                        placeholder="Masukkan Nama Karyawan"
-                        onChange={(e) => handleChangeEmployee("name", e.currentTarget.value, setFieldValue)}
-                      />
                       <DatePickerInput
                         error={touched.date_birth && errors?.date_birth}
                         label="Tanggal Lahir"
@@ -115,21 +114,10 @@ const AddEmployeeModal = ({ companyId }: AddMarketingModalProps) => {
                         label="Jenis Kelamin"
                         placeholder="Masukkan Jenis Kelamin"
                         data={employeeGenderOptions}
-                        value={values.department}
+                        value={values.gender}
                         onChange={(value) => setFieldValue("gender", value)}
                         error={touched.gender && errors.gender ? errors.gender : undefined}
                       />
-                      <Select
-                        label="Status Pernikahan"
-                        placeholder="Masukkan Status Pernikahan"
-                        data={employeeMaritalStatusOptions}
-                        value={values.marital_status}
-                        onChange={(value) => setFieldValue("marital_status", value)}
-                        error={touched.marital_status && errors.marital_status ? errors.marital_status : undefined}
-                      />
-                    </Group>
-
-                    <Group>
                       <TextInput
                         error={touched.phone && errors.phone ? errors.phone : undefined}
                         label="Nomor Telepon"
@@ -140,6 +128,29 @@ const AddEmployeeModal = ({ companyId }: AddMarketingModalProps) => {
                           handleChangeEmployee("phone", onlyNumbers, setFieldValue);
                         }}
                       />
+                    </Group>
+                    <TextInput
+                      error={touched.address && errors.address ? errors.address : undefined}
+                      label="Alamat Karyawan"
+                      placeholder="Masukkan Alamat"
+                      onChange={(e) => handleChangeEmployee("address", e.currentTarget.value, setFieldValue)}
+                    />
+                    <Divider mt={20} />
+                    <TextInput
+                      error={touched.employee_education && errors.employee_education ? errors.employee_education : undefined}
+                      label="Pendidikan Terakhir"
+                      placeholder="Masukkan Pendidikan"
+                      onChange={(e) => handleChangeEmployee("employee_education", e.currentTarget.value, setFieldValue)}
+                    />
+                    <Group>
+                      <Select
+                        label="Status Pernikahan"
+                        placeholder="Masukkan Status Pernikahan"
+                        data={employeeMaritalStatusOptions}
+                        onChange={(value) => setFieldValue("marital_status", value)}
+                        error={errors.marital_status}
+                      />
+
                       <Select
                         placeholder="Masukkan Agama"
                         label="Agama"
@@ -149,18 +160,6 @@ const AddEmployeeModal = ({ companyId }: AddMarketingModalProps) => {
                         error={touched.religion && errors.religion ? errors.religion : undefined}
                       />
                     </Group>
-                    <TextInput
-                      error={touched.address && errors.address ? errors.address : undefined}
-                      label="Alamat Karyawan"
-                      placeholder="Masukkan Alamat"
-                      onChange={(e) => handleChangeEmployee("address", e.currentTarget.value, setFieldValue)}
-                    />
-                    <TextInput
-                      error={touched.employee_education && errors.employee_education ? errors.employee_education : undefined}
-                      label="Pendidikan Karayawan"
-                      placeholder="Masukkan Pendidikan"
-                      onChange={(e) => handleChangeEmployee("employee_education", e.currentTarget.value, setFieldValue)}
-                    />
 
                     <Divider mt={20} />
                     <Select
@@ -168,7 +167,7 @@ const AddEmployeeModal = ({ companyId }: AddMarketingModalProps) => {
                       label="Divisi"
                       data={departmentOptions}
                       value={values.department}
-                      onChange={(value) => setFieldValue("home_id", value)}
+                      onChange={(value) => setFieldValue("department", value)}
                       error={touched.department && errors.department ? errors.department : undefined}
                     />
                     <Select
@@ -188,12 +187,11 @@ const AddEmployeeModal = ({ companyId }: AddMarketingModalProps) => {
                       error={touched.employee_status && errors.employee_status ? errors.employee_status : undefined}
                     />
                     <Select
+                      error={errors.employee_contract_type}
                       label="Status Kontrak Karyawan"
                       placeholder="Masukkan Status Kontrak Karyawan"
-                      data={employeeContractTypeOptions}
-                      value={values.employee_status}
+                      data={employeeTypeOptions}
                       onChange={(value) => setFieldValue("employee_contract_type", value)}
-                      error={touched.employee_contract_type && errors.employee_contract_type ? errors.employee_contract_type : undefined}
                     />
 
                     <Group justify="flex-end" mt="md">

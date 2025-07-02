@@ -40,5 +40,5 @@ export const getDataEmployee = async ({
   const url = `employee/get?${queryParams.toString()}`;
 
   const response = await APIAxiosInstance.get(url);
-  return response.data as IEmployeeResponse
+  return response.data as IEmployeeResponse;
 };
