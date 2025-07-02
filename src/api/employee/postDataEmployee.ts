@@ -17,7 +17,7 @@ export const useSubmitEmployeerForm = () => {
     onSuccess: async (data: any) => {
       await Promise.all([
         queryClient.refetchQueries({
-          queryKey: ["getCustomerData"],
+          queryKey: ["getEmployeeData"],
           exact: false,
         }),
       ]);

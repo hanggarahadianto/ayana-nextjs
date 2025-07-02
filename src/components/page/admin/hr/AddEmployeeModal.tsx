@@ -38,16 +38,6 @@ const AddEmployeeModal = ({ companyId }: AddMarketingModalProps) => {
 
         postDataEmployee(payload, {
           onSuccess: async (res: any) => {
-            const productId = res?.id;
-
-            if (!productId) {
-              showNotification({
-                title: "Gagal",
-                message: "Tidak mendapat ID produk",
-                color: "red",
-              });
-              return;
-            }
             resetForm();
             close();
           },

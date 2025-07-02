@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback } from "react";
-import { Modal, TextInput, Button, Group, Select,  SimpleGrid, Divider, Text, Stack } from "@mantine/core";
+import { Modal, TextInput, Button, Group, Select, SimpleGrid, Divider, Text, Stack } from "@mantine/core";
 import { Formik, Form, FormikHelpers } from "formik";
 import { houseSaleStatuses, paymentMethods } from "@/constants/dictionary";
 import { getInitialValuesUpdateCustomer } from "@/utils/initialValues/initialValuesCustomer";

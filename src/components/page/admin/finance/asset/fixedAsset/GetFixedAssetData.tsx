@@ -40,7 +40,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
     data: fixAssetSummaryData,
     isPending: isLoadingAssetData,
     refetch: isRefetchFixedAsset,
-    isFetched: isFetchingFixedAsset, // untuk setiap refetch
+    isFetching: isFetchingFixedAsset, // untuk setiap refetch
   } = useQuery({
     queryKey: [
       "getFixedAssetData",

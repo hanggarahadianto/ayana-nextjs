@@ -13,6 +13,7 @@ import { useDeleteDataEmployee } from "@/api/employee/deleteDataEmployee";
 import TableComponent from "@/components/common/table/TableComponent";
 import { columnsBaseEmployee } from "./EmployeeColumn";
 import LoadingGlobal from "@/styles/loading/loading-global";
+import EditEmployeeModal from "./EditEmployeeModal";
 
 interface EmployeeTableProps {
   companyId: string;
@@ -22,7 +23,7 @@ export const HumanResourceTable = ({ companyId, companyName }: EmployeeTableProp
   const { getToken } = useCookies();
   const token = getToken();
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500);
@@ -115,6 +116,7 @@ export const HumanResourceTable = ({ companyId, companyName }: EmployeeTableProp
           useCategory={false}
           onRefresh={isRefetchEmployeeData}
           isFetching={isFetchingEmployeeData}
+          useDateFilter={false} // 👉 untuk menyembunyikan filter tanggal
         />
       </Stack>
 
@@ -133,7 +135,7 @@ export const HumanResourceTable = ({ companyId, companyName }: EmployeeTableProp
 
         <LoadingGlobal visible={isLoadingEmployeeData || isLoadingDeleteEmployee} />
       </Box>
-      {/* <EditEmployeeModal companyId={companyId} initialData={useModalStore((state) => state.modalData)} /> */}
+      <EditEmployeeModal companyId={companyId} initialValues={useModalStore((state) => state.modalData)} />
 
       {!isLoadingEmployeeData && (
         <PaginationWithLimit

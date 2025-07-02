@@ -1,11 +1,14 @@
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
-import { Flex } from "@mantine/core";
+import { Badge, Flex } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 
 export const columnsBaseEmployee = (openEditModal: (item: IEmployeeItem) => void, handleDeleteEmployee: (id: string) => void) => [
   { key: "name", title: "Nama", width: 180, minWidth: 180 },
+  { key: "address", title: "Alamat", width: 200, minWidth: 200 },
+  { key: "phone", title: "No. Telepon", width: 110, minWidth: 110 },
+
   { key: "gender", title: "Jenis Kelamin", width: 100, minWidth: 100 },
   {
     key: "date_birth",
@@ -14,9 +17,7 @@ export const columnsBaseEmployee = (openEditModal: (item: IEmployeeItem) => void
     minWidth: 130,
     render: (item: IEmployeeItem) => (item.date_birth ? formatDateIndonesia(item.date_birth) : "-"),
   },
-  { key: "phone", title: "No. Telepon", width: 130, minWidth: 130 },
-  { key: "address", title: "Alamat", width: 200, minWidth: 200 },
-  { key: "religion", title: "Agama", width: 100, minWidth: 100 },
+  { key: "religion", title: "Agama", width: 90, minWidth: 90 },
   {
     key: "marital_status",
     title: "Status Pernikahan",
@@ -31,16 +32,40 @@ export const columnsBaseEmployee = (openEditModal: (item: IEmployeeItem) => void
     minWidth: 150,
     render: (item: IEmployeeItem) => item.employee_education || "-",
   },
-  { key: "department", title: "Departemen", width: 140, minWidth: 140 },
-  { key: "position", title: "Jabatan", width: 140, minWidth: 140 },
+  { key: "department", title: "Departemen", width: 90, minWidth: 90 },
+  { key: "position", title: "Jabatan", width: 90, minWidth: 90 },
   {
     key: "employee_contract_type",
     title: "Tipe Kontrak",
-    width: 130,
-    minWidth: 130,
+    width: 100,
+    minWidth: 100,
     render: (item: IEmployeeItem) => item.employee_contract_type || "-",
   },
-  { key: "employee_status", title: "Status Karyawan", width: 120, minWidth: 120 },
+  {
+    key: "employee_status",
+    title: "Status Karyawan",
+    width: 100,
+    minWidth: 100,
+    render: (record: any) => {
+      const status = record.employee_status;
+
+      const statusColorMap: Record<string, { color: string; label: string }> = {
+        Aktif: { color: "green", label: "Aktif" },
+        Cuti: { color: "yellow", label: "Cuti" },
+        Resign: { color: "gray", label: "Resign" },
+        Diberhentikan: { color: "red", label: "Diberhentikan" },
+        Pensiun: { color: "grape", label: "Pensiun" },
+      };
+
+      const badge = statusColorMap[status] || { color: "gray", label: status };
+
+      return (
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Badge color={badge.color}>{badge.label}</Badge>
+        </div>
+      );
+    },
+  },
 
   {
     key: "aksi",

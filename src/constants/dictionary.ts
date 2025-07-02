@@ -180,8 +180,7 @@ export const employeeReligionOptions = [
 export const employeeMaritalStatusOptions = [
   { label: "Belum Menikah", value: "Belum Menikah" },
   { label: "Menikah", value: "Menikah" },
-  { label: "Cerai Hidup", value: "Cerai Hidup" },
-  { label: "Cerai Mati", value: "Cerai Mati" },
+  { label: "Cerai", value: "Cerai" },
 ];
 
 export const employeeEducationOptions = [

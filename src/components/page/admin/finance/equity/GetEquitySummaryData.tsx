@@ -40,7 +40,7 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
     data: equityData,
     isLoading: isLoadingEquity,
     refetch: isRefetchEquityData,
-    isFetched: isFetchingEquityData, // untuk setiap refetch
+    isFetching: isFetchingEquityData, // untuk setiap refetch
   } = useQuery({
     queryKey: [
       "getEquitySummaryData",

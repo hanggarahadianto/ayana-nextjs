@@ -41,7 +41,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType
     data: outstandingDebtData,
     isLoading: isLoadingOutstandingDebt,
     refetch: isRefetchOutstandingDebtData,
-    isFetched: isFetchingOutstandingDebtData, // untuk setiap refetch
+    isFetching: isFetchingOutstandingDebtData, // untuk setiap refetch
   } = useQuery({
     queryKey: [
       "getOutstandingDebtByCompanyId",

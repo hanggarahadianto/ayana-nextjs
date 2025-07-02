@@ -14,10 +14,12 @@ export const getInitialValuesEmployeeCreate = (companyId: string): IEmployeeCrea
   employee_contract_type: "",
 });
 
-export const getInitialValuesUpdateEmployeeUpdate = (companyId: string, employee?: Partial<IEmployeeItem>): IEmployeeUpdate => ({
+export const getInitialValuesUpdateEmployee = (companyId: string, employee?: Partial<IEmployeeItem>): IEmployeeUpdate => ({
   id: employee?.id || "",
   name: employee?.name || "",
   gender: employee?.gender || "",
+  marital_status: employee?.marital_status || "",
+  employee_contract_type: employee?.employee_contract_type || "",
   address: employee?.address || "",
   religion: employee?.religion || "", // Optional field for religion
   phone: employee?.phone || "",

@@ -42,7 +42,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
     data: receivableAssetSummaryData,
     isPending: isLoadingReceivableAsset,
     refetch: isRefetchReceivableAsset,
-    isFetched: isFetchingReceivableAsset,
+    isFetching: isFetchingReceivableAsset,
   } = useQuery({
     queryKey: [
       "getReceivableAssetData",

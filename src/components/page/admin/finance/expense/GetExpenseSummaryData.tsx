@@ -1,7 +1,7 @@
-import LoadingGlobal from "@/styles/loading/loading-global";
-import { Card, Text, Stack, Box, Group, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import LoadingGlobal from "@/styles/loading/loading-global";
+import { Card, Text, Stack, Box, Group, Skeleton } from "@mantine/core";
 import { formatCurrency } from "@/helper/formatCurrency";
 import { getExpenseSummary } from "@/api/finance/getExpenseSummary";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
@@ -41,7 +41,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
     data: expenseData,
     isLoading: isLoadingExpense,
     refetch: isRefetchExpenseData,
-    isFetched: isFetchingExpenseData, // untuk setiap refetch
+    isFetching: isFetchingExpenseData, // untuk setiap refetch
   } = useQuery({
     queryKey: [
       "getExpenseSummaryData",
@@ -122,7 +122,6 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
           onRefresh={isRefetchExpenseData}
           isFetching={isFetchingExpenseData}
         />
-
         <Box style={{ position: "relative" }}>
           {isLoadingExpense ? (
             <Skeleton height={limit * 60} />
@@ -135,11 +134,8 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
               columns={columns}
             />
           )}
-
           <LoadingGlobal visible={isLoadingExpense || isLoadingDeleteExpense} />
         </Box>
-        <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />
-
         <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />
 
         {!isLoadingExpense && (
