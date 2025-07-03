@@ -40,7 +40,7 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
     data: customerData,
     isLoading: isLoadingCustomerData,
     refetch: isRefetchCustomerData,
-    isFetched: isFetchingCustomerData, // untuk setiap refetch
+    isFetching: isFetchingCustomerData, // untuk setiap refetch
   } = useQuery({
     queryKey: [
       "getCustomerData",

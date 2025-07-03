@@ -143,41 +143,43 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                     {/* )} */}
 
                     {entry.status && (
-                      <SelectFinanceTransactionCategory
-                        companyId={companyId}
-                        transactionType={entry.transaction_type}
-                        label="Kategori Transaksi"
-                        onSelect={(selected) => {
-                          handleJournalChange(index, "description", selected.description);
-                          handleJournalChange(index, "transaction_category_id", selected.id);
-                        }}
-                        status={entry.status}
-                        error={touched?.[index]?.transaction_category_id && error?.[index]?.transaction_category_id}
-                      />
+                      <>
+                        <SelectFinanceTransactionCategory
+                          companyId={companyId}
+                          transactionType={entry.transaction_type}
+                          label="Kategori Transaksi"
+                          onSelect={(selected) => {
+                            handleJournalChange(index, "description", selected.description);
+                            handleJournalChange(index, "transaction_category_id", selected.id);
+                          }}
+                          status={entry.status}
+                          error={touched?.[index]?.transaction_category_id && error?.[index]?.transaction_category_id}
+                        />
+                        <Group w="100%" grow>
+                          <TextInput
+                            error={touched?.[index]?.transaction_id && error?.[index]?.transaction_id}
+                            withAsterisk
+                            label="Transaction ID"
+                            placeholder="Contoh: 001"
+                            value={entry.transaction_id || ""}
+                            onChange={(e) => handleJournalChange(index, "transaction_id", e.currentTarget.value)}
+                            onBlur={handleBlur}
+                            disabled={entry.transaction_type !== "payin" && entry.status === "unpaid"}
+                          />
+                          <TextInput
+                            error={touched?.[index]?.invoice && error?.[index]?.invoice}
+                            disabled={entry.transaction_type !== "payin" && entry.status === "unpaid"}
+                            withAsterisk
+                            label="No Invoice"
+                            placeholder="Contoh: INV/001"
+                            value={entry.invoice}
+                            onChange={(e) => handleJournalChange(index, "invoice", e.currentTarget.value)}
+                            onBlur={handleBlur}
+                          />
+                        </Group>
+                      </>
                     )}
 
-                    <Group w="100%" grow>
-                      <TextInput
-                        error={touched?.[index]?.transaction_id && error?.[index]?.transaction_id}
-                        withAsterisk
-                        label="Transaction ID"
-                        placeholder="Contoh: 001"
-                        value={entry.transaction_id || ""}
-                        onChange={(e) => handleJournalChange(index, "transaction_id", e.currentTarget.value)}
-                        onBlur={handleBlur}
-                        disabled={entry.transaction_type !== "payin" && entry.status === "unpaid"}
-                      />
-                      <TextInput
-                        error={touched?.[index]?.invoice && error?.[index]?.invoice}
-                        disabled={entry.transaction_type !== "payin" && entry.status === "unpaid"}
-                        withAsterisk
-                        label="No Invoice"
-                        placeholder="Contoh: INV/001"
-                        value={entry.invoice}
-                        onChange={(e) => handleJournalChange(index, "invoice", e.currentTarget.value)}
-                        onBlur={handleBlur}
-                      />
-                    </Group>
                     <TextInput
                       withAsterisk
                       label="Partner"

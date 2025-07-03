@@ -36,7 +36,7 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
     data: revenueData,
     isLoading: isLoadingRevenue,
     refetch: isRefetchRevenueData,
-    isFetched: isFetchingRevenueData, // untuk setiap refetch
+    isFetching: isFetchingRevenueData, // untuk setiap refetch
   } = useQuery({
     queryKey: [
       "getRevenueSummaryData",

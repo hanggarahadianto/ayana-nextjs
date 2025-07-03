@@ -35,7 +35,7 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
     data: journalEntryData,
     isLoading: isLoadingJournalEntry,
     refetch: isRefetchJournalEntry,
-    isFetched: isFetchingJournalEntry,
+    isFetching: isFetchingJournalEntry,
   } = useQuery({
     queryKey: [
       "getJournalEntryData",

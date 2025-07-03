@@ -38,7 +38,7 @@ const EditEmployeeModal = ({ companyId, initialValues }: UpdateEmployeeModalProp
   );
 
   if (modalName !== "editEmployee" || !opened || !initialData) return null;
-  console.log("initialvalues", initialData);
+
   return (
     <Modal opened={opened} onClose={closeModal} size="60%" yOffset="100px">
       <Formik

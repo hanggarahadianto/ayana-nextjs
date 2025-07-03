@@ -1,4 +1,4 @@
-import { ActionIcon, Group, Stack, TextInput, Tooltip } from "@mantine/core";
+import { ActionIcon, Group, TextInput, Tooltip } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar, IconRefresh, IconX } from "@tabler/icons-react";
 import { MdClose } from "react-icons/md";
@@ -67,7 +67,7 @@ export default function SearchTable({
         onChange={setStartDate}
         valueFormat="DD MMMM YYYY"
         rightSection={<IconCalendar size={18} />}
-        w={isMobile ? 200 : 440}
+        w={isMobile ? 300 : 440}
       />
       <DatePickerInput
         label="Tanggal Akhir"
@@ -79,7 +79,7 @@ export default function SearchTable({
         onChange={setEndDate}
         valueFormat="DD MMMM YYYY"
         rightSection={<IconCalendar size={18} />}
-        w={isMobile ? 200 : 440}
+        w={isMobile ? 300 : 440}
       />
     </>
   );
@@ -113,57 +113,46 @@ export default function SearchTable({
         }
       />
 
-      <Stack mr={16}>
-        {useDateFilter &&
-          (isMobile ? (
-            <Stack gap="sm">
-              {renderDateInputs()}
-              <Tooltip label="Hapus Tanggal" withArrow>
-                <ActionIcon variant="subtle" color="gray" onClick={clearDates} size="lg" radius="xl">
-                  <MdClose size={24} />
-                </ActionIcon>
-              </Tooltip>
-            </Stack>
-          ) : (
-            <Group grow>
-              {renderDateInputs()}
-              <Stack w={12}>
-                <Group mt={22} gap={20}>
-                  <Tooltip label="Hapus Tanggal" withArrow>
-                    <ActionIcon
-                      bg="orange"
-                      onClick={clearDates}
-                      radius="xl"
-                      variant="default"
-                      color="gray"
-                      size={32}
-                      styles={{
-                        root: {
-                          width: 32,
-                          height: 32,
-                          padding: 5,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        },
-                      }}
-                    >
-                      <MdClose size={24} />
-                    </ActionIcon>
-                  </Tooltip>
-                </Group>
-              </Stack>
-            </Group>
-          ))}
-      </Stack>
+      {useDateFilter && (
+        <Group wrap="wrap" gap="sm" align="end">
+          <DatePickerInput
+            label="Tanggal Awal"
+            placeholder="Tanggal Awal"
+            locale="id"
+            clearable
+            radius="sm"
+            value={startDate}
+            onChange={setStartDate}
+            valueFormat="DD MMMM YYYY"
+            rightSection={<IconCalendar size={18} />}
+            w={isMobile ? 300 : 250}
+          />
+          <DatePickerInput
+            label="Tanggal Akhir"
+            placeholder="Tanggal Akhir"
+            locale="id"
+            clearable
+            radius="sm"
+            value={endDate}
+            onChange={setEndDate}
+            valueFormat="DD MMMM YYYY"
+            rightSection={<IconCalendar size={18} />}
+            w={isMobile ? 300 : 250}
+          />
 
-      <Stack mt={22}>
-        <Tooltip label="Refresh Data" withArrow bg="teal">
-          <ActionIcon variant="subtle" color="orange" onClick={onRefresh} size="lg" radius="xl" loading={isFetching} bg="teal">
-            <IconRefresh size={24} />
-          </ActionIcon>
-        </Tooltip>
-      </Stack>
+          <Tooltip label="Hapus Tanggal" withArrow>
+            <ActionIcon onClick={clearDates} radius="xl" variant="default" size="lg" bg="orange.8">
+              <MdClose size={24} />
+            </ActionIcon>
+          </Tooltip>
+
+          <Tooltip label="Refresh Data" withArrow>
+            <ActionIcon variant="subtle" color="orange" onClick={onRefresh} size="lg" radius="xl" loading={isFetching} bg="teal">
+              <IconRefresh size={24} />
+            </ActionIcon>
+          </Tooltip>
+        </Group>
+      )}
     </Group>
   );
 }
