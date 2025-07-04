@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Modal, TextInput, Button, Group, Select, Text, Stack, SimpleGrid, Grid, Divider, Pagination } from "@mantine/core";
+import { Modal, TextInput, Button, Group, Select, Text, Stack, SimpleGrid, Grid, Divider } from "@mantine/core";
 import { Form, Formik } from "formik";
 import { showNotification } from "@mantine/notifications";
 import { useDisclosure } from "@mantine/hooks";
@@ -127,7 +127,6 @@ const EditCashFlowReportModal = ({
   };
 
   const handleDeleteCashFlow = (idToDelete: string) => {
-    console.log("Menghapus cashflow dengan ID:", idToDelete);
     mutateDeleteDataCashFlow(idToDelete);
   };
 
@@ -139,7 +138,7 @@ const EditCashFlowReportModal = ({
         icon={<IconPencil size="1.5rem" />}
         gradient="linear-gradient(135deg, #60A5FA, #3B82F6)"
       />
-      <Modal opened={opened} onClose={close} size="100%" yOffset="100px">
+      <Modal opened={opened} onClose={close} size="100%" yOffset="180px">
         <Formik
           validationSchema={validationSchemaCashFlowCreate}
           initialValues={{
@@ -153,8 +152,8 @@ const EditCashFlowReportModal = ({
           validateOnMount={false}
         >
           {({ values, errors, touched, setFieldValue }) => {
-            console.log("values", values);
-            console.log("ERROR", errors);
+            // console.log("values", values);
+            // console.log("ERROR", errors);
             const calculateCashOut = useCallback(() => {
               return (values.good || []).reduce((acc, good) => acc + (good.total_cost || 0), 0);
             }, [values.good]);

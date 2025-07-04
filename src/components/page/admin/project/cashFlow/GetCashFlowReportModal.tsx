@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Modal, Paper, Text, ScrollArea, Flex, Group, Badge, Stack, Table, Grid, Progress, Tooltip, Divider } from "@mantine/core";
+import React from "react";
+import { Modal, Paper, Text, Group, Stack, Grid, Progress, Tooltip } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconEye, IconPlus } from "@tabler/icons-react";
+import { IconEye } from "@tabler/icons-react";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { useQuery } from "@tanstack/react-query";
 import { getDataGoods } from "@/api/good/getDataGoods";
@@ -70,8 +70,6 @@ const GetCashFlowReportModal = ({
     return { ...row, goods: matchedGoods };
   });
 
-  // console.log("Merged Data:", mergedData);
-
   return (
     <>
       <BreathingActionIcon
@@ -85,7 +83,7 @@ const GetCashFlowReportModal = ({
         opened={opened}
         onClose={close}
         size={"100%"}
-        yOffset="100px" // Moves modal down
+        yOffset="180px" // Moves modal down
       >
         <Paper p="md" shadow="sm" mb={16}>
           <Grid>

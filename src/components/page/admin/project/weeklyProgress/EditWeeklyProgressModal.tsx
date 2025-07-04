@@ -42,7 +42,7 @@ const EditWeeklyProgressModal = ({
         gradient="linear-gradient(135deg, #60A5FA, #3B82F6)"
       />
 
-      <Modal opened={opened} onClose={close} size="100%" yOffset="100px">
+      <Modal opened={opened} onClose={close} size="100%" yOffset="180px">
         <Formik
           initialValues={getInitialValuesUpdateWeeklyProgress(initialData)}
           validationSchema={validationSchemaWeeklyProgressCreate}

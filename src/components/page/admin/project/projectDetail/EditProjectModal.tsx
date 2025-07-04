@@ -16,8 +16,6 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
   const { mutate: updateData, isPending: isLoadingUpdateProjectData } = useUpdateProjectForm(refetchProjectData, close);
 
   const handleSubmit = (values: IProjectUpdate, { setSubmitting }: any) => {
-    console.log("Updating project with values:", values);
-
     const formData = { ...values, id: initialData?.id };
 
     updateData(formData);
@@ -48,7 +46,6 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
           onSubmit={handleSubmit}
         >
           {({ values, errors, touched, setFieldValue, handleBlur }) => {
-            console.log(values);
             const handleInputChange = (setFieldValue: any, field: string, value: any) => {
               setFieldValue(field, value); // Update field value in Formik
             };

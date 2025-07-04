@@ -12,7 +12,6 @@ const ProjectCardDetail: FC<{
   refetchCashFlowData: () => void;
   totalCashIn: any;
 }> = ({ projectDataDetail, cashFlowData, refetchProjectData, refetchCashFlowData, totalCashIn }) => {
-  console.log("cash flow data di card", cashFlowData);
   return (
     <Card
       shadow="xl"

@@ -32,7 +32,7 @@ const AddWeeklyProgressModal = ({ projectId, refetchWeeklyProgressData, weeklyPr
   return (
     <>
       <ButtonAdd onClick={open} size="3.5rem" />
-      <Modal opened={opened} onClose={close} size="100%" yOffset="100px">
+      <Modal opened={opened} onClose={close} size="100%" yOffset="180px">
         <Formik
           initialValues={initialValueWeeklyProgressCreate}
           validationSchema={validationSchemaWeeklyProgressCreate}

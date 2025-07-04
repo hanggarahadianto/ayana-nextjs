@@ -19,7 +19,6 @@ interface ProjectDetailProps {
 }
 
 const AdminProjectDetailComponent: FC<ProjectDetailProps> = ({ projectId, initialData }) => {
-  console.log("project id", projectId);
   const {
     data: projectDataDetail,
     isLoading: isLoadingGetProjectData,
@@ -39,8 +38,6 @@ const AdminProjectDetailComponent: FC<ProjectDetailProps> = ({ projectId, initia
     queryFn: () => getDataWeeklyProgress(projectId),
     refetchOnWindowFocus: false,
   });
-
-  console.log("progres data", weeklyProgressData);
 
   const {
     data: cashFlowData,

@@ -20,10 +20,8 @@ interface ProjectAdminDataProps {
 }
 const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) => {
   const { isSmallScreen, isMediumScreen, isLaptopScreen } = useScreenSize();
-
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
-
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -35,7 +33,7 @@ const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) 
     data: projectData,
     isLoading: isLoadingGetProjectData,
     refetch: isRefetchProjectData,
-    isFetched: isFetchingProjectData, // untuk setiap refetch
+    isFetching: isFetchingProjectData, // untuk setiap refetch
   } = useQuery({
     queryKey: ["getProjectData", companyId, selectedCategory, page, limit, formattedStartDate, formattedEndDate, searchTerm],
     queryFn: () =>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Modal, TextInput, Button, Group, Select, Text, Stack, SimpleGrid, Grid, Divider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
@@ -11,6 +11,7 @@ import { allWeeks } from "@/constants/dictionary";
 import { initialValuesCashFlowCreate } from "@/utils/initialValues/initialValuesCashFlow";
 import FormGoods from "./FormGoods";
 import { validationSchemaCashFlowCreate } from "@/utils/validation/cashFlow-validation";
+import { calculateAccountBalance, calculateCashOut } from "@/helper/calculateCashFlowProjet";
 
 const AddCashFlowReportModal = ({
   projectName,
@@ -84,12 +85,7 @@ const AddCashFlowReportModal = ({
         gradient="linear-gradient(135deg, #A3E635, #86EFAC)"
       />
 
-      <Modal
-        opened={opened}
-        onClose={close}
-        size={"100%"}
-        yOffset="100px" // Moves modal down
-      >
+      <Modal opened={opened} onClose={close} size={"100%"} yOffset="180px">
         <Formik
           initialValues={initialValuesCashFlowCreate(projectId)}
           validationSchema={validationSchemaCashFlowCreate}
@@ -100,23 +96,14 @@ const AddCashFlowReportModal = ({
           onSubmit={handleSubmit}
         >
           {({ values, errors, touched, setFieldValue }) => {
-            console.log("values", values);
-            console.log("error", errors);
-            const calculateCashOut = useCallback(() => {
-              const totalCost = (values.good || []).reduce((acc, good) => acc + (good.total_cost || 0), 0);
-              return totalCost; // Return the calculated cash_out
-            }, [values.good]);
-
-            // Calculate accountBalance as cash_in - cash_out
-            const accountBalance = useMemo(() => {
-              const cashOut = calculateCashOut();
-              return values.cash_in - cashOut; // cash_in - cash_out
-            }, [values.cash_in, calculateCashOut]);
+            // console.log("values", values);
+            // console.log("error", errors);
+            const cashOut = useMemo(() => calculateCashOut(values.good), [values.good]);
+            const accountBalance = useMemo(() => calculateAccountBalance(values.cash_in, cashOut), [values.cash_in, cashOut]);
 
             useEffect(() => {
-              // Update cash_out field in Formik whenever goods change
-              setFieldValue("cash_out", calculateCashOut());
-            }, [values.good, setFieldValue, calculateCashOut]);
+              setFieldValue("cash_out", cashOut);
+            }, [cashOut, setFieldValue]);
 
             return (
               <SimpleGrid p={20}>

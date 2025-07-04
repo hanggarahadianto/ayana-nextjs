@@ -32,8 +32,6 @@ const AddProjectModal = ({ refetchProjectData, companyId }: AddProjectModalProps
         project_name: projectName,
         company_id: companyId,
       };
-
-      console.log("Form values submitted:", updatedValues);
       postData(updatedValues);
       setSubmitting(false);
     },
@@ -49,7 +47,7 @@ const AddProjectModal = ({ refetchProjectData, companyId }: AddProjectModalProps
         opened={opened}
         onClose={close}
         size="xl"
-        yOffset="100px" // Moves modal down
+        yOffset="180px" // Moves modal down
       >
         <Formik
           initialValues={getInitialValuesCreateProject(companyId)}
@@ -73,13 +71,12 @@ const AddProjectModal = ({ refetchProjectData, companyId }: AddProjectModalProps
                   </Text>
                   <SimpleGrid p={20}>
                     <Group>
-                      <Select
+                      <TextInput
                         label="Nama Lokasi"
                         withAsterisk
                         error={touched.location && errors.location ? errors.location : undefined}
                         placeholder="Pilih Lokasi"
-                        onChange={(value: any) => setFieldValue("location", value)}
-                        data={locationOptions}
+                        onChange={(event) => setFieldValue("location", event.currentTarget.value.toUpperCase())}
                       />
 
                       <TextInput
