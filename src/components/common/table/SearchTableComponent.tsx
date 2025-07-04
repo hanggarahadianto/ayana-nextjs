@@ -11,7 +11,7 @@ interface SearchTableProps {
   searchTerm?: string;
   setSearchTerm: (value: string | undefined) => void;
   selectedCategory?: string | null;
-  setSelectedCategory: (value: string | null) => void;
+  setSelectedCategory?: (value: string | null) => void;
   startDate: Date | null;
   setStartDate: (value: Date | null) => void;
   endDate: Date | null;
@@ -55,42 +55,13 @@ export default function SearchTable({
 
   const clearSearch = () => setSearchTerm(undefined);
 
-  const renderDateInputs = () => (
-    <>
-      <DatePickerInput
-        label="Tanggal Awal"
-        placeholder="Tanggal Awal"
-        locale="id"
-        clearable
-        radius="sm"
-        value={startDate}
-        onChange={setStartDate}
-        valueFormat="DD MMMM YYYY"
-        rightSection={<IconCalendar size={18} />}
-        w={isMobile ? 300 : 440}
-      />
-      <DatePickerInput
-        label="Tanggal Akhir"
-        placeholder="Tanggal Akhir"
-        locale="id"
-        clearable
-        radius="sm"
-        value={endDate}
-        onChange={setEndDate}
-        valueFormat="DD MMMM YYYY"
-        rightSection={<IconCalendar size={18} />}
-        w={isMobile ? 300 : 440}
-      />
-    </>
-  );
-
   return (
     <Group>
       {useCategory && (
         <SelectCategoryFilter
           companyId={companyId}
           value={selectedCategory ?? null}
-          onChange={setSelectedCategory}
+          onChange={setSelectedCategory ?? (() => {})}
           readonly={readonly}
           transactionType={transactionType}
           debitAccountType={debitAccountType}

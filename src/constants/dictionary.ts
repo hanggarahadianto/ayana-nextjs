@@ -140,6 +140,8 @@ export const departmentOptions = [
   { label: "Marketing", value: "Marketing" },
   { label: "Sales", value: "Sales" },
   { label: "Teknik", value: "Teknik" },
+  { label: "Legal", value: "Legal" },
+
   { label: "Keuangan", value: "Keuangan" },
   { label: "HRD", value: "HRD" },
   { label: "Produksi", value: "Produksi" },

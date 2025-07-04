@@ -7,13 +7,14 @@ import { getDataCustomer } from "@/api/customer/getDataCustomer";
 import { useCookies } from "@/utils/hook/useCookies";
 import { useDeleteDataCustomer } from "@/api/customer/deleteDataCustomer";
 import { useModalStore } from "@/store/modalStore";
-import EditCustomerModal from "./UpdateMarketingModal";
-import AddMarketingModal from "./AddMarketingModal";
+import EditCustomerModal from "./UpdateCustomerModal";
+import AddMarketingModal from "./AddCustomerModal";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
-import { columnsBaseMarketing } from "./MarketingColumn";
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import { useDebounce } from "use-debounce";
+import { columnsBaseCustomer } from "./CustomerColumn";
+import SelectCustomerFilter from "@/components/common/select/SelectCustomerStatus";
 
 interface CustomerTableProps {
   companyId: string;
@@ -24,7 +25,7 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
   const token = getToken();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [statusCustomer, setStatusCustomer] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500);
 
@@ -47,8 +48,8 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
       companyId,
       page,
       limit,
-      selectedCategory,
       debouncedSearch,
+      statusCustomer,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
       sortBy,
@@ -60,6 +61,7 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
         page,
         limit,
         search: debouncedSearch,
+        statusCustomer: statusCustomer ?? undefined, // ✅ kirim ke backend
         startDate: formattedStartDate,
         endDate: formattedEndDate,
         sortBy,
@@ -68,10 +70,6 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
     enabled: queryEnabled,
     refetchOnWindowFocus: false,
   });
-
-  useEffect(() => {
-    setPage(1);
-  }, [selectedCategory]);
 
   const customerList = customerData?.data.customerList ?? [];
   const startIndex = (page - 1) * limit + 1;
@@ -85,7 +83,7 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
   const openEditModal = (customer: any) => {
     useModalStore.getState().openModal("editCustomer", customer);
   };
-  const columns = columnsBaseMarketing(openEditModal, handleDeleteCustomer);
+  const columns = columnsBaseCustomer(openEditModal, handleDeleteCustomer);
 
   return (
     <Card shadow="sm" padding="lg">
@@ -98,26 +96,28 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
             <AddMarketingModal companyId={companyId} />
           </Stack>
         </Group>
-
-        <SearchTable
-          label={"Cari Data Konsumen"}
-          companyId={""}
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
-          transactionType={null}
-          debitAccountType={null}
-          creditAccountType={null}
-          readonly={false}
-          useCategory={false}
-          onRefresh={isRefetchCustomerData}
-          isFetching={isFetchingCustomerData}
-        />
+        <Group>
+          <Stack w={400}>
+            <SelectCustomerFilter companyId={companyId} value={statusCustomer} onChange={setStatusCustomer} />
+          </Stack>
+          <SearchTable
+            label={"Cari Data Konsumen"}
+            companyId={""}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            startDate={startDate}
+            setStartDate={setStartDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+            transactionType={null}
+            debitAccountType={null}
+            creditAccountType={null}
+            readonly={false}
+            useCategory={false}
+            onRefresh={isRefetchCustomerData}
+            isFetching={isFetchingCustomerData}
+          />
+        </Group>
       </Stack>
 
       <Box style={{ position: "relative" }}>

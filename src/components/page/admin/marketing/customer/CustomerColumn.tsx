@@ -6,7 +6,7 @@ import { Badge, Group } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import { houseSaleStatuses, paymentMethods } from "@/constants/dictionary";
 
-export const columnsBaseMarketing = (openEditModal: (row: ICustomerItem) => void, handleDeleteDataCustomer: (id: string) => void) => [
+export const columnsBaseCustomer = (openEditModal: (row: ICustomerItem) => void, handleDeleteDataCustomer: (id: string) => void) => [
   { key: "name", title: "Nama", width: 200, minWidth: 200 },
   { key: "address", title: "Alamat", width: 200, minWidth: 200 },
   { key: "phone", title: "Nomor Telepon", width: 100, minWidth: 100 },

@@ -20,7 +20,7 @@ const SelectProduct = ({
   required = false,
   error,
 }: SelectProductProps) => {
-  const status = "available";
+  const status = "";
   const { data: productData, isPending } = useQuery({
     queryKey: ["getProductData"],
     queryFn: () => getDataProduct({ status, page: 1, limit: 100 }),
@@ -28,10 +28,12 @@ const SelectProduct = ({
   });
 
   const options =
-    productData?.data?.map((product: any) => ({
-      value: product.id,
-      label: product.title || product.name,
-    })) ?? [];
+    productData?.data
+      ?.map((product: any) => ({
+        value: product.id,
+        label: product.title || product.name,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label)) ?? [];
 
   return (
     <Select

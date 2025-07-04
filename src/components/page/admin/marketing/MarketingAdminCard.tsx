@@ -2,7 +2,7 @@
 
 import { Group } from "@mantine/core";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
-import { CustomerTable } from "./GetMarketingData";
+import { CustomerTable } from "./customer/GetCustomerData";
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import GlobalTab from "@/components/common/tab/TabGlobal";
 import LoadingGlobal from "@/styles/loading/loading-global";

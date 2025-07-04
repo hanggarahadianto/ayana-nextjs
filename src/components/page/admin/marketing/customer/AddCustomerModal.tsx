@@ -14,12 +14,13 @@ import { houseSaleStatuses, paymentMethods } from "@/constants/dictionary";
 import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar } from "@tabler/icons-react";
 import { getInitialValuesCreateCustomer } from "@/utils/initialValues/initialValuesCustomer";
+import SelectEmployee from "@/components/common/select/SelectEmployee";
 
 interface AddMarketingModalProps {
   companyId: string;
 }
 
-const AddMarketingModal = ({ companyId }: AddMarketingModalProps) => {
+const AddCustomerModal = ({ companyId }: AddMarketingModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const { mutate: postDataCustomer, isPending: isLoadingSubmitCustomerData } = useSubmitCustomerForm();
@@ -174,11 +175,17 @@ const AddMarketingModal = ({ companyId }: AddMarketingModalProps) => {
                       onChange={(date) => handleChangeCustomer("date_inputed", date ? date.toISOString() : null, setFieldValue)}
                     />
 
-                    <TextInput
+                    {/* <TextInput
                       error={touched.name && errors.name ? errors.name : undefined}
                       label="Nama Sales / Marketer"
                       placeholder="Masukkan Nama Sales"
                       onChange={(e) => handleChangeCustomer("marketer", e.currentTarget.value, setFieldValue)}
+                    /> */}
+                    <SelectEmployee
+                      companyId={companyId}
+                      label={"Nama Sales / Marketer"}
+                      value={values?.marketer}
+                      onChange={(value) => handleChangeCustomer("marketer", value, setFieldValue)}
                     />
                     <Divider p={12} mt={16} />
 
@@ -201,4 +208,4 @@ const AddMarketingModal = ({ companyId }: AddMarketingModalProps) => {
   );
 };
 
-export default AddMarketingModal;
+export default AddCustomerModal;
