@@ -12,6 +12,7 @@ export const getInitialValuesEmployeeCreate = (companyId: string): IEmployeeCrea
   company_id: companyId,
   marital_status: "",
   employee_contract_type: "",
+  is_agent: false,
 });
 
 export const getInitialValuesUpdateEmployee = (companyId: string, employee?: Partial<IEmployeeItem>): IEmployeeUpdate => ({
@@ -29,4 +30,5 @@ export const getInitialValuesUpdateEmployee = (companyId: string, employee?: Par
   company_id: employee?.company_id || companyId,
   date_birth: employee?.date_birth || "",
   department: employee?.department || "",
+  is_agent: false,
 });

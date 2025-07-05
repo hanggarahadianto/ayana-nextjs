@@ -13,6 +13,7 @@ interface IEmployeeItem {
   employee_contract_type?: string; // Optional field for contract typ
   employee_status: string; // Status karyawan, misalnya "active", "inactive", dll.
   company_id: string;
+  is_agent: boolean;
   created_at: string; // ISO string dari Date
   updated_at: string; // ISO string dari Date
 }
@@ -31,6 +32,7 @@ interface IEmployeeCreate {
   position: string;
   employee_status: string; // Status karyawan, misalnya "active", "inactive", dll.
   company_id: string;
+  is_agent: boolean;
 }
 interface IEmployeeUpdate {
   id: string;
@@ -46,6 +48,7 @@ interface IEmployeeUpdate {
   department: string;
   position: string;
   employee_status: string; // Status karyawan, misalnya "active", "inactive", dll.
+  is_agent: boolean;
   company_id: string;
 }
 

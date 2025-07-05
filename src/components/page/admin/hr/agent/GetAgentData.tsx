@@ -10,10 +10,10 @@ import { useDebounce } from "use-debounce";
 import { getDataEmployee } from "@/api/employee/getDataEmployee";
 import { useDeleteDataEmployee } from "@/api/employee/deleteDataEmployee";
 import TableComponent from "@/components/common/table/TableComponent";
-import { columnsBaseEmployee } from "./EmployeeColumn";
+import { columnsBaseAgent } from "./AgentColumn";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import EditEmployeeModal from "./EditEmployeeModal";
 import AddAgentModal from "./AddAgentModal";
+import EditAgentModal from "./EditAgentModal";
 
 interface EmployeeTableProps {
   companyId: string;
@@ -87,14 +87,14 @@ export const AgentTable = ({ companyId, companyName }: EmployeeTableProps) => {
     useModalStore.getState().openModal("editEmployee", Employee);
   }, []);
 
-  const columns = useMemo(() => columnsBaseEmployee(openEditModal, handleDeleteEmployee), [openEditModal, handleDeleteEmployee]);
+  const columns = useMemo(() => columnsBaseAgent(openEditModal, handleDeleteEmployee), [openEditModal, handleDeleteEmployee]);
 
   return (
     <Card shadow="sm" padding="lg">
       <Stack>
         <Group justify="space-between">
           <Text size="xl" fw={600}>
-            Daftar Karyawan {""} {companyName}
+            Daftar Agent {""} {companyName}
           </Text>
           <Stack align="flex-end" mb={16}>
             <AddAgentModal companyId={companyId} />
@@ -138,7 +138,7 @@ export const AgentTable = ({ companyId, companyName }: EmployeeTableProps) => {
 
         <LoadingGlobal visible={isLoadingEmployeeData || isLoadingDeleteEmployee} />
       </Box>
-      <EditEmployeeModal companyId={companyId} initialValues={useModalStore((state) => state.modalData)} />
+      <EditAgentModal companyId={companyId} initialValues={useModalStore((state) => state.modalData)} />
 
       {!isLoadingEmployeeData && (
         <PaginationWithLimit

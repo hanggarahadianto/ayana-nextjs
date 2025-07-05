@@ -1,51 +1,19 @@
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
-import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import { Badge, Flex } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 
-export const columnsBaseEmployee = (openEditModal: (item: IEmployeeItem) => void, handleDeleteEmployee: (id: string) => void) => [
+export const columnsBaseAgent = (openEditModal: (item: IEmployeeItem) => void, handleDeleteEmployee: (id: string) => void) => [
   { key: "name", title: "Nama", width: 180, minWidth: 180 },
   { key: "address", title: "Alamat", width: 200, minWidth: 200 },
   { key: "phone", title: "No. Telepon", width: 110, minWidth: 110 },
 
   { key: "gender", title: "Jenis Kelamin", width: 100, minWidth: 100 },
   {
-    key: "date_birth",
-    title: "Tanggal Lahir",
-    width: 130,
-    minWidth: 130,
-    render: (item: IEmployeeItem) => (item.date_birth ? formatDateIndonesia(item.date_birth) : "-"),
-  },
-  { key: "religion", title: "Agama", width: 90, minWidth: 90 },
-  {
-    key: "marital_status",
-    title: "Status Pernikahan",
-    width: 130,
-    minWidth: 130,
-    render: (item: IEmployeeItem) => item.marital_status || "-",
-  },
-  {
-    key: "employee_education",
-    title: "Pendidikan Terakhir",
-    width: 150,
-    minWidth: 150,
-    render: (item: IEmployeeItem) => item.employee_education || "-",
-  },
-  { key: "department", title: "Departemen", width: 90, minWidth: 90 },
-  { key: "position", title: "Jabatan", width: 90, minWidth: 90 },
-  {
-    key: "employee_contract_type",
-    title: "Tipe Kontrak",
-    width: 100,
-    minWidth: 100,
-    render: (item: IEmployeeItem) => item.employee_contract_type || "-",
-  },
-  {
     key: "employee_status",
-    title: "Status Karyawan",
-    width: 100,
-    minWidth: 100,
+    title: "Status",
+    width: 30,
+    minWidth: 30,
     render: (record: any) => {
       const status = record.employee_status;
 
@@ -66,7 +34,6 @@ export const columnsBaseEmployee = (openEditModal: (item: IEmployeeItem) => void
       );
     },
   },
-
   {
     key: "aksi",
     title: "Aksi",

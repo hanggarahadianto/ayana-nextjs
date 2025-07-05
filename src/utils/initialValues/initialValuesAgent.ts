@@ -3,7 +3,7 @@ export const getInitialValueAgentCreate = (companyId: string): IEmployeeCreate =
   address: "",
   phone: "",
   gender: "",
-  date_birth: "-",
+  date_birth: "",
   religion: "-", // Optional field for religion
   department: "-",
   position: "-",
@@ -12,6 +12,7 @@ export const getInitialValueAgentCreate = (companyId: string): IEmployeeCreate =
   company_id: companyId,
   marital_status: "-",
   employee_contract_type: "-",
+  is_agent: true,
 });
 
 export const getInitialValuesAgentUpdate = (companyId: string, employee?: Partial<IEmployeeItem>): IEmployeeUpdate => ({
@@ -29,4 +30,5 @@ export const getInitialValuesAgentUpdate = (companyId: string, employee?: Partia
   company_id: employee?.company_id || companyId,
   date_birth: employee?.date_birth || "",
   department: employee?.department || "",
+  is_agent: true,
 });

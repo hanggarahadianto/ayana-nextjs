@@ -7,9 +7,14 @@ import { showNotification } from "@mantine/notifications";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { useSubmitEmployeerForm } from "@/api/employee/postDataEmployee";
-import { getInitialValuesEmployeeCreate } from "@/utils/initialValues/initialValuesEmployee";
-import { validationSchemaEmployee } from "@/utils/validation/employee-validation";
 import { employeeGenderOptions } from "@/constants/dictionary";
+import { getInitialValueAgentCreate } from "@/utils/initialValues/initialValuesAgent";
+import { validationSchemaAgent } from "@/utils/validation/agent-validation";
+
+const isoDate = (dateStr: string) => {
+  const parsed = new Date(dateStr);
+  return parsed.toISOString(); // hasil: "1950-01-01T00:00:00.000Z"
+};
 
 interface AddMarketingModalProps {
   companyId: string;
@@ -20,11 +25,12 @@ const AddAgentModal = ({ companyId }: AddMarketingModalProps) => {
   const { mutate: postDataEmployee, isPending: isLoadingSubmitEmployeeData } = useSubmitEmployeerForm();
   const handleSubmit = useCallback(
     async (values: IEmployeeCreate, { resetForm }: FormikHelpers<IEmployeeCreate>) => {
+      const finalDateBirth = values.date_birth?.trim() ? isoDate(values.date_birth) : isoDate("1950-01-01");
       try {
         const payload = {
           ...values,
+          date_birth: finalDateBirth,
         };
-
         postDataEmployee(payload, {
           onSuccess: async (res: any) => {
             resetForm();
@@ -54,16 +60,11 @@ const AddAgentModal = ({ companyId }: AddMarketingModalProps) => {
   return (
     <SimpleGridGlobal cols={1}>
       <ButtonAdd onClick={open} size="3.5rem" />
-
       <Modal opened={opened} onClose={close} size={"60%"} yOffset="100px">
-        <Formik
-          initialValues={getInitialValuesEmployeeCreate(companyId)}
-          validationSchema={validationSchemaEmployee}
-          onSubmit={handleSubmit}
-        >
+        <Formik initialValues={getInitialValueAgentCreate(companyId)} validationSchema={validationSchemaAgent} onSubmit={handleSubmit}>
           {({ values, errors, touched, setFieldValue }) => {
-            // console.log("values", values);
-            // console.log("error", errors);
+            console.log("values", values);
+            console.log("error", errors);
             return (
               <SimpleGrid>
                 <Form>
@@ -80,14 +81,6 @@ const AddAgentModal = ({ companyId }: AddMarketingModalProps) => {
                       onChange={(e) => handleChangeEmployee("name", e.currentTarget.value, setFieldValue)}
                     />
                     <Group grow>
-                      <Select
-                        label="Jenis Kelamin"
-                        placeholder="Masukkan Jenis Kelamin"
-                        data={genderOptionsMemo}
-                        value={values.gender}
-                        onChange={(value) => setFieldValue("gender", value)}
-                        error={touched.gender && errors.gender ? errors.gender : undefined}
-                      />
                       <TextInput
                         error={touched.phone && errors.phone ? errors.phone : undefined}
                         label="Nomor Telepon"
@@ -97,6 +90,14 @@ const AddAgentModal = ({ companyId }: AddMarketingModalProps) => {
                           const onlyNumbers = e.currentTarget.value.replace(/\D/g, "");
                           handleChangeEmployee("phone", onlyNumbers, setFieldValue);
                         }}
+                      />
+                      <Select
+                        label="Jenis Kelamin"
+                        placeholder="Masukkan Jenis Kelamin"
+                        data={genderOptionsMemo}
+                        value={values.gender}
+                        onChange={(value) => setFieldValue("gender", value)}
+                        error={touched.gender && errors.gender ? errors.gender : undefined}
                       />
                     </Group>
                     <TextInput

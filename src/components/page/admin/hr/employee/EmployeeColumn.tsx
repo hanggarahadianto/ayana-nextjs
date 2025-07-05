@@ -43,9 +43,9 @@ export const columnsBaseEmployee = (openEditModal: (item: IEmployeeItem) => void
   },
   {
     key: "employee_status",
-    title: "Status Karyawan",
-    width: 100,
-    minWidth: 100,
+    title: "Status",
+    width: 80,
+    minWidth: 80,
     render: (record: any) => {
       const status = record.employee_status;
 

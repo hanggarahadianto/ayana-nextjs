@@ -22,7 +22,7 @@ interface UpdateEmployeeModalProps {
   initialValues: IEmployeeUpdate;
 }
 
-const EditEmployeeModal = ({ companyId, initialValues }: UpdateEmployeeModalProps) => {
+const EditAgentModal = ({ companyId, initialValues }: UpdateEmployeeModalProps) => {
   const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
   const { mutate: updateEmployee, isPending } = useUpdateEmployeeForm(closeModal);
 
@@ -173,4 +173,4 @@ const EditEmployeeModal = ({ companyId, initialValues }: UpdateEmployeeModalProp
   );
 };
 
-export default memo(EditEmployeeModal);
+export default memo(EditAgentModal);
