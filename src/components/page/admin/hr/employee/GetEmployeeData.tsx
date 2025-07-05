@@ -18,9 +18,8 @@ import EditEmployeeModal from "./EditEmployeeModal";
 interface EmployeeTableProps {
   companyId: string;
   companyName?: string;
-  isAgent: boolean;
 }
-export const HumanResourceTable = ({ companyId, companyName, isAgent }: EmployeeTableProps) => {
+export const EmployeeTable = ({ companyId, companyName }: EmployeeTableProps) => {
   const { getToken } = useCookies();
   const token = getToken();
   const [page, setPage] = useState(1);
@@ -35,7 +34,7 @@ export const HumanResourceTable = ({ companyId, companyName, isAgent }: Employee
   const sortBy = "date_inputed";
 
   const queryEnabled = !!token && !!companyId;
-
+  const isAgent = false;
   const {
     data: EmployeeData,
     isLoading: isLoadingEmployeeData,
@@ -86,7 +85,7 @@ export const HumanResourceTable = ({ companyId, companyName, isAgent }: Employee
   const openEditModal = useCallback((Employee: any) => {
     useModalStore.getState().openModal("editEmployee", Employee);
   }, []);
-  // const columns = columnsBaseEmployee(openEditModal, handleDeleteEmployee);
+
   const columns = useMemo(() => columnsBaseEmployee(openEditModal, handleDeleteEmployee), [openEditModal, handleDeleteEmployee]);
 
   return (
@@ -97,13 +96,13 @@ export const HumanResourceTable = ({ companyId, companyName, isAgent }: Employee
             Daftar Karyawan {""} {companyName}
           </Text>
           <Stack align="flex-end" mb={16}>
-            <AddEmployeeModal companyId={companyId} />
+            <AddEmployeeModal companyId={companyId} isAgent />
           </Stack>
         </Group>
 
         <SearchTable
           label={"Cari Data Karyawan"}
-          companyId={""}
+          companyId={companyId}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           selectedCategory={selectedCategory}

@@ -20,13 +20,13 @@ import {
   employeeTypeOptions,
   jabatanOptions,
 } from "@/constants/dictionary";
-import { stat } from "fs";
 
 interface AddMarketingModalProps {
   companyId: string;
+  isAgent: boolean;
 }
 
-const AddEmployeeModal = ({ companyId }: AddMarketingModalProps) => {
+const AddEmployeeModal = ({ companyId, isAgent }: AddMarketingModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
   const { mutate: postDataEmployee, isPending: isLoadingSubmitEmployeeData } = useSubmitEmployeerForm();
   const handleSubmit = useCallback(

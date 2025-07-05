@@ -31,7 +31,7 @@ interface SelectAgentProps {
   error?: string | null;
 }
 
-const SelectAgent: React.FC<SelectAgentProps> = ({ companyId, value, isAgent, onChange, label = "Pilih Karyawan", error }) => {
+const SelectAgent: React.FC<SelectAgentProps> = ({ companyId, value, isAgent, onChange, label = "Pilih Agent", error }) => {
   const { data: agentData, isLoading } = useQuery({
     queryKey: ["getSelectAgent", companyId],
     queryFn: () =>

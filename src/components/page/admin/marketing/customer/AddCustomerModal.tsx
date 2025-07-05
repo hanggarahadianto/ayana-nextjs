@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useCallback } from "react";
-import { Modal, TextInput, Button, Group, Select, SimpleGrid, Divider, Stack, Text } from "@mantine/core";
+import React, { useCallback, useState } from "react";
+import { Modal, TextInput, Button, Group, Select, SimpleGrid, Divider, Stack, Text, Switch } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
@@ -22,6 +22,7 @@ interface AddMarketingModalProps {
 
 const AddCustomerModal = ({ companyId }: AddMarketingModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
+  const [isAgent, setIsAgent] = useState(false);
 
   const { mutate: postDataCustomer, isPending: isLoadingSubmitCustomerData } = useSubmitCustomerForm();
 
@@ -173,6 +174,13 @@ const AddCustomerModal = ({ companyId }: AddMarketingModalProps) => {
                       rightSection={<IconCalendar size={18} />}
                       value={values.date_inputed ? new Date(values.date_inputed) : null}
                       onChange={(date) => handleChangeCustomer("date_inputed", date ? date.toISOString() : null, setFieldValue)}
+                    />
+
+                    <Switch
+                      label={isAgent ? "Mode Agen" : "Mode Karyawan"}
+                      checked={isAgent}
+                      onChange={(event) => setIsAgent(event.currentTarget.checked)}
+                      color="teal"
                     />
                     <SelectEmployee
                       isAgent={false}
