@@ -15,14 +15,14 @@ declare module "@mantine/core" {
   }
 }
 
-interface IEmployeeOption {
+interface IAgentOption {
   id: string;
   name: string;
   department?: string;
   is_agent?: boolean;
 }
 
-interface SelectEmployeeProps {
+interface SelectAgentProps {
   companyId: string;
   value: string | null;
   isAgent: boolean;
@@ -31,9 +31,9 @@ interface SelectEmployeeProps {
   error?: string | null;
 }
 
-const SelectEmployee: React.FC<SelectEmployeeProps> = ({ companyId, value, isAgent, onChange, label = "Pilih Karyawan", error }) => {
-  const { data: employeeData, isLoading } = useQuery({
-    queryKey: ["getSelectEmployee", companyId],
+const SelectAgent: React.FC<SelectAgentProps> = ({ companyId, value, isAgent, onChange, label = "Pilih Karyawan", error }) => {
+  const { data: agentData, isLoading } = useQuery({
+    queryKey: ["getSelectAgent", companyId],
     queryFn: () =>
       getDataEmployee({
         companyId,
@@ -42,12 +42,12 @@ const SelectEmployee: React.FC<SelectEmployeeProps> = ({ companyId, value, isAge
     enabled: !!companyId,
   });
 
-  const employeeList: IEmployeeOption[] = employeeData?.data?.employeeList ?? [];
+  const agentList: IAgentOption[] = agentData?.data?.employeeList ?? [];
 
-  const options = employeeList.map((employee) => ({
-    value: employee.id,
-    label: employee.name,
-    raw: employee, // untuk renderOption
+  const options = agentList.map((agent) => ({
+    value: agent.id,
+    label: agent.name,
+    raw: agent, // untuk renderOption
   }));
 
   return (
@@ -108,4 +108,4 @@ const SelectEmployee: React.FC<SelectEmployeeProps> = ({ companyId, value, isAge
   );
 };
 
-export default SelectEmployee;
+export default SelectAgent;

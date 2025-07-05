@@ -15,8 +15,9 @@ const MarketingAdminCard = () => {
       <SimpleGridGlobal cols={1}>
         <GlobalTab data={filteredCompanies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
         <LoadingGlobal visible={isLoadingCompanies} />
-        <Group justify="space-between" mb={20}></Group>
-        <CustomerTable companyId={activeTab?.id || ""} />
+
+        <CustomerTable companyId={activeTab?.id || ""} isAgent={false} />
+        <CustomerTable companyId={activeTab?.id || ""} isAgent={true} />
       </SimpleGridGlobal>
     </>
   );

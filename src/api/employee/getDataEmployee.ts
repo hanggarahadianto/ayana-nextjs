@@ -5,6 +5,7 @@ interface GetDataEmployeeParams {
   page?: number;
   limit?: number;
   search?: string;
+  isAgent: boolean;
   startDate?: string; // 👈 tambahkan
   endDate?: string; // 👈 tambahkan
   sortBy?: string | null;
@@ -16,6 +17,7 @@ export const getDataEmployee = async ({
   page = 1,
   limit = 10,
   search,
+  isAgent,
   startDate,
   endDate,
   sortBy,
@@ -30,6 +32,8 @@ export const getDataEmployee = async ({
     page: page.toString(),
     limit: limit.toString(),
   });
+
+  queryParams.append("is_agent", isAgent ? "true" : "false");
 
   if (search) queryParams.append("search", search); // 🔍
   if (startDate) queryParams.append("start_date", startDate); // <- gunakan format YYYY-MM-DD

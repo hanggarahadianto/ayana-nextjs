@@ -18,8 +18,9 @@ import EditEmployeeModal from "./EditEmployeeModal";
 interface EmployeeTableProps {
   companyId: string;
   companyName?: string;
+  isAgent: boolean;
 }
-export const HumanResourceTable = ({ companyId, companyName }: EmployeeTableProps) => {
+export const HumanResourceTable = ({ companyId, companyName, isAgent }: EmployeeTableProps) => {
   const { getToken } = useCookies();
   const token = getToken();
   const [page, setPage] = useState(1);
@@ -48,6 +49,7 @@ export const HumanResourceTable = ({ companyId, companyName }: EmployeeTableProp
       limit,
       selectedCategory,
       debouncedSearch,
+      isAgent,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
       sortBy,
@@ -59,6 +61,7 @@ export const HumanResourceTable = ({ companyId, companyName }: EmployeeTableProp
         page,
         limit,
         search: debouncedSearch,
+        isAgent,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
         sortBy,

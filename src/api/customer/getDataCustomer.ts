@@ -7,6 +7,7 @@ interface GetDataCustomerParams {
   search?: string;
   statusCustomer?: string;
   selectStatus?: boolean;
+  isAgent: boolean;
   startDate?: string; // 👈 tambahkan
   endDate?: string; // 👈 tambahkan
   sortBy?: string | null;
@@ -20,6 +21,7 @@ export const getDataCustomer = async ({
   search,
   statusCustomer,
   selectStatus,
+  isAgent,
   startDate,
   endDate,
   sortBy,
@@ -34,6 +36,8 @@ export const getDataCustomer = async ({
     page: page.toString(),
     limit: limit.toString(),
   });
+
+  queryParams.append("is_agent", isAgent ? "true" : "false");
 
   if (search) queryParams.append("search", search); // 🔍
   if (statusCustomer) queryParams.append("status", statusCustomer);

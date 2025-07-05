@@ -174,14 +174,15 @@ const AddCustomerModal = ({ companyId }: AddMarketingModalProps) => {
                       value={values.date_inputed ? new Date(values.date_inputed) : null}
                       onChange={(date) => handleChangeCustomer("date_inputed", date ? date.toISOString() : null, setFieldValue)}
                     />
-
-                    {/* <TextInput
-                      error={touched.name && errors.name ? errors.name : undefined}
-                      label="Nama Sales / Marketer"
-                      placeholder="Masukkan Nama Sales"
-                      onChange={(e) => handleChangeCustomer("marketer", e.currentTarget.value, setFieldValue)}
-                    /> */}
                     <SelectEmployee
+                      isAgent={false}
+                      companyId={companyId}
+                      label={"Nama Sales / Marketer"}
+                      value={values?.marketer}
+                      onChange={(value) => handleChangeCustomer("marketer", value, setFieldValue)}
+                    />
+                    <SelectEmployee
+                      isAgent={true}
                       companyId={companyId}
                       label={"Nama Sales / Marketer"}
                       value={values?.marketer}

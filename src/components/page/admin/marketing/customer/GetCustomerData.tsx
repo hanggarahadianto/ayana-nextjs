@@ -1,7 +1,7 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { Card, Text, Stack, Group, Box, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TableComponent from "@/components/common/table/TableComponent";
 import { getDataCustomer } from "@/api/customer/getDataCustomer";
 import { useCookies } from "@/utils/hook/useCookies";
@@ -19,8 +19,9 @@ import SelectCustomerFilter from "@/components/common/select/SelectCustomerStatu
 interface CustomerTableProps {
   companyId: string;
   companyName?: string;
+  isAgent: boolean;
 }
-export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) => {
+export const CustomerTable = ({ companyId, companyName, isAgent }: CustomerTableProps) => {
   const { getToken } = useCookies();
   const token = getToken();
   const [page, setPage] = useState(1);
@@ -50,6 +51,7 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
       limit,
       debouncedSearch,
       statusCustomer,
+      isAgent,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
       sortBy,
@@ -62,6 +64,7 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
         limit,
         search: debouncedSearch,
         statusCustomer: statusCustomer ?? undefined, // ✅ kirim ke backend
+        isAgent,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
         sortBy,
