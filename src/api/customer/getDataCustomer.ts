@@ -7,7 +7,7 @@ interface GetDataCustomerParams {
   search?: string;
   statusCustomer?: string;
   selectStatus?: boolean;
-  isAgent: boolean;
+  isAgent?: boolean;
   startDate?: string; // 👈 tambahkan
   endDate?: string; // 👈 tambahkan
   sortBy?: string | null;

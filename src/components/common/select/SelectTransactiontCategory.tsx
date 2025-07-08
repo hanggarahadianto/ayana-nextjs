@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 declare module "@mantine/core" {
   interface ComboboxItem {
-    raw?: {
+    rawTransactionCategory?: {
       name: string;
       status: string;
       transaction_label: string;
@@ -57,7 +57,7 @@ export default function SelectFinanceTransactionCategory({
   const TransactionCategoryOptions = TransactionCategoryData?.data?.map((item) => ({
     value: item.id,
     label: ` ${item.description}`,
-    raw: item, // simpan data asli untuk render custom
+    rawTransactionCategory: item, // <== Gunakan key unik
   }));
 
   return (
@@ -79,7 +79,8 @@ export default function SelectFinanceTransactionCategory({
         },
       }}
       renderOption={({ option }) => {
-        const { name, status, transaction_label } = option.raw || {};
+        const { name, status, transaction_label } = option.rawTransactionCategory || {}; // <== Sesuai key
+
         const statusLabel = status === "paid" ? "Tunai" : status === "unpaid" ? "Tenor" : (status || "").toUpperCase();
 
         return (

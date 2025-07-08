@@ -5,9 +5,9 @@ interface IProduct {
   type: string;
   image: string;
   location: string;
-  bathroom: string;
-  bedroom: string;
-  square: string;
+  bathroom: number;
+  bedroom: number;
+  square: number;
   status: string;
   price: number;
   quantity: number;
@@ -25,9 +25,9 @@ interface IProductCreate {
   type: string;
   content: string;
   address: string;
-  bathroom: string;
-  bedroom: string;
-  square: string;
+  bathroom: number;
+  bedroom: number;
+  square: number;
   status: string;
   price: number;
   sequence: number;
@@ -42,9 +42,9 @@ interface IProductUpdate {
   type: string;
   content: string;
   address: string;
-  bathroom: string;
-  bedroom: string;
-  square: string;
+  bathroom: number;
+  bedroom: number;
+  square: number;
   status: string;
   price: number;
   sequence: number;

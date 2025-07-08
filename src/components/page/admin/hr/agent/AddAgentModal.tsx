@@ -7,7 +7,7 @@ import { showNotification } from "@mantine/notifications";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { useSubmitEmployeerForm } from "@/api/employee/postDataEmployee";
-import { employeeGenderOptions } from "@/constants/dictionary";
+import { employeeGenderOptions, employeeStatusOptions } from "@/constants/dictionary";
 import { getInitialValueAgentCreate } from "@/utils/initialValues/initialValuesAgent";
 import { validationSchemaAgent } from "@/utils/validation/agent-validation";
 
@@ -56,6 +56,7 @@ const AddAgentModal = ({ companyId }: AddMarketingModalProps) => {
   };
 
   const genderOptionsMemo = useMemo(() => employeeGenderOptions, []);
+  const statusOptionsMemo = useMemo(() => employeeStatusOptions, []);
 
   return (
     <SimpleGridGlobal cols={1}>
@@ -100,11 +101,20 @@ const AddAgentModal = ({ companyId }: AddMarketingModalProps) => {
                         error={touched.gender && errors.gender ? errors.gender : undefined}
                       />
                     </Group>
+
                     <TextInput
                       error={touched.address && errors.address ? errors.address : undefined}
                       label="Alamat Agent"
                       placeholder="Masukkan Alamat Agent"
                       onChange={(e) => handleChangeEmployee("address", e.currentTarget.value, setFieldValue)}
+                    />
+                    <Select
+                      label="Status"
+                      placeholder="Masukkan Status Pekerja "
+                      data={statusOptionsMemo}
+                      value={values.employee_status}
+                      onChange={(value) => setFieldValue("employee_status", value)}
+                      error={touched.employee_status && errors.employee_status ? errors.employee_status : undefined}
                     />
                     <Divider mt={20} />
 

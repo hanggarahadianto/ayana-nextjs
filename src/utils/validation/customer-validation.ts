@@ -39,7 +39,7 @@ export const validationSchemaCustomer = Yup.object({
     .required("Tanggal input wajib diisi")
     .test("is-date", "Format tanggal tidak valid", (val) => !isNaN(Date.parse(val || ""))),
 
-  marketer: Yup.string().required("Nama marketer wajib diisi"),
+  marketer_id: Yup.string().required("Nama marketer wajib diisi"),
 
   home_id: Yup.string().required("Produk wajib diisi"),
   product_unit: Yup.string().required("Unit wajib diisi"),

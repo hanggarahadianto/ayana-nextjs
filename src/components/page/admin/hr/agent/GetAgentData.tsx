@@ -84,7 +84,7 @@ export const AgentTable = ({ companyId, companyName }: EmployeeTableProps) => {
   );
 
   const openEditModal = useCallback((Employee: any) => {
-    useModalStore.getState().openModal("editEmployee", Employee);
+    useModalStore.getState().openModal("editAgent", Employee);
   }, []);
 
   const columns = useMemo(() => columnsBaseAgent(openEditModal, handleDeleteEmployee), [openEditModal, handleDeleteEmployee]);

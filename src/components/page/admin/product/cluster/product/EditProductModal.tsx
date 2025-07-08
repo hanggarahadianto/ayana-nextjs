@@ -141,7 +141,6 @@ const UpdateProductModal = ({
         <Formik
           enableReinitialize
           initialValues={getInitialValuesUpdateProduct(productData)}
-          // initialValues={getInitialValuesUpdateProduct(productData, keepImageIds, originalKeepImageIds)}
           validationSchema={validationSchemaProduct}
           onSubmit={handleSubmit}
         >

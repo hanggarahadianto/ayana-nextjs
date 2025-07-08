@@ -19,9 +19,8 @@ import SelectCustomerFilter from "@/components/common/select/SelectCustomerStatu
 interface CustomerTableProps {
   companyId: string;
   companyName?: string;
-  isAgent: boolean;
 }
-export const CustomerTable = ({ companyId, companyName, isAgent }: CustomerTableProps) => {
+export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) => {
   const { getToken } = useCookies();
   const token = getToken();
   const [page, setPage] = useState(1);
@@ -32,7 +31,9 @@ export const CustomerTable = ({ companyId, companyName, isAgent }: CustomerTable
 
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
+
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "date_inputed";
 
@@ -51,7 +52,6 @@ export const CustomerTable = ({ companyId, companyName, isAgent }: CustomerTable
       limit,
       debouncedSearch,
       statusCustomer,
-      isAgent,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
       sortBy,
@@ -64,7 +64,6 @@ export const CustomerTable = ({ companyId, companyName, isAgent }: CustomerTable
         limit,
         search: debouncedSearch,
         statusCustomer: statusCustomer ?? undefined, // ✅ kirim ke backend
-        isAgent,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
         sortBy,
@@ -87,6 +86,8 @@ export const CustomerTable = ({ companyId, companyName, isAgent }: CustomerTable
     useModalStore.getState().openModal("editCustomer", customer);
   };
   const columns = columnsBaseCustomer(openEditModal, handleDeleteCustomer);
+
+  // console.log("customer list", customerList);
 
   return (
     <Card shadow="sm" padding="lg">

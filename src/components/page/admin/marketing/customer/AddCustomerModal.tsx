@@ -135,8 +135,14 @@ const AddCustomerModal = ({ companyId }: AddMarketingModalProps) => {
                       placeholder="Pilih Status"
                       clearable
                       searchable
+                      styles={{
+                        input: {
+                          cursor: "pointer", // <- Force pointer even when searchable
+                        },
+                      }}
                       onChange={(val) => handleChangeCustomer("status", val || "", setFieldValue)}
                     />
+
                     <Select
                       error={touched.payment_method && errors.payment_method ? errors.payment_method : undefined}
                       label="Metode Pembayaran"
@@ -176,26 +182,24 @@ const AddCustomerModal = ({ companyId }: AddMarketingModalProps) => {
                       onChange={(date) => handleChangeCustomer("date_inputed", date ? date.toISOString() : null, setFieldValue)}
                     />
 
-                    <Switch
-                      label={isAgent ? "Mode Agen" : "Mode Karyawan"}
-                      checked={isAgent}
-                      onChange={(event) => setIsAgent(event.currentTarget.checked)}
-                      color="teal"
-                    />
+                    <Stack w={60}>
+                      <Switch
+                        label={isAgent ? "Agen" : "Karyawan"}
+                        checked={isAgent}
+                        onChange={(event) => setIsAgent(event.currentTarget.checked)}
+                        color="teal"
+                      />
+                    </Stack>
+
                     <SelectEmployee
-                      isAgent={false}
+                      isAgent={isAgent}
                       companyId={companyId}
                       label={"Nama Sales / Marketer"}
-                      value={values?.marketer}
-                      onChange={(value) => handleChangeCustomer("marketer", value, setFieldValue)}
+                      value={values?.marketer_id}
+                      onChange={(value) => handleChangeCustomer("marketer_id", value, setFieldValue)}
+                      error={values.marketer_id && errors?.marketer_id}
                     />
-                    <SelectEmployee
-                      isAgent={true}
-                      companyId={companyId}
-                      label={"Nama Sales / Marketer"}
-                      value={values?.marketer}
-                      onChange={(value) => handleChangeCustomer("marketer", value, setFieldValue)}
-                    />
+
                     <Divider p={12} mt={16} />
 
                     <Group justify="flex-end" mt="md">

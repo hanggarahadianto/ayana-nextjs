@@ -88,12 +88,13 @@ export const columnsBaseCustomer = (openEditModal: (row: ICustomerItem) => void,
       );
     },
   },
+
   {
-    key: "marketer",
+    key: "marketer.name",
     title: "Marketing",
-    width: 120,
-    minWidth: 120,
-    render: (row: ICustomerItem) => row.marketer ?? "-",
+    width: 180,
+    minWidth: 180,
+    render: (row: ICustomerItem) => row.marketer?.name ?? "-",
   },
   {
     key: "aksi",
