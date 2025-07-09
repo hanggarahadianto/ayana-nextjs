@@ -7,7 +7,7 @@ interface IPresenceItem {
   company_id: string;
   created_at: string;
   updated_at: string;
-  employee: IEmployeeItem; // Relasi ke employee
+  Employee: IEmployeeItem; // Relasi ke employee
 }
 
 interface IPresenceData {

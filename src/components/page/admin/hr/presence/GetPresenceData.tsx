@@ -7,17 +7,18 @@ import { formatDateRange } from "@/helper/formatDateIndonesia";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import { useDebounce } from "use-debounce";
-import { getDataEmployee } from "@/api/employee/getDataEmployee";
 import { useDeleteDataEmployee } from "@/api/employee/deleteDataEmployee";
 import TableComponent from "@/components/common/table/TableComponent";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import UploadPresence from "./UploadPresence";
+import { getDataPresence } from "@/api/employee/getDataPresence";
+import { columnsBasePresence } from "./PresenceColumn";
 
-interface EmployeeTableProps {
+interface PresenceTableProps {
   companyId: string;
   companyName?: string;
 }
-export const PresenceTable = ({ companyId, companyName }: EmployeeTableProps) => {
+export const PresenceTable = ({ companyId, companyName }: PresenceTableProps) => {
   const { getToken } = useCookies();
   const token = getToken();
   const [page, setPage] = useState(1);
@@ -34,13 +35,13 @@ export const PresenceTable = ({ companyId, companyName }: EmployeeTableProps) =>
   const queryEnabled = !!token && !!companyId;
   const isAgent = false;
   const {
-    data: EmployeeData,
-    isLoading: isLoadingEmployeeData,
-    refetch: isRefetchEmployeeData,
-    isFetching: isFetchingEmployeeData, // untuk setiap refetch
+    data: presenceData,
+    isLoading: isLoadingPresenceData,
+    refetch: isRefetchPresenceData,
+    isFetching: isFetchingPresenceData, // untuk setiap refetch
   } = useQuery({
     queryKey: [
-      "getEmployeeData",
+      "getPresenceData",
       companyId,
       page,
       limit,
@@ -53,7 +54,7 @@ export const PresenceTable = ({ companyId, companyName }: EmployeeTableProps) =>
       sortOrder,
     ],
     queryFn: () =>
-      getDataEmployee({
+      getDataPresence({
         companyId: companyId!,
         page,
         limit,
@@ -68,23 +69,25 @@ export const PresenceTable = ({ companyId, companyName }: EmployeeTableProps) =>
     refetchOnWindowFocus: false,
   });
 
-  const employeeList = EmployeeData?.data.employeeList ?? [];
+  const presenceList = presenceData?.data.presenceList ?? [];
   const startIndex = (page - 1) * limit + 1;
-  const endIndex = Math.min(page * limit, EmployeeData?.data.total || 0);
+  const endIndex = Math.min(page * limit, presenceData?.data.total || 0);
 
-  const { mutate: mutateDeleteDataEmployee, isPending: isLoadingDeleteEmployee } = useDeleteDataEmployee(isRefetchEmployeeData);
-  const handleDeleteEmployee = useCallback(
+  const { mutate: mutateDeleteDataPresence, isPending: isLoadingDeletePrensece } = useDeleteDataEmployee(isRefetchPresenceData);
+  const handleDeletePresence = useCallback(
     (idToDelete: string) => {
-      mutateDeleteDataEmployee(idToDelete);
+      mutateDeleteDataPresence(idToDelete);
     },
-    [mutateDeleteDataEmployee]
+    [mutateDeleteDataPresence]
   );
 
-  const openEditModal = useCallback((Employee: any) => {
-    useModalStore.getState().openModal("editEmployee", Employee);
+  const openEditModal = useCallback((Presence: any) => {
+    useModalStore.getState().openModal("editPresence", Presence);
   }, []);
 
-  //   const columns = useMemo(() => columnsBaseEmployee(openEditModal, handleDeleteEmployee), [openEditModal, handleDeleteEmployee]);
+  const columns = useMemo(() => columnsBasePresence(openEditModal, handleDeletePresence), [openEditModal, handleDeletePresence]);
+
+  console.log(presenceList);
 
   return (
     <Card shadow="sm" padding="lg">
@@ -112,8 +115,8 @@ export const PresenceTable = ({ companyId, companyName }: EmployeeTableProps) =>
                   creditAccountType={null}
                   readonly={false}
                   useCategory={false}
-                  onRefresh={isRefetchEmployeeData}
-                  isFetching={isFetchingEmployeeData}
+                  onRefresh={isRefetchPresenceData}
+                  isFetching={isFetchingPresenceData}
                   useDateFilter={true} // 👉 untuk menyembunyikan filter tanggal
                 />
               </Stack>
@@ -126,27 +129,27 @@ export const PresenceTable = ({ companyId, companyName }: EmployeeTableProps) =>
           </GridCol>
         </Grid>
       </Stack>
-      {/* 
+
       <Box style={{ position: "relative" }}>
-        {isLoadingEmployeeData ? (
+        {isLoadingPresenceData ? (
           <Skeleton height={limit * 60} />
         ) : (
           <TableComponent
             startIndex={startIndex}
-            data={employeeList}
-            totalAmount={EmployeeData?.data.total_employee}
+            data={presenceList}
+            totalAmount={presenceData?.data.total_presence}
             height={"580"}
             columns={columns}
           />
         )}
 
-        <LoadingGlobal visible={isLoadingEmployeeData || isLoadingDeleteEmployee} />
-      </Box> */}
+        {/* <LoadingGlobal visible={isLoadingPresenceData || isLoadingDeleteEmployee} /> */}
+      </Box>
       {/* <EditEmployeeModal companyId={companyId} initialValues={useModalStore((state) => state.modalData)} /> */}
 
-      {!isLoadingEmployeeData && (
+      {!isLoadingPresenceData && (
         <PaginationWithLimit
-          total={EmployeeData?.data.total ?? 0}
+          total={presenceData?.data.total ?? 0}
           page={page}
           limit={limit}
           startIndex={startIndex}
