@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useCallback, useEffect, useState } from "react";
 import { Modal, TextInput, Button, Group, Select, SimpleGrid, Divider, Text, Stack, Switch, Card } from "@mantine/core";
 import { Formik, Form, FormikHelpers } from "formik";
@@ -25,7 +26,7 @@ const EditCustomerModal: React.FC<EditCustomerModalProps> = ({ companyId }) => {
   const { mutate: updateCustomer, isPending: isLoadingUpdateCustomer } = useUpdateCustomerData(closeModal);
 
   const handleSubmit = useCallback(
-    async (values: ICustomerUpdate, { resetForm }: FormikHelpers<ICustomerUpdate>) => {
+    async (values: ICustomerUpdate, {}: FormikHelpers<ICustomerUpdate>) => {
       try {
         updateCustomer({ ...values, id: initialData.id });
       } catch (error: any) {

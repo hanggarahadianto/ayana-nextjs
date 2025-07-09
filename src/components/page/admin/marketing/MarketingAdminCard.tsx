@@ -15,7 +15,6 @@ const MarketingAdminCard = () => {
       <SimpleGridGlobal cols={1}>
         <GlobalTab data={filteredCompanies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
         <LoadingGlobal visible={isLoadingCompanies} />
-
         <CustomerTable companyId={activeTab?.id || ""} />
       </SimpleGridGlobal>
     </>

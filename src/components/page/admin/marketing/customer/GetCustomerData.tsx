@@ -1,7 +1,7 @@
-import LoadingGlobal from "@/styles/loading/loading-global";
 import { Card, Text, Stack, Group, Box, Skeleton } from "@mantine/core";
-import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query"; // assumed path
+import LoadingGlobal from "@/styles/loading/loading-global";
 import TableComponent from "@/components/common/table/TableComponent";
 import { getDataCustomer } from "@/api/customer/getDataCustomer";
 import { useCookies } from "@/utils/hook/useCookies";
