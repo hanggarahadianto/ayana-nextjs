@@ -202,3 +202,13 @@ export const employeePerformanceRatingOptions = [
   { label: "Kurang", value: "Kurang" },
   { label: "Sangat Kurang", value: "Sangat Kurang" },
 ];
+
+export const dayDictionary = [
+  { value: "monday", label: "Senin" },
+  { value: "tuesday", label: "Selasa" },
+  { value: "wednesday", label: "Rabu" },
+  { value: "thursday", label: "Kamis" },
+  { value: "friday", label: "Jumat" },
+  { value: "saturday", label: "Sabtu" },
+  { value: "sunday", label: "Minggu" },
+];

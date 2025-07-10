@@ -7,6 +7,7 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 import { EmployeeTable } from "./employee/GetEmployeeData";
 import { AgentTable } from "./agent/GetAgentData";
 import { PresenceTable } from "./presence/GetPresenceData";
+import { PresenceRuleTable } from "./presenceRule/GetPresenceRuleData";
 
 const HumanResourceAdminCard = () => {
   const { filteredCompanies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs({ has_customer: true });
@@ -17,6 +18,7 @@ const HumanResourceAdminCard = () => {
         <GlobalTab data={filteredCompanies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
         <LoadingGlobal visible={isLoadingCompanies} />
         <PresenceTable companyId={activeTab?.id || ""} companyName={activeTab?.title} />
+        <PresenceRuleTable companyId={activeTab?.id || ""} companyName={activeTab?.title} />
         <EmployeeTable companyId={activeTab?.id || ""} companyName={activeTab?.title} />
         <AgentTable companyId={activeTab?.id || ""} companyName={activeTab?.title} />
       </SimpleGridGlobal>

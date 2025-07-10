@@ -1,6 +1,6 @@
-import { Card, Text, Stack, Group, Box, Skeleton, Grid, GridCol } from "@mantine/core";
+import { Card, Text, Stack, Group, Box, Skeleton, Grid, GridCol, Checkbox } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useCookies } from "@/utils/hook/useCookies";
 import { useModalStore } from "@/store/modalStore";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
@@ -13,6 +13,8 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 import UploadPresence from "./UploadPresence";
 import { getDataPresence } from "@/api/employee/getDataPresence";
 import { columnsBasePresence } from "./PresenceColumn";
+import { useListState } from "@mantine/hooks";
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 
 interface PresenceTableProps {
   companyId: string;
@@ -85,9 +87,30 @@ export const PresenceTable = ({ companyId, companyName }: PresenceTableProps) =>
     useModalStore.getState().openModal("editPresence", Presence);
   }, []);
 
-  const columns = useMemo(() => columnsBasePresence(openEditModal, handleDeletePresence), [openEditModal, handleDeletePresence]);
+  const [checkboxStates, checkboxHandlers] = useListState<{ id: string; checked: boolean; key: string }>([]);
+  const total = checkboxStates.length;
+  const selectedCount = checkboxStates.filter((c) => c.checked).length;
+  const allChecked = selectedCount === total && total > 0;
+  const indeterminate = selectedCount > 0 && selectedCount < total;
 
-  console.log(presenceList);
+  useEffect(() => {
+    if (presenceList.length > 0) {
+      checkboxHandlers.setState(
+        presenceList.map((item) => ({
+          id: item.id,
+          key: item.id + Math.random().toString(), // tambahkan unique key
+          checked: false,
+        }))
+      );
+    }
+  }, [presenceList]);
+
+  const columns = useMemo(
+    () => columnsBasePresence(openEditModal, handleDeletePresence, checkboxStates, checkboxHandlers),
+    [openEditModal, handleDeletePresence, checkboxStates, checkboxHandlers]
+  );
+
+  //   console.log(presenceList);
 
   return (
     <Card shadow="sm" padding="lg">
@@ -128,6 +151,37 @@ export const PresenceTable = ({ companyId, companyName }: PresenceTableProps) =>
             </Stack>
           </GridCol>
         </Grid>
+      </Stack>
+
+      <Stack mt={"16px"} p={10}>
+        <Group justify="space-between">
+          <Checkbox
+            checked={allChecked}
+            indeterminate={indeterminate}
+            label="Pilih semua transaksi"
+            mb="sm"
+            onChange={() =>
+              checkboxHandlers.setState((current) =>
+                current.map((value) => ({
+                  ...value,
+                  checked: !allChecked,
+                }))
+              )
+            }
+          />
+          {selectedCount > 0 && (
+            <></>
+            // <ButtonDeleteWithConfirmation
+            //   size={2.5}
+            //   id={""}
+            //   onDelete={() => {
+            //     const selectedIds = checkboxStates.filter((c) => c.checked).map((c) => c.id);
+            //     mutateDeleteDataPresence(selectedIds);
+            //   }}
+            //   description={"Hapus yang ditandai"}
+            // />
+          )}
+        </Group>
       </Stack>
 
       <Box style={{ position: "relative" }}>

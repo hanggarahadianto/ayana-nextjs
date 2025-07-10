@@ -1,11 +1,38 @@
-import { Flex } from "@mantine/core";
+import { Checkbox, Flex, Stack } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
+import { UseListStateHandlers } from "@mantine/hooks";
 
-export const columnsBasePresence = (openEditModal: (item: IPresenceItem) => void, handleDeletePresence: (id: string) => void) => [
+type CheckboxItem = { id: string; checked: boolean; key: string };
+
+export const columnsBasePresence = (
+  openEditModal: (item: IPresenceItem) => void,
+  handleDeletePresence: (id: string) => void,
+  checkboxStates: CheckboxItem[],
+  checkboxHandlers: UseListStateHandlers<CheckboxItem>
+) => [
+  {
+    key: "checkbox",
+    title: "",
+    width: 1,
+    minWidth: 1,
+    render: (item: IPresenceItem) => {
+      const index = checkboxStates.findIndex((i) => i.id === item.id);
+      if (index === -1) return <Checkbox disabled />;
+      return (
+        <Stack justify="justify-center" align="center">
+          <Checkbox
+            key={checkboxStates[index].key}
+            checked={checkboxStates[index].checked}
+            onChange={(e) => checkboxHandlers.setItemProp(index, "checked", e.currentTarget.checked)}
+          />
+        </Stack>
+      );
+    },
+  },
   {
     key: "scan_date",
     title: "Tanggal",

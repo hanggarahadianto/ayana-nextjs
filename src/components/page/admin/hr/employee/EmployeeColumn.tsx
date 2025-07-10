@@ -6,7 +6,7 @@ import { IconPencil } from "@tabler/icons-react";
 
 export const columnsBaseEmployee = (openEditModal: (item: IEmployeeItem) => void, handleDeleteEmployee: (id: string) => void) => [
   { key: "name", title: "Nama", width: 180, minWidth: 180 },
-  { key: "address", title: "Alamat", width: 200, minWidth: 200 },
+  { key: "address", title: "Alamat", width: 280, minWidth: 280 },
   { key: "phone", title: "No. Telepon", width: 110, minWidth: 110 },
 
   { key: "gender", title: "Jenis Kelamin", width: 100, minWidth: 100 },
