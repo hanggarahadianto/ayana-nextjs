@@ -17,7 +17,7 @@ export const useSubmitPresenceRulesForm = () => {
     onSuccess: async (data: any) => {
       await Promise.all([
         queryClient.refetchQueries({
-          queryKey: ["getPresenceRule"],
+          queryKey: ["getPresenceRuleData"],
           exact: false,
         }),
       ]);

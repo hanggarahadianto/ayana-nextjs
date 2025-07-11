@@ -1,4 +1,4 @@
-import { Card, Text, Stack, Group, Badge, Skeleton, Box } from "@mantine/core";
+import { Card, Text, Stack, Group, Badge, Box, Flex } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useCookies } from "@/utils/hook/useCookies";
@@ -7,7 +7,8 @@ import { Carousel } from "@mantine/carousel";
 import { IconCalendarOff, IconClockHour7 } from "@tabler/icons-react";
 import { dayDictionary } from "@/constants/dictionary";
 import CreatePresenceRuleModal from "./AddPresenceRuleModal";
-import { useMediaQuery } from "@mantine/hooks";
+import { useResponsiveLayout } from "@/styles/resposnsiveLayout/resposnvieLayout";
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 
 interface PresenceRuleTableProps {
   companyId: string;
@@ -33,57 +34,85 @@ export const PresenceRuleTable = ({ companyId, companyName }: PresenceRuleTableP
     refetchOnWindowFocus: false,
   });
 
-  const presenceRuleList = presenceRuleData?.presenceRules ?? [];
+  const presenceRuleListRaw = presenceRuleData?.presenceRules ?? [];
 
-  const isSmall = useMediaQuery("(max-width: 36em)");
-  const isMedium = useMediaQuery("(max-width: 48em)");
-  const slideSize = isSmall ? "100%" : isMedium ? "50%" : "25%";
+  const dayOrder = dayDictionary.map((d) => d.value.toLowerCase());
+
+  const presenceRuleList = [...presenceRuleListRaw].sort((a, b) => {
+    const dayA = a.day.toLowerCase();
+    const dayB = b.day.toLowerCase();
+    return dayOrder.indexOf(dayA) - dayOrder.indexOf(dayB);
+  });
+
+  const { isMobile, isTablet, isLaptop } = useResponsiveLayout();
+
+  const slideSize = isMobile ? "100%" : isTablet ? "1%" : "10%";
 
   return (
-    <Box mt="md" bg={"red"} p={"20"} h={"600px"}>
-      <Group justify="space-between">
-        <Text fw={600} size="lg" mb="sm">
-          Aturan Presensi {companyName && `– ${companyName}`}
+    <Box mt="md" p="md">
+      <Group justify="space-between" mb="md">
+        <Text fw={600} size="lg">
+          Aturan Presensi {companyName && ` ${companyName}`}
         </Text>
         <CreatePresenceRuleModal companyId={companyId} />
       </Group>
 
-      <Carousel slideGap="xs" align="start" withControls withIndicators loop height={500} slideSize={slideSize}>
-        {presenceRuleList.map((rule) => (
-          <Carousel.Slide key={rule?.id || `${rule.day}-${rule.start_time}`} p={"50px"}>
+      <Carousel
+        align="start"
+        withControls
+        withIndicators
+        loop
+        w={"100%"}
+        height={isMobile ? 400 : isTablet ? 420 : 400}
+        slideSize={slideSize}
+        slideGap="md"
+        p={"60px"}
+      >
+        {presenceRuleList.map((rule: IPresenceRuleItem) => (
+          <Carousel.Slide key={rule?.id || `${rule.day}-${rule.start_time}`}>
             <Card
               shadow="sm"
               radius="md"
               withBorder
               padding="md"
               style={{
-                minHeight: 380,
-                maxWidth: 390,
+                height: "100%",
+                width: isMobile ? 400 : isTablet ? 800 : 300,
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
               }}
             >
               <Group justify="space-between" align="center" mb="xs">
-                <Text fw={600}>{dayDictionary.find((d) => d.value.toLowerCase() === rule.day.toLowerCase())?.label || rule.day}</Text>
+                <Flex gap={"12px"}>
+                  <Text size="xl" fw={600}>
+                    {dayDictionary.find((d) => d.value.toLowerCase() === rule.day.toLowerCase())?.label || rule.day}
+                  </Text>
 
-                <Badge color={rule.is_holiday ? "red" : "green"} variant="light">
-                  {rule.is_holiday ? "Libur" : "Hari Kerja"}
-                </Badge>
+                  <Badge color={rule.is_holiday ? "red" : "green"} variant="light" mt={8}>
+                    {rule.is_holiday ? "Libur" : "Hari Kerja"}
+                  </Badge>
+                </Flex>
+                <ButtonDeleteWithConfirmation
+                  id={""}
+                  onDelete={function (id: string): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                  description={""}
+                  size={2.2}
+                />
               </Group>
 
               {!rule.is_holiday ? (
                 <Stack>
-                  {/* Card Masuk */}
-                  <Card withBorder shadow="xs" radius="md" p="md" w="100%">
-                    <Stack>
+                  <Card withBorder shadow="xs" radius="md" p="md">
+                    <Stack gap={4}>
                       <Group>
                         <IconClockHour7 size={20} color="teal" />
                         <Text size="sm" fw={500}>
                           Waktu Masuk: <strong>{rule.start_time}</strong>
                         </Text>
                       </Group>
-
                       {rule.arrival_tolerances?.length > 0 ? (
                         rule.arrival_tolerances.map((t: number, i: number) => (
                           <Text size="sm" key={`arrival-${rule.id}-${t}-${i}`}>
@@ -98,16 +127,14 @@ export const PresenceRuleTable = ({ companyId, companyName }: PresenceRuleTableP
                     </Stack>
                   </Card>
 
-                  {/* Card Pulang */}
-                  <Card withBorder shadow="xs" radius="md" p="md" w="100%">
-                    <Stack gap="xs">
+                  <Card withBorder shadow="xs" radius="md" p="md">
+                    <Stack gap={4}>
                       <Group>
                         <IconClockHour7 size={20} color="teal" />
                         <Text size="sm" fw={500}>
                           Waktu Pulang: <strong>{rule.end_time}</strong>
                         </Text>
                       </Group>
-
                       {rule.departure_tolerances?.length > 0 ? (
                         rule.departure_tolerances.map((t: number, i: number) => (
                           <Text size="sm" key={`departure-${rule.id}-${t}-${i}`}>

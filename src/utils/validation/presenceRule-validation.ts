@@ -3,7 +3,7 @@ import * as Yup from "yup";
 export const validationSchemaPresenceRule = Yup.object().shape({
   company_id: Yup.string().uuid("ID perusahaan tidak valid").required("Wajib diisi"),
   day: Yup.string()
-    .oneOf(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], "Hari tidak valid")
+    // .oneOf(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], "Hari tidak valid")
     .required("Hari wajib dipilih"),
   is_holiday: Yup.boolean().required("Status hari libur wajib diisi"),
   start_time: Yup.string()
