@@ -1,10 +1,10 @@
-import { Checkbox, Flex, Stack } from "@mantine/core";
+import { Badge, Checkbox, Flex, Stack } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
-import { format } from "date-fns";
-import { id } from "date-fns/locale";
 import { UseListStateHandlers } from "@mantine/hooks";
+import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
+import { getPresenceStatus } from "@/helper/presenceStatus";
 
 type CheckboxItem = { id: string; checked: boolean; key: string };
 
@@ -12,7 +12,8 @@ export const columnsBasePresence = (
   openEditModal: (item: IPresenceItem) => void,
   handleDeletePresence: (id: string) => void,
   checkboxStates: CheckboxItem[],
-  checkboxHandlers: UseListStateHandlers<CheckboxItem>
+  checkboxHandlers: UseListStateHandlers<CheckboxItem>,
+  presenceRuleList: IPresenceRuleItem[]
 ) => [
   {
     key: "checkbox",
@@ -38,7 +39,7 @@ export const columnsBasePresence = (
     title: "Tanggal",
     width: 120,
     minWidth: 120,
-    render: (record: any) => format(new Date(record.scan_date), "dd MMMM yyyy", { locale: id }),
+    render: (record: any) => formatDateIndonesia(new Date(record.scan_date)),
   },
   {
     key: "scan_time",
@@ -46,13 +47,6 @@ export const columnsBasePresence = (
     width: 100,
     minWidth: 100,
     render: (record: IPresenceItem) => record.scan_time,
-  },
-  {
-    key: "raw_date",
-    title: "Tanggal Excel",
-    width: 130,
-    minWidth: 130,
-    render: (record: IPresenceItem) => record.raw_date,
   },
   {
     key: "employee_name",
@@ -68,6 +62,29 @@ export const columnsBasePresence = (
     minWidth: 130,
     render: (record: IPresenceItem) => record.Employee.department,
   },
+  {
+    key: "status",
+    title: "Status",
+    width: 130,
+    minWidth: 130,
+    render: (record: IPresenceItem) => {
+      const [hour] = record.scan_time.split(":").map(Number);
+      const scanType = hour < 12 ? "arrival" : "departure";
+
+      const status = getPresenceStatus(record.scan_date, record.scan_time, presenceRuleList, scanType);
+
+      const labelMap: Record<typeof status, string> = {
+        green: scanType === "arrival" ? "Tepat Waktu" : "Pulang Tepat Waktu",
+        teal: scanType === "arrival" ? "Terlambat Level 1" : "Pulang Cepat Level 1",
+        yellow: scanType === "arrival" ? "Terlambat Level 2" : "Pulang Cepat Level 2",
+        red: scanType === "arrival" ? "Terlambat Level 3" : "Pulang Cepat Level 3",
+        gray: scanType === "arrival" ? "Terlambat Parah / Libur" : "Pulang Parah / Libur",
+      };
+
+      return <Badge color={status}>{labelMap[status]}</Badge>;
+    },
+  },
+
   {
     key: "aksi",
     title: "Aksi",

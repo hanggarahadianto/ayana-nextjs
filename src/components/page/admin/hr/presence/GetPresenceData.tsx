@@ -15,12 +15,14 @@ import { getDataPresence } from "@/api/employee/getDataPresence";
 import { columnsBasePresence } from "./PresenceColumn";
 import { useListState } from "@mantine/hooks";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import { useDeleteDataPresenceRule } from "@/api/employee/deletePresenceRule";
 
 interface PresenceTableProps {
   companyId: string;
   companyName?: string;
+  presenceRuleList: IPresenceRuleItem[];
 }
-export const PresenceTable = ({ companyId, companyName }: PresenceTableProps) => {
+export const PresenceTable = ({ companyId, companyName, presenceRuleList }: PresenceTableProps) => {
   const { getToken } = useCookies();
   const token = getToken();
   const [page, setPage] = useState(1);
@@ -75,7 +77,7 @@ export const PresenceTable = ({ companyId, companyName }: PresenceTableProps) =>
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, presenceData?.data.total || 0);
 
-  const { mutate: mutateDeleteDataPresence, isPending: isLoadingDeletePrensece } = useDeleteDataEmployee(isRefetchPresenceData);
+  const { mutate: mutateDeleteDataPresence, isPending: isLoadingDeletePrensece } = useDeleteDataPresenceRule(isRefetchPresenceData);
   const handleDeletePresence = useCallback(
     (idToDelete: string) => {
       mutateDeleteDataPresence(idToDelete);
@@ -106,8 +108,8 @@ export const PresenceTable = ({ companyId, companyName }: PresenceTableProps) =>
   }, [presenceList]);
 
   const columns = useMemo(
-    () => columnsBasePresence(openEditModal, handleDeletePresence, checkboxStates, checkboxHandlers),
-    [openEditModal, handleDeletePresence, checkboxStates, checkboxHandlers]
+    () => columnsBasePresence(openEditModal, handleDeletePresence, checkboxStates, checkboxHandlers, presenceRuleList),
+    [openEditModal, handleDeletePresence, checkboxStates, checkboxHandlers, presenceRuleList]
   );
 
   //   console.log(presenceList);
