@@ -2,60 +2,56 @@
 
 import React, { useCallback } from "react";
 import { Modal, TextInput, Button, Group, Stack, Text, NumberInput, Select, MultiSelect } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
-import { useSubmitPresenceRulesForm } from "@/api/employee/postPresenceRule";
-import { getInitialValuesPresenceRuleUpdate, initialValuePresenceRuleCreate } from "@/utils/initialValues/initialValuesPresenceRule";
 import { validationSchemaPresenceRule } from "@/utils/validation/presenceRule-validation";
 import { dayDictionary } from "@/constants/dictionary";
+import { useUpdatePresenceRulesForm } from "@/api/employee/updatePresenceRule";
+import { getInitialValuesPresenceRuleUpdate } from "@/utils/initialValues/initialValuesPresenceRule";
+import { useModalStore } from "@/store/modalStore";
 
-interface CreatePresenceRuleModalProps {
-  companyId: string;
-}
+const UpdatePresenceRuleModal = () => {
+  const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
 
-const CreatePresenceRuleModal = ({ companyId }: CreatePresenceRuleModalProps) => {
-  const [opened, { open, close }] = useDisclosure(false);
-  const { mutate: postPresenceRule, isPending } = useSubmitPresenceRulesForm();
+  const { mutate: updatePresenceRule, isPending } = useUpdatePresenceRulesForm();
 
   const handleSubmit = useCallback(
-    async (values: IPresenceRuleUpdate, { resetForm }: FormikHelpers<IPresenceRuleUpdate>) => {
+    async (values: IPresenceRuleUpdate, { setSubmitting }: FormikHelpers<IPresenceRuleUpdate>) => {
       try {
         const payload = {
           ...values,
-          company_id: companyId,
+          company_id: initialData.company_id,
           arrival_tolerances: values.arrival_tolerances.map(Number),
           departure_tolerances: values.departure_tolerances.map(Number),
         };
 
-        postPresenceRule(payload, {
+        updatePresenceRule(payload, {
           onSuccess: () => {
-            resetForm();
-            close();
+            closeModal();
           },
         });
       } catch (error) {
-        console.error("Submit Error:", error);
+        console.error("Update Error:", error);
+        setSubmitting(false);
       }
     },
-    [companyId, postPresenceRule, close]
+    [initialData, updatePresenceRule, closeModal]
   );
+
+  if (modalName !== "editPresenceRule" || !opened || !initialData) return null;
 
   return (
     <SimpleGridGlobal cols={1}>
-      <ButtonAdd onClick={open} size="3.5rem" />
-
-      <Modal opened={opened} onClose={close} size="60%" yOffset="100px">
+      <Modal opened={opened} onClose={closeModal} size="60%" yOffset="100px">
         <Formik
-          initialValues={getInitialValuesPresenceRuleUpdate(companyId)}
+          initialValues={getInitialValuesPresenceRuleUpdate(initialData.company_id, initialData)}
           validationSchema={validationSchemaPresenceRule}
           onSubmit={handleSubmit}
         >
           {({ values, errors, touched, setFieldValue }) => (
             <Form>
               <Stack p="lg" gap="md">
-                <Text fw={700}>Tambah Aturan Presensi</Text>
+                <Text fw={700}>Ubah Aturan Presensi</Text>
 
                 <Select
                   label="Hari"
@@ -64,7 +60,6 @@ const CreatePresenceRuleModal = ({ companyId }: CreatePresenceRuleModalProps) =>
                   value={values.day}
                   onChange={(val) => setFieldValue("day", val)}
                   error={touched.day && errors.day ? errors.day : undefined}
-                  required
                 />
 
                 <TextInput
@@ -73,7 +68,6 @@ const CreatePresenceRuleModal = ({ companyId }: CreatePresenceRuleModalProps) =>
                   value={values.start_time}
                   onChange={(e) => setFieldValue("start_time", e.currentTarget.value)}
                   error={touched.start_time && errors.start_time ? errors.start_time : undefined}
-                  required
                 />
 
                 <TextInput
@@ -82,13 +76,12 @@ const CreatePresenceRuleModal = ({ companyId }: CreatePresenceRuleModalProps) =>
                   value={values.end_time}
                   onChange={(e) => setFieldValue("end_time", e.currentTarget.value)}
                   error={touched.end_time && errors.end_time ? errors.end_time : undefined}
-                  required
                 />
 
                 <NumberInput
                   label="Grace Period (menit)"
                   value={values.grace_period_mins}
-                  onChange={(val) => setFieldValue("grace_period_mins", val || 0)}
+                  onChange={(val) => setFieldValue("grace_period_mins", val ?? 0)}
                   min={0}
                 />
 
@@ -118,15 +111,14 @@ const CreatePresenceRuleModal = ({ companyId }: CreatePresenceRuleModalProps) =>
                   ]}
                   value={String(values.is_holiday)}
                   onChange={(val) => setFieldValue("is_holiday", val === "true")}
-                  required
                 />
 
                 <Group justify="flex-end" mt="md">
-                  <Button onClick={close} variant="default">
+                  <Button onClick={closeModal} variant="default">
                     Batal
                   </Button>
                   <Button type="submit" loading={isPending}>
-                    Simpan
+                    Simpan Perubahan
                   </Button>
                 </Group>
               </Stack>
@@ -138,4 +130,4 @@ const CreatePresenceRuleModal = ({ companyId }: CreatePresenceRuleModalProps) =>
   );
 };
 
-export default CreatePresenceRuleModal;
+export default UpdatePresenceRuleModal;

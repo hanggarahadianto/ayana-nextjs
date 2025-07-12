@@ -5,6 +5,7 @@ import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDelet
 import { UseListStateHandlers } from "@mantine/hooks";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import { getPresenceStatus } from "@/helper/presenceStatus";
+import { dayDictionary } from "@/constants/dictionary";
 
 type CheckboxItem = { id: string; checked: boolean; key: string };
 
@@ -49,6 +50,16 @@ export const columnsBasePresence = (
     render: (record: IPresenceItem) => record.scan_time,
   },
   {
+    key: "day",
+    title: "Hari",
+    width: 60,
+    minWidth: 60,
+    render: (record: IPresenceItem) => {
+      const found = dayDictionary.find((d) => d.value === record.day?.toLowerCase());
+      return found ? found.label : "-";
+    },
+  },
+  {
     key: "employee_name",
     title: "Nama Karyawan",
     width: 130,
@@ -71,7 +82,7 @@ export const columnsBasePresence = (
       const [hour] = record.scan_time.split(":").map(Number);
       const scanType = hour < 12 ? "arrival" : "departure";
 
-      const status = getPresenceStatus(record.scan_date, record.scan_time, presenceRuleList, scanType);
+      const status = getPresenceStatus(record.scan_date, record.scan_time, presenceRuleList, scanType, record.day);
 
       const labelMap: Record<typeof status, string> = {
         green: scanType === "arrival" ? "Tepat Waktu" : "Pulang Tepat Waktu",
@@ -84,7 +95,6 @@ export const columnsBasePresence = (
       return <Badge color={status}>{labelMap[status]}</Badge>;
     },
   },
-
   {
     key: "aksi",
     title: "Aksi",

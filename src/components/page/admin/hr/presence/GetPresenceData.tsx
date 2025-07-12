@@ -16,6 +16,7 @@ import { columnsBasePresence } from "./PresenceColumn";
 import { useListState } from "@mantine/hooks";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeleteDataPresenceRule } from "@/api/employee/deletePresenceRule";
+import { getPresenceStatus } from "@/helper/presenceStatus";
 
 interface PresenceTableProps {
   companyId: string;
@@ -111,8 +112,6 @@ export const PresenceTable = ({ companyId, companyName, presenceRuleList }: Pres
     () => columnsBasePresence(openEditModal, handleDeletePresence, checkboxStates, checkboxHandlers, presenceRuleList),
     [openEditModal, handleDeletePresence, checkboxStates, checkboxHandlers, presenceRuleList]
   );
-
-  //   console.log(presenceList);
 
   return (
     <Card shadow="sm" padding="lg">

@@ -1,15 +1,15 @@
 import { Card, Text, Stack, Group, Badge, Box, Flex } from "@mantine/core";
-import { useQuery } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
-import { useCookies } from "@/utils/hook/useCookies";
-import { getDataPresenceRule } from "@/api/employee/getPresenceRule";
 import { Carousel } from "@mantine/carousel";
-import { IconCalendarOff, IconClockHour7 } from "@tabler/icons-react";
+import { IconCalendarOff, IconClockHour7, IconPencil } from "@tabler/icons-react";
 import { dayDictionary } from "@/constants/dictionary";
 import CreatePresenceRuleModal from "./AddPresenceRuleModal";
 import { useResponsiveLayout } from "@/styles/resposnsiveLayout/resposnvieLayout";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeleteDataPresenceRule } from "@/api/employee/deletePresenceRule";
+import UpdatePresenceRuleModal from "./UpdatePresenceRuleModal";
+import BreathingActionIcon from "@/components/common/button/buttonAction";
+import { useModalStore } from "@/store/modalStore";
 
 interface PresenceRuleTableProps {
   companyId: string;
@@ -30,6 +30,10 @@ export const PresenceRuleTable = ({ companyId, companyName, presenceRuleList, re
 
   const { isMobile, isTablet } = useResponsiveLayout();
   const slideSize = isMobile ? "100%" : isTablet ? "1%" : "10%";
+
+  const openEditModal = useCallback((data: IPresenceRuleItem) => {
+    useModalStore.getState().openModal("editPresenceRule", data);
+  }, []);
 
   return (
     <Box mt="md" p="md">
@@ -106,7 +110,11 @@ export const PresenceRuleTable = ({ companyId, companyName, presenceRuleList, re
                       {rule.is_holiday ? "Libur" : "Hari Kerja"}
                     </Badge>
                   </Flex>
-                  <ButtonDeleteWithConfirmation id={""} onDelete={() => handleDeletePresenceRule(rule.id)} description={""} size={2.2} />
+                  <Stack>
+                    <BreathingActionIcon onClick={() => openEditModal(rule)} icon={<IconPencil size="2rem" />} size="2.2rem" />
+
+                    <UpdatePresenceRuleModal />
+                  </Stack>
                 </Group>
 
                 {!rule.is_holiday ? (
@@ -155,18 +163,31 @@ export const PresenceRuleTable = ({ companyId, companyName, presenceRuleList, re
                       </Stack>
                     </Card>
 
-                    <Group>
-                      <Text size="sm" mt="xs">
-                        Grace Period: <strong>{rule.grace_period_mins}</strong> menit
-                      </Text>
+                    <Group justify="space-between">
+                      <Flex>
+                        <Text size="sm" mt="xs">
+                          Grace Period: <strong>{rule.grace_period_mins}</strong> menit
+                        </Text>
+                      </Flex>
+
+                      <ButtonDeleteWithConfirmation
+                        id={""}
+                        onDelete={() => handleDeletePresenceRule(rule.id)}
+                        description={""}
+                        size={2.2}
+                      />
                     </Group>
                   </Stack>
                 ) : (
                   <Group mt="sm">
-                    <IconCalendarOff size={18} />
-                    <Text size="sm" c="dimmed">
-                      Tidak ada jam kerja pada hari ini
-                    </Text>
+                    <Group>
+                      <IconCalendarOff size={18} />
+                      <Text size="sm" c="dimmed">
+                        Tidak ada jam kerja pada hari ini
+                      </Text>
+                    </Group>
+
+                    <ButtonDeleteWithConfirmation id={""} onDelete={() => handleDeletePresenceRule(rule.id)} description={""} size={2.2} />
                   </Group>
                 )}
               </Card>

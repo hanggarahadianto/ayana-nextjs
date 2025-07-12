@@ -4,6 +4,7 @@ interface IPresenceItem {
   scan_date: string; // ISO string (e.g., "2025-07-09")
   scan_time: string; // Jam dalam format HH:mm:ss
   raw_date: string; // Tanggal asli dari Excel, misal "09-07"
+  day: string;
   company_id: string;
   created_at: string;
   updated_at: string;
