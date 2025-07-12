@@ -1,19 +1,23 @@
 "use client";
 
-import React, { useCallback } from "react";
-import { Modal, TextInput, Button, Group, Stack, Text, NumberInput, Select, MultiSelect } from "@mantine/core";
-import { Formik, Form, FormikHelpers } from "formik";
+import React, { useCallback, useRef } from "react";
+import { Modal, Button, Group, Stack, Text, NumberInput, Select, MultiSelect, ActionIcon } from "@mantine/core";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
+import { Formik, Form, FormikHelpers } from "formik";
 import { validationSchemaPresenceRule } from "@/utils/validation/presenceRule-validation";
-import { dayDictionary } from "@/constants/dictionary";
 import { useUpdatePresenceRulesForm } from "@/api/employee/updatePresenceRule";
 import { getInitialValuesPresenceRuleUpdate } from "@/utils/initialValues/initialValuesPresenceRule";
 import { useModalStore } from "@/store/modalStore";
+import { TimeInput } from "@mantine/dates";
+import { IconClock } from "@tabler/icons-react";
+import { dayDictionary } from "@/constants/dictionary";
 
 const UpdatePresenceRuleModal = () => {
   const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
 
   const { mutate: updatePresenceRule, isPending } = useUpdatePresenceRulesForm();
+  const startTimeRef = useRef<HTMLInputElement>(null);
+  const endTimeRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = useCallback(
     async (values: IPresenceRuleUpdate, { setSubmitting }: FormikHelpers<IPresenceRuleUpdate>) => {
@@ -62,28 +66,41 @@ const UpdatePresenceRuleModal = () => {
                   error={touched.day && errors.day ? errors.day : undefined}
                 />
 
-                <TextInput
-                  label="Jam Masuk"
-                  placeholder="07:00"
-                  value={values.start_time}
-                  onChange={(e) => setFieldValue("start_time", e.currentTarget.value)}
-                  error={touched.start_time && errors.start_time ? errors.start_time : undefined}
-                />
-
-                <TextInput
-                  label="Jam Pulang"
-                  placeholder="16:00"
-                  value={values.end_time}
-                  onChange={(e) => setFieldValue("end_time", e.currentTarget.value)}
-                  error={touched.end_time && errors.end_time ? errors.end_time : undefined}
-                />
-
-                <NumberInput
-                  label="Grace Period (menit)"
-                  value={values.grace_period_mins}
-                  onChange={(val) => setFieldValue("grace_period_mins", val ?? 0)}
-                  min={0}
-                />
+                <Group>
+                  <TimeInput
+                    w={200}
+                    label="Jam Masuk"
+                    ref={startTimeRef}
+                    value={values.start_time}
+                    onChange={(e) => setFieldValue("start_time", e.currentTarget.value)}
+                    rightSection={
+                      <ActionIcon variant="subtle" color="gray" onClick={() => startTimeRef.current?.showPicker()}>
+                        <IconClock size={16} stroke={1.5} />
+                      </ActionIcon>
+                    }
+                    error={touched.start_time && errors.start_time ? errors.start_time : undefined}
+                  />
+                  <TimeInput
+                    w={200}
+                    label="Jam Pulang"
+                    ref={endTimeRef}
+                    value={values.end_time}
+                    onChange={(e) => setFieldValue("end_time", e.currentTarget.value)}
+                    rightSection={
+                      <ActionIcon variant="subtle" color="gray" onClick={() => endTimeRef.current?.showPicker()}>
+                        <IconClock size={16} stroke={1.5} />
+                      </ActionIcon>
+                    }
+                    error={touched.end_time && errors.end_time ? errors.end_time : undefined}
+                  />
+                  <NumberInput
+                    w={200}
+                    label="Grace Period (menit)"
+                    value={values.grace_period_mins}
+                    onChange={(val) => setFieldValue("grace_period_mins", val ?? 0)}
+                    min={0}
+                  />
+                </Group>
 
                 <MultiSelect
                   label="Toleransi Datang (menit)"
@@ -104,6 +121,7 @@ const UpdatePresenceRuleModal = () => {
                 />
 
                 <Select
+                  w={400}
                   label="Hari Libur"
                   data={[
                     { value: "false", label: "Tidak Libur" },

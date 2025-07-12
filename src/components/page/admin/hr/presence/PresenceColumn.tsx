@@ -1,7 +1,4 @@
-import { Badge, Checkbox, Flex, Stack } from "@mantine/core";
-import { IconPencil } from "@tabler/icons-react";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import { Badge, Checkbox, Stack } from "@mantine/core";
 import { UseListStateHandlers } from "@mantine/hooks";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import { getPresenceStatus } from "@/helper/presenceStatus";
@@ -10,8 +7,6 @@ import { dayDictionary } from "@/constants/dictionary";
 type CheckboxItem = { id: string; checked: boolean; key: string };
 
 export const columnsBasePresence = (
-  openEditModal: (item: IPresenceItem) => void,
-  handleDeletePresence: (id: string) => void,
   checkboxStates: CheckboxItem[],
   checkboxHandlers: UseListStateHandlers<CheckboxItem>,
   presenceRuleList: IPresenceRuleItem[]
@@ -85,31 +80,18 @@ export const columnsBasePresence = (
       const status = getPresenceStatus(record.scan_date, record.scan_time, presenceRuleList, scanType, record.day);
 
       const labelMap: Record<typeof status, string> = {
-        green: scanType === "arrival" ? "Tepat Waktu" : "Pulang Tepat Waktu",
-        teal: scanType === "arrival" ? "Terlambat Level 1" : "Pulang Cepat Level 1",
-        yellow: scanType === "arrival" ? "Terlambat Level 2" : "Pulang Cepat Level 2",
-        red: scanType === "arrival" ? "Terlambat Level 3" : "Pulang Cepat Level 3",
-        gray: scanType === "arrival" ? "Terlambat Parah / Libur" : "Pulang Parah / Libur",
+        green: scanType === "arrival" ? "✅ Hadir Tepat Waktu" : "✅ Pulang Tepat Waktu",
+        teal: scanType === "arrival" ? "🟡 Terlambat Sedikit" : "🟡 Pulang Lebih Awal (Ringan)",
+        yellow: scanType === "arrival" ? "🟠 Terlambat" : "🟠 Pulang Lebih Awal",
+        red: scanType === "arrival" ? "🔴 Terlambat Parah" : "🔴 Pulang Terlalu Cepat",
+        gray: scanType === "arrival" ? "❌ Tidak Hadir / Izin" : "❌ Tidak Ada Data Pulang",
       };
 
-      return <Badge color={status}>{labelMap[status]}</Badge>;
+      return (
+        <Stack p={4}>
+          <Badge color={status}>{labelMap[status]}</Badge>
+        </Stack>
+      );
     },
-  },
-  {
-    key: "aksi",
-    title: "Aksi",
-    width: 80,
-    minWidth: 80,
-    render: (item: IPresenceItem) => (
-      <Flex gap="lg" justify="center">
-        <BreathingActionIcon onClick={() => openEditModal(item)} icon={<IconPencil size="2rem" />} size="2.2rem" />
-        <ButtonDeleteWithConfirmation
-          id={item.id}
-          onDelete={() => handleDeletePresence(item.id)}
-          description={`Hapus data presensi dengan ID ${item.id}?`}
-          size={2.2}
-        />
-      </Flex>
-    ),
   },
 ];

@@ -2,9 +2,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"; // Correct 
 import { showNotification } from "@mantine/notifications";
 import { APIAxiosInstance } from "../../lib";
 
-const handleUpdatePresenceRuleForm = async (values: IPresenceRuleCreate) => {
+const handleUpdatePresenceRuleForm = async (values: IPresenceRuleUpdate) => {
   console.log("values on fetching", values);
-  const response = await APIAxiosInstance.post(`employee/edit/presence-rule`, values);
+  const response = await APIAxiosInstance.put(`employee/edit/presence-rule/${values.id}`, values);
   return response.data;
 };
 
@@ -13,7 +13,7 @@ export const useUpdatePresenceRulesForm = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (values: IPresenceRuleCreate) => handleUpdatePresenceRuleForm(values),
+    mutationFn: (values: IPresenceRuleUpdate) => handleUpdatePresenceRuleForm(values),
     onSuccess: async (data: any) => {
       await Promise.all([
         queryClient.refetchQueries({

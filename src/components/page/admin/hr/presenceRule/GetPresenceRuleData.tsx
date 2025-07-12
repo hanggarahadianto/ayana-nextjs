@@ -1,5 +1,5 @@
 import { Card, Text, Stack, Group, Badge, Box, Flex } from "@mantine/core";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { Carousel } from "@mantine/carousel";
 import { IconCalendarOff, IconClockHour7, IconPencil } from "@tabler/icons-react";
 import { dayDictionary } from "@/constants/dictionary";
@@ -66,10 +66,10 @@ export const PresenceRuleTable = ({ companyId, companyName, presenceRuleList, re
           }}
         >
           <IconCalendarOff size={64} stroke={1.5} color="#868e96" />
-          <Text mt="md" fw={500} size="lg" color="dimmed">
+          <Text mt="md" fw={500} size="lg" c="dimmed">
             Aturan Jam Kerja Belum Tersedia
           </Text>
-          <Text size="sm" color="dimmed">
+          <Text size="sm" c="dimmed">
             Silakan tambahkan aturan jam kerja terlebih dahulu
           </Text>
         </Card>

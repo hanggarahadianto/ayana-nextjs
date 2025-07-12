@@ -1,13 +1,11 @@
-import { Card, Text, Stack, Group, Box, Skeleton, Grid, GridCol, Checkbox } from "@mantine/core";
+import { Card, Text, Stack, Group, Box, Skeleton, Grid, GridCol, Checkbox, SegmentedControl } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useCookies } from "@/utils/hook/useCookies";
-import { useModalStore } from "@/store/modalStore";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import { useDebounce } from "use-debounce";
-import { useDeleteDataEmployee } from "@/api/employee/deleteDataEmployee";
 import TableComponent from "@/components/common/table/TableComponent";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import UploadPresence from "./UploadPresence";
@@ -15,8 +13,7 @@ import { getDataPresence } from "@/api/employee/getDataPresence";
 import { columnsBasePresence } from "./PresenceColumn";
 import { useListState } from "@mantine/hooks";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
-import { useDeleteDataPresenceRule } from "@/api/employee/deletePresenceRule";
-import { getPresenceStatus } from "@/helper/presenceStatus";
+import { useDeletePresenceBulk } from "@/api/employee/deletePresence";
 
 interface PresenceTableProps {
   companyId: string;
@@ -37,8 +34,9 @@ export const PresenceTable = ({ companyId, companyName, presenceRuleList }: Pres
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "date_inputed";
 
+  const [presenceType, setPresenceType] = useState<"all" | "arrival" | "departure" | undefined>("all");
+
   const queryEnabled = !!token && !!companyId;
-  const isAgent = false;
   const {
     data: presenceData,
     isLoading: isLoadingPresenceData,
@@ -52,11 +50,11 @@ export const PresenceTable = ({ companyId, companyName, presenceRuleList }: Pres
       limit,
       selectedCategory,
       debouncedSearch,
-      isAgent,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
       sortBy,
       sortOrder,
+      presenceType,
     ],
     queryFn: () =>
       getDataPresence({
@@ -64,11 +62,11 @@ export const PresenceTable = ({ companyId, companyName, presenceRuleList }: Pres
         page,
         limit,
         search: debouncedSearch,
-        isAgent,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
         sortBy,
         sortOrder,
+        presenceType,
       }),
     enabled: queryEnabled,
     refetchOnWindowFocus: false,
@@ -77,18 +75,6 @@ export const PresenceTable = ({ companyId, companyName, presenceRuleList }: Pres
   const presenceList = presenceData?.data.presenceList ?? [];
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, presenceData?.data.total || 0);
-
-  const { mutate: mutateDeleteDataPresence, isPending: isLoadingDeletePrensece } = useDeleteDataPresenceRule(isRefetchPresenceData);
-  const handleDeletePresence = useCallback(
-    (idToDelete: string) => {
-      mutateDeleteDataPresence(idToDelete);
-    },
-    [mutateDeleteDataPresence]
-  );
-
-  const openEditModal = useCallback((Presence: any) => {
-    useModalStore.getState().openModal("editPresence", Presence);
-  }, []);
 
   const [checkboxStates, checkboxHandlers] = useListState<{ id: string; checked: boolean; key: string }>([]);
   const total = checkboxStates.length;
@@ -108,9 +94,17 @@ export const PresenceTable = ({ companyId, companyName, presenceRuleList }: Pres
     }
   }, [presenceList]);
 
+  const { mutate: deleteSelectedPresence, isPending: isDeletePresenceData } = useDeletePresenceBulk(isRefetchPresenceData);
+  const handleBulkDelete = useCallback(() => {
+    const selectedIds = checkboxStates.filter((c) => c.checked).map((c) => c.id);
+    if (selectedIds.length > 0) {
+      deleteSelectedPresence(selectedIds);
+    }
+  }, [checkboxStates, deleteSelectedPresence]);
+
   const columns = useMemo(
-    () => columnsBasePresence(openEditModal, handleDeletePresence, checkboxStates, checkboxHandlers, presenceRuleList),
-    [openEditModal, handleDeletePresence, checkboxStates, checkboxHandlers, presenceRuleList]
+    () => columnsBasePresence(checkboxStates, checkboxHandlers, presenceRuleList),
+    [checkboxStates, checkboxHandlers, presenceRuleList]
   );
 
   return (
@@ -154,8 +148,19 @@ export const PresenceTable = ({ companyId, companyName, presenceRuleList }: Pres
         </Grid>
       </Stack>
 
-      <Stack mt={"16px"} p={10}>
-        <Group justify="space-between">
+      <Stack mt={"16px"} p={10} bg={"black.3"}>
+        <Stack w={400}>
+          <SegmentedControl
+            value={presenceType}
+            onChange={(value) => setPresenceType(value as "all" | "arrival" | "departure")}
+            data={[
+              { label: "Semua", value: "all" },
+              { label: "Berangkat", value: "arrival" },
+              { label: "Pulang", value: "departure" },
+            ]}
+          />
+        </Stack>
+        <Group justify="space-between" mt={12}>
           <Checkbox
             checked={allChecked}
             indeterminate={indeterminate}
@@ -171,16 +176,7 @@ export const PresenceTable = ({ companyId, companyName, presenceRuleList }: Pres
             }
           />
           {selectedCount > 0 && (
-            <></>
-            // <ButtonDeleteWithConfirmation
-            //   size={2.5}
-            //   id={""}
-            //   onDelete={() => {
-            //     const selectedIds = checkboxStates.filter((c) => c.checked).map((c) => c.id);
-            //     mutateDeleteDataPresence(selectedIds);
-            //   }}
-            //   description={"Hapus yang ditandai"}
-            // />
+            <ButtonDeleteWithConfirmation size={2.5} id="" onDelete={handleBulkDelete} description="Hapus yang ditandai" />
           )}
         </Group>
       </Stack>
@@ -198,9 +194,8 @@ export const PresenceTable = ({ companyId, companyName, presenceRuleList }: Pres
           />
         )}
 
-        {/* <LoadingGlobal visible={isLoadingPresenceData || isLoadingDeleteEmployee} /> */}
+        <LoadingGlobal visible={isLoadingPresenceData || isDeletePresenceData} />
       </Box>
-      {/* <EditEmployeeModal companyId={companyId} initialValues={useModalStore((state) => state.modalData)} /> */}
 
       {!isLoadingPresenceData && (
         <PaginationWithLimit

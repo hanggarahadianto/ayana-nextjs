@@ -31,7 +31,6 @@ export function getPresenceStatus(
 
     if (scanType === "arrival") {
       const diffMin = Math.floor((scan.getTime() - ruleTime.getTime()) / 60000);
-      console.log("⏳ Arrival diff:", diffMin);
 
       if (diffMin <= 0) return "green";
       if (diffMin <= tolerances[0] + grace) return "teal";
@@ -39,7 +38,6 @@ export function getPresenceStatus(
       if (diffMin <= tolerances[2] + grace) return "red";
     } else {
       const diffMin = Math.floor((ruleTime.getTime() - scan.getTime()) / 60000);
-      // console.log("⏳ Departure diff:", diffMin);
 
       if (scan.getTime() >= ruleTime.getTime()) return "green"; // Pulang tepat waktu / lembur
       if (diffMin <= tolerances[0] + grace) return "teal"; // Pulang cepat level 1
