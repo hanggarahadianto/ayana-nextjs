@@ -7,7 +7,7 @@ import { showNotification } from "@mantine/notifications";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { useSubmitEmployeerForm } from "@/api/employee/postDataEmployee";
-import { employeeGenderOptions, employeeStatusOptions } from "@/constants/dictionary";
+import { departmentOptions, employeeGenderOptions, employeeStatusOptions } from "@/constants/dictionary";
 import { getInitialValueAgentCreate } from "@/utils/initialValues/initialValuesAgent";
 import { validationSchemaAgent } from "@/utils/validation/agent-validation";
 
@@ -57,6 +57,7 @@ const AddAgentModal = ({ companyId }: AddMarketingModalProps) => {
 
   const genderOptionsMemo = useMemo(() => employeeGenderOptions, []);
   const statusOptionsMemo = useMemo(() => employeeStatusOptions, []);
+  const departmentOptionsMemo = useMemo(() => departmentOptions, []);
 
   return (
     <SimpleGridGlobal cols={1}>
@@ -64,8 +65,8 @@ const AddAgentModal = ({ companyId }: AddMarketingModalProps) => {
       <Modal opened={opened} onClose={close} size={"60%"} yOffset="100px">
         <Formik initialValues={getInitialValueAgentCreate(companyId)} validationSchema={validationSchemaAgent} onSubmit={handleSubmit}>
           {({ values, errors, touched, setFieldValue }) => {
-            console.log("values", values);
-            console.log("error", errors);
+            // console.log("values", values);
+            // console.log("error", errors);
             return (
               <SimpleGrid>
                 <Form>
@@ -107,6 +108,15 @@ const AddAgentModal = ({ companyId }: AddMarketingModalProps) => {
                       label="Alamat Agent"
                       placeholder="Masukkan Alamat Agent"
                       onChange={(e) => handleChangeEmployee("address", e.currentTarget.value, setFieldValue)}
+                    />
+                    <Select
+                      readOnly
+                      placeholder="Masukkan Divisi"
+                      label="Divisi"
+                      data={departmentOptionsMemo}
+                      value={values.department || "Marketing"}
+                      onChange={(value) => setFieldValue("department", value)}
+                      error={touched.department && errors.department ? errors.department : undefined}
                     />
                     <Select
                       label="Status"

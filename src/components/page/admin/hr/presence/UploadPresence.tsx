@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Button, FileInput, Group, Title, Text, Card, Stack, rem, Flex } from "@mantine/core";
+import { Button, FileInput, Title, Text, Card, Stack, rem, Flex } from "@mantine/core";
 import { IconUpload } from "@tabler/icons-react";
 import { useUploadPresence } from "@/api/employee/uploadPresence";
-import { useResponsiveLayout } from "@/styles/resposnsiveLayout/resposnvieLayout";
 
 export default function UploadPresence() {
   const [file, setFile] = useState<File | null>(null);

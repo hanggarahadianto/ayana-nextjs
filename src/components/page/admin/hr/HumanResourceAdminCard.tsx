@@ -49,7 +49,7 @@ const HumanResourceAdminCard = () => {
     <>
       <SimpleGridGlobal cols={1}>
         <GlobalTab data={filteredCompanies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
-        <LoadingGlobal visible={isLoadingCompanies} />
+        <LoadingGlobal visible={isLoadingCompanies || isLoadingPresenceRuleData} />
         <PresenceTable companyId={activeTab?.id || ""} companyName={activeTab?.title} presenceRuleList={presenceRuleList} />
         <PresenceRuleTable
           companyId={activeTab?.id || ""}

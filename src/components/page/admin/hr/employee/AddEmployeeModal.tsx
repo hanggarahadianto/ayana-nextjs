@@ -186,7 +186,6 @@ const AddEmployeeModal = ({ companyId, isAgent }: AddMarketingModalProps) => {
                       error={touched.employee_status && errors.employee_status ? errors.employee_status : undefined}
                     />
                     <Select
-                      // error={errors.employee_contract_type}
                       error={touched.employee_contract_type && errors.employee_contract_type ? errors.employee_contract_type : undefined}
                       label="Status Kontrak Karyawan"
                       placeholder="Masukkan Status Kontrak Karyawan"

@@ -3,7 +3,7 @@ import { Modal, TextInput, Button, Group, Select, Stack, SimpleGrid, Divider, Te
 import { Formik, Form, FormikHelpers } from "formik";
 import { useModalStore } from "@/store/modalStore";
 import { validationSchemaEmployee } from "@/utils/validation/employee-validation";
-import { employeeStatusOptions } from "@/constants/dictionary";
+import { departmentOptions, employeeStatusOptions } from "@/constants/dictionary";
 import { useUpdateEmployeeForm } from "@/api/employee/updateDataEmployee";
 import { getInitialValuesAgentUpdate } from "@/utils/initialValues/initialValuesAgent";
 
@@ -26,6 +26,7 @@ const EditAgentModal = ({ companyId, initialValues }: UpdateEmployeeModalProps) 
     },
     [updateEmployee, closeModal, initialData]
   );
+  const departmentOptionsMemo = useMemo(() => departmentOptions, []);
 
   if (modalName !== "editAgent" || !opened || !initialData) return null;
 
@@ -66,13 +67,22 @@ const EditAgentModal = ({ companyId, initialValues }: UpdateEmployeeModalProps) 
                 onChange={(e) => setFieldValue("address", e.currentTarget.value)}
                 error={touched.address && errors.address}
               />
+              <Select
+                label="Divisi"
+                placeholder="Marketing"
+                data={departmentOptionsMemo}
+                value={values.department}
+                disabled // ⛔ tidak bisa diubah
+                error={touched.department && errors.department ? errors.department : undefined}
+              />
 
               <Divider />
+
               <Select
                 label="Status"
                 placeholder="Masukkan Status Agen"
                 data={employeeStatusOptions}
-                value={values.employee_status}
+                value={values.department || "Marketing"}
                 onChange={(value) => setFieldValue("employee_status", value)}
                 error={touched.employee_status && errors.employee_status ? errors.employee_status : undefined}
               />

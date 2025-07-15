@@ -9,6 +9,8 @@ export const columnsBaseAgent = (openEditModal: (item: IEmployeeItem) => void, h
   { key: "phone", title: "No. Telepon", width: 110, minWidth: 110 },
 
   { key: "gender", title: "Jenis Kelamin", width: 100, minWidth: 100 },
+  { key: "department", title: "Departemen", width: 90, minWidth: 90 },
+
   {
     key: "employee_status",
     title: "Status",

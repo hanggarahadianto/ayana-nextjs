@@ -5,7 +5,7 @@ export const getInitialValueAgentCreate = (companyId: string): IEmployeeCreate =
   gender: "",
   date_birth: "",
   religion: "-", // Optional field for religion
-  department: "-",
+  department: "Marketing", // ✅ default to "Marketing"
   position: "-",
   employee_education: "-", // Optional field for education
   employee_status: "-", // Default status
@@ -29,6 +29,6 @@ export const getInitialValuesAgentUpdate = (companyId: string, employee?: Partia
   employee_status: employee?.employee_status || "", // Default status
   company_id: employee?.company_id || companyId,
   date_birth: employee?.date_birth || "",
-  department: employee?.department || "",
+  department: employee?.department || "Marketing",
   is_agent: true,
 });

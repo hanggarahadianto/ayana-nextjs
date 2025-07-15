@@ -141,10 +141,10 @@ export const departmentOptions = [
   { label: "Sales", value: "Sales" },
   { label: "Teknik", value: "Teknik" },
   { label: "Legal", value: "Legal" },
-
   { label: "Keuangan", value: "Keuangan" },
   { label: "HRD", value: "HRD" },
   { label: "Produksi", value: "Produksi" },
+  { label: "Divisi Umum", value: "Divisi Umum" },
 ];
 
 export const jabatanOptions = [
