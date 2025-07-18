@@ -17,6 +17,7 @@ import { getDataTestimony } from "@/api/testimony/getDataTestiomony";
 import { useDeleteTestimony } from "@/api/testimony/deleteTestimony";
 import { columnsBaseTestimony } from "./TestimonyCustomerColumn";
 import { TestimonyCardCarousel } from "./TestimonyCard";
+import UpdateTestimonyModal from "./UpdateTestimonyModal";
 
 interface TestimonyTableProps {
   companyId: string;
@@ -27,7 +28,7 @@ export const TestimonyTable = ({ companyId, companyName }: TestimonyTableProps) 
   const { getToken } = useCookies();
   const token = getToken();
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(10);
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500);
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -86,7 +87,7 @@ export const TestimonyTable = ({ companyId, companyName }: TestimonyTableProps) 
   const openEditModal = (row: any) => {
     useModalStore.getState().openModal("editTestimony", row);
   };
-  console.log("testimony list", testimonyList);
+
   return (
     <Card shadow="sm" padding="lg">
       <Stack>
@@ -97,8 +98,8 @@ export const TestimonyTable = ({ companyId, companyName }: TestimonyTableProps) 
           <AddTestimonyModal companyId={companyId} />
         </Group>
       </Stack>
-      <TestimonyCardCarousel testimonyList={testimonyList} />
-      {/* <EditTestimonyModal companyId={companyId} initialData={useModalStore((s) => s.modalData)} /> */}
+      <TestimonyCardCarousel testimonyList={testimonyList} openEditModal={openEditModal} onDelete={handleDeleteTestimony} />
+      <UpdateTestimonyModal companyId={companyId} initialData={useModalStore((s) => s.modalData)} />
 
       {!isLoading && (
         <PaginationWithLimit

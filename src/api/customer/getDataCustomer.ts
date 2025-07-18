@@ -8,6 +8,7 @@ interface GetDataCustomerParams {
   statusCustomer?: string;
   selectStatus?: boolean;
   isAgent?: boolean;
+  hasTestimony?: boolean;
   startDate?: string; // 👈 tambahkan
   endDate?: string; // 👈 tambahkan
   sortBy?: string | null;
@@ -22,6 +23,7 @@ export const getDataCustomer = async ({
   statusCustomer,
   selectStatus,
   isAgent,
+  hasTestimony,
   startDate,
   endDate,
   sortBy,
@@ -42,6 +44,8 @@ export const getDataCustomer = async ({
   if (search) queryParams.append("search", search); // 🔍
   if (statusCustomer) queryParams.append("status", statusCustomer);
   if (selectStatus) queryParams.append("select_status", "true");
+  queryParams.append("has_testimony", hasTestimony ? "true" : "false");
+
   if (startDate) queryParams.append("start_date", startDate); // <- gunakan format YYYY-MM-DD
   if (endDate) queryParams.append("end_date", endDate);
   if (sortBy) queryParams.append("sort_by", sortBy);

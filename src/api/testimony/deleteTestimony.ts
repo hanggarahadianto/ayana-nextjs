@@ -4,7 +4,7 @@ import { AxiosResponse } from "axios";
 import { APIAxiosInstance } from "@/lib";
 
 const handleDeleteTestimony = async (idToDelete: string): Promise<AxiosResponse<any>> => {
-  return APIAxiosInstance.delete(`testimony/delete/${idToDelete}`);
+  return APIAxiosInstance.delete(`customer/testimony/delete/${idToDelete}`);
 };
 
 export const useDeleteTestimony = (refetchData: () => void) => {

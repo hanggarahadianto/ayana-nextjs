@@ -17,14 +17,17 @@ export const CashinStats = ({ companyId, assetType, category, title }: CashInSta
         companyId: companyId!,
         assetType,
         summaryOnly: true,
-        debitCategory: "Kas & Bank",
-        creditCategory: category ?? null,
+        debitCategory: category ?? "",
+        creditCategory: null,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,
   });
 
+  console.log("cash in data", cashinData);
+
   const totalCashIn = cashinData?.data?.total_asset ?? 0;
+  console.log("total cashin", totalCashIn);
 
   const statsData: StatItem[] = [
     {

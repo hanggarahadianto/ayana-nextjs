@@ -31,11 +31,13 @@ interface SelectCustomerTestimonyProps {
 
 const SelectCustomerTestimony: React.FC<SelectCustomerTestimonyProps> = ({ companyId, value, onChange, label = "Customer", error }) => {
   const { data: customerData, isLoading } = useQuery({
-    queryKey: ["getCustomerTestimony", companyId, "booking"],
+    queryKey: ["getCustomerTestimony", companyId],
     queryFn: () =>
       getDataCustomer({
         companyId,
-        statusCustomer: "booking",
+        statusCustomer: "handover",
+        hasTestimony: false,
+        limit: 1000,
       }),
     enabled: !!companyId,
   });

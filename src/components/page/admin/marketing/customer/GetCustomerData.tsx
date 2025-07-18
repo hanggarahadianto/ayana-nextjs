@@ -87,8 +87,6 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
   };
   const columns = columnsBaseCustomer(openEditModal, handleDeleteCustomer);
 
-  // console.log("customer list", customerList);
-
   return (
     <Card shadow="sm" padding="lg">
       <Stack>

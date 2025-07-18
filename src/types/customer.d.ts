@@ -100,6 +100,13 @@ interface ITestimonyCreate {
   customer_id: string | null;
   company_id: string;
 }
+interface ITestimonyUpdate {
+  id: string;
+  rating: number;
+  note: string;
+  customer_id: string | null;
+  company_id: string;
+}
 
 interface ITestimonyData {
   testimonyList: ITestimonyItem[];

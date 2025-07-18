@@ -8,3 +8,13 @@ export function getInitialValuesCreateTestimony(companyId: string): ITestimonyCr
     company_id: companyId,
   };
 }
+
+export function getInitialValuesUpdateTestimony(initialData: ITestimonyUpdate): ITestimonyUpdate {
+  return {
+    id: initialData.id,
+    customer_id: initialData.customer_id,
+    rating: initialData.rating,
+    note: initialData.note,
+    company_id: initialData.company_id,
+  };
+}
