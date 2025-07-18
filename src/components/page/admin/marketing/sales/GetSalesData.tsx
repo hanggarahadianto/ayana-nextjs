@@ -75,7 +75,7 @@ const SalesDashboardParent = ({ companyId, companyName }: SalesDashboardParentPr
       />
 
       <Title order={3} mt="xl">
-        Agent Marketing
+        Agen
       </Title>
       <AgentPerformSales
         data={agentData?.data}

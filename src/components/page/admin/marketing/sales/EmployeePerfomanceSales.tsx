@@ -17,36 +17,18 @@ interface Props {
   setEndDate: (d: Date | null) => void;
 }
 
-const EmployeePerformSales = ({
-  data,
-  isLoading,
-  isFetching,
-  onRefresh,
-  companyId,
-  startDate,
-  endDate,
-  setStartDate,
-  setEndDate,
-}: Props) => {
+const EmployeePerformSales = ({ data, isLoading, isFetching, onRefresh, companyId }: Props) => {
   return (
     <Card shadow="sm" padding="lg">
       <Stack>
         <SearchTable
           label="Cari Internal Marketing"
           companyId={companyId}
-          searchTerm={""}
-          setSearchTerm={() => {}}
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
           readonly={false}
-          useCategory={false}
           onRefresh={onRefresh}
           isFetching={isFetching}
-          transactionType={null}
-          debitAccountType={null}
-          creditAccountType={null}
+          useDateFilter={false}
+          useSearch={false}
         />
         {isLoading ? (
           <Skeleton height={180} radius="md" />

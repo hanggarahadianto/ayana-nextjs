@@ -9,21 +9,22 @@ interface SearchTableProps {
   label: string;
   companyId: string;
   searchTerm?: string;
-  setSearchTerm: (value: string | undefined) => void;
+  setSearchTerm?: (value: string | undefined) => void;
   selectedCategory?: string | null;
   setSelectedCategory?: (value: string | null) => void;
-  startDate: Date | null;
-  setStartDate: (value: Date | null) => void;
-  endDate: Date | null;
-  setEndDate: (value: Date | null) => void;
-  transactionType: string | null;
-  debitAccountType: string | null;
-  creditAccountType: string | null;
+  startDate?: Date | null;
+  setStartDate?: (value: Date | null) => void;
+  endDate?: Date | null;
+  setEndDate?: (value: Date | null) => void;
+  transactionType?: string | null;
+  debitAccountType?: string | null;
+  creditAccountType?: string | null;
   readonly?: boolean;
   useCategory?: boolean;
   onRefresh: () => void;
   isFetching?: boolean;
   useDateFilter?: boolean;
+  useSearch?: boolean;
 }
 
 export default function SearchTable({
@@ -45,15 +46,18 @@ export default function SearchTable({
   onRefresh = () => {},
   isFetching = false,
   useDateFilter = true,
+  useSearch = true,
 }: SearchTableProps) {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const clearDates = () => {
-    setStartDate(null);
-    setEndDate(null);
+    if (setStartDate) setStartDate(null);
+    if (setEndDate) setEndDate(null);
   };
 
-  const clearSearch = () => setSearchTerm(undefined);
+  const clearSearch = () => {
+    if (setSearchTerm) setSearchTerm(undefined);
+  };
 
   return (
     <Group>
@@ -63,27 +67,28 @@ export default function SearchTable({
           value={selectedCategory ?? null}
           onChange={setSelectedCategory ?? (() => {})}
           readonly={readonly}
-          transactionType={transactionType}
-          debitAccountType={debitAccountType}
-          creditAccountType={creditAccountType}
+          transactionType={transactionType ?? null}
+          debitAccountType={debitAccountType ?? null}
+          creditAccountType={creditAccountType ?? null}
         />
       )}
 
-      <TextInput
-        w={useCategory ? 400 : 800}
-        label={label}
-        placeholder="Cari data transaksi..."
-        value={searchTerm ?? ""}
-        onChange={(e) => setSearchTerm(e.currentTarget.value || undefined)}
-        rightSection={
-          searchTerm && (
-            <ActionIcon onClick={clearSearch} variant="subtle" color="gray">
-              <IconX size={16} />
-            </ActionIcon>
-          )
-        }
-      />
-
+      {useSearch && (
+        <TextInput
+          w={useCategory ? 400 : 800}
+          label={label}
+          placeholder="Cari data transaksi..."
+          value={searchTerm ?? ""}
+          onChange={(e) => setSearchTerm && setSearchTerm(e.currentTarget.value || undefined)}
+          rightSection={
+            searchTerm && (
+              <ActionIcon onClick={clearSearch} variant="subtle" color="gray">
+                <IconX size={16} />
+              </ActionIcon>
+            )
+          }
+        />
+      )}
       {useDateFilter && (
         <Group wrap="wrap" gap="sm" align="end">
           <DatePickerInput

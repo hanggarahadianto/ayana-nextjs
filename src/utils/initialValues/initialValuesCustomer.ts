@@ -6,7 +6,6 @@ export const getInitialValuesCreateCustomer = (companyId: string): ICustomerCrea
   payment_method: "cash",
   amount: 0,
   date_inputed: "",
-
   home_id: null,
   product_unit: "",
   bank_name: "",

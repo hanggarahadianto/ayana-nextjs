@@ -29,11 +29,9 @@ interface ICustomerItem {
   address: string;
   phone: string;
   status: string;
-
   payment_method: string;
   amount: number;
   date_inputed: string;
-
   home_id?: string | null;
   home?: IProduct | null;
   marketer?: IMarketer; // ✅ marketer sebagai relasi opsional
@@ -54,9 +52,7 @@ interface ICustomerCreate {
   payment_method: string;
   amount: number;
   date_inputed: string;
-
   marketer_id: string;
-
   home_id?: string | null;
   product_unit: string | null;
   bank_name: string;
@@ -84,6 +80,36 @@ interface ICustomerData {
 // API RESPONSE WRAPPER
 interface ICustomerResponse {
   data: ICustomerData;
+  message: string;
+  status: string;
+}
+
+interface ITestimonyItem {
+  id: string;
+  rating: number;
+  note: string;
+  customer_id: string | null;
+  company_id: string;
+  customer;
+}
+
+// types/testimony.ts
+interface ITestimonyCreate {
+  rating: number;
+  note: string;
+  customer_id: string | null;
+  company_id: string;
+}
+
+interface ITestimonyData {
+  testimonyList: ITestimonyItem[];
+  total_testimony: number;
+  page: number;
+  limit: number;
+  total: number;
+}
+interface ITestimonyResponse {
+  data: ITestimonyData;
   message: string;
   status: string;
 }

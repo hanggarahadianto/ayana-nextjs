@@ -24,26 +24,18 @@ const AgentPerformSales = ({ data, isLoading, isFetching, onRefresh, companyId, 
         <SearchTable
           label="Cari Agent Marketing"
           companyId={companyId}
-          searchTerm={""}
-          setSearchTerm={() => {}}
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
           readonly={false}
-          useCategory={false}
           onRefresh={onRefresh}
           isFetching={isFetching}
-          transactionType={null}
-          debitAccountType={null}
-          creditAccountType={null}
+          useDateFilter={false}
+          useSearch={false}
         />
         {isLoading ? (
           <Skeleton height={180} radius="md" />
         ) : (
-          <Grid bg="#2e2e2e" p="40px" mt={"20px"}>
+          <Grid bg="#1a1a1a" p="40px" mt={"20px"}>
             <GridCol span={{ base: 12, md: 8 }}>
-              <PerformerSection title="Top Performers" data={data?.top_performers || []} color="green" />
+              <PerformerSection title="Top Performers" data={data?.top_performers || []} color="teal" />
             </GridCol>
             <GridCol span={{ base: 12, md: 4 }}>
               <PerformerSection title="Under Performers" data={data?.under_performers || []} color="gray" />
