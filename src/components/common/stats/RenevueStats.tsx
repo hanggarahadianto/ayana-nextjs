@@ -18,6 +18,8 @@ export const RevenueStats = ({ companyId, revenueType, onLoaded, title }: Revenu
         companyId: companyId!,
         revenueType: "realized",
         summaryOnly: true,
+        debitCategory: null,
+        creditCategory: null,
       }),
     enabled: !!companyId,
     refetchOnWindowFocus: false,

@@ -32,6 +32,9 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
   const [endDate, setEndDate] = useState<Date | null>(null);
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const sortBy = "date_inputed"; // bisa juga dari Select nanti
+
   const {
     data: revenueData,
     isLoading: isLoadingRevenue,
@@ -48,18 +51,24 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
       debouncedSearch,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
+      sortBy,
+      sortOrder,
     ],
     queryFn: () =>
       companyId
         ? getRevenueSummary({
             companyId,
             selectedCategory: selectedCategory ?? undefined,
+            debitCategory: selectedCategory,
+            creditCategory: null,
             page,
             limit,
             revenueType: revenueType ?? "",
             search: debouncedSearch,
             startDate: formattedStartDate,
             endDate: formattedEndDate,
+            sortBy,
+            sortOrder,
           })
         : null,
     enabled: !!companyId,
@@ -147,6 +156,9 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
               setLimit(newLimit);
               setPage(1);
             }}
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            onSortChange={setSortOrder}
           />
         )}
       </Card>
