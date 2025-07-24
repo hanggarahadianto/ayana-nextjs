@@ -6,9 +6,9 @@ import { Flex } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 
 export const columnsBaseExpense = (openEditModal: (row: IExpenseSummaryItem) => void, handleDeleteDataJournal: (id: string) => void) => [
-  { key: "transaction_id", title: "Transaction ID", width: 40, minWidth: 40 },
-  { key: "invoice", title: "Invoice", width: 100, minWidth: 100 },
-  { key: "partner", title: "Partner", width: 120, minWidth: 120 },
+  { key: "transaction_id", title: "Transaction ID", width: 30, minWidth: 30 },
+  { key: "invoice", title: "Invoice", width: 60, minWidth: 60 },
+  { key: "partner", title: "Partner", width: 180, minWidth: 180 },
   // { key: "credit_category", title: "Kategori", width: 120, minWidth: 120 },
   {
     key: "amount",

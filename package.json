@@ -43,7 +43,6 @@
     "react-image-gallery": "^1.4.0",
     "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.1.1",
-    "react-virtualized": "^9.22.6",
     "use-debounce": "^10.0.4",
     "yup": "^1.6.1",
     "zustand": "^5.0.4"
@@ -55,7 +54,6 @@
     "@types/lodash": "^4.17.14",
     "@types/node": "^22.13.5",
     "@types/react": "^19",
-    "@types/react-virtualized": "^9.22.2",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "eslint": "9.25.1",
     "eslint-config-next": "15.3.1",

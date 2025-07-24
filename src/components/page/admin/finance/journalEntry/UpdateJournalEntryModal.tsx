@@ -26,6 +26,7 @@ const UpdateJournalEntryModal: React.FC<IUpdateJournalEntryModalProps> = ({ tran
     const transformedEntry: IJournalEntryUpdate = {
       ...entry,
       due_date: entry.due_date || null,
+      note: entry.note?.toUpperCase() || "",
     };
     submitJournal(transformedEntry); // kirim objek langsung, bukan array
   };

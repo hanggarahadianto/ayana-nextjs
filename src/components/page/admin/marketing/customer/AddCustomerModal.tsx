@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useState } from "react";
-import { Modal, TextInput, Button, Group, Select, SimpleGrid, Divider, Stack, Text, Switch } from "@mantine/core";
+import { Modal, TextInput, Button, Group, Select, SimpleGrid, Divider, Stack, Text, Switch, InputError } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
@@ -194,11 +194,13 @@ const AddCustomerModal = ({ companyId }: AddMarketingModalProps) => {
                     <SelectEmployee
                       isAgent={isAgent}
                       companyId={companyId}
-                      label={"Nama Sales / Marketer"}
-                      value={values?.marketer_id}
+                      label="Nama Sales / Marketer"
+                      value={values.marketer_id}
                       onChange={(value) => handleChangeCustomer("marketer_id", value, setFieldValue)}
-                      error={values.marketer_id && errors?.marketer_id}
+                      error={touched.marketer_id ? errors.marketer_id : undefined}
                     />
+
+                    {/* {touched.marketer_id && errors.marketer_id && <InputError>{errors.marketer_id}</InputError>} */}
 
                     <Divider p={12} mt={16} />
 

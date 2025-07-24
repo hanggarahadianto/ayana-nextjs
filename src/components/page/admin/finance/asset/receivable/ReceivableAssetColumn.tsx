@@ -17,8 +17,8 @@ export const columnsBaseReceivableAsset = (
   const hasDone = assetList.some((item) => item.status === "done");
 
   return [
-    { key: "transaction_id", title: "Transaction ID", width: 120, minWidth: 120 },
-    { key: "invoice", title: "Invoice", width: 120, minWidth: 120 },
+    { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
+    { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
     { key: "partner", title: "Partner", width: 200, minWidth: 200 },
     {
       key: "amount",
