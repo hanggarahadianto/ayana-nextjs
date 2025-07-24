@@ -24,10 +24,10 @@ export const CashinStats = ({ companyId, assetType, category, title }: CashInSta
     refetchOnWindowFocus: false,
   });
 
-  console.log("cash in data", cashinData);
+  // console.log("cash in data", cashinData);
 
   const totalCashIn = cashinData?.data?.total_asset ?? 0;
-  console.log("total cashin", totalCashIn);
+  // console.log("total cashin", totalCashIn);
 
   const statsData: StatItem[] = [
     {

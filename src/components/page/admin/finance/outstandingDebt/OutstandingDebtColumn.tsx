@@ -23,7 +23,7 @@ export const columnsBaseDebt = (
   const baseColumns: ColumnType<IDebtSummaryItem>[] = [
     { key: "transaction_id", title: "Transaction ID", width: 140, minWidth: 140 },
     { key: "invoice", title: "Invoice", width: 160, minWidth: 160 },
-    { key: "partner", title: "Partner", width: 160, minWidth: 160 },
+    { key: "partner", title: "Partner", width: 280, minWidth: 280 },
     {
       key: "kategori",
       title: "Kategori",
