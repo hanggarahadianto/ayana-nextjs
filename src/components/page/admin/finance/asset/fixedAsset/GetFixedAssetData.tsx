@@ -25,7 +25,7 @@ interface AssetSummaryCardProps {
 export const GetFixedAssetData = ({ companyId, companyName, assetType, transactionType, title }: AssetSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>("Aset Tetap");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
