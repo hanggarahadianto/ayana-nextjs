@@ -14,6 +14,7 @@ import SearchTable from "@/components/common/table/SearchTableComponent";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import { useDebounce } from "use-debounce";
 import { columnsBaseCashout } from "./CashOutColumn";
+import DownloadJournalButton from "../../journalEntry/DownloadJournalTransaction";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -27,7 +28,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
-  const [selectedCategory, setSelectedCategory] = useState<string | null>("Kas & Bank");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>("");
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500);
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -61,8 +62,8 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
         page,
         limit,
         assetType,
-        debitCategory: null,
-        creditCategory: selectedCategory,
+        debitCategory: selectedCategory,
+        creditCategory: null,
         search: debouncedSearch,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
@@ -85,8 +86,6 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
     useModalStore.getState().openModal("editCashOutData", cashOutAsset);
   };
 
-  // console.log("cashout", cashOutSummaryData);
-
   const columns = columnsBaseCashout(openEditModal, handleDeleteDataJournal);
 
   return (
@@ -99,7 +98,18 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
         </Stack>
 
         <Stack align="flex-end">
-          <CreateJournalEntryModal companyId={companyId} transactionType={"payout"} />
+          <Group>
+            <DownloadJournalButton
+              entries={cashOutList}
+              title={`Jurnal Transaksi Uang Keluar ${companyName || ""}`}
+              startDate={formattedStartDate || ""}
+              endDate={formattedEndDate || ""}
+              selectedCategory={selectedCategory || ""}
+              searchTerm={debouncedSearch || ""}
+            />
+
+            <CreateJournalEntryModal companyId={companyId} transactionType={"payout"} />
+          </Group>
 
           <Text size="xl" fw={800} c={"red"} mt={20}>
             {formatCurrency(cashOutSummaryData?.data.total_asset ?? 0)}
@@ -118,10 +128,10 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
           setStartDate={setStartDate}
           endDate={endDate}
           setEndDate={setEndDate}
-          readonly={true}
+          readonly={false}
           transactionType={transactionType}
-          debitAccountType={null}
-          creditAccountType={"Asset"}
+          debitAccountType={"Asset"}
+          creditAccountType={null}
           useCategory={true}
           onRefresh={isRefetchCashOutData}
           isFetching={isFetchingCashOutData}

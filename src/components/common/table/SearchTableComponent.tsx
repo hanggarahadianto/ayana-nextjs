@@ -41,7 +41,7 @@ export default function SearchTable({
   transactionType,
   debitAccountType,
   creditAccountType,
-  readonly = false,
+  readonly,
   useCategory = false,
   onRefresh = () => {},
   isFetching = false,
@@ -58,6 +58,10 @@ export default function SearchTable({
   const clearSearch = () => {
     if (setSearchTerm) setSearchTerm(undefined);
   };
+
+  console.log("readonly di search table", readonly);
+
+  // console.log("transaction type di search table", transactionType);
 
   return (
     <Group>

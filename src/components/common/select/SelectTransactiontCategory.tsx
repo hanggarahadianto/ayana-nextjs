@@ -1,4 +1,5 @@
 import { getDataTransactionCategory } from "@/api/transaction-category/getDataTransactionCategory";
+import { transactionLabel } from "@/constants/dictionary";
 import { Grid, Select, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 
@@ -53,13 +54,21 @@ export default function SelectFinanceTransactionCategory({
       });
     }
   };
+  const transactionLabelOrder = transactionLabel.map((item) => item.value);
 
-  const TransactionCategoryOptions = TransactionCategoryData?.data?.map((item) => ({
+  const sortedTransactionData = TransactionCategoryData?.data
+    ?.slice() // untuk menghindari mutasi langsung
+    .sort((a, b) => {
+      const aIndex = transactionLabelOrder.indexOf(a.transaction_label);
+      const bIndex = transactionLabelOrder.indexOf(b.transaction_label);
+      return aIndex - bIndex;
+    });
+
+  const TransactionCategoryOptions = sortedTransactionData?.map((item) => ({
     value: item.id,
     label: ` ${item.description}`,
-    rawTransactionCategory: item, // <== Gunakan key unik
+    rawTransactionCategory: item,
   }));
-
   return (
     <Select
       error={error}

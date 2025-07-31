@@ -3,7 +3,7 @@ import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDelet
 import ButtonReversedJournal from "@/components/common/button/buttonReversedJournal";
 import { formatCurrency } from "@/helper/formatCurrency";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
-import { Flex } from "@mantine/core";
+import { Badge, Flex, Text } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 
 export const columnsBaseReceivableAsset = (
@@ -14,9 +14,10 @@ export const columnsBaseReceivableAsset = (
     handleDeleteDataJournal: (id: string) => void;
   }
 ) => {
+  const { handleSendClick, openEditModal, handleDeleteDataJournal } = handlers;
   const hasDone = assetList.some((item) => item.status === "done");
 
-  return [
+  const baseColumns = [
     { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
     { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
     { key: "partner", title: "Partner", width: 200, minWidth: 200 },
@@ -41,20 +42,41 @@ export const columnsBaseReceivableAsset = (
       minWidth: 120,
       render: (item: IAssetSummaryItem) => (item.due_date ? formatDateIndonesia(item.due_date) : " - "),
     },
+    {
+      key: "payment_note",
+      title: "Status Pembayaran",
+      width: 280,
+      render: (item: IAssetSummaryItem) => {
+        const note = item.payment_note || "-";
+        const color = item.payment_note_color || "gray";
 
+        return (
+          <Badge color={color} p={10}>
+            <Text fw={600} size="11px">
+              {note}
+            </Text>
+          </Badge>
+        );
+      },
+    },
+    {
+      key: "description",
+      title: "Deskripsi",
+      width: 400,
+      minWidth: 400,
+    },
     {
       key: "aksi",
       title: "Aksi",
-      width: 1,
-      minWidth: 1,
-      maxWidth: 4,
+      width: 10,
+      minWidth: 10,
       render: (row: IAssetSummaryItem) => (
         <Flex gap="lg" justify="center">
-          {row.status !== "paid" && <ButtonReversedJournal size={2.2} onClick={() => handlers.handleSendClick(row)} />}
-          <BreathingActionIcon onClick={() => handlers.openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
+          {row.status !== "done" && <ButtonReversedJournal size={2.2} onClick={() => handleSendClick(row)} />}
+          <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size="2.2rem" />
           <ButtonDeleteWithConfirmation
             id={row.id}
-            onDelete={() => handlers.handleDeleteDataJournal(row.id)}
+            onDelete={() => handleDeleteDataJournal(row.id)}
             description={`Hapus Transaksi ${row.description}?`}
             size={2.2}
           />
@@ -62,4 +84,6 @@ export const columnsBaseReceivableAsset = (
       ),
     },
   ];
+
+  return baseColumns;
 };

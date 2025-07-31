@@ -26,7 +26,7 @@ interface AssetSummaryCardProps {
 export const GetReceivableAssetData = ({ companyId, companyName, assetType, transactionType, title }: AssetSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>("");
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -121,7 +121,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         setStartDate={setStartDate}
         endDate={endDate}
         setEndDate={setEndDate}
-        readonly={true}
+        readonly={false}
         transactionType={null}
         debitAccountType={"Asset"}
         creditAccountType={null}

@@ -26,7 +26,7 @@ interface CashSummaryCardProps {
 export const GetCashinData = ({ companyId, companyName, assetType, transactionType, title }: CashSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>("Kas & Bank");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>("");
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -60,8 +60,8 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         page,
         limit,
         assetType,
-        debitCategory: selectedCategory,
-        creditCategory: null,
+        debitCategory: null,
+        creditCategory: selectedCategory,
         search: debouncedSearch,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
@@ -113,10 +113,10 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
           setStartDate={setStartDate}
           endDate={endDate}
           setEndDate={setEndDate}
-          readonly={true}
-          transactionType={null}
+          transactionType={transactionType}
           debitAccountType={"Asset"}
           creditAccountType={null}
+          readonly={false}
           useCategory={true}
           onRefresh={isRefetchCashinData}
           isFetching={isFetchingCashinData}

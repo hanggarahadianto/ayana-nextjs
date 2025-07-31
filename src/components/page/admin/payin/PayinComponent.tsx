@@ -10,7 +10,6 @@ import { GetReceivableAssetData } from "../finance/asset/receivable/GetReceivabl
 
 export default function PayinComponent() {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
-  const transactionType = "payin";
 
   return (
     <SimpleGridGlobal cols={1}>
@@ -18,35 +17,37 @@ export default function PayinComponent() {
       <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
 
       <SimpleGridGlobal cols={1} gap="20px">
-        <GetCashinData
+        {/* <GetCashinData
           companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
           assetType="cashin"
-          transactionType={transactionType}
+          transactionType={"payin"}
           title="Uang Masuk"
-        />
+        /> */}
 
         <GetReceivableAssetData
           companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
           assetType="receivable"
-          transactionType={transactionType}
+          transactionType={"payin"}
           title="Piutang Berjalan"
         />
+
         <GetReceivableAssetData
           companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
           assetType="receivable_history"
-          transactionType={transactionType}
+          transactionType={"payin"}
           title="Piutang Lunas"
         />
-        <GetFixedAssetData
+
+        {/* <GetFixedAssetData
           companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
           assetType="fixed_asset"
-          transactionType={transactionType}
+          transactionType={"payout"}
           title="Aset Tetap"
-        />
+        /> */}
       </SimpleGridGlobal>
     </SimpleGridGlobal>
   );

@@ -18,7 +18,7 @@ export default function PayoutComponent() {
       <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
 
       <SimpleGridGlobal cols={1} gap="20px">
-        <GetCashOutData
+        {/* <GetCashOutData
           companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
           assetType="cashout"
@@ -26,7 +26,7 @@ export default function PayoutComponent() {
           title="Uang Keluar"
         />
 
-        <GetExpenseSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} title="Pengeluaran" />
+        <GetExpenseSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} title="Pengeluaran" /> */}
 
         <GetOutstandingDebtData
           companyId={activeTab?.id || ""}

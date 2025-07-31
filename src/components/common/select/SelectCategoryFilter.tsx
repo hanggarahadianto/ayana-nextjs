@@ -1,7 +1,6 @@
 import { getTransactionCategoryByCategoryOnly } from "@/api/transaction-category/getDataTransactionCategoryFilter";
 import { Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { read } from "fs";
 import React from "react";
 
 interface SelectCategoryFilterProps {
@@ -23,9 +22,11 @@ const SelectCategoryFilter: React.FC<SelectCategoryFilterProps> = ({
   onChange,
   readonly = false,
 }) => {
+  // console.log("transaction type di select category", transactionType);
+
   const { data: transactionCategoryData, isLoading } = useQuery({
-    queryKey: ["getTransactionCategoryByCategoryOnly", companyId, , transactionType, debitAccountType, creditAccountType],
-    queryFn: () => getTransactionCategoryByCategoryOnly(companyId, transactionType, debitAccountType, creditAccountType),
+    queryKey: ["getTransactionCategoryByCategoryOnly", companyId, , transactionType || "payin", , debitAccountType, creditAccountType],
+    queryFn: () => getTransactionCategoryByCategoryOnly(companyId, transactionType || "payin", debitAccountType, creditAccountType),
     enabled: !!companyId,
   });
 
@@ -34,6 +35,13 @@ const SelectCategoryFilter: React.FC<SelectCategoryFilterProps> = ({
       label: category,
       value: category,
     })) || [];
+
+  console.log("readonly", readonly);
+  console.log("value", value);
+  console.log(
+    "options",
+    options.map((opt) => opt.value)
+  );
 
   return (
     <Select

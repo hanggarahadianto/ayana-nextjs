@@ -25,7 +25,7 @@ interface AssetSummaryCardProps {
 export const GetFixedAssetData = ({ companyId, companyName, assetType, transactionType, title }: AssetSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>("Aset Tetap");
 
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
@@ -60,7 +60,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         page,
         limit,
         assetType,
-        debitCategory: selectedCategory,
+        debitCategory: null,
         creditCategory: null,
         search: debouncedSearch,
         startDate: formattedStartDate,
@@ -117,9 +117,9 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         endDate={endDate}
         setEndDate={setEndDate}
         readonly={true}
-        transactionType={null}
-        debitAccountType={"Asset"}
-        creditAccountType={null}
+        transactionType={transactionType}
+        debitAccountType={null}
+        creditAccountType={"Asset"}
         useCategory={true}
         onRefresh={isRefetchFixedAsset}
         isFetching={isFetchingFixedAsset}

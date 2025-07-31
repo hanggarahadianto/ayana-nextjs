@@ -80,6 +80,8 @@ interface IAssetSummaryItem {
   transaction_category: string;
   transaction_id: string;
   label: string;
+  payment_note: string;
+  payment_note_color;
 }
 
 interface IAssetSummaryData {

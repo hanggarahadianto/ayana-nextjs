@@ -3,7 +3,6 @@ import { APIAxiosInstance } from "@/lib";
 export const getTransactionCategoryByCategoryOnly = async (
   companyId: string,
   transactionType: string | null,
-
   debitAccountType: string | null,
   creditAccountType: string | null
 ): Promise<ITransactionCategorySelectByCategoryResponse> => {
@@ -14,6 +13,8 @@ export const getTransactionCategoryByCategoryOnly = async (
 
   const selectByCategory = "true";
 
+  console.log("transaction type di fething", transactionType);
+
   const queryParams = new URLSearchParams({
     company_id: companyId,
   });
@@ -21,9 +22,6 @@ export const getTransactionCategoryByCategoryOnly = async (
   if (transactionType) {
     queryParams.append("transaction_type", transactionType);
   }
-  // if (transactionType) {
-  //   queryParams.append("transaction_type", transactionType);
-  // }
 
   if (selectByCategory) {
     queryParams.append("select_by_category", "true");

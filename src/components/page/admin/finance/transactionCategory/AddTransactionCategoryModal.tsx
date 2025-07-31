@@ -77,6 +77,7 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
                     {values.status && (
                       <Group>
                         <Select
+                          searchable
                           required
                           withAsterisk
                           label="Jenis Transaksi"
