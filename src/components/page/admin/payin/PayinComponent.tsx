@@ -7,6 +7,7 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 import GlobalTab from "@/components/common/tab/TabGlobal";
 import { GetFixedAssetData } from "../finance/asset/fixedAsset/GetFixedAssetData";
 import { GetReceivableAssetData } from "../finance/asset/receivable/GetReceivableData";
+import { GetInventoryAssetData } from "../finance/asset/inventory/GetInventoryAssetData";
 
 export default function PayinComponent() {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
@@ -23,6 +24,14 @@ export default function PayinComponent() {
           assetType="cashin"
           transactionType={"payin"}
           title="Uang Masuk"
+        />
+
+        <GetInventoryAssetData
+          companyId={activeTab?.id || ""}
+          companyName={activeTab?.title}
+          assetType="inventory"
+          transactionType={"payout"}
+          title="Barang Dagangan"
         />
 
         <GetReceivableAssetData

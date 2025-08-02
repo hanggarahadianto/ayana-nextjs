@@ -80,7 +80,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, expenseData?.data.total || 0);
 
-  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteExpense } = useDeleteDataJournalEntry();
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteExpense } = useDeleteDataJournalEntry(title);
 
   const openEditModal = (expenseData: IExpenseSummaryItem) => {
     useModalStore.getState().openModal("editExpenseData", expenseData);

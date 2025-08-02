@@ -17,7 +17,7 @@ import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDelet
 interface GetJournalEntryDataProps {
   companyId: string;
   companyName?: string;
-  title?: string;
+  title: string;
 }
 
 export const GetJournalEntryData = ({ companyId, companyName, title }: GetJournalEntryDataProps) => {

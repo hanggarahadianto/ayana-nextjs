@@ -19,7 +19,7 @@ interface GetEquityDataProps {
   companyId: string;
   companyName?: string;
   equityType?: string;
-  title?: string;
+  title: string;
 }
 export const GetEquitySummaryData = ({ companyId, companyName, equityType, title }: GetEquityDataProps) => {
   const [page, setPage] = useState(1);
@@ -76,15 +76,12 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, equityData?.data.total || 0);
 
-  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteEquity } = useDeleteDataJournalEntry();
-  const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal([idToDelete]); // <-- bungkus dalam array
-  };
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteEquity } = useDeleteDataJournalEntry(title);
   const openEditModal = (equityData: IEquitySummaryItem) => {
     useModalStore.getState().openModal("editEquityData", equityData);
   };
 
-  const columns = columnsBaseEquity(openEditModal, handleDeleteDataJournal);
+  const columns = columnsBaseEquity(mutateDeleteDataJournal, openEditModal, isLoadingDeleteEquity);
 
   const textColor = equityType === "setor" ? "teal" : equityType === "tarik" ? "red" : "gray";
 
@@ -135,7 +132,7 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
             />
           )}
 
-          <LoadingGlobal visible={isLoadingEquity || isLoadingDeleteEquity} />
+          <LoadingGlobal visible={isLoadingEquity} />
         </Box>
         <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />
 

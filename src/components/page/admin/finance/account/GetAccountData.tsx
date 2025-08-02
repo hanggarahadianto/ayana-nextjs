@@ -57,7 +57,7 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
 
   return (
     <Card shadow="sm" padding="lg">
-      <LoadingGlobal visible={isLoadingGetAccount || isLoadingDeleteAccount} />
+      <LoadingGlobal visible={isLoadingGetAccount} />
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>
@@ -99,8 +99,7 @@ export const AccountCard = ({ companyId, companyName }: AccountCardProps) => {
               <Flex gap="lg" justify="center">
                 <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
                 <ButtonDeleteWithConfirmation
-                  isLoading={false}
-                  // id={row.id} // Gunakan id customer
+                  isLoading={isLoadingDeleteAccount}
                   onDelete={() => handleDeleteAccount(row.id)}
                   description={`Hapus Akun ${row.name}?`}
                   size={2.2}

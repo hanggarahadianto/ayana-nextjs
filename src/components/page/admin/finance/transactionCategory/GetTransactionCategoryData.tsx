@@ -74,7 +74,7 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <LoadingGlobal visible={isLoadingGetTransactionCategory || isLoadingDeleteTransactionCategory} />
+      <LoadingGlobal visible={isLoadingGetTransactionCategory} />
       <Stack>
         <Group justify="space-between">
           <Text size="xl" fw={600}>
@@ -85,26 +85,6 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
           </Stack>
         </Group>
         <Group>
-          {/* <SelectCategoryFilter
-              companyId={companyId}
-              value={selectedDebitCategory}
-              onChange={(value) => {
-                setSelectedDebitCategory(value);
-              }}
-              transactionType={null}
-              debitAccountType={null}
-              creditAccountType={null}
-            />
-            <SelectCategoryFilter
-              companyId={companyId}
-              value={selectedCreditCategory}
-              onChange={(value) => {
-                setSelectedCreditCategory(value);
-              }}
-              transactionType={null}
-              debitAccountType={null}
-              creditAccountType={null}
-            /> */}
           <Select
             label="Filter Berdasarkan Tipe Akun (Debit)"
             placeholder="Pilih Type"
@@ -194,8 +174,7 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
               <Group gap="lg" justify="center">
                 <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
                 <ButtonDeleteWithConfirmation
-                  isLoading={false}
-                  // id={row.id} // Gunakan id customer
+                  isLoading={isLoadingDeleteTransactionCategory}
                   onDelete={() => handleDeleteAccount(row.id)}
                   description={`Hapus Kategori Transaksi ${row.name}?`}
                   size={2.2}

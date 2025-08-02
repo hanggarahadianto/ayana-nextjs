@@ -79,7 +79,7 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
     useModalStore.getState().openModal("editCashInData", cashInAsset);
   };
 
-  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteCashIn } = useDeleteDataJournalEntry();
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteCashIn } = useDeleteDataJournalEntry(title);
 
   const columns = columnsBaseCashIn(mutateDeleteDataJournal, openEditModal, isLoadingDeleteCashIn);
 

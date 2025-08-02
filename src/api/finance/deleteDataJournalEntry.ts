@@ -7,7 +7,7 @@ const handleDeleteJournalEntry = async (ids: string[]): Promise<AxiosResponse<an
   return APIAxiosInstance.delete(`journal-entry/delete`, { data: { ids } });
 };
 
-export const useDeleteDataJournalEntry = (title?: string) => {
+export const useDeleteDataJournalEntry = (title: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -36,22 +36,28 @@ export const useDeleteDataJournalEntry = (title?: string) => {
           case "hutang berjaan":
             await queryClient.invalidateQueries({ queryKey: ["getOutstandingDebtByCompanyId"], exact: false });
             break;
+          case "modal disetor":
+            await queryClient.invalidateQueries({ queryKey: ["getEquitySummaryData"], exact: false });
+            break;
+          case "modal ditarik":
+            await queryClient.invalidateQueries({ queryKey: ["getOutstandingDebtByCompanyId"], exact: false });
+            break;
           case "transaksi":
             await queryClient.invalidateQueries({
               predicate: (query) => Array.isArray(query.queryKey) && query.queryKey[0] === "getJournalEntryData",
             });
             break;
-          default:
-            // fallback refetch semua
-            await Promise.all([
-              queryClient.invalidateQueries({ queryKey: ["getCashinData"], exact: false }),
-              queryClient.invalidateQueries({ queryKey: ["getReceivableAssetData"], exact: false }),
-              queryClient.invalidateQueries({ queryKey: ["getFixedAssetData"], exact: false }),
-              queryClient.invalidateQueries({ queryKey: ["getCashOutData"], exact: false }),
-              queryClient.invalidateQueries({ queryKey: ["getExpenseSummaryData"], exact: false }),
-              queryClient.invalidateQueries({ queryKey: ["getOutstandingDebtByCompanyId"], exact: false }),
-            ]);
-            break;
+          // default:
+          //   // fallback refetch semua
+          //   await Promise.all([
+          //     queryClient.invalidateQueries({ queryKey: ["getCashinData"], exact: false }),
+          //     queryClient.invalidateQueries({ queryKey: ["getReceivableAssetData"], exact: false }),
+          //     queryClient.invalidateQueries({ queryKey: ["getFixedAssetData"], exact: false }),
+          //     queryClient.invalidateQueries({ queryKey: ["getCashOutData"], exact: false }),
+          //     queryClient.invalidateQueries({ queryKey: ["getExpenseSummaryData"], exact: false }),
+          //     queryClient.invalidateQueries({ queryKey: ["getOutstandingDebtByCompanyId"], exact: false }),
+          //   ]);
+          //   break;
         }
 
         showNotification({
