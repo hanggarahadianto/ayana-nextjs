@@ -59,7 +59,7 @@ export default function SearchTable({
     if (setSearchTerm) setSearchTerm(undefined);
   };
 
-  console.log("readonly di search table", readonly);
+  // console.log("readonly di search table", readonly);
 
   // console.log("transaction type di search table", transactionType);
 

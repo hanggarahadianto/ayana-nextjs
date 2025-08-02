@@ -15,9 +15,10 @@ interface Column<T> {
 }
 
 export const columnsBaseJournalEntry = (
-  handleDeleteJournalEntry: (id: string) => void,
+  mutateDeleteJournal: (ids: string[]) => void,
   checkboxStates: CheckboxItem[],
-  checkboxHandlers: UseListStateHandlers<CheckboxItem>
+  checkboxHandlers: UseListStateHandlers<CheckboxItem>,
+  isLoadingDeleteJournalEntry: boolean // ✅ tambahkan ini sebagai argumen
 ): Column<IJournalEntryItem>[] => {
   return [
     {
@@ -57,11 +58,18 @@ export const columnsBaseJournalEntry = (
       render: (item: IJournalEntryItem) => (item.date_inputed ? formatDateIndonesia(item.date_inputed) : "-"),
     },
     {
+      key: "transaction_category_name",
+      title: "Kategori",
+      width: 180,
+      minWidth: 180,
+    },
+    {
       key: "note",
       title: "Keterangan",
       width: 220,
       minWidth: 220,
     },
+
     {
       key: "aksi",
       title: "Aksi",
@@ -70,8 +78,8 @@ export const columnsBaseJournalEntry = (
       render: (item: IJournalEntryItem) => (
         <Flex gap="lg" justify="center">
           <ButtonDeleteWithConfirmation
-            id={item.transaction_category_id}
-            onDelete={() => handleDeleteJournalEntry(item.id)}
+            isLoading={isLoadingDeleteJournalEntry}
+            onDelete={() => mutateDeleteJournal([item.id])} // langsung kirim array
             description={`Hapus Transaksi ${item.description || item.transaction_id}?`}
             size={2.2}
           />

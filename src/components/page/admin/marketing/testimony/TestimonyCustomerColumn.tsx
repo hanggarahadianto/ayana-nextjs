@@ -45,7 +45,12 @@ export const columnsBaseTestimony = (openEditModal: (row: any) => void, handleDe
     render: (row: any) => (
       <Group gap="lg">
         <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="1rem" />} size="2.2rem" />
-        <ButtonDeleteWithConfirmation id={row.id} onDelete={() => handleDelete(row.id)} description={`Hapus testimony ini?`} size={2.2} />
+        <ButtonDeleteWithConfirmation
+          isLoading={false}
+          onDelete={() => handleDelete(row.id)}
+          description={`Hapus testimony ini?`}
+          size={2.2}
+        />
       </Group>
     ),
   },

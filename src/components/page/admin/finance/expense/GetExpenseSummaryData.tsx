@@ -81,14 +81,12 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
   const endIndex = Math.min(page * limit, expenseData?.data.total || 0);
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteExpense } = useDeleteDataJournalEntry();
-  const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal([idToDelete]); // <-- bungkus dalam array
-  };
+
   const openEditModal = (expenseData: IExpenseSummaryItem) => {
     useModalStore.getState().openModal("editExpenseData", expenseData);
   };
 
-  const columns = columnsBaseExpense(openEditModal, handleDeleteDataJournal);
+  const columns = columnsBaseExpense(mutateDeleteDataJournal, openEditModal, isLoadingDeleteExpense);
 
   return (
     <SimpleGridGlobal cols={1}>
@@ -134,7 +132,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
               columns={columns}
             />
           )}
-          <LoadingGlobal visible={isLoadingExpense || isLoadingDeleteExpense} />
+          <LoadingGlobal visible={isLoadingExpense} />
         </Box>
         <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />
 

@@ -105,7 +105,7 @@ export const columnsBaseCustomer = (openEditModal: (row: ICustomerItem) => void,
       <Group gap="lg">
         <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="1rem" />} size={"2.2rem"} />
         <ButtonDeleteWithConfirmation
-          id={row.id} // Gunakan id customer
+          isLoading={false}
           onDelete={() => handleDeleteDataCustomer(row.id)}
           description={`Hapus konsumen ${row.name}?`}
           size={2.2}

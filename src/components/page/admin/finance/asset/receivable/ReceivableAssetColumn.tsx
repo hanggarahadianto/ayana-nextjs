@@ -18,8 +18,8 @@ export const columnsBaseReceivableAsset = (
   const hasDone = assetList.some((item) => item.status === "done");
 
   const baseColumns = [
-    { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
-    { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
+    { key: "transaction_id", title: "Transaction ID", width: 110, minWidth: 110 },
+    { key: "invoice", title: "Invoice", width: 110, minWidth: 110 },
     { key: "partner", title: "Partner", width: 200, minWidth: 200 },
     {
       key: "amount",
@@ -31,14 +31,14 @@ export const columnsBaseReceivableAsset = (
     {
       key: "date_inputed",
       title: "Tanggal Transaksi",
-      width: 120,
+      width: 140,
       minWidth: 120,
       render: (item: IAssetSummaryItem) => (item.date_inputed ? formatDateIndonesia(item.date_inputed) : " - "),
     },
     {
       key: "due_date",
       title: "Jatuh Tempo",
-      width: 120,
+      width: 140,
       minWidth: 120,
       render: (item: IAssetSummaryItem) => (item.due_date ? formatDateIndonesia(item.due_date) : " - "),
     },
@@ -75,7 +75,7 @@ export const columnsBaseReceivableAsset = (
           {row.status !== "done" && <ButtonReversedJournal size={2.2} onClick={() => handleSendClick(row)} />}
           <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size="2.2rem" />
           <ButtonDeleteWithConfirmation
-            id={row.id}
+            isLoading={false}
             onDelete={() => handleDeleteDataJournal(row.id)}
             description={`Hapus Transaksi ${row.description}?`}
             size={2.2}

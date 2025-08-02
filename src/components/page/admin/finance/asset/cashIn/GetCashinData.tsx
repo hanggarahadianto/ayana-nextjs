@@ -80,11 +80,8 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
   };
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteCashIn } = useDeleteDataJournalEntry();
-  const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal([idToDelete]);
-  };
 
-  const columns = columnsBaseCashIn(openEditModal, handleDeleteDataJournal);
+  const columns = columnsBaseCashIn(mutateDeleteDataJournal, openEditModal, isLoadingDeleteCashIn);
 
   return (
     <Card padding="lg" shadow="sm" radius="md" withBorder>
@@ -137,7 +134,7 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
           />
         )}
 
-        <LoadingGlobal visible={isLoadingCashinData || isLoadingDeleteCashIn} />
+        <LoadingGlobal visible={isLoadingCashinData} />
       </Box>
 
       <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payin" />

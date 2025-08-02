@@ -65,10 +65,6 @@ const WeeklyProgressMenu = ({ refetchWeeklyProgressData, projectDataDetail, week
                   color: "#fff",
                   cursor: "pointer",
                   maxWidth: "80x",
-                  // minWidth: "250px", // Fix card width
-                  // minHeight: "240px", // Fix card height
-                  // maxWidth: "280px", // Optional max width
-                  // maxHeight: "280px", // Optional max height
                   transition: "transform 0.3s ease-in-out, opacity 0.3s ease-in-out", // Added transition
                   transform: "scale(1)", // Initial scale value
                 }}
@@ -121,8 +117,8 @@ const WeeklyProgressMenu = ({ refetchWeeklyProgressData, projectDataDetail, week
                     />
 
                     <ButtonDeleteWithConfirmation
-                      id={weeklyProgress.id}
-                      onDelete={handleDeleteWeeklyProgress}
+                      isLoading={false}
+                      onDelete={() => handleDeleteWeeklyProgress(weeklyProgress.id)}
                       description={`Apakah anda yakin ingin menghapus progress minggu ke ${weeklyProgress.week_number} ?`}
                       size={2.5}
                     />

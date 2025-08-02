@@ -112,8 +112,8 @@ const ProductAdminCard = ({ clusterId }: Props) => {
                     />
 
                     <ButtonDeleteWithConfirmation
-                      id={product.id}
-                      onDelete={handleDeleteProduct}
+                      isLoading={false}
+                      onDelete={() => handleDeleteProduct(product.id)}
                       description={`Apakah anda ingin menghapus ${product.title}?`}
                       size={2.5}
                     />

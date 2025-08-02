@@ -94,8 +94,8 @@ export const TestimonyCardCarousel = ({ testimonyList, openEditModal, onDelete }
 
               {onDelete && (
                 <ButtonDeleteWithConfirmation
-                  id={item.id}
-                  onDelete={onDelete}
+                  isLoading={false}
+                  onDelete={() => onDelete(item.id)}
                   description="Apakah anda ingin menghapus Testimony ini ?"
                   size={2}
                 />

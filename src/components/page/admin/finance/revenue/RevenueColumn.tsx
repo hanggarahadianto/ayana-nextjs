@@ -34,7 +34,8 @@ export const columnsBaseRevenue = (openEditModal: (row: IRevenueSummaryItem) => 
       <Flex gap="lg" justify="center">
         <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
         <ButtonDeleteWithConfirmation
-          id={row.id}
+          isLoading={false}
+          // id={row.id}
           onDelete={() => handleDeleteDataJournal(row.id)}
           description={`Hapus Transaksi ${row.description}?`}
           size={2.2}

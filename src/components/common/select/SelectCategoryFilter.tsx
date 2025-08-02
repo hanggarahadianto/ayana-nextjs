@@ -36,13 +36,6 @@ const SelectCategoryFilter: React.FC<SelectCategoryFilterProps> = ({
       value: category,
     })) || [];
 
-  console.log("readonly", readonly);
-  console.log("value", value);
-  console.log(
-    "options",
-    options.map((opt) => opt.value)
-  );
-
   return (
     <Select
       clearable={!readonly}

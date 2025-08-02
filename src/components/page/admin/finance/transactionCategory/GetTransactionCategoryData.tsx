@@ -194,7 +194,8 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
               <Group gap="lg" justify="center">
                 <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
                 <ButtonDeleteWithConfirmation
-                  id={row.id} // Gunakan id customer
+                  isLoading={false}
+                  // id={row.id} // Gunakan id customer
                   onDelete={() => handleDeleteAccount(row.id)}
                   description={`Hapus Kategori Transaksi ${row.name}?`}
                   size={2.2}

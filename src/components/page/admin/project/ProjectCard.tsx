@@ -66,8 +66,8 @@ const ProjectCardAdmin = ({ project, onDelete }: ProjectCardAdminProps) => {
               </Stack>
 
               <ButtonDeleteWithConfirmation
-                id={project.id}
-                onDelete={onDelete}
+                isLoading={false}
+                onDelete={() => onDelete(project.id)}
                 description={`Apakah anda ingin menghapus proyek ${project?.project_name} ?`}
                 size={2.5}
               />

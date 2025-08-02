@@ -6,11 +6,9 @@ import { Flex } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 
 export const columnsBaseFixAsset = (
-  assetList: IAssetSummaryItem[],
-  handlers: {
-    openEditModal: (row: IAssetSummaryItem) => void;
-    handleDeleteDataJournal: (id: string) => void;
-  }
+  mutateDeleteJournal: (ids: string[]) => void,
+  openEditModal: (item: IAssetSummaryItem) => void,
+  isLoading: boolean // ✅ tambahkan ini sebagai argumen
 ) => {
   return [
     { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
@@ -43,10 +41,10 @@ export const columnsBaseFixAsset = (
       minWidth: 10,
       render: (row: IAssetSummaryItem) => (
         <Flex gap="lg" justify="center">
-          <BreathingActionIcon onClick={() => handlers.openEditModal(row)} icon={<IconPencil size="2rem" />} size="2.2rem" />
+          <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size="2.2rem" />
           <ButtonDeleteWithConfirmation
-            id={row.id}
-            onDelete={() => handlers.handleDeleteDataJournal(row.id)}
+            isLoading={isLoading}
+            onDelete={() => mutateDeleteJournal([row.id])} // langsung kirim array
             description={`Hapus Transaksi ${row.description}?`}
             size={2.2}
           />

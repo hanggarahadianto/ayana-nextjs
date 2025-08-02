@@ -99,7 +99,7 @@ export const columnsBaseDebt = (
           {row.status !== "done" && <ButtonReversedJournal size={2.2} onClick={() => handleSendClick(row)} />}
           <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size="2.2rem" />
           <ButtonDeleteWithConfirmation
-            id={row.id}
+            isLoading={false}
             onDelete={() => handleDeleteDataJournal(row.id)}
             description={`Hapus Transaksi ${row.description}?`}
             size={2.2}

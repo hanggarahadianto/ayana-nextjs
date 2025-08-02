@@ -171,7 +171,7 @@ export const PresenceRuleTable = ({ companyId, companyName, presenceRuleList, re
                       </Flex>
 
                       <ButtonDeleteWithConfirmation
-                        id={""}
+                        isLoading={false}
                         onDelete={() => handleDeletePresenceRule(rule.id)}
                         description={""}
                         size={2.2}
@@ -187,7 +187,12 @@ export const PresenceRuleTable = ({ companyId, companyName, presenceRuleList, re
                       </Text>
                     </Group>
 
-                    <ButtonDeleteWithConfirmation id={""} onDelete={() => handleDeletePresenceRule(rule.id)} description={""} size={2.2} />
+                    <ButtonDeleteWithConfirmation
+                      isLoading={false}
+                      onDelete={() => handleDeletePresenceRule(rule.id)}
+                      description={""}
+                      size={2.2}
+                    />
                   </Group>
                 )}
               </Card>

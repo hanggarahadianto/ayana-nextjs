@@ -79,22 +79,16 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
   const endIndex = Math.min(page * limit, totalData);
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteFixAsset } = useDeleteDataJournalEntry();
-  const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal([idToDelete]); // <-- bungkus dalam array
-  };
 
   const openEditModal = (fixAssetSummaryData: IAssetSummaryItem) => {
     useModalStore.getState().openModal("editFixAssetData", fixAssetSummaryData);
   };
 
-  const columns = columnsBaseFixAsset(assetList, {
-    openEditModal,
-    handleDeleteDataJournal,
-  });
+  const columns = columnsBaseFixAsset(mutateDeleteDataJournal, openEditModal, isLoadingDeleteFixAsset);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <LoadingGlobal visible={isLoadingAssetData || isLoadingDeleteFixAsset} />
+      <LoadingGlobal visible={isLoadingAssetData} />
       <Group justify="space-between">
         <Stack>
           <Text size="xl" fw={600}>

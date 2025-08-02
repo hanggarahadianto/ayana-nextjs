@@ -5,7 +5,11 @@ import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import { Flex } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 
-export const columnsBaseCashIn = (openEditModal: (item: IAssetSummaryItem) => void, handleDeleteJournalEntry: (id: string) => void) => [
+export const columnsBaseCashIn = (
+  mutateDeleteJournal: (ids: string[]) => void,
+  openEditModal: (item: IAssetSummaryItem) => void,
+  isLoadingCashinData: boolean // ✅ tambahkan ini sebagai argumen
+) => [
   { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
   { key: "invoice", title: "Invoice", width: 80, minWidth: 80 },
   { key: "partner", title: "Partner", width: 180, minWidth: 180 },
@@ -35,8 +39,8 @@ export const columnsBaseCashIn = (openEditModal: (item: IAssetSummaryItem) => vo
       <Flex gap="lg" justify="center">
         <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size="2.2rem" />
         <ButtonDeleteWithConfirmation
-          id={row.transaction_category_id}
-          onDelete={() => handleDeleteJournalEntry(row.id)}
+          isLoading={isLoadingCashinData}
+          onDelete={() => mutateDeleteJournal([row.id])} // langsung kirim array
           description={`Hapus Transaksi ${row.description}?`}
           size={2.2}
         />

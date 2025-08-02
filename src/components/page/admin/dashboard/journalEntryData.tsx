@@ -1,7 +1,7 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { Card, Text, Stack, Box, Group, Button, Checkbox, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
@@ -67,17 +67,13 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, totalItems);
 
-  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteJournalEntry } = useDeleteDataJournalEntry(title);
-
-  const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal([idToDelete]); // kirim dalam array juga
-  };
-
   const [checkboxStates, checkboxHandlers] = useListState<{ id: string; checked: boolean; key: string }>([]);
   const total = checkboxStates.length;
   const selectedCount = checkboxStates.filter((c) => c.checked).length;
   const allChecked = selectedCount === total && total > 0;
   const indeterminate = selectedCount > 0 && selectedCount < total;
+
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteJournalEntry } = useDeleteDataJournalEntry(title);
 
   useEffect(() => {
     if (journalList.length > 0) {
@@ -91,7 +87,7 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
     }
   }, [journalList]);
 
-  const columns = columnsBaseJournalEntry(handleDeleteDataJournal, checkboxStates, checkboxHandlers);
+  const columns = columnsBaseJournalEntry(mutateDeleteDataJournal, checkboxStates, checkboxHandlers, isLoadingDeleteJournalEntry);
 
   return (
     <SimpleGridGlobal cols={1}>
@@ -143,12 +139,12 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
             {selectedCount > 0 && (
               <ButtonDeleteWithConfirmation
                 size={2.5}
-                id={""}
-                onDelete={() => {
+                description="Hapus yang ditandai"
+                onDelete={async () => {
                   const selectedIds = checkboxStates.filter((c) => c.checked).map((c) => c.id);
-                  mutateDeleteDataJournal(selectedIds);
+                  mutateDeleteDataJournal(selectedIds); // pastikan ini Promise
                 }}
-                description={"Hapus yang ditandai"}
+                isLoading={isLoadingDeleteJournalEntry} // ✅ INI WAJIB ADA
               />
             )}
           </Group>
@@ -160,7 +156,7 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
           ) : (
             <TableComponent startIndex={startIndex} data={journalList} height="400" columns={columns} />
           )}
-          <LoadingGlobal visible={isLoadingJournalEntry || isLoadingDeleteJournalEntry} />
+          <LoadingGlobal visible={isLoadingJournalEntry} />
         </Box>
 
         <PaginationWithLimit

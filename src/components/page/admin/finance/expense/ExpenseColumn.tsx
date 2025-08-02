@@ -5,11 +5,15 @@ import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDelet
 import { Flex } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 
-export const columnsBaseExpense = (openEditModal: (row: IExpenseSummaryItem) => void, handleDeleteDataJournal: (id: string) => void) => [
-  { key: "transaction_id", title: "Transaction ID", width: 30, minWidth: 30 },
-  { key: "invoice", title: "Invoice", width: 60, minWidth: 60 },
+export const columnsBaseExpense = (
+  mutateDeleteJournal: (ids: string[]) => void,
+  openEditModal: (item: IExpenseSummaryItem) => void,
+  isLoading: boolean // ✅ tambahkan ini sebagai argumen
+) => [
+  { key: "transaction_id", title: "Transaction ID", width: 60, minWidth: 60 },
+  { key: "invoice", title: "Invoice", width: 110, minWidth: 110 },
   { key: "partner", title: "Partner", width: 180, minWidth: 180 },
-  // { key: "credit_category", title: "Kategori", width: 120, minWidth: 120 },
+  { key: "debit_category", title: "Kategori", width: 120, minWidth: 120 },
   {
     key: "amount",
     title: "Nominal",
@@ -34,8 +38,8 @@ export const columnsBaseExpense = (openEditModal: (row: IExpenseSummaryItem) => 
       <Flex gap="lg" justify="center">
         <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
         <ButtonDeleteWithConfirmation
-          id={row.id}
-          onDelete={() => handleDeleteDataJournal(row.id)}
+          isLoading={isLoading}
+          onDelete={() => mutateDeleteJournal([row.id])} // langsung kirim array
           description={`Hapus Transaksi ${row.description}?`}
           size={2.2}
         />

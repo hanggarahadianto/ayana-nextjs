@@ -24,7 +24,7 @@ export const useDeleteDataJournalEntry = (title?: string) => {
           case "uang masuk":
             await queryClient.invalidateQueries({ queryKey: ["getCashinData"], exact: false });
             break;
-          case "piuatang":
+          case "piutang":
             await queryClient.invalidateQueries({ queryKey: ["getReceivableAssetData"], exact: false });
             break;
           case "uang keluar":

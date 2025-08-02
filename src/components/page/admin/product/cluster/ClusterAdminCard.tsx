@@ -130,8 +130,8 @@ const ClusterAdminCard = ({ setSelectedClusterId, setSelectedClusterName, select
 
             {selectedClusterId && (
               <ButtonDeleteWithConfirmation
-                id={selectedClusterId}
-                onDelete={handleDeleteCluster}
+                isLoading={false}
+                onDelete={() => handleDeleteCluster(selectedClusterId)}
                 description={`Hapus ${selectedClusterName}`}
                 size={2.5}
               />

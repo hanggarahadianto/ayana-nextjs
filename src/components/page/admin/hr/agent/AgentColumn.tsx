@@ -45,7 +45,8 @@ export const columnsBaseAgent = (openEditModal: (item: IEmployeeItem) => void, h
       <Flex gap="lg" justify="center">
         <BreathingActionIcon onClick={() => openEditModal(item)} icon={<IconPencil size="2rem" />} size="2.2rem" />
         <ButtonDeleteWithConfirmation
-          id={item.id}
+          isLoading={false}
+          // id={item.id}
           onDelete={() => handleDeleteEmployee(item.id)}
           description={`Hapus karyawan bernama ${item.name}?`}
           size={2.2}

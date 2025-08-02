@@ -78,15 +78,12 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   const endIndex = Math.min(page * limit, cashOutSummaryData?.data.total || 0);
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteCashout } = useDeleteDataJournalEntry();
-  const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal([idToDelete]); // <-- bungkus dalam array
-  };
 
   const openEditModal = (cashOutAsset: IAssetSummaryItem) => {
     useModalStore.getState().openModal("editCashOutData", cashOutAsset);
   };
 
-  const columns = columnsBaseCashout(openEditModal, handleDeleteDataJournal);
+  const columns = columnsBaseCashout(mutateDeleteDataJournal, openEditModal, isLoadingDeleteCashout);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -152,7 +149,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
           />
         )}
 
-        <LoadingGlobal visible={isLoadingCashOutData || isLoadingDeleteCashout} />
+        <LoadingGlobal visible={isLoadingCashOutData} />
       </Box>
 
       <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />

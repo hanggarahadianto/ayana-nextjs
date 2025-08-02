@@ -221,8 +221,8 @@ const EditCashFlowReportModal = ({
                     {values?.id && (
                       <Stack mt={24}>
                         <ButtonDeleteWithConfirmation
-                          id={values?.id}
-                          onDelete={handleDeleteCashFlow}
+                          isLoading={false}
+                          onDelete={() => handleDeleteCashFlow(values.id)}
                           description={`Apakah anda ingin menghapus data minggu ke ${values?.week_number}`}
                           size={2.5}
                         />

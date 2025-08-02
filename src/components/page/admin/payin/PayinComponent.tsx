@@ -17,13 +17,13 @@ export default function PayinComponent() {
       <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
 
       <SimpleGridGlobal cols={1} gap="20px">
-        {/* <GetCashinData
+        <GetCashinData
           companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
           assetType="cashin"
           transactionType={"payin"}
           title="Uang Masuk"
-        /> */}
+        />
 
         <GetReceivableAssetData
           companyId={activeTab?.id || ""}
@@ -41,13 +41,13 @@ export default function PayinComponent() {
           title="Piutang Lunas"
         />
 
-        {/* <GetFixedAssetData
+        <GetFixedAssetData
           companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
           assetType="fixed_asset"
           transactionType={"payout"}
           title="Aset Tetap"
-        /> */}
+        />
       </SimpleGridGlobal>
     </SimpleGridGlobal>
   );

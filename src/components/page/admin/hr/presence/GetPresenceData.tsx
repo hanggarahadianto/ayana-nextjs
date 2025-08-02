@@ -176,7 +176,7 @@ export const PresenceTable = ({ companyId, companyName, presenceRuleList }: Pres
             }
           />
           {selectedCount > 0 && (
-            <ButtonDeleteWithConfirmation size={2.5} id="" onDelete={handleBulkDelete} description="Hapus yang ditandai" />
+            <ButtonDeleteWithConfirmation isLoading={false} size={2.5} onDelete={handleBulkDelete} description="Hapus yang ditandai" />
           )}
         </Group>
       </Stack>
