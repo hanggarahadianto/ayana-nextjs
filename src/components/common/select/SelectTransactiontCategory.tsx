@@ -1,14 +1,19 @@
 import { getDataTransactionCategory } from "@/api/transaction-category/getDataTransactionCategory";
-import { transactionLabel } from "@/constants/dictionary";
+import { accountTypeOptions, transactionLabel } from "@/constants/dictionary";
 import { Grid, Select, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 
 declare module "@mantine/core" {
   interface ComboboxItem {
     rawTransactionCategory?: {
+      id: string;
       name: string;
       status: string;
       transaction_label: string;
+      debit_account_type: string;
+      credit_account_id: string;
+      debit_account_id: string;
+      description: string;
     };
   }
 }
@@ -18,6 +23,7 @@ interface ISelectFinanceTransactionCategoryProps {
   onSelect: (selected: { id: string; debit_account_id: string; credit_account_id: string; name: string; description: string }) => void;
   label: string;
   transactionType?: string;
+  transactionCategoryTerm?: string;
   status?: string;
   error?: string | null;
 }
@@ -27,10 +33,11 @@ export default function SelectFinanceTransactionCategory({
   onSelect,
   label,
   transactionType,
+  transactionCategoryTerm,
   status,
   error,
 }: ISelectFinanceTransactionCategoryProps) {
-  const { data: TransactionCategoryData, isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["getTransactionCategorySelect", companyId, transactionType, status],
     queryFn: () =>
       getDataTransactionCategory({
@@ -43,41 +50,44 @@ export default function SelectFinanceTransactionCategory({
   });
 
   const handleSelect = (value: string | null) => {
-    const TransactionCategory = value ? TransactionCategoryData?.data.find((acc) => acc.id === value) : null;
-    if (TransactionCategory) {
+    const selected = value ? data?.data.find((item) => item.id === value) : null;
+    if (selected) {
       onSelect({
-        id: TransactionCategory.id,
-        debit_account_id: TransactionCategory.debit_account_id,
-        credit_account_id: TransactionCategory.credit_account_id,
-        name: TransactionCategory.name,
-        description: TransactionCategory.description,
+        id: selected.id,
+        debit_account_id: selected.debit_account_id,
+        credit_account_id: selected.credit_account_id,
+        name: selected.name,
+        description: selected.description,
       });
     }
   };
+
+  const accountTypeLabelMap = accountTypeOptions.reduce<Record<string, string>>((acc, item) => {
+    acc[item.value] = item.label;
+    return acc;
+  }, {});
+
+  const filteredData = data?.data.filter((item) => item.description.toLowerCase().includes((transactionCategoryTerm ?? "").toLowerCase()));
+
   const transactionLabelOrder = transactionLabel.map((item) => item.value);
-
-  const sortedTransactionData = TransactionCategoryData?.data
-    ?.slice() // untuk menghindari mutasi langsung
-    .sort((a, b) => {
-      const aIndex = transactionLabelOrder.indexOf(a.transaction_label);
-      const bIndex = transactionLabelOrder.indexOf(b.transaction_label);
-      return aIndex - bIndex;
-    });
-
-  const TransactionCategoryOptions = sortedTransactionData?.map((item) => ({
+  const sortedTransactionData = filteredData?.slice().sort((a, b) => {
+    return transactionLabelOrder.indexOf(a.transaction_label) - transactionLabelOrder.indexOf(b.transaction_label);
+  });
+  const selectOptions = sortedTransactionData?.map((item) => ({
     value: item.id,
-    label: ` ${item.description}`,
+    label: item.description,
     rawTransactionCategory: item,
   }));
+
   return (
     <Select
-      error={error}
-      searchable
-      clearable
       label={label}
       placeholder={`Pilih ${label}`}
+      data={selectOptions}
+      searchable
+      clearable
       onChange={handleSelect}
-      data={TransactionCategoryOptions}
+      error={error}
       styles={{
         option: {
           fontSize: "14px",
@@ -88,24 +98,30 @@ export default function SelectFinanceTransactionCategory({
         },
       }}
       renderOption={({ option }) => {
-        const { name, status, transaction_label } = option.rawTransactionCategory || {}; // <== Sesuai key
+        const raw = option.rawTransactionCategory;
+        if (!raw) return null;
 
-        const statusLabel = status === "paid" ? "Tunai" : status === "unpaid" ? "Tenor" : (status || "").toUpperCase();
+        const statusLabel = raw.status === "paid" ? "Tunai" : raw.status === "unpaid" ? "Tenor" : raw.status?.toUpperCase() || "-";
 
         return (
-          <Grid w={"100%"}>
-            <Grid.Col span={4}>
+          <Grid w="100%">
+            <Grid.Col span={2}>
               <Text size="sm" fw={500}>
-                {transaction_label}
+                {raw.transaction_label}
               </Text>
             </Grid.Col>
-            <Grid.Col span={6}>
+            <Grid.Col span={5}>
               <Text size="sm" c="dimmed">
-                {name || "-"}
+                {raw.name || "-"}
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={3}>
+              <Text size="sm" c="dimmed">
+                {accountTypeLabelMap[raw.debit_account_type] || "-"}
               </Text>
             </Grid.Col>
             <Grid.Col span={2}>
-              <Text size="sm">{statusLabel || "-"}</Text>
+              <Text size="sm">{statusLabel}</Text>
             </Grid.Col>
           </Grid>
         );

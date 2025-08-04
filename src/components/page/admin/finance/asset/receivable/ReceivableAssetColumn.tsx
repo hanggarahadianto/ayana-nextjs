@@ -7,16 +7,11 @@ import { Badge, Flex, Text } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 
 export const columnsBaseReceivableAsset = (
-  assetList: IAssetSummaryItem[],
-  handlers: {
-    handleSendClick: (row: IAssetSummaryItem) => void;
-    openEditModal: (row: IAssetSummaryItem) => void;
-    handleDeleteDataJournal: (id: string) => void;
-  }
+  handleSendClick: (row: IAssetSummaryItem) => void,
+  openEditModal: (row: IAssetSummaryItem) => void,
+  mutateDeleteJournal: (ids: string[]) => void,
+  isLoading: boolean
 ) => {
-  const { handleSendClick, openEditModal, handleDeleteDataJournal } = handlers;
-  const hasDone = assetList.some((item) => item.status === "done");
-
   const baseColumns = [
     { key: "transaction_id", title: "Transaction ID", width: 110, minWidth: 110 },
     { key: "invoice", title: "Invoice", width: 110, minWidth: 110 },
@@ -75,8 +70,8 @@ export const columnsBaseReceivableAsset = (
           {row.status !== "done" && <ButtonReversedJournal size={2.2} onClick={() => handleSendClick(row)} />}
           <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size="2.2rem" />
           <ButtonDeleteWithConfirmation
-            isLoading={false}
-            onDelete={() => handleDeleteDataJournal(row.id)}
+            isLoading={isLoading}
+            onDelete={() => mutateDeleteJournal([row.id])} // langsung kirim array
             description={`Hapus Transaksi ${row.description}?`}
             size={2.2}
           />

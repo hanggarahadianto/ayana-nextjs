@@ -7,9 +7,8 @@ import { IconPencil } from "@tabler/icons-react";
 
 export const columnsBaseEquity = (
   mutateDeleteJournal: (ids: string[]) => void,
-
   openEditModal: (row: IEquitySummaryItem) => void,
-  isLoading: boolean // ✅ tambahkan ini sebagai argumen
+  isLoading: boolean
 ) => [
   { key: "transaction_id", title: "Transaction ID", width: 40, minWidth: 40 },
   { key: "invoice", title: "Invoice", width: 100, minWidth: 100 },

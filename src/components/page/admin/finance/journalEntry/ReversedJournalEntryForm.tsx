@@ -10,6 +10,7 @@ import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 interface JournalFormProps {
   companyId?: string;
   transactionType: "payin" | "payout";
+  transactionCategoryTerm: string;
   error?: Array<{
     transaction_id?: string;
     amount?: string;
@@ -26,7 +27,14 @@ interface JournalFormProps {
   initialData: any;
 }
 
-const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, initialData }: JournalFormProps) => {
+const ReversedJournalEntryForm = ({
+  companyId,
+  transactionType,
+  transactionCategoryTerm,
+  error,
+  touched,
+  initialData,
+}: JournalFormProps) => {
   const { values, setFieldValue, handleBlur } = useFormikContext<{
     transactionType: "payin" | "payout";
     journalEntries: IJournalEntryCreate[];
@@ -83,6 +91,7 @@ const ReversedJournalEntryForm = ({ companyId, transactionType, error, touched, 
                       <SelectFinanceTransactionCategory
                         companyId={companyId}
                         transactionType={transactionType}
+                        transactionCategoryTerm={transactionCategoryTerm}
                         label="Kategori Transaksi"
                         onSelect={(selected) => {
                           handleJournalChange(index, "description", selected.description);

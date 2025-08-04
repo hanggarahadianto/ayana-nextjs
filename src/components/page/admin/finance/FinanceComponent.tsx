@@ -22,12 +22,12 @@ export default function FinanceComponent() {
           companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
           revenueType="realized"
-          title={"Terealisasi"}
+          title={"Pendapatan Terealisasi"}
         />
       </SimpleGrid>
       <SimpleGrid cols={2} spacing="20px">
-        <GetEquitySummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} equityType="setor" title="Di Setor" />
-        <GetEquitySummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} equityType="tarik" title="Di Tarik" />
+        <GetEquitySummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} equityType="setor" title="Modal Disetor" />
+        <GetEquitySummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} equityType="tarik" title="Modal Ditarik" />
       </SimpleGrid>
 
       <SimpleGridGlobal cols={1} gap="20px">

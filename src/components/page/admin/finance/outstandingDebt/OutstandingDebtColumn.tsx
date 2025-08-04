@@ -17,8 +17,9 @@ type ColumnType<T> = {
 export const columnsBaseDebt = (
   handleSendClick: (item: IDebtSummaryItem) => void,
   openEditModal: (item: IDebtSummaryItem) => void,
-  handleDeleteDataJournal: (id: string) => void,
-  status?: string
+  mutateDeleteJournal: (ids: string[]) => void,
+  debtType: string,
+  isLoading: boolean
 ): ColumnType<IDebtSummaryItem>[] => {
   const baseColumns: ColumnType<IDebtSummaryItem>[] = [
     { key: "transaction_id", title: "Transaction ID", width: 140, minWidth: 140 },
@@ -29,7 +30,7 @@ export const columnsBaseDebt = (
       title: "Kategori",
       width: 180,
       minWidth: 180,
-      render: (item) => (status === "going" ? item.debit_category || "-" : item.credit_category || "-"),
+      render: (item) => (debtType === "going" ? item.debit_category || "-" : item.credit_category || "-"),
     },
     {
       key: "amount",
@@ -55,7 +56,7 @@ export const columnsBaseDebt = (
   ];
 
   // ✅ Tambahkan repayment_date jika status !== "going"
-  if (status !== "going") {
+  if (debtType !== "going") {
     baseColumns.push({
       key: "repayment_date",
       title: "Tanggal Pelunasan",
@@ -99,8 +100,8 @@ export const columnsBaseDebt = (
           {row.status !== "done" && <ButtonReversedJournal size={2.2} onClick={() => handleSendClick(row)} />}
           <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size="2.2rem" />
           <ButtonDeleteWithConfirmation
-            isLoading={false}
-            onDelete={() => handleDeleteDataJournal(row.id)}
+            isLoading={isLoading}
+            onDelete={() => mutateDeleteJournal([row.id])} // langsung kirim array
             description={`Hapus Transaksi ${row.description}?`}
             size={2.2}
           />

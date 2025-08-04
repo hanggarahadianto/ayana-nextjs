@@ -78,7 +78,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, totalData);
 
-  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteFixAsset } = useDeleteDataJournalEntry();
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteFixAsset } = useDeleteDataJournalEntry(title);
 
   const openEditModal = (fixAssetSummaryData: IAssetSummaryItem) => {
     useModalStore.getState().openModal("editFixAssetData", fixAssetSummaryData);

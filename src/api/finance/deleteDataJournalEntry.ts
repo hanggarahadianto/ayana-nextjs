@@ -24,6 +24,9 @@ export const useDeleteDataJournalEntry = (title: string) => {
           case "uang masuk":
             await queryClient.invalidateQueries({ queryKey: ["getCashinData"], exact: false });
             break;
+          case "barang dagangan":
+            await queryClient.invalidateQueries({ queryKey: ["getInventoryAssetData"], exact: false });
+            break;
           case "piutang":
             await queryClient.invalidateQueries({ queryKey: ["getReceivableAssetData"], exact: false });
             break;
@@ -33,7 +36,10 @@ export const useDeleteDataJournalEntry = (title: string) => {
           case "pengeluaran":
             await queryClient.invalidateQueries({ queryKey: ["getExpenseSummaryData"], exact: false });
             break;
-          case "hutang berjaan":
+          case "hutang berjalan":
+            await queryClient.invalidateQueries({ queryKey: ["getOutstandingDebtByCompanyId"], exact: false });
+            break;
+          case "hutang lunas":
             await queryClient.invalidateQueries({ queryKey: ["getOutstandingDebtByCompanyId"], exact: false });
             break;
           case "modal disetor":
@@ -42,22 +48,14 @@ export const useDeleteDataJournalEntry = (title: string) => {
           case "modal ditarik":
             await queryClient.invalidateQueries({ queryKey: ["getOutstandingDebtByCompanyId"], exact: false });
             break;
+          case "pendapatan terealisasi":
+            await queryClient.invalidateQueries({ queryKey: ["getRevenueSummaryData"], exact: false });
+            break;
           case "transaksi":
             await queryClient.invalidateQueries({
               predicate: (query) => Array.isArray(query.queryKey) && query.queryKey[0] === "getJournalEntryData",
             });
             break;
-          // default:
-          //   // fallback refetch semua
-          //   await Promise.all([
-          //     queryClient.invalidateQueries({ queryKey: ["getCashinData"], exact: false }),
-          //     queryClient.invalidateQueries({ queryKey: ["getReceivableAssetData"], exact: false }),
-          //     queryClient.invalidateQueries({ queryKey: ["getFixedAssetData"], exact: false }),
-          //     queryClient.invalidateQueries({ queryKey: ["getCashOutData"], exact: false }),
-          //     queryClient.invalidateQueries({ queryKey: ["getExpenseSummaryData"], exact: false }),
-          //     queryClient.invalidateQueries({ queryKey: ["getOutstandingDebtByCompanyId"], exact: false }),
-          //   ]);
-          //   break;
         }
 
         showNotification({

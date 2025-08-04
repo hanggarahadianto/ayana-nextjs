@@ -79,16 +79,13 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, revenueData?.data.total || 0);
 
-  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteRevenue } = useDeleteDataJournalEntry();
-  const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal([idToDelete]); // <-- bungkus dalam array
-  };
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteRevenue } = useDeleteDataJournalEntry(title);
 
   const openEditModal = (RevenueData: IRevenueSummaryItem) => {
     useModalStore.getState().openModal("editRevenueData", RevenueData);
   };
 
-  const columns = columnsBaseRevenue(openEditModal, handleDeleteDataJournal);
+  const columns = columnsBaseRevenue(mutateDeleteDataJournal, openEditModal, isLoadingDeleteRevenue);
 
   return (
     <SimpleGridGlobal cols={1}>
@@ -139,7 +136,7 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
             </Box>
           )}
 
-          <LoadingGlobal visible={isLoadingRevenue || isLoadingDeleteRevenue} />
+          <LoadingGlobal visible={isLoadingRevenue} />
         </Box>
 
         <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType="payout" />

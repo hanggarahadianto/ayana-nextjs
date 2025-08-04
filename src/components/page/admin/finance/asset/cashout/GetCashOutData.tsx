@@ -77,7 +77,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, cashOutSummaryData?.data.total || 0);
 
-  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteCashout } = useDeleteDataJournalEntry();
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteCashout } = useDeleteDataJournalEntry(title);
 
   const openEditModal = (cashOutAsset: IAssetSummaryItem) => {
     useModalStore.getState().openModal("editCashOutData", cashOutAsset);

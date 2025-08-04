@@ -119,15 +119,15 @@ export const ValidCategories: Record<string, string[]> = {
 };
 
 export const transactionLabel = [
+  { value: "Pembelian", label: "Pembelian" },
+  { value: "Pembayaran", label: "Pembayaran" },
+  { value: "Pengeluaran", label: "Pengeluaran" },
   { value: "Penjualan", label: "Penjualan" },
   { value: "Pencairan", label: "Pencairan" },
   { value: "Penerimaan", label: "Penerimaan" },
   { value: "Pinjaman", label: "Pinjaman" },
   { value: "Piutang", label: "Piutang" },
   { value: "Pelunasan", label: "Pelunasan" },
-  { value: "Pembelian", label: "Pembelian" },
-  { value: "Pembayaran", label: "Pembayaran" },
-  { value: "Pengeluaran", label: "Pengeluaran" },
 ];
 
 export const employeeGenderOptions = [

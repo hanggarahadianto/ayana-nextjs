@@ -6,7 +6,6 @@ import { formatCurrency } from "@/helper/formatCurrency";
 import { getAssetSummary } from "@/api/finance/getAssetSummary";
 import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
-import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 import { useModalStore } from "@/store/modalStore";
 import UpdateJournalEntryModal from "../../journalEntry/UpdateJournalEntryModal";
 import ReversedJournalEntryModal from "../../journalEntry/ReversedJournalEntryModal";
@@ -14,6 +13,7 @@ import SearchTable from "@/components/common/table/SearchTableComponent";
 import { columnsBaseReceivableAsset } from "./ReceivableAssetColumn";
 import { useDebounce } from "use-debounce";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
+import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -78,11 +78,6 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, receivableAssetSummaryData?.data.total || 0);
 
-  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteReceivableAsset } = useDeleteDataJournalEntry();
-  const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal([idToDelete]); // <-- bungkus dalam array
-  };
-
   const openEditModal = (receivableAssetSummaryData: IAssetSummaryItem) => {
     useModalStore.getState().openModal("editReceivableAssetData", receivableAssetSummaryData);
   };
@@ -92,11 +87,9 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
     setIsModalOpen(true);
   };
 
-  const columns = columnsBaseReceivableAsset(receivableList, {
-    handleSendClick,
-    openEditModal,
-    handleDeleteDataJournal,
-  });
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteReceivableAsset } = useDeleteDataJournalEntry(title);
+
+  const columns = columnsBaseReceivableAsset(handleSendClick, openEditModal, mutateDeleteDataJournal, isLoadingDeleteReceivableAsset);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -144,7 +137,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
           />
         )}
 
-        <LoadingGlobal visible={isLoadingReceivableAsset || isLoadingDeleteReceivableAsset} />
+        <LoadingGlobal visible={isLoadingReceivableAsset} />
       </Box>
       <UpdateJournalEntryModal initialValues={useModalStore((state) => state.modalData)} transactionType={transactionType} />
 

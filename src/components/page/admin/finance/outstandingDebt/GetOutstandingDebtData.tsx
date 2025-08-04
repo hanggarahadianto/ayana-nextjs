@@ -80,16 +80,13 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType
     setIsModalOpen(true);
   };
 
-  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteDebt } = useDeleteDataJournalEntry();
-  const handleDeleteDataJournal = (idToDelete: string) => {
-    mutateDeleteDataJournal([idToDelete]); // <-- bungkus dalam array
-  };
+  const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteDebt } = useDeleteDataJournalEntry(title);
 
   const openEditModal = (outstandingDebtData: IDebtSummaryItem) => {
     useModalStore.getState().openModal("editOutstadingData", outstandingDebtData);
   };
 
-  const columns = columnsBaseDebt(handleSendClick, openEditModal, handleDeleteDataJournal, status);
+  const columns = columnsBaseDebt(handleSendClick, openEditModal, mutateDeleteDataJournal, debtType, isLoadingDeleteDebt);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -137,7 +134,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType
           />
         )}
 
-        <LoadingGlobal visible={isLoadingOutstandingDebt || isLoadingDeleteDebt} />
+        <LoadingGlobal visible={isLoadingOutstandingDebt} />
       </Box>
 
       {!isLoadingOutstandingDebt && (
@@ -162,6 +159,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType
         <ReversedJournalEntryModal
           companyId={companyId}
           transactionType="payout"
+          transactionCategoryTerm={"pelunasan"}
           initialData={selectedDebt}
           opened={isModalOpen}
           close={() => setIsModalOpen(false)}

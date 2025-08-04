@@ -5,7 +5,11 @@ import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDelet
 import { Flex } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 
-export const columnsBaseRevenue = (openEditModal: (row: IRevenueSummaryItem) => void, handleDeleteDataJournal: (id: string) => void) => [
+export const columnsBaseRevenue = (
+  mutateDeleteJournal: (ids: string[]) => void,
+  openEditModal: (row: IEquitySummaryItem) => void,
+  isLoading: boolean
+) => [
   { key: "transaction_id", title: "Transaction ID", width: 40, minWidth: 40 },
   { key: "invoice", title: "Invoice", width: 100, minWidth: 100 },
   { key: "partner", title: "Partner", width: 120, minWidth: 120 },
@@ -34,9 +38,8 @@ export const columnsBaseRevenue = (openEditModal: (row: IRevenueSummaryItem) => 
       <Flex gap="lg" justify="center">
         <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="2rem" />} size={"2.2rem"} />
         <ButtonDeleteWithConfirmation
-          isLoading={false}
-          // id={row.id}
-          onDelete={() => handleDeleteDataJournal(row.id)}
+          isLoading={isLoading}
+          onDelete={() => mutateDeleteJournal([row.id])} // langsung kirim array
           description={`Hapus Transaksi ${row.description}?`}
           size={2.2}
         />
