@@ -67,7 +67,15 @@ export default function SelectFinanceTransactionCategory({
     return acc;
   }, {});
 
-  const filteredData = data?.data.filter((item) => item.description.toLowerCase().includes((transactionCategoryTerm ?? "").toLowerCase()));
+  const filteredData = Array.isArray(data?.data)
+    ? data.data.filter((item) => {
+        const term = transactionCategoryTerm?.trim().toLowerCase();
+        if (!term) return true;
+
+        const label = (item.transaction_label || "").toLowerCase();
+        return label.includes(term);
+      })
+    : [];
 
   const transactionLabelOrder = transactionLabel.map((item) => item.value);
   const sortedTransactionData = filteredData?.slice().sort((a, b) => {

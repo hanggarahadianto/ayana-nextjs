@@ -6,6 +6,7 @@ interface ICompany {
   has_customer: boolean; // Ubah dari string ke boolean
   has_project: boolean; // Ubah dari string ke boolean
   has_product: boolean; // Ubah dari string ke boolean
+  is_retail: boolean;
 }
 
 interface ICompanyResponse {

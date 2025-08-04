@@ -38,6 +38,7 @@ const UpdateJournalEntryModal: React.FC<IUpdateJournalEntryModalProps> = ({ tran
     "editCashOutData",
     "editExpenseData",
     "editEquityData",
+    "editOutstadingData",
   ];
   if (!modalName || !validModals.includes(modalName) || !opened || !initialData) return null;
 

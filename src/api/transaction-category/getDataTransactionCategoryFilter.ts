@@ -13,8 +13,6 @@ export const getTransactionCategoryByCategoryOnly = async (
 
   const selectByCategory = "true";
 
-  console.log("transaction type di fething", transactionType);
-
   const queryParams = new URLSearchParams({
     company_id: companyId,
   });

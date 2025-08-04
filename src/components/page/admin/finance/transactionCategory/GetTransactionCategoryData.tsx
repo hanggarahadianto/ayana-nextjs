@@ -32,18 +32,7 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
     isPending: isLoadingGetTransactionCategory,
     refetch: refetchTransactionCategoryData,
   } = useQuery({
-    queryKey: [
-      "getTransactionCategory",
-      companyId,
-      page,
-      limit,
-      selectedType,
-      selectedDebitAccount,
-      selectedCreditAccount,
-      // selectedDebitCategory,
-      // selectedCreditCategory,
-      selectedStatus,
-    ],
+    queryKey: ["getTransactionCategory", companyId, page, limit, selectedType, selectedDebitAccount, selectedCreditAccount, selectedStatus],
     queryFn: () =>
       getDataTransactionCategory({
         companyId: companyId as string,
@@ -52,8 +41,6 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
         transactionType: selectedType,
         selectedDebitAccount,
         selectedCreditAccount,
-        // selectedDebitCategory,
-        // selectedCreditCategory,
         status: selectedStatus, // bisa juga dihapus kalau tidak dipakai
       }),
     enabled: !!companyId,

@@ -11,6 +11,7 @@ import { GetInventoryAssetData } from "../finance/asset/inventory/GetInventoryAs
 
 export default function PayinComponent() {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
+  // console.log("companies", companies);
 
   return (
     <SimpleGridGlobal cols={1}>
@@ -26,13 +27,15 @@ export default function PayinComponent() {
           title="Uang Masuk"
         />
 
-        <GetInventoryAssetData
-          companyId={activeTab?.id || ""}
-          companyName={activeTab?.title}
-          assetType="inventory"
-          transactionType={"payout"}
-          title="Barang Dagangan"
-        />
+        {activeTab?.is_retail && (
+          <GetInventoryAssetData
+            companyId={activeTab?.id || ""}
+            companyName={activeTab?.title}
+            assetType="inventory"
+            transactionType={"payout"}
+            title="Barang Dagangan"
+          />
+        )}
 
         <GetReceivableAssetData
           companyId={activeTab?.id || ""}
