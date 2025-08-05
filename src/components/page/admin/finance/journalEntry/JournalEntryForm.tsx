@@ -147,6 +147,7 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                         <SelectFinanceTransactionCategory
                           companyId={companyId}
                           transactionType={entry.transaction_type}
+                          transactionCategoryTerm=""
                           label="Kategori Transaksi"
                           onSelect={(selected) => {
                             handleJournalChange(index, "description", selected.description);

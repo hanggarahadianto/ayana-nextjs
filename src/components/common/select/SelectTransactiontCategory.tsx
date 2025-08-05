@@ -23,7 +23,7 @@ interface ISelectFinanceTransactionCategoryProps {
   onSelect: (selected: { id: string; debit_account_id: string; credit_account_id: string; name: string; description: string }) => void;
   label: string;
   transactionType?: string;
-  transactionCategoryTerm?: string;
+  transactionCategoryTerm: string;
   status?: string;
   error?: string | null;
 }

@@ -87,7 +87,12 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
                           onChange={(value) => setFieldValue("transaction_label", value)}
                           onBlur={handleBlur}
                           error={touched.transaction_label && errors.transaction_label}
+                          styles={{
+                            input: { cursor: "pointer" },
+                            dropdown: { cursor: "pointer" },
+                          }}
                         />
+
                         <TextInput
                           w={"100%"}
                           withAsterisk

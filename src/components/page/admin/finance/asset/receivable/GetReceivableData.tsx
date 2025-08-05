@@ -18,12 +18,12 @@ import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry"
 interface AssetSummaryCardProps {
   companyId: string;
   companyName?: string;
+  title: string;
   assetType?: string;
   transactionType: "payout" | "payin";
-  title: string;
 }
 
-export const GetReceivableAssetData = ({ companyId, companyName, assetType, transactionType, title }: AssetSummaryCardProps) => {
+export const GetReceivableAssetData = ({ companyId, companyName, title, assetType, transactionType }: AssetSummaryCardProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>("Piutang");
@@ -163,6 +163,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, assetType, tran
         <ReversedJournalEntryModal
           companyId={companyId}
           transactionType={transactionType}
+          transactionCategoryTerm={"piutang"}
           initialData={selectedReceivableAsset}
           opened={isModalOpen}
           close={() => setIsModalOpen(false)}

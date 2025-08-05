@@ -9,7 +9,7 @@ import { initialValuesReservedJournalEntry } from "@/utils/initialValues/initial
 interface IReversedJournalEntryModalProps {
   companyId: string;
   transactionType: "payin" | "payout";
-  transactionCategoryTerm?: string;
+  transactionCategoryTerm: string;
   initialData?: IJournalEntryUpdate;
   opened: boolean;
   close: () => void;
@@ -73,7 +73,7 @@ const ReversedJournalEntryModal: React.FC<IReversedJournalEntryModalProps> = ({
                     <ReversedJournalEntryForm
                       companyId={companyId}
                       transactionType={transactionType}
-                      transactionCategoryTerm={transactionCategoryTerm ?? ""}
+                      transactionCategoryTerm={transactionCategoryTerm}
                       error={(errors.journalEntries as any) || []}
                       touched={(touched.journalEntries as any) || []}
                       initialData={initialData}

@@ -19,7 +19,7 @@ interface GetOutStandingDebtDataProps {
   companyName?: string;
   title: string;
   debtType: string;
-  transactionType: string;
+  transactionType: "payout" | "payin";
 }
 
 export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType, transactionType }: GetOutStandingDebtDataProps) => {
@@ -158,7 +158,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType
       {selectedDebt && companyId && (
         <ReversedJournalEntryModal
           companyId={companyId}
-          transactionType="payout"
+          transactionType={transactionType}
           transactionCategoryTerm={"pelunasan"}
           initialData={selectedDebt}
           opened={isModalOpen}
