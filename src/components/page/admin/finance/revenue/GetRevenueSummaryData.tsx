@@ -85,7 +85,11 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
     useModalStore.getState().openModal("editRevenueData", RevenueData);
   };
 
-  const columns = columnsBaseRevenue(mutateDeleteDataJournal, openEditModal, isLoadingDeleteRevenue);
+  const deleteJournalWithIdsOnly = (ids: string[]) => {
+    mutateDeleteDataJournal({ ids });
+  };
+
+  const columns = columnsBaseRevenue(deleteJournalWithIdsOnly, openEditModal, isLoadingDeleteRevenue);
 
   return (
     <SimpleGridGlobal cols={1}>

@@ -9,7 +9,7 @@ type AssetStatsProps = {
 
 export const ReceivableAssetStats = ({ companyId, title }: AssetStatsProps) => {
   const { data: receivableAssetSummaryOnly, isPending: isLoadingReceivableAsset } = useQuery({
-    queryKey: ["getReceivableAsset", companyId],
+    queryKey: ["getReceivableAssetStats", companyId],
     queryFn: () =>
       getAssetSummary({
         companyId: companyId || "",

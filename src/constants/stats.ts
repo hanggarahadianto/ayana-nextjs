@@ -4,6 +4,7 @@ export const DASHBOARD_QUERY_KEYS = [
   "getCashinDataStats",
   "getCashOutDataStats",
   "getCashInStat",
+  "getReceivableAssetStats",
   "getEquityDataStats",
   "getExpenseOnlyDataStats",
   "getFixedAssetStats",
