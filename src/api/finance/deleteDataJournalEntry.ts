@@ -36,7 +36,7 @@ export const useDeleteDataJournalEntry = (title: string) => {
           case "pengeluaran":
             await queryClient.invalidateQueries({ queryKey: ["getExpenseSummaryData"], exact: false });
             break;
-          case "hutang berjalan":
+          case "hutang berjaan":
             await queryClient.invalidateQueries({ queryKey: ["getOutstandingDebtByCompanyId"], exact: false });
             break;
           case "hutang lunas":

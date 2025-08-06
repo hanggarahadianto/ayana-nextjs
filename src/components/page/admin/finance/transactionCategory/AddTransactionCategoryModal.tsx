@@ -52,7 +52,7 @@ const AddTransactionCategoryModal = ({ refetchTransactionCategoryData, companyId
           validationSchema={validationSchemaTransactionCategory}
           onSubmit={handleSubmit}
         >
-          {({ values, errors, touched, setFieldValue, handleBlur, isSubmitting }) => {
+          {({ values, errors, touched, setFieldValue, handleBlur }) => {
             // console.log("error", errors);
             // console.log("values", values);
             return (

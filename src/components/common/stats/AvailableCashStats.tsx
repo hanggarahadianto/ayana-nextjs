@@ -9,7 +9,7 @@ type AvailableCashStatsProps = {
 
 export const AvailableCashStats = ({ companyId, title }: AvailableCashStatsProps) => {
   const { data: cashInData, isLoading: loadingIn } = useQuery({
-    queryKey: ["getCashIn", companyId],
+    queryKey: ["getCashInStats", companyId],
     queryFn: () =>
       getAssetSummary({
         companyId: companyId!,
@@ -23,7 +23,7 @@ export const AvailableCashStats = ({ companyId, title }: AvailableCashStatsProps
   });
 
   const { data: cashOutData, isLoading: loadingOut } = useQuery({
-    queryKey: ["getCashOut", companyId],
+    queryKey: ["getCashOutStats", companyId],
     queryFn: () =>
       getAssetSummary({
         companyId: companyId!,

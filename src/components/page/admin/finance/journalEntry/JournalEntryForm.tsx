@@ -330,15 +330,17 @@ const JournalEntryForm = ({ companyId, transactionType, error, touched }: Journa
                     />
                   </Stack>
 
-                  <Button
-                    variant="light"
-                    color="red"
-                    mt="sm"
-                    onClick={() => deleteJournalField(index)}
-                    leftSection={<IconTrash size={18} />}
-                  >
-                    Hapus
-                  </Button>
+                  {values.journalEntries.length > 1 && (
+                    <Button
+                      variant="light"
+                      color="red"
+                      mt="sm"
+                      onClick={() => deleteJournalField(index)}
+                      leftSection={<IconTrash size={18} />}
+                    >
+                      Hapus
+                    </Button>
+                  )}
                 </Group>
               </SimpleGrid>
             );

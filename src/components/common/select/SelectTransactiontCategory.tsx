@@ -13,6 +13,7 @@ declare module "@mantine/core" {
       debit_account_type: string;
       credit_account_id: string;
       debit_account_id: string;
+      debit_category: string;
       description: string;
     };
   }
@@ -44,10 +45,12 @@ export default function SelectFinanceTransactionCategory({
         companyId: companyId as string,
         transactionType,
         status,
-        select: true,
+        select: false,
       }),
     enabled: !!companyId && !!transactionType,
   });
+
+  // console.log(data?.data);
 
   const handleSelect = (value: string | null) => {
     const selected = value ? data?.data.find((item) => item.id === value) : null;
@@ -118,9 +121,14 @@ export default function SelectFinanceTransactionCategory({
                 {raw.transaction_label}
               </Text>
             </Grid.Col>
-            <Grid.Col span={5}>
+            <Grid.Col span={4}>
               <Text size="sm" c="dimmed">
                 {raw.name || "-"}
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={2}>
+              <Text size="sm" c="dimmed">
+                {raw.debit_category || "-"}
               </Text>
             </Grid.Col>
             <Grid.Col span={3}>
@@ -128,7 +136,7 @@ export default function SelectFinanceTransactionCategory({
                 {accountTypeLabelMap[raw.debit_account_type] || "-"}
               </Text>
             </Grid.Col>
-            <Grid.Col span={2}>
+            <Grid.Col span={1}>
               <Text size="sm">{statusLabel}</Text>
             </Grid.Col>
           </Grid>

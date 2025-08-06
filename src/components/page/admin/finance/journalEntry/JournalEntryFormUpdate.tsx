@@ -36,9 +36,7 @@ const JournalEntryForm = ({ initialData, error, touched }: JournalFormProps) => 
 
             return (
               <SimpleGrid key={entry.transaction_id || index} p={20} spacing="md">
-                <Text fw={600}>
-                  Ubah Data {initialData.transaction_category_name} {initialData.partner}
-                </Text>
+                <Text fw={600}>Ubah Data {initialData.transaction_category_name}</Text>
 
                 <Group>
                   <Switch disabled mr={16} w={40} checked={entry.transaction_type === "payin"} size="lg" />
@@ -132,14 +130,6 @@ const JournalEntryForm = ({ initialData, error, touched }: JournalFormProps) => 
                       />
                     </Group>
 
-                    {/* <Textarea
-                      label="Keterangan"
-                      placeholder="Masukkan Keterangan"
-                      value={entry.note?.toUpperCase() || ""}
-                      onChange={(e) => handleJournalChange(index, "note", e.currentTarget.value.toUpperCase())}
-                      error={touched?.journalEntries?.[index]?.note && error?.journalEntries?.[index]?.note}
-                      style={{ textTransform: "uppercase" }}
-                    /> */}
                     <Textarea
                       placeholder="Masukkan Keterangan"
                       value={entry.note || ""}

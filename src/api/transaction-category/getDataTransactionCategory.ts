@@ -60,5 +60,6 @@ export const getDataTransactionCategory = async ({
 
   const url = `transaction-category/get?${params.toString()}`;
   const response = await APIAxiosInstance.get(url);
+
   return response.data as ITransactionCategoryResponse;
 };

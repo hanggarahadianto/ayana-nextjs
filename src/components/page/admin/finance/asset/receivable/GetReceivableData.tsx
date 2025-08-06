@@ -163,7 +163,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, title, assetTyp
         <ReversedJournalEntryModal
           companyId={companyId}
           transactionType={transactionType}
-          transactionCategoryTerm={"piutang"}
+          transactionCategoryTerm={"pelunasan"}
           initialData={selectedReceivableAsset}
           opened={isModalOpen}
           close={() => setIsModalOpen(false)}
