@@ -83,7 +83,11 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
     useModalStore.getState().openModal("editCashOutData", cashOutAsset);
   };
 
-  const columns = columnsBaseCashout(mutateDeleteDataJournal, openEditModal, isLoadingDeleteCashout);
+  const deleteJournalWithIdsOnly = (ids: string[]) => {
+    mutateDeleteDataJournal({ ids });
+  };
+
+  const columns = columnsBaseCashout(deleteJournalWithIdsOnly, openEditModal, isLoadingDeleteCashout);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>

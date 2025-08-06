@@ -11,7 +11,7 @@ type ExpenseStatsProps = {
 
 export const ExpenseStats = ({ companyId, onLoaded, title }: ExpenseStatsProps) => {
   const { data: expenseSummaryOnlyData, isPending: isLoadingExpense } = useQuery({
-    queryKey: ["getExpenseOnlyData", companyId],
+    queryKey: ["getExpenseOnlyDataStats", companyId],
     queryFn: () =>
       getExpenseSummary({
         companyId: companyId || "",

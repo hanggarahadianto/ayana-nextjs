@@ -85,8 +85,11 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType
   const openEditModal = (outstandingDebtData: IDebtSummaryItem) => {
     useModalStore.getState().openModal("editOutstadingData", outstandingDebtData);
   };
+  const deleteJournalWithIdsOnly = (ids: string[]) => {
+    mutateDeleteDataJournal({ ids });
+  };
 
-  const columns = columnsBaseDebt(handleSendClick, openEditModal, mutateDeleteDataJournal, debtType, isLoadingDeleteDebt);
+  const columns = columnsBaseDebt(handleSendClick, openEditModal, deleteJournalWithIdsOnly, debtType, isLoadingDeleteDebt);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>

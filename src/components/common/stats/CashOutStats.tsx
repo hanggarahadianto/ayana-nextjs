@@ -7,12 +7,13 @@ type CashInStatsProps = {
   companyId?: string;
   assetType?: string;
   category?: string;
+  onLoaded?: (val: number) => void; // <--- tambahkan ini
   title?: string;
 };
 
-export const CashOutStats = ({ companyId, assetType, category, title }: CashInStatsProps) => {
+export const CashOutStats = ({ companyId, assetType, category, onLoaded, title }: CashInStatsProps) => {
   const { data: cashOutData, isPending: isLoadingCashOutData } = useQuery({
-    queryKey: ["getCashOutData", companyId, assetType, category],
+    queryKey: ["getCashOutDataStats", companyId, assetType, category],
     queryFn: () =>
       getAssetSummary({
         companyId: companyId!,
@@ -25,6 +26,10 @@ export const CashOutStats = ({ companyId, assetType, category, title }: CashInSt
     refetchOnWindowFocus: false,
   });
   const totalCashOut = cashOutData?.data?.total_asset ?? 0;
+
+  useEffect(() => {
+    if (onLoaded) onLoaded(totalCashOut);
+  }, [totalCashOut, onLoaded]);
 
   const statsData: StatItem[] = [
     {

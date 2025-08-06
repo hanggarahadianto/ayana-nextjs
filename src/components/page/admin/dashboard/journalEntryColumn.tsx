@@ -43,6 +43,7 @@ export const columnsBaseJournalEntry = (
     { key: "transaction_id", title: "Transaction ID", width: 80, minWidth: 80 },
     { key: "invoice", title: "Invoice", width: 120, minWidth: 120 },
     { key: "partner", title: "Partner", width: 80, minWidth: 80 },
+    { key: "debit_category", title: "Kategori", width: 80, minWidth: 80 },
     {
       key: "amount",
       title: "Nominal",
@@ -59,7 +60,7 @@ export const columnsBaseJournalEntry = (
     },
     {
       key: "transaction_category_name",
-      title: "Kategori",
+      title: "Deskripsi",
       width: 180,
       minWidth: 180,
     },

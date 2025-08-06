@@ -84,7 +84,11 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
     useModalStore.getState().openModal("editFixAssetData", fixAssetSummaryData);
   };
 
-  const columns = columnsBaseFixAsset(mutateDeleteDataJournal, openEditModal, isLoadingDeleteFixAsset);
+  const deleteJournalWithIdsOnly = (ids: string[]) => {
+    mutateDeleteDataJournal({ ids });
+  };
+
+  const columns = columnsBaseFixAsset(deleteJournalWithIdsOnly, openEditModal, isLoadingDeleteFixAsset);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>

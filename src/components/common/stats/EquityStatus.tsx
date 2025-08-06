@@ -10,7 +10,7 @@ type EquityStatsProps = {
 
 export const EquityStats = ({ companyId, equityType, title }: EquityStatsProps) => {
   const { data: equityData, isPending: isLoadingEquityData } = useQuery({
-    queryKey: ["getEquityData", companyId, equityType],
+    queryKey: ["getEquityDataStats", companyId, equityType],
     queryFn: () =>
       getEquitySummary({
         companyId: companyId!,

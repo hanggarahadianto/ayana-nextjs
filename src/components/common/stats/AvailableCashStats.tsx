@@ -3,41 +3,14 @@ import { StatItem, StatsGrid } from "@/components/common/stats/StatsGrid";
 import { useQuery } from "@tanstack/react-query";
 
 type AvailableCashStatsProps = {
-  companyId?: string;
   title?: string;
+  totalCashIn: number;
+  totalCashOut: number;
+  loadingIn?: boolean;
+  loadingOut?: boolean;
 };
 
-export const AvailableCashStats = ({ companyId, title }: AvailableCashStatsProps) => {
-  const { data: cashInData, isLoading: loadingIn } = useQuery({
-    queryKey: ["getCashInStats", companyId],
-    queryFn: () =>
-      getAssetSummary({
-        companyId: companyId!,
-        assetType: "cashin",
-        summaryOnly: true,
-        debitCategory: "Kas & Bank",
-        creditCategory: null,
-      }),
-    enabled: !!companyId,
-    refetchOnWindowFocus: false,
-  });
-
-  const { data: cashOutData, isLoading: loadingOut } = useQuery({
-    queryKey: ["getCashOutStats", companyId],
-    queryFn: () =>
-      getAssetSummary({
-        companyId: companyId!,
-        assetType: "cashout",
-        summaryOnly: true,
-        debitCategory: null,
-        creditCategory: null,
-      }),
-    enabled: !!companyId,
-    refetchOnWindowFocus: false,
-  });
-
-  const totalCashIn = cashInData?.data?.total_asset ?? 0;
-  const totalCashOut = cashOutData?.data?.total_asset ?? 0;
+export const AvailableCashStats = ({ title, totalCashIn, totalCashOut, loadingIn, loadingOut }: AvailableCashStatsProps) => {
   const availableCash = totalCashIn - Math.abs(totalCashOut);
 
   const statsData: StatItem[] = [

@@ -87,7 +87,14 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
     }
   }, [journalList]);
 
-  const columns = columnsBaseJournalEntry(mutateDeleteDataJournal, checkboxStates, checkboxHandlers, isLoadingDeleteJournalEntry);
+  // Hapus & refresh dashboard
+  const deleteJournalForDashboard = (ids: string[]) => {
+    mutateDeleteDataJournal({
+      ids,
+      forDashboard: true,
+    });
+  };
+  const columns = columnsBaseJournalEntry(deleteJournalForDashboard, checkboxStates, checkboxHandlers, isLoadingDeleteJournalEntry);
 
   return (
     <SimpleGridGlobal cols={1}>
@@ -142,9 +149,9 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
                 description="Hapus yang ditandai"
                 onDelete={async () => {
                   const selectedIds = checkboxStates.filter((c) => c.checked).map((c) => c.id);
-                  mutateDeleteDataJournal(selectedIds); // pastikan ini Promise
+                  mutateDeleteDataJournal({ ids: selectedIds }); // ✅ dibungkus dalam objek
                 }}
-                isLoading={isLoadingDeleteJournalEntry} // ✅ INI WAJIB ADA
+                isLoading={isLoadingDeleteJournalEntry}
               />
             )}
           </Group>

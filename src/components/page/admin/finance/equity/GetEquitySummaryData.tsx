@@ -81,7 +81,11 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
     useModalStore.getState().openModal("editEquityData", equityData);
   };
 
-  const columns = columnsBaseEquity(mutateDeleteDataJournal, openEditModal, isLoadingDeleteEquity);
+  const deleteJournalWithIdsOnly = (ids: string[]) => {
+    mutateDeleteDataJournal({ ids });
+  };
+
+  const columns = columnsBaseEquity(deleteJournalWithIdsOnly, openEditModal, isLoadingDeleteEquity);
 
   const textColor = equityType === "setor" ? "teal" : equityType === "tarik" ? "red" : "gray";
 

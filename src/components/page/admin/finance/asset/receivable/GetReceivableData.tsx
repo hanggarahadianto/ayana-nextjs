@@ -89,7 +89,11 @@ export const GetReceivableAssetData = ({ companyId, companyName, title, assetTyp
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteReceivableAsset } = useDeleteDataJournalEntry(title);
 
-  const columns = columnsBaseReceivableAsset(handleSendClick, openEditModal, mutateDeleteDataJournal, isLoadingDeleteReceivableAsset);
+  const deleteJournalWithIdsOnly = (ids: string[]) => {
+    mutateDeleteDataJournal({ ids });
+  };
+
+  const columns = columnsBaseReceivableAsset(handleSendClick, openEditModal, deleteJournalWithIdsOnly, isLoadingDeleteReceivableAsset);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>

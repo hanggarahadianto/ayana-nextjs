@@ -81,7 +81,11 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteCashIn } = useDeleteDataJournalEntry(title);
 
-  const columns = columnsBaseCashIn(mutateDeleteDataJournal, openEditModal, isLoadingDeleteCashIn);
+  const deleteJournalWithIdsOnly = (ids: string[]) => {
+    mutateDeleteDataJournal({ ids });
+  };
+
+  const columns = columnsBaseCashIn(deleteJournalWithIdsOnly, openEditModal, isLoadingDeleteCashIn);
 
   return (
     <Card padding="lg" shadow="sm" radius="md" withBorder>

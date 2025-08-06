@@ -12,7 +12,7 @@ type RevenueStatsProps = {
 
 export const RevenueStats = ({ companyId, revenueType, onLoaded, title }: RevenueStatsProps) => {
   const { data: revenueData, isPending: isLoadingCashinData } = useQuery({
-    queryKey: ["getRevenueData", companyId, revenueType],
+    queryKey: ["getRevenueDataStats", companyId, revenueType],
     queryFn: () =>
       getRevenueSummary({
         companyId: companyId!,

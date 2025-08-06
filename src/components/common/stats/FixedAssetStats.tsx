@@ -10,7 +10,7 @@ type AssetStatsProps = {
 
 export const FixedAssetStats = ({ companyId, title }: AssetStatsProps) => {
   const { data: fixedAssetSummaryOnly, isPending: isLoadingFixedAsset } = useQuery({
-    queryKey: ["getFixedAsset", companyId],
+    queryKey: ["getFixedAssetStats", companyId],
     queryFn: () =>
       getAssetSummary({
         companyId: companyId || "",

@@ -10,7 +10,7 @@ type OutstandingDebtStatsProps = {
 
 export const OutstandingDebtStats = ({ companyId, title }: OutstandingDebtStatsProps) => {
   const { data: OutstandingDebtSummaryOnlyData, isPending: isLoadingDebt } = useQuery({
-    queryKey: ["getOutstandingDebtOnlyData", companyId],
+    queryKey: ["getOutstandingDebtOnlyStats", companyId],
     queryFn: () =>
       getOutstandingDebt({
         companyId: companyId || "",

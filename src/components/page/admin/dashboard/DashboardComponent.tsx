@@ -21,6 +21,10 @@ import { EquityStats } from "@/components/common/stats/EquityStatus";
 
 export const DashboardComponent = () => {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
+
+  const [totalCashIn, setTotalCashIn] = useState(0);
+  const [totalCashOut, setTotalCashOut] = useState(0);
+
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
 
@@ -53,16 +57,16 @@ export const DashboardComponent = () => {
             </Group>
 
             <Paper shadow="sm" radius="md" p="md" withBorder>
-              <AvailableCashStats companyId={activeTab?.id} title="Saldo Tersedia" />
+              <AvailableCashStats title="Saldo Tersedia" totalCashIn={totalCashIn} totalCashOut={totalCashOut} />
             </Paper>
 
             <Flex gap={"12px"}>
               <Paper shadow="sm" radius="md" p="md" withBorder w="100%">
-                <CashinStats companyId={activeTab?.id} assetType="cashin" category="Kas & Bank" />
+                <CashinStats companyId={activeTab?.id} assetType="cashin" category="Kas & Bank" onLoaded={(val) => setTotalCashIn(val)} />
               </Paper>
 
               <Paper shadow="sm" radius="md" p="md" withBorder w="100%">
-                <CashOutStats companyId={activeTab?.id} assetType="cashout" />
+                <CashOutStats companyId={activeTab?.id} assetType="cashout" onLoaded={(val) => setTotalCashOut(val)} />
               </Paper>
             </Flex>
 

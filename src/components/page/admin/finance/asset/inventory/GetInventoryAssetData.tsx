@@ -84,7 +84,11 @@ export const GetInventoryAssetData = ({ companyId, companyName, assetType, trans
     useModalStore.getState().openModal("editInventoryAssetData", inventoryAssetSummaryData);
   };
 
-  const columns = columnsBaseInventoryAsset(mutateDeleteDataJournal, openEditModal, isLoadingDeleteFixAsset);
+  const deleteJournalWithIdsOnly = (ids: string[]) => {
+    mutateDeleteDataJournal({ ids });
+  };
+
+  const columns = columnsBaseInventoryAsset(deleteJournalWithIdsOnly, openEditModal, isLoadingDeleteFixAsset);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
