@@ -55,7 +55,7 @@ export default function AccountCard() {
           </Stack> */}
 
           <Text size="sm" c="dimmed">
-            ID: {user.ID}
+            ID: {user.id}
           </Text>
         </Flex>
       </Card>

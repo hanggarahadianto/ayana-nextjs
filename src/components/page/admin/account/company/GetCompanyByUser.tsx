@@ -3,34 +3,32 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import LoadingGlobal from "@/styles/loading/loading-global";
 import TableComponent from "@/components/common/table/TableComponent";
-import { getDataCustomer } from "@/api/customer/getDataCustomer";
 import { useCookies } from "@/utils/hook/useCookies";
-import { useDeleteDataCustomer } from "@/api/customer/deleteDataCustomer";
 import { useModalStore } from "@/store/modalStore";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import { useDebounce } from "use-debounce";
-import SelectCustomerFilter from "@/components/common/select/SelectCustomerStatus";
 import AddCompanyModal from "./AddCompanyModal";
 import { columnsBaseCompany } from "./CompanyColumn";
 import { getDataCompany } from "@/api/company/getCompany";
 import { getDataCompanyByUser } from "@/api/company/getCompanyByUser";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
+import { useDeleteDataCompanyByUser } from "@/api/company/deleteDataCompany";
 
-interface CustomerTableProps {
+interface companyByIdTableProps {
   companyId: string;
   companyName?: string;
 }
-export const CompanyByUserTable = ({ companyId, companyName }: CustomerTableProps) => {
+export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableProps) => {
   const { getToken } = useCookies();
   const { user } = useLoggedInUser();
-  console.log("user", user);
+  // console.log("user", user);
 
   const token = getToken();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
-  const [statusCustomer, setStatusCustomer] = useState<string | null>(null);
+  const [statuscompanyById, setStatuscompanyById] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500);
 
@@ -45,26 +43,26 @@ export const CompanyByUserTable = ({ companyId, companyName }: CustomerTableProp
   const queryEnabled = !!token && !!companyId;
 
   const {
-    data: customerData,
+    data: companyByIdData,
     isLoading: isLoadingCompanyData,
-    refetch: isRefetchCompanyData,
-    isFetching: isFetchingCustomerData,
+    refetch: isRefetchCompanyByIdData,
+    isFetching: isFetchingcompanyByIdData,
   } = useQuery({
     queryKey: [
-      "getCompanyData", // supaya kalau user berubah, data ikut refetch
-      user?.ID,
+      "getCompanyByIdData", // supaya kalau user berubah, data ikut refetch
+      user?.id,
       page,
       limit,
       debouncedSearch,
-      statusCustomer,
+      statuscompanyById,
       formattedStartDate ?? null,
       formattedEndDate ?? null,
       sortBy,
       sortOrder,
     ],
     queryFn: () =>
-      getDataCompany({
-        user_id: user?.ID,
+      getDataCompanyByUser({
+        user_id: user?.id ?? "",
         page,
         limit,
       }),
@@ -72,19 +70,19 @@ export const CompanyByUserTable = ({ companyId, companyName }: CustomerTableProp
     refetchOnWindowFocus: false,
   });
 
-  const customerList = customerData?.data.companyList ?? [];
+  const companyByIdList = companyByIdData?.data.companyList ?? [];
   const startIndex = (page - 1) * limit + 1;
-  const endIndex = Math.min(page * limit, customerData?.data.total_data || 0);
+  const endIndex = Math.min(page * limit, companyByIdData?.data.total_data || 0);
 
-  const { mutate: mutateDeleteDataCustomer, isPending: isLoadingDeleteCustomer } = useDeleteDataCustomer(isRefetchCompanyData);
-  const handleDeleteCustomer = (idToDelete: string) => {
-    mutateDeleteDataCustomer(idToDelete);
+  const { mutate: mutateDeleteDatacompanyById, isPending: isLoadingDeletecompanyById } = useDeleteDataCompanyByUser();
+  const handleDeleteCompanyByUser = (idToDelete: string) => {
+    mutateDeleteDatacompanyById(idToDelete);
   };
 
-  const openEditModal = (customer: any) => {
-    useModalStore.getState().openModal("editCustomer", customer);
+  const openEditModal = (companyById: any) => {
+    useModalStore.getState().openModal("editcompanyById", companyById);
   };
-  const columns = columnsBaseCompany(openEditModal, handleDeleteCustomer);
+  const columns = columnsBaseCompany(openEditModal, handleDeleteCompanyByUser);
 
   return (
     <Card shadow="sm" padding="lg">
@@ -94,14 +92,14 @@ export const CompanyByUserTable = ({ companyId, companyName }: CustomerTableProp
             Daftar Perusahaan {""} {companyName}
           </Text>
           <Stack align="flex-end" mb={16}>
-            <AddCompanyModal companyId={companyId} refetchCompanyData={isRefetchCompanyData} />
+            <AddCompanyModal companyId={companyId} refetchCompanyData={isRefetchCompanyByIdData} />
           </Stack>
         </Group>
         <Group>
           <Stack w={400}>
-            <SelectCustomerFilter companyId={companyId} value={statusCustomer} onChange={setStatusCustomer} />
+            {/* <SelectcompanyByIdFilter companyId={companyId} value={statuscompanyById} onChange={setStatuscompanyById} /> */}
           </Stack>
-          <SearchTable
+          {/* <SearchTable
             label={"Cari Data Perusahaan"}
             companyId={""}
             searchTerm={searchTerm}
@@ -116,8 +114,8 @@ export const CompanyByUserTable = ({ companyId, companyName }: CustomerTableProp
             readonly={false}
             useCategory={false}
             onRefresh={isRefetchCompanyData}
-            isFetching={isFetchingCustomerData}
-          />
+            isFetching={isFetchingcompanyByIdData}
+          /> */}
         </Group>
       </Stack>
 
@@ -127,20 +125,20 @@ export const CompanyByUserTable = ({ companyId, companyName }: CustomerTableProp
         ) : (
           <TableComponent
             startIndex={startIndex}
-            data={customerList}
-            totalAmount={customerData?.data.total_data}
+            data={companyByIdList}
+            totalAmount={companyByIdData?.data.total_data}
             height={"580"}
             columns={columns}
           />
         )}
 
-        <LoadingGlobal visible={isLoadingCompanyData || isLoadingDeleteCustomer} />
+        <LoadingGlobal visible={isLoadingCompanyData || isLoadingDeletecompanyById} />
       </Box>
-      {/* <EditCustomerModal companyId={companyId} initialData={useModalStore((state) => state.modalData)} /> */}
+      {/* <EditcompanyByIdModal companyId={companyId} initialData={useModalStore((state) => state.modalData)} /> */}
 
       {!isLoadingCompanyData && (
         <PaginationWithLimit
-          total={customerData?.data.total_data ?? 0}
+          total={companyByIdData?.data.total_data ?? 0}
           page={page}
           limit={limit}
           startIndex={startIndex}

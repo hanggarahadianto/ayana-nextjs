@@ -1,5 +1,3 @@
-// types/company.d.ts
-
 interface ICompanyItem {
   id: string;
   title: string;
@@ -9,8 +7,8 @@ interface ICompanyItem {
   has_project: boolean;
   has_product: boolean;
   is_retail: boolean;
-  created_at?: string; // optional kalau dari BE
-  updated_at?: string; // optional kalau dari BE
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface ICompanyCreate {
@@ -30,10 +28,10 @@ interface ICompanyUpdate extends ICompanyCreate {
 interface ICompanyData {
   companyList: ICompanyItem[];
   status: string;
-  page?: number; // dari BE kalau pakai pagination
-  limit?: number; // dari BE kalau pakai pagination
-  total_data?: number; // total seluruh data
-  total_page?: number; // total halaman
+  page?: number;
+  limit?: number;
+  total_data?: number;
+  total_page?: number;
 }
 
 interface ICompanyResponse {

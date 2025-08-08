@@ -1,5 +1,5 @@
 interface IUser {
-  ID: string;
+  id: string;
   username: string;
   role: string;
 }
@@ -11,7 +11,7 @@ interface IUserPayload {
 interface IAuthResponse {
   data: {
     user: {
-      ID: string;
+      id: string;
       created_at: string;
       password: string;
       role: string;
