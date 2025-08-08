@@ -30,26 +30,10 @@ export default function LoginPage() {
     }
   }, [router]);
 
-  // if (isRedirecting) {
-  //   return <LoadingGlobal visible={true} />;
-  // }
-
   const handleSubmit = (values: { username: string; password: string }) => {
     mutate(values, {
-      onSuccess: (response: any) => {
-        if (response?.data?.token) {
-          const token = response.data.token;
-          Cookies.set("token", token); // simpan token di cookie
-
-          console.log("✅ Login berhasil");
-          console.log("🧁 Token disimpan di cookies:", token);
-          console.log("📦 Semua cookies:", Cookies.get()); // log semua cookies
-
-          router.push("/admin/sidebar/product");
-        }
-      },
-      onError: (response: any) => {
-        console.error("❌ Login gagal", response);
+      onSuccess: () => {
+        router.push("/admin/sidebar/product");
       },
     });
   };

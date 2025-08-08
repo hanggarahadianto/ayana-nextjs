@@ -1,6 +1,5 @@
 "use client";
 
-import { menuItems } from "@/constants/navigation";
 import { AppShell, Burger, NavLink, Stack, rem, useMantineTheme, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { AnimatePresence, motion } from "framer-motion";
@@ -11,6 +10,7 @@ import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import Cookies from "js-cookie";
 import { useResponsiveLayout } from "@/styles/resposnsiveLayout/resposnvieLayout";
 import Navbar from "@/components/page/landing/navbar";
+import { mainMenuItems, userMenuItem } from "@/constants/navigation";
 
 export default function InternalLayoutClient({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
@@ -77,56 +77,84 @@ export default function InternalLayoutClient({ children }: { children: React.Rea
           overflowY: "auto",
         }}
       >
-        <Stack mt="md" gap="md">
-          <Stack justify="flex-end" align="flex-end" style={{ width: "100%" }}>
-            <button
-              onClick={toggleNav}
-              style={{
-                cursor: "pointer",
-                background: "transparent",
-                border: "none",
-                color: "white",
-              }}
-            >
-              {isClosedOrMobile ? <FaAngleDoubleRight /> : <FaAngleDoubleLeft />}
-            </button>
+        <Stack justify="space-between" style={{ height: "100%" }}>
+          <Stack gap="md">
+            <Stack justify="flex-end" align="flex-end" style={{ width: "100%" }}>
+              <button
+                onClick={toggleNav}
+                style={{
+                  cursor: "pointer",
+                  background: "transparent",
+                  border: "none",
+                  color: "white",
+                }}
+              >
+                {isClosedOrMobile ? <FaAngleDoubleRight /> : <FaAngleDoubleLeft />}
+              </button>
+            </Stack>
+
+            <AnimatePresence>
+              {mainMenuItems.map((item, index) => (
+                <motion.div
+                  key={item.href}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <NavLink
+                    component={Link}
+                    href={item.href}
+                    label={!isClosed ? item.label : undefined}
+                    leftSection={item.icon}
+                    active={pathname === item.href}
+                    styles={(theme) => ({
+                      root: {
+                        color: "white",
+                        fontWeight: "bold",
+                        borderRadius: rem(8),
+                        padding: rem(12),
+                        transition: "background-color 0.3s ease, transform 0.3s ease",
+                        "&:hover": {
+                          transform: "scale(1.05)",
+                          backgroundColor: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.2)",
+                        },
+                      },
+                      label: {
+                        whiteSpace: "nowrap",
+                      },
+                    })}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </Stack>
 
-          <AnimatePresence>
-            {menuItems.map((item, index) => (
-              <motion.div
-                key={item.href}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-              >
-                <NavLink
-                  component={Link}
-                  href={item.href}
-                  label={!isClosed ? item.label : undefined}
-                  leftSection={item.icon}
-                  active={pathname === item.href}
-                  styles={(theme) => ({
-                    root: {
-                      color: "white",
-                      fontWeight: "bold",
-                      borderRadius: rem(8),
-                      padding: rem(12),
-                      transition: "background-color 0.3s ease, transform 0.3s ease",
-                      "&:hover": {
-                        transform: "scale(1.05)",
-                        backgroundColor: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.2)",
-                      },
-                    },
-                    label: {
-                      whiteSpace: "nowrap",
-                    },
-                  })}
-                />
-              </motion.div>
-            ))}
-          </AnimatePresence>
+          {/* USER MENU AT BOTTOM */}
+          <NavLink
+            component={Link}
+            href={userMenuItem.href}
+            label={!isClosed ? userMenuItem.label : undefined}
+            leftSection={userMenuItem.icon}
+            active={pathname === userMenuItem.href}
+            styles={{
+              root: {
+                marginBottom: "12px",
+                color: "white",
+                fontWeight: "bold",
+                borderRadius: rem(8),
+                padding: rem(12),
+                transition: "background-color 0.3s ease, transform 0.3s ease",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                  backgroundColor: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.2)",
+                },
+              },
+              label: {
+                whiteSpace: "nowrap",
+              },
+            }}
+          />
         </Stack>
       </AppShell.Navbar>
 

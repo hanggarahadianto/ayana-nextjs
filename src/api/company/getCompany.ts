@@ -1,6 +1,6 @@
 import { APIAxiosInstance } from "../../lib";
 
-export const getDataCompany = async () => {
+export const getDataCompany = async (p0: {}) => {
   try {
     const url = "company/get";
 

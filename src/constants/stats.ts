@@ -1,5 +1,3 @@
-// src/constants/queryKeys.ts
-
 export const DASHBOARD_QUERY_KEYS = [
   "getCashinDataStats",
   "getCashOutDataStats",

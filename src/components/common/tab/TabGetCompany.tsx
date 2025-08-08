@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import useGetCompanies from "@/components/common/tab/GetCompanyTab";
 
-type CompanyFilter = Partial<Pick<ICompany, "has_customer" | "has_project" | "has_product">>;
+type CompanyFilter = Partial<Pick<ICompanyItem, "has_customer" | "has_project" | "has_product">>;
 
 export default function UseCompanyTabs(filter: CompanyFilter = {}) {
   const { companies, isLoading: isLoadingCompanies } = useGetCompanies();
-  const [activeTab, setActiveTab] = useState<ICompany | null>(null);
-  const [filteredCompanies, setFilteredCompanies] = useState<ICompany[]>([]);
+  const [activeTab, setActiveTab] = useState<ICompanyItem | null>(null);
+  const [filteredCompanies, setFilteredCompanies] = useState<ICompanyItem[]>([]);
 
   useEffect(() => {
     // 🔍 Terapkan filter dinamis berdasarkan prop
@@ -24,7 +24,7 @@ export default function UseCompanyTabs(filter: CompanyFilter = {}) {
     }
   }, [companies, activeTab, JSON.stringify(filter)]); // depend on filter content
 
-  const handleTabChange = (value: ICompany) => {
+  const handleTabChange = (value: ICompanyItem) => {
     if (value) {
       setActiveTab(value);
       localStorage.setItem("activeCompanyTab", value.company_code);
