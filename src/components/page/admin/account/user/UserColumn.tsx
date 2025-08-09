@@ -11,33 +11,12 @@ interface Column<T> {
   render?: (item: T) => ReactNode;
 }
 
-export const columnsBaseCompany = (
-  openEditModal: (row: ICompanyItem) => void,
+export const columnsBaseUser = (
+  openEditModal: (row: IUserItem) => void,
   handleDeleteDataCompanyById: (id: string) => void
-): Column<ICompanyItem>[] => [
-  { key: "company_code", title: "Kode Perusahaan", width: 40, minWidth: 40 },
-  { key: "title", title: "Nama Perusahaan", width: 200, minWidth: 200 },
-  {
-    key: "is_retail",
-    title: "Retail",
-    width: 160,
-    minWidth: 160,
-    render: (item) => (item.is_retail ? "Ya" : "Tidak"),
-  },
-  {
-    key: "has_project",
-    title: "Project",
-    width: 160,
-    minWidth: 160,
-    render: (item) => (item.has_project ? "Ya" : "Tidak"),
-  },
-  {
-    key: "has_customer",
-    title: "Customer",
-    width: 160,
-    minWidth: 160,
-    render: (item) => (item.has_customer ? "Ya" : "Tidak"),
-  },
+): Column<IUserItem>[] => [
+  { key: "username", title: "Nama Pengguna", width: 40, minWidth: 40 },
+  { key: "role", title: "Role", width: 200, minWidth: 200 },
   {
     key: "aksi",
     title: "Aksi",
@@ -49,7 +28,7 @@ export const columnsBaseCompany = (
         <ButtonDeleteWithConfirmation
           isLoading={false}
           onDelete={() => handleDeleteDataCompanyById(row.id)}
-          description={`Hapus perusahaan ${row.title}?`}
+          description={`Hapus perusahaan ${row.username}?`}
           size={2.2}
         />
       </Group>

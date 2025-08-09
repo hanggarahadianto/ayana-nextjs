@@ -6,7 +6,7 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 import GlobalTab from "@/components/common/tab/TabGlobal";
 import { Card, Stack, Text, Group, Badge, Divider, Flex } from "@mantine/core";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
-import LogoutButton from "./user/buttonLogout";
+import LogoutButton from "./user/ButtonAccountLogout";
 
 export default function AccountCard() {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
