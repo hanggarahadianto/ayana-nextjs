@@ -5,9 +5,9 @@
 import { Tabs } from "@mantine/core";
 
 interface GlobalTabProps {
-  data: ICompany[];
+  data: ICompanyItem[];
   activeTab: string | null;
-  onTabChange: (selected: ICompany) => void;
+  onTabChange: (selected: ICompanyItem) => void;
 }
 
 const GlobalTab = ({ data, activeTab, onTabChange }: GlobalTabProps) => {

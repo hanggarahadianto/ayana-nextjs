@@ -1,34 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { TextInput, Button, Card, Container, Title, Group, Loader, Center, Stack, InputWrapper } from "@mantine/core";
+import { useState } from "react";
+import { TextInput, Button, Card, Title, Group, Stack, InputWrapper } from "@mantine/core";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import { Formik, Field, Form } from "formik";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 import { initialValuesUser, validationSchemaUser } from "./initialValuesUser";
 import { useLoginMutation } from "@/api/auth/login";
 import LoadingGlobal from "@/styles/loading/loading-global";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   const { mutate, isPending: isLoadingLogin } = useLoginMutation();
   const router = useRouter();
-  const [isRedirecting, setIsRedirecting] = useState(false);
 
-  useEffect(() => {
-    const token = Cookies.get("token");
+  const { user, isLoadingUser } = useLoggedInUser("admin/sidebar/project");
+  console.log("user di halaman auth", user);
 
-    if (token) {
-      console.log("🔁 Redirecting to /admin/sidebar/project...");
-      setIsRedirecting(true);
-
-      setTimeout(() => {
-        router.replace("/admin/sidebar/product");
-      }, 100); // kasih delay agar cookies benar-benar ready
-    }
-  }, [router]);
+  if (isLoadingUser) return <LoadingGlobal visible={isLoadingLogin} />;
+  if (user) return null; // Sudah auto redirect oleh hook
 
   const handleSubmit = (values: { username: string; password: string }) => {
     mutate(values, {
@@ -51,7 +43,7 @@ export default function LoginPage() {
         marginBottom: "-16px",
       }}
     >
-      <LoadingGlobal visible={isLoadingLogin || isRedirecting} />
+      <LoadingGlobal visible={isLoadingLogin} />
 
       <Card
         shadow="xl"

@@ -2,31 +2,41 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter, usePathname } from "next/navigation";
 
-export function useLoggedInUser() {
+export function useLoggedInUser(redirectIfLoggedInTo?: string) {
   const [user, setUser] = useState<IUser | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    setIsMounted(true);
+    const userCookie = Cookies.get("user");
 
-    const cookie = Cookies.get("user");
-    if (!cookie) {
-      router.push("/home"); // Redirect kalau gak ada user
+    if (!userCookie) {
+      // Belum login
+      if (pathname !== "/auth/login") {
+        router.replace("/auth/login");
+      }
+      setIsLoadingUser(false);
       return;
     }
 
     try {
-      const parsedUser: IUser = JSON.parse(cookie);
+      const parsedUser = JSON.parse(userCookie);
       setUser(parsedUser);
-    } catch (error) {
-      console.error("❌ Gagal parse user dari cookie:", error);
-      router.push("/home");
+
+      // 🚀 Jika user ada dan kita minta redirect
+      if (redirectIfLoggedInTo && pathname === "/auth/login") {
+        const target = redirectIfLoggedInTo.startsWith("/") ? redirectIfLoggedInTo : `/${redirectIfLoggedInTo}`;
+        router.replace(target);
+      }
+    } catch (err) {
+      console.error("❌ Failed to parse user cookie:", err);
+      Cookies.remove("user");
+      router.replace("/auth/login");
     }
-  }, [router]);
 
-  // Hindari render saat belum mount (prevent hydration mismatch)
-  if (!isMounted) return { user: null };
+    setIsLoadingUser(false);
+  }, [pathname, router, redirectIfLoggedInTo]);
 
-  return { user };
+  return { user, isLoadingUser };
 }

@@ -3,43 +3,32 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import LoadingGlobal from "@/styles/loading/loading-global";
 import TableComponent from "@/components/common/table/TableComponent";
-import { useCookies } from "@/utils/hook/useCookies";
 import { useModalStore } from "@/store/modalStore";
-import { formatDateRange } from "@/helper/formatDateIndonesia";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
-import SearchTable from "@/components/common/table/SearchTableComponent";
 import { useDebounce } from "use-debounce";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 import { useDeleteDataCompanyByUser } from "@/api/company/deleteDataCompany";
 import { columnsBaseUser } from "./UserColumn";
 import { getUserByIdForSuperadmin } from "@/api/user/getUserDataForSuperadmin";
 import AddUserModal from "./AddUserModal";
+import UpdateUserByIdModal from "./UpdateUserModal";
+import { useDisclosure } from "@mantine/hooks";
 
 interface userForSuperadminTableProps {
   companyId: string;
   companyName?: string;
 }
 export const UserForSuperadminTable = ({ companyId, companyName }: userForSuperadminTableProps) => {
-  const { getToken } = useCookies();
   const { user } = useLoggedInUser();
-  // console.log("user", user);
 
-  const token = getToken();
+  const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [statuscompanyById, setStatuscompanyById] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
-  const [debouncedSearch] = useDebounce(searchTerm, 500);
-
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
-
-  const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
-
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "date_inputed";
 
-  const queryEnabled = !!token && !!companyId;
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: userByIdData,
@@ -62,10 +51,10 @@ export const UserForSuperadminTable = ({ companyId, companyName }: userForSupera
     mutateDeleteDatacompanyById(idToDelete);
   };
 
-  const openEditModal = (companyById: any) => {
-    useModalStore.getState().openModal("editcompanyById", companyById);
+  const openEditModal = (user: IUserUpdate) => {
+    useModalStore.getState().openModal("editUser", user);
   };
-  const columns = columnsBaseUser(openEditModal, handleDeleteCompanyByUser);
+  const columns = columnsBaseUser(openEditModal, handleDeleteCompanyByUser, isLoadingDeletecompanyById);
 
   return (
     <Card shadow="sm" padding="lg">
@@ -77,28 +66,6 @@ export const UserForSuperadminTable = ({ companyId, companyName }: userForSupera
           <Stack align="flex-end" mb={16}>
             <AddUserModal refetchUserData={refetchUserById} />
           </Stack>
-        </Group>
-        <Group>
-          <Stack w={400}>
-            {/* <SelectcompanyByIdFilter companyId={companyId} value={statuscompanyById} onChange={setStatuscompanyById} /> */}
-          </Stack>
-          {/* <SearchTable
-            label={"Cari Data Perusahaan"}
-            companyId={""}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            startDate={startDate}
-            setStartDate={setStartDate}
-            endDate={endDate}
-            setEndDate={setEndDate}
-            transactionType={null}
-            debitAccountType={null}
-            creditAccountType={null}
-            readonly={false}
-            useCategory={false}
-            onRefresh={isRefetchCompanyData}
-            isFetching={isFetchingcompanyByIdData}
-          /> */}
         </Group>
       </Stack>
 
@@ -117,7 +84,7 @@ export const UserForSuperadminTable = ({ companyId, companyName }: userForSupera
 
         <LoadingGlobal visible={isLoadingUserData} />
       </Box>
-      {/* <EditcompanyByIdModal companyId={companyId} initialData={useModalStore((state) => state.modalData)} /> */}
+      <UpdateUserByIdModal initialValues={useModalStore((state) => state.modalData)} />
 
       {!isLoadingUserData && (
         <PaginationWithLimit

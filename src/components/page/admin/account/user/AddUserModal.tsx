@@ -6,7 +6,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import { useSubmitUserForm } from "@/api/auth/register";
-import { userValidationSchema } from "@/utils/validation/user-validation";
+import { userValidationSchemaCreate } from "@/utils/validation/user-validation";
 import { getInitialValuesCreateUser } from "@/utils/initialValues/initialValuesUser";
 
 interface AddUserModalProps {
@@ -36,7 +36,7 @@ const AddUserModal = ({ refetchUserData }: AddUserModalProps) => {
       <ButtonAdd onClick={open} size="3.5rem" />
 
       <Modal opened={opened} onClose={close} size="lg" yOffset="100px">
-        <Formik initialValues={getInitialValuesCreateUser()} validationSchema={userValidationSchema} onSubmit={handleSubmit}>
+        <Formik initialValues={getInitialValuesCreateUser()} validationSchema={userValidationSchemaCreate} onSubmit={handleSubmit}>
           {({ values, errors, touched, setFieldValue, handleBlur, isSubmitting }) => (
             <Form>
               <Stack p={20} gap={20}>

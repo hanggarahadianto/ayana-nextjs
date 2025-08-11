@@ -14,7 +14,7 @@ interface AddCompanyModalProps {
   refetchCompanyData: () => void;
 }
 
-const AddCompanyModal = ({ companyId, refetchCompanyData }: AddCompanyModalProps) => {
+const UpdateCompanyModal = ({ companyId, refetchCompanyData }: AddCompanyModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const { mutate: postCompany, isPending: isLoadingSubmitCompany } = useSubmitCompany(refetchCompanyData, close);
@@ -116,4 +116,4 @@ const AddCompanyModal = ({ companyId, refetchCompanyData }: AddCompanyModalProps
   );
 };
 
-export default memo(AddCompanyModal);
+export default memo(UpdateCompanyModal);

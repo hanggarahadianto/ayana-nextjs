@@ -21,11 +21,8 @@ interface companyByIdTableProps {
   companyName?: string;
 }
 export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableProps) => {
-  const { getToken } = useCookies();
   const { user } = useLoggedInUser();
-  // console.log("user", user);
 
-  const token = getToken();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [statuscompanyById, setStatuscompanyById] = useState<string | null>(null);
@@ -40,7 +37,7 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "date_inputed";
 
-  const queryEnabled = !!token && !!companyId;
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: companyByIdData,
@@ -82,7 +79,7 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
   const openEditModal = (companyById: any) => {
     useModalStore.getState().openModal("editcompanyById", companyById);
   };
-  const columns = columnsBaseCompany(openEditModal, handleDeleteCompanyByUser);
+  const columns = columnsBaseCompany(openEditModal, handleDeleteCompanyByUser, isLoadingDeletecompanyById);
 
   return (
     <Card shadow="sm" padding="lg">
@@ -94,28 +91,6 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
           <Stack align="flex-end" mb={16}>
             <AddCompanyModal companyId={companyId} refetchCompanyData={isRefetchCompanyByIdData} />
           </Stack>
-        </Group>
-        <Group>
-          <Stack w={400}>
-            {/* <SelectcompanyByIdFilter companyId={companyId} value={statuscompanyById} onChange={setStatuscompanyById} /> */}
-          </Stack>
-          {/* <SearchTable
-            label={"Cari Data Perusahaan"}
-            companyId={""}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            startDate={startDate}
-            setStartDate={setStartDate}
-            endDate={endDate}
-            setEndDate={setEndDate}
-            transactionType={null}
-            debitAccountType={null}
-            creditAccountType={null}
-            readonly={false}
-            useCategory={false}
-            onRefresh={isRefetchCompanyData}
-            isFetching={isFetchingcompanyByIdData}
-          /> */}
         </Group>
       </Stack>
 
@@ -132,7 +107,7 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
           />
         )}
 
-        <LoadingGlobal visible={isLoadingCompanyData || isLoadingDeletecompanyById} />
+        <LoadingGlobal visible={isLoadingCompanyData} />
       </Box>
       {/* <EditcompanyByIdModal companyId={companyId} initialData={useModalStore((state) => state.modalData)} /> */}
 

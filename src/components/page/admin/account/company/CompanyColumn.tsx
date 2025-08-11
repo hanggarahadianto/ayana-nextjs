@@ -13,7 +13,8 @@ interface Column<T> {
 
 export const columnsBaseCompany = (
   openEditModal: (row: ICompanyItem) => void,
-  handleDeleteDataCompanyById: (id: string) => void
+  handleDeleteDataCompanyById: (id: string) => void,
+  isLoading: boolean
 ): Column<ICompanyItem>[] => [
   { key: "company_code", title: "Kode Perusahaan", width: 40, minWidth: 40 },
   { key: "title", title: "Nama Perusahaan", width: 200, minWidth: 200 },
@@ -47,7 +48,7 @@ export const columnsBaseCompany = (
       <Group gap="lg">
         <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="1rem" />} size={"2.2rem"} />
         <ButtonDeleteWithConfirmation
-          isLoading={false}
+          isLoading={isLoading}
           onDelete={() => handleDeleteDataCompanyById(row.id)}
           description={`Hapus perusahaan ${row.title}?`}
           size={2.2}

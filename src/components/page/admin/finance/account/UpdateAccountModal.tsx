@@ -14,7 +14,6 @@ interface UpdateAccountModalProps {
 
 const UpdateAccountModal = ({ companyId, initialValues }: UpdateAccountModalProps) => {
   const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
-
   const { mutate: editData, isPending } = useUpdateAccountForm();
 
   const handleSubmit = useCallback(

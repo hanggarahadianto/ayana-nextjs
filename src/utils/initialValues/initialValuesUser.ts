@@ -7,14 +7,12 @@ export const getInitialValuesCreateUser = (): IUserCreate => ({
 });
 
 // Initial Values untuk Update User
-export const getInitialValuesUpdateUser = (user: Partial<IUserUpdate> = {}): IUserUpdate => {
-  const { id = "", username = "", password = "", password_confirm = "", role = "" } = user;
-
-  return {
-    id,
-    username,
-    password,
-    password_confirm,
-    role,
-  };
-};
+export const getInitialValuesUpdateUser = (user: IUserUpdate): IUserUpdate => ({
+  id: user.id, // wajib ada
+  username: user.username || "",
+  // password: "",
+  // password_confirm: "",
+  // password: user.password || "",
+  // password_confirm: user.password || "",
+  role: user.role || "",
+});

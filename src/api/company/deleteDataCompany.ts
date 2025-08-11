@@ -4,7 +4,7 @@ import { AxiosResponse } from "axios";
 import { APIAxiosInstance } from "../../lib";
 
 const handleDeleteCompanyByUser = async (idToDelete: string): Promise<AxiosResponse<any>> => {
-  return APIAxiosInstance.delete(`account/delete/${idToDelete}`);
+  return APIAxiosInstance.delete(`company/delete/${idToDelete}`);
 };
 
 // Mutation function for deleting a project
@@ -17,11 +17,7 @@ export const useDeleteDataCompanyByUser = () => {
       if (data.status === 200) {
         await Promise.all([
           queryClient.refetchQueries({
-            queryKey: ["getAccountData"],
-            exact: false,
-          }),
-          queryClient.refetchQueries({
-            queryKey: ["getTransactionCategory"],
+            queryKey: ["getUserByIdData"],
             exact: false,
           }),
         ]);

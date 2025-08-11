@@ -10,7 +10,7 @@ interface APIErrorResponse {
 }
 
 const handleSubmitCompanyForm = async (values: ICompanyCreate) => {
-  const response = await APIAxiosInstance.post("/company/create", values);
+  const response = await APIAxiosInstance.post("/company/post", values);
   return response.data;
 };
 

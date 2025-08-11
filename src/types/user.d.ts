@@ -10,13 +10,17 @@ interface IUserItem {
 
 interface IUserCreate {
   username: string;
-  password: string;
-  password_confirm: string;
   role: string;
+  password: string; // <- ini tidak optional
+  password_confirm: string; // <- ini juga
 }
 
-interface IUserUpdate extends IUserCreate {
+interface IUserUpdate {
   id: string;
+  username: string;
+  role: string;
+  password?: string;
+  password_confirm?: string;
 }
 
 interface IUserData {

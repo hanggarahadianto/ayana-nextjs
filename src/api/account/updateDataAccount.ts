@@ -17,8 +17,6 @@ export const useUpdateAccountForm = () => {
   return useMutation({
     mutationFn: ({ id, values }: { id: string; values: IAccountUpdate }) => handleEditAccountForm(id, values),
     onSuccess: async (data: any) => {
-      // console.log("✅ Update berhasil:", data);
-
       await queryClient.refetchQueries({
         queryKey: ["getAccountData"],
         exact: false,

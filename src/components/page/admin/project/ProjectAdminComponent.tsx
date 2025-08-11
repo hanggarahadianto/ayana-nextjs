@@ -8,7 +8,7 @@ import GetProjectAdminData from "./GetProjectData";
 
 const ProjectAdminComponent = () => {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
-  const customerCompanies = companies?.filter((company: ICompany) => company.has_project === true) || [];
+  const customerCompanies = companies?.filter((company: ICompanyItem) => company.has_project === true) || [];
 
   return (
     <>

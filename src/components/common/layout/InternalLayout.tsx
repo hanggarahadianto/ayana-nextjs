@@ -7,34 +7,33 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
-import Cookies from "js-cookie";
 import { useResponsiveLayout } from "@/styles/resposnsiveLayout/resposnvieLayout";
 import Navbar from "@/components/page/landing/navbar";
 import { mainMenuItems, userMenuItem } from "@/constants/navigation";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 export default function InternalLayoutClient({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
-  const [isMounted, setIsMounted] = useState(false);
+
   const { isMobile, isTablet, isLaptop } = useResponsiveLayout();
 
   const [isClosed, setIsClosed] = useState(false);
   const [isToggleTriggered, setIsToggleTriggered] = useState(false);
 
-  const router = useRouter();
   const pathname = usePathname();
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
   const isDark = colorScheme === "dark";
 
-  useEffect(() => {
-    setIsMounted(true);
-    const token = Cookies.get("token");
-    if (!token) {
-      router.push("/home");
-    }
-  }, [router]);
+  const { user, isLoadingUser } = useLoggedInUser(); // atau "/login"
 
-  if (!isMounted) return null;
+  if (isLoadingUser) {
+    return <LoadingGlobal visible={true} />; // tampilkan loading, bukan null
+  }
+
+  if (!user) return null;
+
   const isClosedOrMobile = isClosed || isMobile || isTablet;
   const computedWidth = isToggleTriggered ? (isClosed ? 105 : 200) : isClosedOrMobile ? 105 : 200;
 
