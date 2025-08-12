@@ -1,5 +1,3 @@
-"use client";
-
 import React, { memo, useCallback } from "react";
 import { Modal, TextInput, Button, Group, Stack, Switch, Text } from "@mantine/core";
 import { Form, Formik } from "formik";

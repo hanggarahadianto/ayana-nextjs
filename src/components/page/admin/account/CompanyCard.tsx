@@ -1,5 +1,3 @@
-"use client";
-
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";

@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@mantine/core";
 import { IconLogout } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";

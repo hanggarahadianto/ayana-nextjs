@@ -1,5 +1,4 @@
 import { Card, Text, Stack, Group, Box, Skeleton } from "@mantine/core";
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import LoadingGlobal from "@/styles/loading/loading-global";
 import TableComponent from "@/components/common/table/TableComponent";
@@ -11,6 +10,7 @@ import { getDataCompanyByUser } from "@/api/company/getCompanyByUser";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 import { useDeleteDataCompanyByUser } from "@/api/company/deleteDataCompany";
 import UpdateCompanyModal from "./UpdateCompanyModal";
+import { useState } from "react";
 
 interface companyByIdTableProps {
   companyId: string;

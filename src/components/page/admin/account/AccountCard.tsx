@@ -1,5 +1,3 @@
-"use client";
-
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import LoadingGlobal from "@/styles/loading/loading-global";

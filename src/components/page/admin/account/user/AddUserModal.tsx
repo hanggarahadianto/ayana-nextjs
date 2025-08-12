@@ -1,5 +1,3 @@
-"use client";
-
 import React, { memo, useCallback } from "react";
 import { Modal, TextInput, Button, Group, Stack, PasswordInput, Select, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
