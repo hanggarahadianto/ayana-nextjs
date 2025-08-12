@@ -4,13 +4,15 @@ interface BreathingActionIconProps {
   onClick: () => void;
   size: string | number;
   icon: ReactNode;
-  color?: string;
+  backgroundColor?: string;
   gradient?: string;
   disabled?: boolean;
 }
 
-const BreathingActionIcon = ({ onClick, size, icon, color = "white", gradient, disabled }: BreathingActionIconProps) => {
-  const backgroundColor = disabled ? "#1e293b" : gradient || "linear-gradient(135deg, #38a169, #2f855a)";
+const BreathingActionIcon = ({ onClick, size, icon, backgroundColor, gradient, disabled }: BreathingActionIconProps) => {
+  // Tentukan warna background:
+  const finalBackground = disabled ? "#1e293b" : backgroundColor || gradient || "linear-gradient(135deg, #38a169, #2f855a)";
+
   const cursorStyle = disabled ? "not-allowed" : "pointer";
 
   return (
@@ -24,8 +26,7 @@ const BreathingActionIcon = ({ onClick, size, icon, color = "white", gradient, d
         alignItems: "center",
         justifyContent: "center",
         borderRadius: "50%",
-        background: backgroundColor,
-        color: color,
+        background: finalBackground,
         border: "none",
         cursor: cursorStyle,
         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",

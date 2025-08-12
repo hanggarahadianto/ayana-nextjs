@@ -15,14 +15,7 @@ export default function AccountCard() {
   return (
     <SimpleGridGlobal cols={1}>
       <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
-      <SimpleGridGlobal cols={1} gap="20px">
-        <Stack>
-          <Divider />
-          <Text fw={600} size="lg">
-            {activeTab?.title}
-          </Text>
-        </Stack>
-      </SimpleGridGlobal>
+
       <LoadingGlobal visible={isLoadingCompanies} />
 
       {/* Card untuk info user */}
@@ -35,22 +28,14 @@ export default function AccountCard() {
         </Group>
 
         <Flex justify="space-between" align="center" w="100%" mt={30}>
-          <Stack>
-            <Text size="sm" fw={500}>
+          <Stack gap={"40px"}>
+            <Text fw={500} size="20px" mr={"30px"}>
               Username:{" "}
-              <Text span fw={700}>
+              <Text span fw={700} size="20px" ml={"4px"}>
                 {user.username}
               </Text>
             </Text>
           </Stack>
-          {/* <Stack>
-            <Text size="sm" fw={500}>
-              Role:{" "}
-              <Text span fw={700}>
-                {user.username}
-              </Text>
-            </Text>
-          </Stack> */}
 
           <Text size="sm" c="dimmed">
             ID: {user.id}

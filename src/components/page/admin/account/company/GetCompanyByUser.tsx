@@ -11,6 +11,7 @@ import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 import { useDeleteDataCompanyByUser } from "@/api/company/deleteDataCompany";
 import UpdateCompanyModal from "./UpdateCompanyModal";
 import { useState } from "react";
+import AssignUserHandleCompany from "./AssignUserHandleCompany";
 
 interface companyByIdTableProps {
   companyId: string;
@@ -20,7 +21,7 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
   const { user } = useLoggedInUser();
 
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(10);
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "date_inputed";
@@ -63,9 +64,12 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
   const openEditModal = (companyById: any) => {
     useModalStore.getState().openModal("editCompany", companyById);
   };
-  const columns = columnsBaseCompany(openEditModal, handleDeleteCompanyByUser, isLoadingDeletecompanyById);
+  const openAssignModal = (user: IUserItem) => {
+    useModalStore.getState().openModal("assignUser", user);
+  };
+  console.log(companyByIdList);
 
-  console.log("loading", isLoadingCompanyData);
+  const columns = columnsBaseCompany(openEditModal, openAssignModal, handleDeleteCompanyByUser, isLoadingDeletecompanyById);
 
   return (
     <Card shadow="sm" padding="lg">
@@ -96,6 +100,7 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
         <LoadingGlobal visible={isLoadingCompanyData} />
       </Box>
       <UpdateCompanyModal initialValues={useModalStore((state) => state.modalData)} />
+      <AssignUserHandleCompany company={useModalStore((state) => state.modalData)} />
 
       {!isLoadingCompanyData && (
         <PaginationWithLimit

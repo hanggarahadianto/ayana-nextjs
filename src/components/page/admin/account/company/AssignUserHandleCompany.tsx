@@ -1,78 +1,82 @@
-import React, { memo, useCallback } from "react";
-import { Modal, Button, Group, Stack, Text, Select, MultiSelect } from "@mantine/core";
+import React, { memo, useCallback, useState } from "react";
+import { Modal, Button, Group, Stack, Text } from "@mantine/core";
 import { Form, Formik } from "formik";
 import { useModalStore } from "@/store/modalStore";
 import { useAssignUserToCompany } from "@/api/company/assignCompanyHandleUser";
 import { assignUserValidationSchema } from "@/utils/validation/companyAssign-validation";
+import SelectUser from "@/components/common/select/SelectUserForSuperadmin";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface AssignUserHandleCompanyModalProps {
-  companies: { value: string; label: string }[];
-  users: { value: string; label: string }[];
+  company: { value: string; label: string }[];
 }
 
-const AssignUserHandleCompanyModal = ({ companies, users }: AssignUserHandleCompanyModalProps) => {
+interface UserOption {
+  id: string;
+  username: string;
+}
+
+const AssignUserHandleCompanyModal = (company: any) => {
+  const { user } = useLoggedInUser();
+
   const { opened, modalName, modalData, closeModal } = useModalStore();
 
-  const { mutate: assignUser, isPending: isLoadingSubmit } = useAssignUserToCompany();
+  const userId = user?.id ?? "";
 
-  const handleSubmit = useCallback((values: { company_id: string; user_ids: string[] }, { setSubmitting }: any) => {
-    assignUser(values, {
-      onSuccess: () => {
-        closeModal();
-        setSubmitting(false);
-      },
-      onError: () => {
-        setSubmitting(false);
-      },
-    });
-  }, []);
+  const { mutate: assignUser, isPending: isLoadingSubmit } = useAssignUserToCompany(userId);
 
-  if (modalName !== "assignUserToCompany" || !opened) return null;
+  const handleSubmit = useCallback(
+    (values: { company_id: string; user_ids: string[] }, { setSubmitting }: any) => {
+      assignUser(values, {
+        onSuccess: () => {
+          closeModal();
+          setSubmitting(false);
+        },
+        onError: () => {
+          setSubmitting(false);
+        },
+      });
+    },
+    [assignUser, closeModal]
+  );
+
+  if (modalName !== "assignUser" || !opened) return null;
 
   return (
-    <Modal opened={opened} onClose={closeModal} size="lg" yOffset="100px">
+    <Modal opened={opened} onClose={closeModal} size="40%" yOffset="100px">
       <Formik
         initialValues={{
-          company_id: modalData?.company_id || "",
+          company_id: modalData,
           user_ids: modalData?.user_ids || [],
         }}
         validationSchema={assignUserValidationSchema}
         onSubmit={handleSubmit}
       >
-        {({ values, errors, touched, setFieldValue, isSubmitting }) => (
-          <Form>
-            <Stack p={20} gap={20}>
-              <Text fw={600}>Assign User ke Perusahaan</Text>
+        {({ values, errors, touched, setFieldValue, isSubmitting }) => {
+          console.log("values", values);
+          return (
+            <Form>
+              <Stack p={20} gap={20}>
+                <Text fw={600}>Tugaskan Pengguna Untuk Perusahaan</Text>
+                <SelectUser
+                  userId={userId ?? ""}
+                  value={values.user_ids} // ⬅️ pakai state dari formik
+                  isuser={false}
+                  onChange={(val) => setFieldValue("user_ids", val)} // ⬅️ langsung update array
+                />
 
-              <Select
-                label="Pilih Perusahaan"
-                placeholder="Pilih perusahaan"
-                data={companies}
-                value={values.company_id}
-                onChange={(val) => setFieldValue("company_id", val)}
-                // error={touched.company_id && errors.company_id}
-              />
-
-              <MultiSelect
-                label="Pilih User"
-                placeholder="Pilih user yang akan handle"
-                data={users}
-                value={values.user_ids}
-                onChange={(val) => setFieldValue("user_ids", val)}
-                // error={touched.user_ids && errors.user_ids}
-              />
-
-              <Group justify="flex-end">
-                <Button variant="default" onClick={closeModal} disabled={isLoadingSubmit}>
-                  Batal
-                </Button>
-                <Button type="submit" loading={isSubmitting || isLoadingSubmit}>
-                  Simpan
-                </Button>
-              </Group>
-            </Stack>
-          </Form>
-        )}
+                <Group justify="flex-end" mt={"140px"}>
+                  <Button variant="default" onClick={closeModal} disabled={isLoadingSubmit}>
+                    Batal
+                  </Button>
+                  <Button type="submit" loading={isSubmitting || isLoadingSubmit}>
+                    Simpan
+                  </Button>
+                </Group>
+              </Stack>
+            </Form>
+          );
+        }}
       </Formik>
     </Modal>
   );

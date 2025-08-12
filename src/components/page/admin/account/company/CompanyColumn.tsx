@@ -1,7 +1,8 @@
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
-import { Group } from "@mantine/core";
-import { IconPencil } from "@tabler/icons-react";
+import { Badge, Group, Stack, Text } from "@mantine/core";
+import { IconPencil, IconPlayerSkipForwardFilled } from "@tabler/icons-react";
+import { MdEmojiPeople } from "react-icons/md";
 import { ReactNode } from "react";
 interface Column<T> {
   key: string;
@@ -13,6 +14,7 @@ interface Column<T> {
 
 export const columnsBaseCompany = (
   openEditModal: (row: ICompanyItem) => void,
+  openAssignModal: (row: any) => void,
   handleDeleteDataCompanyById: (id: string) => void,
   isLoading: boolean
 ): Column<ICompanyItem>[] => [
@@ -40,12 +42,39 @@ export const columnsBaseCompany = (
     render: (item) => (item.has_customer ? "Ya" : "Tidak"),
   },
   {
+    key: "users",
+    title: "Pengguna",
+    width: 150,
+    minWidth: 150,
+    render: (item) => (
+      <Stack gap={4}>
+        {item.users?.map((user) => (
+          <Group gap={6} key={user.id}>
+            <Badge variant="light" color="blue" size="sm">
+              {user.username}
+            </Badge>
+            <Text size="xs" c="dimmed">
+              ({user.role})
+            </Text>
+          </Group>
+        ))}
+      </Stack>
+    ),
+  },
+  {
     key: "aksi",
     title: "Aksi",
-    width: 40,
-    minWidth: 40,
+    width: 80,
+    minWidth: 80,
     render: (row) => (
       <Group gap="lg">
+        <BreathingActionIcon
+          onClick={() => openAssignModal(row.id)}
+          icon={<MdEmojiPeople size="1rem" />}
+          size={"2.2rem"}
+          backgroundColor="#5DADE2"
+        />
+
         <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="1rem" />} size={"2.2rem"} />
         <ButtonDeleteWithConfirmation
           isLoading={isLoading}

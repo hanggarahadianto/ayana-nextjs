@@ -37,9 +37,3 @@ interface IUserResponse {
   message: string;
   status: string;
 }
-
-// interface IUserResponseSingle {
-//   data: IUserItem;
-//   message: string;
-//   status: string;
-// }

@@ -3,10 +3,10 @@ import { showNotification } from "@mantine/notifications";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // API call
-const handleAssignUserCompanyForm = async (values: IAssignUserToCompany) => {
+// API call
+const handleAssignUserCompanyForm = async ({ id, values }: { id: string; values: IAssignUserToCompany }) => {
   try {
-    const userId = values.user_ids?.[0]; // ambil user pertama, atau sesuaikan
-    const response = await APIAxiosInstance.post(`/company/post/assign-user?user_id=${userId}`, values);
+    const response = await APIAxiosInstance.post(`/company/post/assign-user?user_id=${id}`, values);
     return response.data;
   } catch (error: any) {
     throw error.response?.data?.message || "Terjadi kesalahan saat assign user ke company";
@@ -14,11 +14,11 @@ const handleAssignUserCompanyForm = async (values: IAssignUserToCompany) => {
 };
 
 // Custom hook
-export const useAssignUserToCompany = () => {
+export const useAssignUserToCompany = (id: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: handleAssignUserCompanyForm,
+    mutationFn: (values: IAssignUserToCompany) => handleAssignUserCompanyForm({ id, values }),
     onSuccess: async () => {
       await queryClient.refetchQueries({
         queryKey: ["getCompanyByIdData"],

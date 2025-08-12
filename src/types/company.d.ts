@@ -1,3 +1,10 @@
+interface ICompanyUser {
+  id: string; // id relasi user-company
+  user_id: string; // id user asli
+  username: string; // nama user
+  role: string; // role di perusahaan (misal: admin, staff)
+}
+
 interface ICompanyItem {
   id: string;
   title: string;
@@ -7,6 +14,7 @@ interface ICompanyItem {
   has_project: boolean;
   has_product: boolean;
   is_retail: boolean;
+  users: ICompanyUser[]; // array user di perusahaan
   created_at?: string;
   updated_at?: string;
 }
@@ -39,8 +47,6 @@ interface ICompanyResponse {
   message: string;
   status: string;
 }
-
-// types/company.d.ts
 
 interface IAssignUserToCompany {
   company_id: string; // ID perusahaan yang dipilih

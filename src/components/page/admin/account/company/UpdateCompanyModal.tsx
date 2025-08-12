@@ -32,8 +32,6 @@ const UpdateCompanyModal = ({ initialValues }: UpdateCompanyModalProps) => {
 
   return (
     <>
-      <ButtonAdd onClick={open} size="3.5rem" />
-
       <Modal opened={opened} onClose={closeModal} size="lg" yOffset="100px">
         <Formik
           initialValues={initialCompanyValuesUpdate(initialValues)}
@@ -46,7 +44,7 @@ const UpdateCompanyModal = ({ initialValues }: UpdateCompanyModalProps) => {
             return (
               <Form>
                 <Stack p={20} gap={20}>
-                  <Text fw={600}>Tambah Perusahaan</Text>
+                  <Text fw={600}>Ubah Perusahaan</Text>
 
                   <TextInput
                     withAsterisk
@@ -67,15 +65,6 @@ const UpdateCompanyModal = ({ initialValues }: UpdateCompanyModalProps) => {
                     onBlur={handleBlur}
                     error={touched.company_code && errors.company_code}
                   />
-
-                  {/* <TextInput
-                  label="Warna"
-                  placeholder="#000000"
-                  value={values.color}
-                  onChange={(e) => setFieldValue("color", e.currentTarget.value)}
-                  onBlur={handleBlur}
-                  error={touched.color && errors.color}
-                /> */}
 
                   <Stack gap="xs">
                     <Switch

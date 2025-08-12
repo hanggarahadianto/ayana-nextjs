@@ -21,8 +21,8 @@ export const columnsBaseUser = (
   {
     key: "aksi",
     title: "Aksi",
-    width: 100,
-    minWidth: 100,
+    width: 80,
+    minWidth: 80,
     render: (row) => (
       <Group gap="lg">
         <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="1rem" />} size={"2.2rem"} />
