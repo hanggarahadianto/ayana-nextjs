@@ -52,7 +52,7 @@ export const UserForSuperadminTable = ({ companyId, companyName }: userForSupera
   const columns = columnsBaseUser(openEditModal, handleDeleteCompanyByUser, isLoadingDeletecompanyById);
 
   return (
-    <Card shadow="sm" padding="lg" w={"full"}>
+    <Card shadow="sm" padding="lg">
       <Stack>
         <Group justify="space-between">
           <Text size="xl" fw={600}>

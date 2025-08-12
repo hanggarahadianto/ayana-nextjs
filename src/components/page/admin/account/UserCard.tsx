@@ -15,9 +15,9 @@ export default function UserCard() {
   if (!user) return null;
 
   return (
-    <SimpleGridGlobal cols={1}>
+    <>
       <LoadingGlobal visible={isLoadingCompanies} />
       <UserForSuperadminTable companyId={activeTab?.id || ""} />
-    </SimpleGridGlobal>
+    </>
   );
 }

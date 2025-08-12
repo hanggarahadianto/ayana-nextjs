@@ -24,8 +24,8 @@ const SimpleGridGlobal = ({ children, spacing = "lg", gap = "md", ...props }: Si
       spacing={spacing}
       {...props}
     >
+      {children}
       {/* Menggunakan Stack untuk memberi jarak antar item */}
-      <Stack gap={gap}>{children}</Stack>
     </SimpleGrid>
   );
 };

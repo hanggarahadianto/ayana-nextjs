@@ -3,15 +3,10 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import LoadingGlobal from "@/styles/loading/loading-global";
 import TableComponent from "@/components/common/table/TableComponent";
-import { useCookies } from "@/utils/hook/useCookies";
 import { useModalStore } from "@/store/modalStore";
-import { formatDateRange } from "@/helper/formatDateIndonesia";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
-import SearchTable from "@/components/common/table/SearchTableComponent";
-import { useDebounce } from "use-debounce";
 import AddCompanyModal from "./AddCompanyModal";
 import { columnsBaseCompany } from "./CompanyColumn";
-import { getDataCompany } from "@/api/company/getCompany";
 import { getDataCompanyByUser } from "@/api/company/getCompanyByUser";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 import { useDeleteDataCompanyByUser } from "@/api/company/deleteDataCompany";
@@ -26,14 +21,6 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
-  const [statuscompanyById, setStatuscompanyById] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
-  const [debouncedSearch] = useDebounce(searchTerm, 500);
-
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
-
-  const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "date_inputed";
@@ -51,10 +38,6 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
       user?.id,
       page,
       limit,
-      debouncedSearch,
-      statuscompanyById,
-      formattedStartDate ?? null,
-      formattedEndDate ?? null,
       sortBy,
       sortOrder,
     ],
@@ -85,7 +68,7 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
   console.log("loading", isLoadingCompanyData);
 
   return (
-    <Card shadow="sm" padding="lg" w={"full"}>
+    <Card shadow="sm" padding="lg">
       <Stack>
         <Group justify="space-between">
           <Text size="xl" fw={600}>
