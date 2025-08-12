@@ -15,6 +15,7 @@ import { getDataCompany } from "@/api/company/getCompany";
 import { getDataCompanyByUser } from "@/api/company/getCompanyByUser";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 import { useDeleteDataCompanyByUser } from "@/api/company/deleteDataCompany";
+import UpdateCompanyModal from "./UpdateCompanyModal";
 
 interface companyByIdTableProps {
   companyId: string;
@@ -69,7 +70,7 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
 
   const companyByIdList = companyByIdData?.data.companyList ?? [];
   const startIndex = (page - 1) * limit + 1;
-  const endIndex = Math.min(page * limit, companyByIdData?.data.total_data || 0);
+  const endIndex = Math.min(page * limit, companyByIdData?.data.total_company || 0);
 
   const { mutate: mutateDeleteDatacompanyById, isPending: isLoadingDeletecompanyById } = useDeleteDataCompanyByUser();
   const handleDeleteCompanyByUser = (idToDelete: string) => {
@@ -77,12 +78,14 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
   };
 
   const openEditModal = (companyById: any) => {
-    useModalStore.getState().openModal("editcompanyById", companyById);
+    useModalStore.getState().openModal("editCompany", companyById);
   };
   const columns = columnsBaseCompany(openEditModal, handleDeleteCompanyByUser, isLoadingDeletecompanyById);
 
+  console.log("loading", isLoadingCompanyData);
+
   return (
-    <Card shadow="sm" padding="lg">
+    <Card shadow="sm" padding="lg" w={"full"}>
       <Stack>
         <Group justify="space-between">
           <Text size="xl" fw={600}>
@@ -95,13 +98,13 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
       </Stack>
 
       <Box style={{ position: "relative" }}>
-        {isLoadingCompanyData ? (
+        {isFetchingcompanyByIdData ? (
           <Skeleton height={limit * 60} />
         ) : (
           <TableComponent
             startIndex={startIndex}
             data={companyByIdList}
-            totalAmount={companyByIdData?.data.total_data}
+            totalAmount={companyByIdData?.data.total_company}
             height={"580"}
             columns={columns}
           />
@@ -109,11 +112,11 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
 
         <LoadingGlobal visible={isLoadingCompanyData} />
       </Box>
-      {/* <EditcompanyByIdModal companyId={companyId} initialData={useModalStore((state) => state.modalData)} /> */}
+      <UpdateCompanyModal initialValues={useModalStore((state) => state.modalData)} />
 
       {!isLoadingCompanyData && (
         <PaginationWithLimit
-          total={companyByIdData?.data.total_data ?? 0}
+          total={companyByIdData?.data.total_company ?? 0}
           page={page}
           limit={limit}
           startIndex={startIndex}

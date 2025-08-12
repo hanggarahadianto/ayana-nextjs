@@ -5,14 +5,12 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 import TableComponent from "@/components/common/table/TableComponent";
 import { useModalStore } from "@/store/modalStore";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
-import { useDebounce } from "use-debounce";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 import { useDeleteDataCompanyByUser } from "@/api/company/deleteDataCompany";
 import { columnsBaseUser } from "./UserColumn";
 import { getUserByIdForSuperadmin } from "@/api/user/getUserDataForSuperadmin";
 import AddUserModal from "./AddUserModal";
 import UpdateUserByIdModal from "./UpdateUserModal";
-import { useDisclosure } from "@mantine/hooks";
 
 interface userForSuperadminTableProps {
   companyId: string;
@@ -20,9 +18,6 @@ interface userForSuperadminTableProps {
 }
 export const UserForSuperadminTable = ({ companyId, companyName }: userForSuperadminTableProps) => {
   const { user } = useLoggedInUser();
-
-  const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
-
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
@@ -57,7 +52,7 @@ export const UserForSuperadminTable = ({ companyId, companyName }: userForSupera
   const columns = columnsBaseUser(openEditModal, handleDeleteCompanyByUser, isLoadingDeletecompanyById);
 
   return (
-    <Card shadow="sm" padding="lg">
+    <Card shadow="sm" padding="lg" w={"full"}>
       <Stack>
         <Group justify="space-between">
           <Text size="xl" fw={600}>

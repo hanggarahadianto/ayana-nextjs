@@ -30,7 +30,7 @@ interface ICompanyData {
   status: string;
   page?: number;
   limit?: number;
-  total_data?: number;
+  total_company?: number;
   total_page?: number;
 }
 
@@ -38,4 +38,11 @@ interface ICompanyResponse {
   data: ICompanyData;
   message: string;
   status: string;
+}
+
+// types/company.d.ts
+
+interface IAssignUserToCompany {
+  company_id: string; // ID perusahaan yang dipilih
+  user_ids: string[]; // List ID user yang akan handle
 }

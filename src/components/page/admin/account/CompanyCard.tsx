@@ -3,7 +3,6 @@
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import { Stack, Divider } from "@mantine/core";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 import { CompanyByUserTable } from "./company/GetCompanyByUser";
 
@@ -15,11 +14,6 @@ export default function CompanyCard() {
 
   return (
     <SimpleGridGlobal cols={1}>
-      <SimpleGridGlobal cols={1} gap="20px">
-        <Stack>
-          <Divider />
-        </Stack>
-      </SimpleGridGlobal>
       <LoadingGlobal visible={isLoadingCompanies} />
       <CompanyByUserTable companyId={activeTab?.id || ""} />
     </SimpleGridGlobal>

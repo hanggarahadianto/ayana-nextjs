@@ -6,8 +6,8 @@ import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import ButtonAdd from "@/components/common/button/buttonAdd";
 import { useSubmitCompany } from "@/api/company/postDataCompany";
-import { initialCompanyValues } from "@/utils/initialValues/initialValuesCompany";
 import { companyValidationSchema } from "@/utils/validation/company-validation";
+import { initialCompanyValuesCreate } from "@/utils/initialValues/initialValuesCompany";
 
 interface AddCompanyModalProps {
   companyId: string;
@@ -37,7 +37,7 @@ const AddCompanyModal = ({ companyId, refetchCompanyData }: AddCompanyModalProps
       <ButtonAdd onClick={open} size="3.5rem" />
 
       <Modal opened={opened} onClose={close} size="lg" yOffset="100px">
-        <Formik initialValues={initialCompanyValues} validationSchema={companyValidationSchema} onSubmit={handleSubmit}>
+        <Formik initialValues={initialCompanyValuesCreate} validationSchema={companyValidationSchema} onSubmit={handleSubmit}>
           {({ values, errors, touched, setFieldValue, handleBlur, isSubmitting }) => {
             console.log("values", values);
             console.log("error", errors);

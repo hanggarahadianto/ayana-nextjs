@@ -2,28 +2,26 @@
 
 import React, { memo, useCallback } from "react";
 import { Modal, TextInput, Button, Group, Stack, Switch, Text } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import ButtonAdd from "@/components/common/button/buttonAdd";
-import { useSubmitCompany } from "@/api/company/postDataCompany";
-import { initialCompanyValues } from "@/utils/initialValues/initialValuesCompany";
+import { initialCompanyValuesUpdate } from "@/utils/initialValues/initialValuesCompany";
+import { useUpdateCompanyForm } from "@/api/company/updateDataCompany";
+import { useModalStore } from "@/store/modalStore";
 import { companyValidationSchema } from "@/utils/validation/company-validation";
 
-interface AddCompanyModalProps {
-  companyId: string;
-  refetchCompanyData: () => void;
+interface UpdateCompanyModalProps {
+  initialValues: ICompanyUpdate; // data dari store/modal
 }
 
-const UpdateCompanyModal = ({ companyId, refetchCompanyData }: AddCompanyModalProps) => {
-  const [opened, { open, close }] = useDisclosure(false);
+const UpdateCompanyModal = ({ initialValues }: UpdateCompanyModalProps) => {
+  const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
 
-  const { mutate: postCompany, isPending: isLoadingSubmitCompany } = useSubmitCompany(refetchCompanyData, close);
+  const { mutate: postCompany, isPending: isLoadingSubmitCompany } = useUpdateCompanyForm();
 
-  const handleSubmit = useCallback((values: ICompanyCreate, { setSubmitting }: any) => {
+  const handleSubmit = useCallback((values: ICompanyUpdate, { setSubmitting }: any) => {
     postCompany(values, {
       onSuccess: () => {
-        refetchCompanyData?.();
-        close();
+        closeModal();
         setSubmitting(false);
       },
       onError: () => {
@@ -32,12 +30,18 @@ const UpdateCompanyModal = ({ companyId, refetchCompanyData }: AddCompanyModalPr
     });
   }, []);
 
+  if (modalName !== "editCompany" || !opened || !initialData) return null;
+
   return (
     <>
       <ButtonAdd onClick={open} size="3.5rem" />
 
-      <Modal opened={opened} onClose={close} size="lg" yOffset="100px">
-        <Formik initialValues={initialCompanyValues} validationSchema={companyValidationSchema} onSubmit={handleSubmit}>
+      <Modal opened={opened} onClose={closeModal} size="lg" yOffset="100px">
+        <Formik
+          initialValues={initialCompanyValuesUpdate(initialValues)}
+          validationSchema={companyValidationSchema}
+          onSubmit={handleSubmit}
+        >
           {({ values, errors, touched, setFieldValue, handleBlur, isSubmitting }) => {
             console.log("values", values);
             console.log("error", errors);
@@ -99,7 +103,7 @@ const UpdateCompanyModal = ({ companyId, refetchCompanyData }: AddCompanyModalPr
                   </Stack>
 
                   <Group justify="flex-end">
-                    <Button variant="default" onClick={close}>
+                    <Button variant="default" onClick={closeModal} disabled={isLoadingSubmitCompany}>
                       Batal
                     </Button>
                     <Button type="submit" loading={isSubmitting || isLoadingSubmitCompany}>

@@ -16,14 +16,7 @@ export default function UserCard() {
 
   return (
     <SimpleGridGlobal cols={1}>
-      <SimpleGridGlobal cols={1} gap="20px">
-        <Stack>
-          <Divider />
-        </Stack>
-      </SimpleGridGlobal>
       <LoadingGlobal visible={isLoadingCompanies} />
-      {/* <UserForSuperadminTable companyId={activeTab?.id || ""} /> */}
-
       <UserForSuperadminTable companyId={activeTab?.id || ""} />
     </SimpleGridGlobal>
   );

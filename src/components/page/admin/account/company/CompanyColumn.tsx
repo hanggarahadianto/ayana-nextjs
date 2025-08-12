@@ -17,33 +17,33 @@ export const columnsBaseCompany = (
   isLoading: boolean
 ): Column<ICompanyItem>[] => [
   { key: "company_code", title: "Kode Perusahaan", width: 40, minWidth: 40 },
-  { key: "title", title: "Nama Perusahaan", width: 200, minWidth: 200 },
+  { key: "title", title: "Nama Perusahaan", width: 100, minWidth: 100 },
   {
     key: "is_retail",
     title: "Retail",
-    width: 160,
-    minWidth: 160,
+    width: 40,
+    minWidth: 40,
     render: (item) => (item.is_retail ? "Ya" : "Tidak"),
   },
   {
     key: "has_project",
     title: "Project",
-    width: 160,
-    minWidth: 160,
+    width: 40,
+    minWidth: 40,
     render: (item) => (item.has_project ? "Ya" : "Tidak"),
   },
   {
     key: "has_customer",
     title: "Customer",
-    width: 160,
-    minWidth: 160,
+    width: 40,
+    minWidth: 40,
     render: (item) => (item.has_customer ? "Ya" : "Tidak"),
   },
   {
     key: "aksi",
     title: "Aksi",
-    width: 100,
-    minWidth: 100,
+    width: 40,
+    minWidth: 40,
     render: (row) => (
       <Group gap="lg">
         <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="1rem" />} size={"2.2rem"} />
