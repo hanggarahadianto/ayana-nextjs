@@ -61,13 +61,12 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
     mutateDeleteDatacompanyById(idToDelete);
   };
 
-  const openEditModal = (companyById: any) => {
+  const openEditModal = (companyById: string) => {
     useModalStore.getState().openModal("editCompany", companyById);
   };
-  const openAssignModal = (user: IUserItem) => {
-    useModalStore.getState().openModal("assignUser", user);
+  const openAssignModal = (company: ICompanyItem) => {
+    useModalStore.getState().openModal("assignUser", company);
   };
-  console.log(companyByIdList);
 
   const columns = columnsBaseCompany(openEditModal, openAssignModal, handleDeleteCompanyByUser, isLoadingDeletecompanyById);
 
@@ -100,7 +99,7 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
         <LoadingGlobal visible={isLoadingCompanyData} />
       </Box>
       <UpdateCompanyModal initialValues={useModalStore((state) => state.modalData)} />
-      <AssignUserHandleCompany company={useModalStore((state) => state.modalData)} />
+      <AssignUserHandleCompany />
 
       {!isLoadingCompanyData && (
         <PaginationWithLimit

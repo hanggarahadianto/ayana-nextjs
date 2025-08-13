@@ -13,8 +13,8 @@ interface Column<T> {
 }
 
 export const columnsBaseCompany = (
-  openEditModal: (row: ICompanyItem) => void,
-  openAssignModal: (row: any) => void,
+  openEditModal: (row: string) => void,
+  openAssignModal: (row: ICompanyItem) => void,
   handleDeleteDataCompanyById: (id: string) => void,
   isLoading: boolean
 ): Column<ICompanyItem>[] => [
@@ -66,23 +66,25 @@ export const columnsBaseCompany = (
     title: "Aksi",
     width: 80,
     minWidth: 80,
-    render: (row) => (
-      <Group gap="lg">
-        <BreathingActionIcon
-          onClick={() => openAssignModal(row.id)}
-          icon={<MdEmojiPeople size="1rem" />}
-          size={"2.2rem"}
-          backgroundColor="#5DADE2"
-        />
+    render: (row) => {
+      return (
+        <Group gap="lg">
+          <BreathingActionIcon
+            onClick={() => openAssignModal(row)}
+            icon={<MdEmojiPeople size="1rem" />}
+            size={"2.2rem"}
+            backgroundColor="#5DADE2"
+          />
 
-        <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="1rem" />} size={"2.2rem"} />
-        <ButtonDeleteWithConfirmation
-          isLoading={isLoading}
-          onDelete={() => handleDeleteDataCompanyById(row.id)}
-          description={`Hapus perusahaan ${row.title}?`}
-          size={2.2}
-        />
-      </Group>
-    ),
+          <BreathingActionIcon onClick={() => openEditModal(row.id)} icon={<IconPencil size="1rem" />} size={"2.2rem"} />
+          <ButtonDeleteWithConfirmation
+            isLoading={isLoading}
+            onDelete={() => handleDeleteDataCompanyById(row.id)}
+            description={`Hapus perusahaan ${row.title}?`}
+            size={2.2}
+          />
+        </Group>
+      );
+    },
   },
 ];

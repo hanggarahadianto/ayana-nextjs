@@ -2,7 +2,7 @@ import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import GlobalTab from "@/components/common/tab/TabGlobal";
-import { Card, Stack, Text, Group, Badge, Divider, Flex } from "@mantine/core";
+import { Card, Stack, Text, Group, Badge, Flex } from "@mantine/core";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 import LogoutButton from "./user/ButtonAccountLogout";
 

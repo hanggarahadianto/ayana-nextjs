@@ -33,11 +33,13 @@ const SelectUser: React.FC<SelectUserProps> = ({ userId, value, isuser, onChange
 
   const userList: IUserOption[] = userData?.data?.userList ?? [];
 
-  const options = userList.map((user) => ({
-    value: user.id,
-    label: user.username.charAt(0).toUpperCase() + user.username.slice(1),
-    raw: user,
-  }));
+  const options = userList
+    .filter((user) => user.username.toLowerCase() !== "superadmin") // ⬅️ sembunyikan superadmin
+    .map((user) => ({
+      value: user.id,
+      label: user.username.charAt(0).toUpperCase() + user.username.slice(1),
+      raw: user,
+    }));
 
   return (
     <MultiSelect
