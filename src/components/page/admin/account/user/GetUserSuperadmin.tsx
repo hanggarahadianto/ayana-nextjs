@@ -6,11 +6,11 @@ import TableComponent from "@/components/common/table/TableComponent";
 import { useModalStore } from "@/store/modalStore";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
-import { useDeleteDataCompanyByUser } from "@/api/company/deleteDataCompany";
 import { columnsBaseUser } from "./UserColumn";
 import { getUserByIdForSuperadmin } from "@/api/user/getUserDataForSuperadmin";
 import AddUserModal from "./AddUserModal";
 import UpdateUserByIdModal from "./UpdateUserModal";
+import { useDeleteDataUser } from "@/api/user/deleteDataUser";
 
 interface userForSuperadminTableProps {
   companyId: string;
@@ -41,9 +41,9 @@ export const UserForSuperadminTable = ({ companyId, companyName }: userForSupera
   const startIndex = (page - 1) * limit + 1;
   const endIndex = Math.min(page * limit, userByIdData?.data.total_data || 0);
 
-  const { mutate: mutateDeleteDatacompanyById, isPending: isLoadingDeletecompanyById } = useDeleteDataCompanyByUser();
+  const { mutate: mutateDeleteDataCompanyById, isPending: isLoadingDeletecompanyById } = useDeleteDataUser();
   const handleDeleteCompanyByUser = (idToDelete: string) => {
-    mutateDeleteDatacompanyById(idToDelete);
+    mutateDeleteDataCompanyById(idToDelete);
   };
 
   const openEditModal = (user: IUserUpdate) => {

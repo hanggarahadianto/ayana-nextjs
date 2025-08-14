@@ -1,23 +1,15 @@
-import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
-import LoadingGlobal from "@/styles/loading/loading-global";
-import GlobalTab from "@/components/common/tab/TabGlobal";
 import { Card, Stack, Text, Group, Badge, Flex } from "@mantine/core";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 import LogoutButton from "./user/ButtonAccountLogout";
 
 export default function AccountCard() {
-  const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
   const { user } = useLoggedInUser();
 
   if (!user) return null;
 
   return (
     <SimpleGridGlobal cols={1}>
-      <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
-
-      <LoadingGlobal visible={isLoadingCompanies} />
-
       {/* Card untuk info user */}
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Group p="apart" mb="sm" justify="space-between">

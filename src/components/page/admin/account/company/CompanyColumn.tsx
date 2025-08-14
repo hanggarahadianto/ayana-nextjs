@@ -1,9 +1,9 @@
 import BreathingActionIcon from "@/components/common/button/buttonAction";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { Badge, Group, Stack, Text } from "@mantine/core";
-import { IconPencil, IconPlayerSkipForwardFilled } from "@tabler/icons-react";
+import { IconPencil } from "@tabler/icons-react";
 import { MdEmojiPeople } from "react-icons/md";
 import { ReactNode } from "react";
+import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 interface Column<T> {
   key: string;
   title: string;

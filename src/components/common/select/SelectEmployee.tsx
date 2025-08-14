@@ -5,13 +5,6 @@ import { Badge, Grid, Select, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
-// Custom field to store raw data
-declare module "@mantine/core" {
-  interface ComboboxItemEmployee {
-    raw?: IEmployeeOption;
-  }
-}
-
 interface IEmployeeOption {
   id: string;
   name: string;
@@ -49,14 +42,15 @@ const SelectEmployee: React.FC<SelectEmployeeProps> = ({
     enabled: !!companyId,
   });
 
-  const employeeList = data?.data?.employeeList ?? [];
+  const employeeList: IEmployeeOption[] = data?.data?.employeeList ?? [];
 
-  const placeholderOption = marketerName
+  // Placeholder jika marketerName ada
+  const placeholderOption: { value: string; label: string; meta: IEmployeeOption }[] = marketerName
     ? [
         {
           value: value ?? "",
           label: marketerName,
-          raw: {
+          meta: {
             id: value ?? "",
             name: marketerName,
             is_agent: isAgent,
@@ -65,17 +59,17 @@ const SelectEmployee: React.FC<SelectEmployeeProps> = ({
       ]
     : [];
 
-  const options = [
+  // Gabung placeholder + data asli
+  const options: { value: string; label: string; meta: IEmployeeOption }[] = [
     ...placeholderOption,
-    ...employeeList.map((employee): any => ({
+    ...employeeList.map((employee) => ({
       value: employee.id,
       label: employee.name,
-      raw: employee,
+      meta: employee,
     })),
   ];
 
   const dynamicLabel = isAgent ? "Nama Agen" : label;
-  // console.log("marketer name", marketerName);
 
   return (
     <Select
@@ -94,26 +88,29 @@ const SelectEmployee: React.FC<SelectEmployeeProps> = ({
         dropdown: { cursor: "pointer" },
       }}
       renderOption={({ option }) => {
-        const employee = option.raw as IEmployeeOption;
-        if (!employee) return null;
+        const { name, department, is_agent } = (option as (typeof options)[number]).meta;
 
         return (
           <Grid w="100%" align="center">
             <Grid.Col span={6}>
               <Text size="sm" fw={500}>
-                {employee.name}
+                {name}
               </Text>
             </Grid.Col>
             <Grid.Col span={3}>
-              {!employee.is_agent && employee.department && (
+              {department ? (
                 <Badge color="green" size="sm">
-                  {employee.department}
+                  {department}
+                </Badge>
+              ) : (
+                <Badge color="gray" variant="light" size="sm">
+                  -
                 </Badge>
               )}
             </Grid.Col>
             <Grid.Col span={3}>
-              <Badge color={employee.is_agent ? "teal" : "blue"} size="sm">
-                {employee.is_agent ? "Agen" : "Karyawan"}
+              <Badge color={is_agent ? "teal" : "blue"} size="sm" variant="light">
+                {is_agent ? "Agen" : "Karyawan"}
               </Badge>
             </Grid.Col>
           </Grid>

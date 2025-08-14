@@ -10,8 +10,6 @@ export default function UserCard() {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
   const { user } = useLoggedInUser();
 
-  if (!user) return null;
-
   return (
     <>
       <LoadingGlobal visible={isLoadingCompanies} />

@@ -13,20 +13,17 @@ import UpdateCompanyModal from "./UpdateCompanyModal";
 import { useState } from "react";
 import AssignUserHandleCompany from "./AssignUserHandleCompany";
 
-interface companyByIdTableProps {
-  companyId: string;
-  companyName?: string;
-}
-export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableProps) => {
+export const CompanyByUserTable = () => {
   const { user } = useLoggedInUser();
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "date_inputed";
 
-  const queryEnabled = !!user && !!companyId;
+  const queryEnabled = !!user;
 
   const {
     data: companyByIdData,
@@ -58,7 +55,12 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
 
   const { mutate: mutateDeleteDatacompanyById, isPending: isLoadingDeletecompanyById } = useDeleteDataCompanyByUser();
   const handleDeleteCompanyByUser = (idToDelete: string) => {
-    mutateDeleteDatacompanyById(idToDelete);
+    setLoadingId(idToDelete);
+    mutateDeleteDatacompanyById(idToDelete, {
+      onSettled: () => {
+        setLoadingId(null); // reset setelah selesai
+      },
+    });
   };
 
   const openEditModal = (companyById: string) => {
@@ -75,16 +77,16 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
       <Stack>
         <Group justify="space-between">
           <Text size="xl" fw={600}>
-            Daftar Perusahaan {""} {companyName}
+            Daftar Perusahaan {""}
           </Text>
           <Stack align="flex-end" mb={16}>
-            <AddCompanyModal companyId={companyId} refetchCompanyData={isRefetchCompanyByIdData} />
+            <AddCompanyModal refetchCompanyData={isRefetchCompanyByIdData} />
           </Stack>
         </Group>
       </Stack>
-
+      <LoadingGlobal visible={isLoadingCompanyData} />
       <Box style={{ position: "relative" }}>
-        {isFetchingcompanyByIdData ? (
+        {isLoadingCompanyData ? (
           <Skeleton height={limit * 60} />
         ) : (
           <TableComponent
@@ -95,12 +97,9 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
             columns={columns}
           />
         )}
-
-        <LoadingGlobal visible={isLoadingCompanyData} />
       </Box>
       <UpdateCompanyModal initialValues={useModalStore((state) => state.modalData)} />
       <AssignUserHandleCompany />
-
       {!isLoadingCompanyData && (
         <PaginationWithLimit
           total={companyByIdData?.data.total_company ?? 0}
@@ -121,3 +120,5 @@ export const CompanyByUserTable = ({ companyId, companyName }: companyByIdTableP
     </Card>
   );
 };
+{
+}

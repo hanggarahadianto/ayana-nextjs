@@ -1,7 +1,7 @@
 "use client";
 
 import React, { memo, useCallback } from "react";
-import { Modal, TextInput, Button, Group, Stack, Switch, Text } from "@mantine/core";
+import { Modal, TextInput, Button, Group, Stack, Switch, Text, NumberInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import ButtonAdd from "@/components/common/button/buttonAdd";
@@ -10,11 +10,10 @@ import { companyValidationSchema } from "@/utils/validation/company-validation";
 import { initialCompanyValuesCreate } from "@/utils/initialValues/initialValuesCompany";
 
 interface AddCompanyModalProps {
-  companyId: string;
   refetchCompanyData: () => void;
 }
 
-const AddCompanyModal = ({ companyId, refetchCompanyData }: AddCompanyModalProps) => {
+const AddCompanyModal = ({ refetchCompanyData }: AddCompanyModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const { mutate: postCompany, isPending: isLoadingSubmitCompany } = useSubmitCompany(refetchCompanyData, close);
@@ -39,8 +38,8 @@ const AddCompanyModal = ({ companyId, refetchCompanyData }: AddCompanyModalProps
       <Modal opened={opened} onClose={close} size="lg" yOffset="100px">
         <Formik initialValues={initialCompanyValuesCreate} validationSchema={companyValidationSchema} onSubmit={handleSubmit}>
           {({ values, errors, touched, setFieldValue, handleBlur, isSubmitting }) => {
-            console.log("values", values);
-            console.log("error", errors);
+            // console.log("values", values);
+            // console.log("error", errors);
             return (
               <Form>
                 <Stack p={20} gap={20}>
@@ -56,24 +55,16 @@ const AddCompanyModal = ({ companyId, refetchCompanyData }: AddCompanyModalProps
                     error={touched.title && errors.title}
                   />
 
-                  <TextInput
+                  <NumberInput
+                    hideControls
                     withAsterisk
                     label="Kode Perusahaan"
                     placeholder="Contoh: 001"
                     value={values.company_code}
-                    onChange={(e) => setFieldValue("company_code", e.currentTarget.value)}
+                    onChange={(e) => setFieldValue("company_code", e.toString())}
                     onBlur={handleBlur}
                     error={touched.company_code && errors.company_code}
                   />
-
-                  {/* <TextInput
-                  label="Warna"
-                  placeholder="#000000"
-                  value={values.color}
-                  onChange={(e) => setFieldValue("color", e.currentTarget.value)}
-                  onBlur={handleBlur}
-                  error={touched.color && errors.color}
-                /> */}
 
                   <Stack gap="xs">
                     <Switch

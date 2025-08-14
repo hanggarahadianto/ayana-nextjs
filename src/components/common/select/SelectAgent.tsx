@@ -3,18 +3,6 @@ import { Badge, Grid, Select, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
-// Tambahkan raw field ke ComboboxItem agar bisa dipakai di renderOption
-declare module "@mantine/core" {
-  interface ComboboxItem {
-    raw?: {
-      id: string;
-      name: string;
-      department?: string;
-      is_agent?: boolean;
-    };
-  }
-}
-
 interface IAgentOption {
   id: string;
   name: string;
@@ -44,10 +32,11 @@ const SelectAgent: React.FC<SelectAgentProps> = ({ companyId, value, isAgent, on
 
   const agentList: IAgentOption[] = agentData?.data?.employeeList ?? [];
 
+  // Pakai 'meta' biar nggak bentrok sama raw di global type
   const options = agentList.map((agent) => ({
     value: agent.id,
     label: agent.name,
-    raw: agent, // untuk renderOption
+    meta: agent,
   }));
 
   return (
@@ -74,7 +63,7 @@ const SelectAgent: React.FC<SelectAgentProps> = ({ companyId, value, isAgent, on
         },
       }}
       renderOption={({ option }) => {
-        const { name, department, is_agent } = option.raw || {};
+        const { name, department, is_agent } = (option as (typeof options)[number]).meta;
 
         return (
           <Grid w="100%" align="center">

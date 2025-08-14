@@ -8,8 +8,6 @@ import UserCard from "./UserCard";
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 
 export default function AccountComponent() {
-  const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
-
   return (
     <>
       <AccountAdminCard />

@@ -45,9 +45,9 @@ const ButtonDeleteWithConfirmation: React.FC<ButtonDeleteProps> = ({ onDelete, i
           radius="xl"
           variant="gradient"
           gradient={{ from: "red", to: "orange", deg: 90 }}
-          disabled={isLoading}
+          // disabled={isLoading}
         >
-          {isLoading ? <Loader color="white" size="xs" /> : <IconTrash size="1rem" />}
+          <IconTrash size="1rem" />
         </ActionIcon>
       </div>
     </>

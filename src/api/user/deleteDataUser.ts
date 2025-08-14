@@ -3,21 +3,21 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import { APIAxiosInstance } from "../../lib";
 
-const handleDeleteCompanyByUser = async (idToDelete: string): Promise<AxiosResponse<any>> => {
-  return APIAxiosInstance.delete(`company/delete/${idToDelete}`);
+const handleDeleteUser = async (idToDelete: string): Promise<AxiosResponse<any>> => {
+  return APIAxiosInstance.delete(`user/delete/${idToDelete}`);
 };
 
 // Mutation function for deleting a project
-export const useDeleteDataCompanyByUser = () => {
+export const useDeleteDataUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (idToDelete: string) => handleDeleteCompanyByUser(idToDelete), // Define mutation function explicitly
+    mutationFn: (idToDelete: string) => handleDeleteUser(idToDelete), // Define mutation function explicitly
     onSuccess: async (data) => {
       if (data.status === 200) {
         await Promise.all([
           queryClient.refetchQueries({
-            queryKey: ["getCompanyByIdData"],
+            queryKey: ["getUserByIdData"],
             exact: false,
           }),
         ]);

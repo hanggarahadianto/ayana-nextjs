@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useMemo } from "react";
-import { Modal, Button, Group, Stack, Text, Badge, ActionIcon } from "@mantine/core";
+import { Modal, Button, Group, Stack, Text, ActionIcon, Card, Grid, ScrollArea, Divider } from "@mantine/core";
 import { Form, Formik } from "formik";
 import { useModalStore } from "@/store/modalStore";
 import { useAssignUserToCompany } from "@/api/company/assignCompanyHandleUser";
@@ -8,17 +8,33 @@ import SelectUser from "@/components/common/select/SelectUserForSuperadmin";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 import { IconX } from "@tabler/icons-react";
 
+// --- Typing ringan untuk modalData ---
+interface ICompanyUser {
+  id: string; // id relasi (opsional dipakai)
+  user_id: string; // id user asli (ini yang dipakai API)
+  username: string;
+  role?: string;
+}
+interface ICompanyModalData {
+  id: string;
+  title: string;
+  users?: ICompanyUser[];
+}
+
 const AssignUserHandleCompanyModal = () => {
   const { user } = useLoggedInUser();
   const { opened, modalName, modalData, closeModal } = useModalStore();
 
+  const company = (modalData || {}) as ICompanyModalData;
   const userId = user?.id ?? "";
+
   const { mutate: assignUser, isPending: isLoadingSubmit } = useAssignUserToCompany(userId);
 
-  const initialUserIds = useMemo(() => modalData?.users?.map((u: any) => u.user_id) || [], [modalData]);
+  // selalu panggil hooks di atas, sebelum early-return
+  const initialUserIds = useMemo<string[]>(() => company?.users?.map((u) => u.user_id) || [], [company]);
 
   const handleSubmit = useCallback(
-    (values: { company_id: string; user_ids: string[] }, { setSubmitting }: any) => {
+    (values: { company_id: string; user_ids: string[] }, { setSubmitting }: { setSubmitting: (v: boolean) => void }) => {
       assignUser(values, {
         onSuccess: () => {
           closeModal();
@@ -32,14 +48,15 @@ const AssignUserHandleCompanyModal = () => {
     [assignUser, closeModal]
   );
 
-  // hanya render kalau modal benar & dibuka
-  if (modalName !== "assignUser" || !opened) return null;
+  // render hanya saat modal assign terbuka
+  const isAssignOpen = opened && modalName === "assignUser";
+  if (!isAssignOpen) return null;
 
   return (
-    <Modal opened={opened} onClose={closeModal} size="40%" yOffset="100px" title={`Tugaskan Pengguna ke ${modalData?.title}`}>
+    <Modal opened={opened} onClose={closeModal} size="40%" yOffset="100px" title={`Tugaskan Pengguna • ${company?.title ?? ""}`}>
       <Formik
         initialValues={{
-          company_id: modalData?.id || "",
+          company_id: company?.id || "",
           user_ids: initialUserIds,
         }}
         validationSchema={assignUserValidationSchema}
@@ -47,7 +64,6 @@ const AssignUserHandleCompanyModal = () => {
         enableReinitialize
       >
         {({ values, setFieldValue, isSubmitting }) => {
-          // Fungsi hapus user dari list
           const handleRemoveUser = (id: string) => {
             setFieldValue(
               "user_ids",
@@ -55,49 +71,79 @@ const AssignUserHandleCompanyModal = () => {
             );
           };
 
+          const selectedUsers = useMemo<ICompanyUser[]>(
+            () => (company?.users || []).filter((u) => values.user_ids.includes(u.user_id)),
+            [company?.users, values.user_ids]
+          );
+
           return (
             <Form>
               <Stack p={20} gap={20}>
-                {/* List user yang sudah ada */}
+                {/* Seksi: Pengguna saat ini */}
                 <Stack gap={8}>
-                  <Text fw={600}>Pengguna Saat Ini</Text>
-                  <Stack gap={16} mt={"20px"}>
-                    {modalData?.users?.length > 0 ? (
-                      modalData.users
-                        .filter((u: any) => values.user_ids.includes(u.user_id))
-                        .map((u: any) => (
-                          <Badge
-                            key={u.user_id}
-                            variant="light"
-                            color="blue"
-                            size="lg"
-                            rightSection={
-                              <ActionIcon size="sm" color="red" radius="xl" onClick={() => handleRemoveUser(u.user_id)}>
-                                <IconX size={14} />
-                              </ActionIcon>
-                            }
-                          >
-                            {u.username} ({u.role})
-                          </Badge>
-                        ))
+                  <Text fw={700} size="sm">
+                    Pengguna Saat Ini
+                  </Text>
+
+                  <Card withBorder radius="md" padding="md">
+                    {selectedUsers.length > 0 ? (
+                      <ScrollArea.Autosize mah={220}>
+                        <Stack gap={10}>
+                          {selectedUsers.map((u) => (
+                            <Card key={u.user_id} withBorder radius="sm" padding="xs">
+                              <Grid align="center">
+                                <Grid.Col span={10}>
+                                  <Text size="sm" fw={600} lh={1.2}>
+                                    {u.username}
+                                  </Text>
+                                  <Text size="xs" c="dimmed">
+                                    {u.role || "-"}
+                                  </Text>
+                                </Grid.Col>
+                                <Grid.Col span={2}>
+                                  <Group justify="flex-end">
+                                    <ActionIcon
+                                      size="sm"
+                                      color="red"
+                                      radius="xl"
+                                      onClick={() => handleRemoveUser(u.user_id)}
+                                      aria-label={`Hapus ${u.username}`}
+                                    >
+                                      <IconX size={14} />
+                                    </ActionIcon>
+                                  </Group>
+                                </Grid.Col>
+                              </Grid>
+                            </Card>
+                          ))}
+                        </Stack>
+                      </ScrollArea.Autosize>
                     ) : (
                       <Text size="sm" c="dimmed">
                         Belum ada pengguna
                       </Text>
                     )}
-                  </Stack>
+                  </Card>
                 </Stack>
 
-                {/* Pilih user baru */}
+                <Divider />
+
+                {/* Seksi: Tambah pengguna baru */}
                 <Stack gap={8}>
-                  <Text fw={600} mb={"20px"}>
+                  <Text fw={700} size="sm" mb={"12px"}>
                     Tambah Pengguna Baru
                   </Text>
-                  <SelectUser userId={userId} value={values.user_ids} isuser={false} onChange={(val) => setFieldValue("user_ids", val)} />
+                  <SelectUser
+                    userId={userId}
+                    value={values.user_ids}
+                    isuser={false}
+                    onChange={(val) => setFieldValue("user_ids", val)}
+                    label="Pilih Pengguna"
+                  />
                 </Stack>
 
-                {/* Tombol aksi */}
-                <Group justify="flex-end" mt="xl">
+                {/* Aksi */}
+                <Group justify="flex-end" mt="60px">
                   <Button variant="default" onClick={closeModal} disabled={isLoadingSubmit}>
                     Batal
                   </Button>
