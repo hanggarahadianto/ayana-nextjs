@@ -10,9 +10,7 @@ export const getInitialValuesCreateUser = (): IUserCreate => ({
 export const getInitialValuesUpdateUser = (user: IUserUpdate): IUserUpdate => ({
   id: user.id, // wajib ada
   username: user.username || "",
-  // password: "",
-  // password_confirm: "",
-  // password: user.password || "",
-  // password_confirm: user.password || "",
+  password: "",
+  password_confirm: "",
   role: user.role || "",
 });

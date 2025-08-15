@@ -13,7 +13,7 @@ interface UpdateUserByIdModalProps {
   initialValues: IUserUpdate; // data dari store/modal
 }
 
-const UpdateUserByIdModal = ({ companyId, initialValues }: UpdateUserByIdModalProps) => {
+const UpdateUserByIdModal = ({ initialValues }: UpdateUserByIdModalProps) => {
   const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
   const { mutate: updateUser, isPending: isLoadingUpdate } = useUpdateUserForm();
 
@@ -23,17 +23,14 @@ const UpdateUserByIdModal = ({ companyId, initialValues }: UpdateUserByIdModalPr
         id: initialData.id,
         username: values.username,
         role: values.role,
-        // password: values.password?.trim() || "",
-        // password_confirm: values.password_confirm?.trim() || "",
+        password: values.password?.trim() || "",
+        password_confirm: values.password_confirm?.trim() || "",
       };
       updateUser(payload, {
-        onSuccess: () => {
-          closeModal(); // hanya tutup modal kalau berhasil
-        },
-        onError: () => {},
+        onSuccess: closeModal,
       });
     },
-    [companyId]
+    [initialData, updateUser, closeModal]
   );
 
   if (modalName !== "editUser" || !opened || !initialData) return null;
@@ -46,8 +43,8 @@ const UpdateUserByIdModal = ({ companyId, initialValues }: UpdateUserByIdModalPr
         onSubmit={handleSubmit}
       >
         {({ values, errors, touched, setFieldValue, handleBlur }) => {
-          //   console.log("values", values);
-          //   console.log("err", errors);
+          // console.log("values", values);
+          // console.log("err", errors);
 
           return (
             <Form>

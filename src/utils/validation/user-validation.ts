@@ -9,20 +9,18 @@ export const userValidationSchemaCreate = yup.object({
     .required("Password Confirm wajib diisi")
     .min(3, "Password Confirm minimal 3 karakter")
     .max(50, "Password Confirm maksimal 50 karakter"),
+  role: yup.string().required("Role wajib diisi"),
 });
+
 export const userValidationSchemaUpdate = yup.object({
-  username: yup
+  username: yup.string().required("Username wajib diisi").min(3, "Username minimal 3 karakter").max(50, "Username maksimal 20 karakter"),
+
+  password: yup.string().required("Password wajib diisi").min(3, "Password minimal 3 karakter").max(50, "Password maksimal 50 karakter"),
+
+  password_confirm: yup
     .string()
-    .required("Username wajib diisi")
-    .min(3, "Username minimal 3 karakter")
-    .max(50, "Username maksimal 50 karakter")
-    .nullable(), // biar boleh null
-
-  // password: yup.string().required("Username wajib diisi").min(3, "Password minimal 3 karakter").max(50, "Password maksimal 50 karakter"),
-
-  // password_confirm: yup
-  //   .string()
-  //   .required("Password Confirm wajib diisi")
-  //   .min(3, "Password Confirm minimal 3 karakter")
-  //   .max(50, "Password Confirm maksimal 50 karakter"),
+    .required("Password Confirm wajib diisi")
+    .min(3, "Password Confirm minimal 3 karakter")
+    .max(50, "Password Confirm maksimal 50 karakter"),
+  role: yup.string().required("Role wajib diisi"),
 });
