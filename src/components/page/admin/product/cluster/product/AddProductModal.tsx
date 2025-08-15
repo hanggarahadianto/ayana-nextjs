@@ -13,9 +13,6 @@ import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import UploadImageField from "./UploadProductImageForm";
 import { useUploadImages } from "@/api/products/uploadImageProduct";
 
-const handleChangeProduct = (field: keyof IProductCreate, value: any, setFieldValue: (field: string, value: any) => void) => {
-  setFieldValue(field, value);
-};
 interface Props {
   clusterId?: string | null;
 }
@@ -97,6 +94,10 @@ const AddProductModal = ({ clusterId }: Props) => {
     },
     [postDataProduct, uploadImage, clusterId, selectedFiles, close]
   );
+
+  const handleChangeProduct = (field: keyof IProductCreate, value: any, setFieldValue: (field: string, value: any) => void) => {
+    setFieldValue(field, value);
+  };
 
   return (
     <SimpleGridGlobal cols={1}>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { Modal, TextInput, Button, Group, Select, Textarea, InputWrapper, NumberInput, ActionIcon, Stack } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
@@ -10,6 +10,8 @@ import { FiSettings } from "react-icons/fi";
 import { useUpdateProjectForm } from "@/api/project/editDataProject";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { getInitialValuesUpdateProject } from "@/utils/initialValues/initialValuesProject";
+import { projectStatusOptions } from "@/constants/dictionary";
+import { validationSchemaProject } from "@/utils/validation/project-validation";
 
 const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: IProjectUpdate; refetchProjectData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -22,10 +24,9 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
     setSubmitting(false);
   };
 
-  useEffect(() => {
-    if (initialData) {
-    }
-  }, [initialData]);
+  const handleChangeProject = (field: keyof IProjectCreate, value: any, setFieldValue: (field: string, value: any) => void) => {
+    setFieldValue(field, value);
+  };
 
   return (
     <>
@@ -39,6 +40,7 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
       <Modal opened={opened} onClose={close} size="xl" yOffset="100px">
         <Formik
           initialValues={getInitialValuesUpdateProject(initialData)}
+          validationSchema={validationSchemaProject}
           enableReinitialize
           validateOnBlur={false}
           validateOnChange={true}
@@ -46,25 +48,46 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
           onSubmit={handleSubmit}
         >
           {({ values, errors, touched, setFieldValue, handleBlur }) => {
-            const handleInputChange = (setFieldValue: any, field: string, value: any) => {
-              setFieldValue(field, value); // Update field value in Formik
-            };
+            console.log("values", values);
+            console.log("erorr", errors);
             return (
               <Form>
                 <Stack p={20}>
-                  <InputWrapper required error={touched.project_name && errors.project_name ? errors.project_name : undefined}>
+                  <Group>
                     <TextInput
-                      label="Nama Proyek"
-                      value={values.project_name}
-                      onChange={(event) => setFieldValue("project_name", event.target.value)}
+                      label="Nama Lokasi"
+                      withAsterisk
+                      error={touched.location && errors.location ? errors.location : undefined}
+                      placeholder="Pilih Lokasi"
+                      onChange={(event) => handleChangeProject("location", event.currentTarget.value.toUpperCase(), setFieldValue)}
                     />
-                  </InputWrapper>
+
+                    <TextInput
+                      label="Nama Blok"
+                      withAsterisk
+                      error={touched.unit && errors.unit ? errors.unit : undefined}
+                      value={values?.unit.toUpperCase()}
+                      placeholder="Masukan Nama Blok"
+                      onChange={(event) => handleChangeProject("unit", event.currentTarget.value.toUpperCase(), setFieldValue)}
+                    />
+
+                    <TextInput
+                      error={touched.type && errors.type ? errors.type : undefined}
+                      label="Tipe"
+                      placeholder="Contoh: 45 / 72"
+                      value={values.type}
+                      onChange={(e) => {
+                        const inputValue = e.currentTarget.value;
+                        handleChangeProject("type", inputValue, setFieldValue);
+                      }}
+                    />
+                  </Group>
 
                   <InputWrapper required error={touched.project_leader && errors.project_leader ? errors.project_leader : undefined}>
                     <TextInput
                       label="Penanggung Jawab"
                       value={values.project_leader}
-                      onChange={(event) => setFieldValue("project_leader", event.target.value)}
+                      onChange={(event) => handleChangeProject("project_leader", event.target.value, setFieldValue)}
                     />
                   </InputWrapper>
 
@@ -72,7 +95,7 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
                     <TextInput
                       label="Investor"
                       value={values.investor}
-                      onChange={(event) => setFieldValue("investor", event.target.value.toUpperCase())}
+                      onChange={(event) => handleChangeProject("investor", event.target.value.toUpperCase(), setFieldValue)}
                     />
                   </InputWrapper>
 
@@ -85,7 +108,7 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
                       onChange={(event) => {
                         const rawValue = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
                         const numericValue = Number(rawValue) || 0;
-                        setFieldValue("total_cost", numericValue); // Store as number
+                        handleChangeProject("total_cost", numericValue, setFieldValue); // Store as number
                       }}
                     />
                   </InputWrapper>
@@ -96,7 +119,7 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
                         label="Durasi Project"
                         placeholder="Pilih Durasi Waktu"
                         value={values.project_time}
-                        onChange={(value) => setFieldValue("project_time", value)}
+                        onChange={(value) => handleChangeProject("project_time", value, setFieldValue)}
                         data={[
                           { value: "35", label: "35 Hari" },
                           { value: "45", label: "45 Hari" },
@@ -125,7 +148,7 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
                           rightSection={<IconCalendar size={18} />}
                           value={values.project_start ? new Date(values.project_start) : null} // ✅ Ensure it's always a Date
                           onChange={(value: Date | null) => {
-                            handleInputChange(setFieldValue, "project_start", value ? value.toISOString() : null);
+                            handleChangeProject("project_start", value ? value.toISOString() : null, setFieldValue);
                           }}
                           onBlur={handleBlur}
                         />
@@ -148,7 +171,7 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
                           rightSection={<IconCalendar size={18} />}
                           value={values.project_end ? new Date(values.project_end) : null} // ✅ Ensure it's always a Date
                           onChange={(value: Date | null) => {
-                            handleInputChange(setFieldValue, "project_end", value ? value.toISOString() : null);
+                            handleChangeProject("project_end", value ? value.toISOString() : null, setFieldValue);
                           }}
                           onBlur={handleBlur}
                         />
@@ -159,7 +182,16 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
                   <Textarea
                     label="Note"
                     value={values.note}
-                    onChange={(event) => setFieldValue("note", event.target.value.toUpperCase())}
+                    error={touched.note && errors.note ? errors.note : undefined}
+                    onChange={(event) => handleChangeProject("note", event.target.value.toUpperCase(), setFieldValue)}
+                  />
+                  <Select
+                    error={touched.project_status && errors.project_status ? errors.project_status : undefined}
+                    placeholder="Pilih Status"
+                    value={values.project_status}
+                    onChange={(value) => handleChangeProject("project_status", value, setFieldValue)}
+                    data={projectStatusOptions}
+                    required
                   />
                   <Group justify="flex-end" mt="md">
                     <Button onClick={close} variant="default">

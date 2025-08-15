@@ -1,9 +1,10 @@
-import { Card, Grid, Text, Group, Stack, SimpleGrid, Box, Divider } from "@mantine/core";
+import { Card, Grid, Text, Group, Stack, SimpleGrid, Box, Divider, Badge } from "@mantine/core";
 import AddCashFlowReportModal from "../cashFlow/AddCashFlowReportModal";
 import EditCashFlowReportModal from "../cashFlow/EditCashFlowReportModal";
 import GetCashFlowReportModal from "../cashFlow/GetCashFlowReportModal";
 import { FC } from "react";
 import EditProjectModal from "./EditProjectModal";
+import { projectStatusColors, projectStatusOptions } from "@/constants/dictionary";
 
 const ProjectCardDetail: FC<{
   projectDataDetail?: IProjectItem;
@@ -12,6 +13,10 @@ const ProjectCardDetail: FC<{
   refetchCashFlowData: () => void;
   totalCashIn: any;
 }> = ({ projectDataDetail, cashFlowData, refetchProjectData, refetchCashFlowData, totalCashIn }) => {
+  const statusValue = projectDataDetail?.project_status || "";
+  const statusLabel = projectStatusOptions.find((opt) => opt.value === statusValue)?.label || statusValue;
+  const statusColor = projectStatusColors[statusValue] || "gray";
+
   return (
     <Card
       shadow="xl"
@@ -27,7 +32,7 @@ const ProjectCardDetail: FC<{
         <Grid>
           <Grid.Col span={6}>
             <Text fw={900} size="xl">
-              {projectDataDetail?.project_name}
+              ${projectDataDetail?.location} ${projectDataDetail?.location} ${projectDataDetail?.unit}
             </Text>
           </Grid.Col>
           <Grid.Col span={6}>
@@ -36,16 +41,28 @@ const ProjectCardDetail: FC<{
             </Stack>
           </Grid.Col>
         </Grid>
-        <Text fw={700} size="1.5rem">
-          {projectDataDetail?.investor}
-        </Text>
+        <Group justify="space-between">
+          <Stack>
+            <Text fw={700} size="1.5rem">
+              {projectDataDetail?.investor}
+            </Text>
 
-        <Text fw={400} mt={-4} size="md">
-          {projectDataDetail?.project_leader}
-        </Text>
-        <Text fw={700} size="md">
-          {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(projectDataDetail?.total_cost || 0)}
-        </Text>
+            <Text fw={400} mt={-4} size="md">
+              {projectDataDetail?.project_leader}
+            </Text>
+            <Text fw={700} size="md">
+              {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(projectDataDetail?.total_cost || 0)}
+            </Text>
+          </Stack>
+          <Stack>
+            <Badge bg={statusColor} p="12px">
+              <Text size="xs" fw={800}>
+                {statusLabel}
+              </Text>
+            </Badge>
+          </Stack>
+        </Group>
+
         <Divider mt={-8} my="xs" color="white" />
         <Card
           mt={-12}
@@ -67,19 +84,19 @@ const ProjectCardDetail: FC<{
                 </Text>
                 <Group wrap="wrap" gap="md">
                   <AddCashFlowReportModal
-                    projectName={projectDataDetail?.project_name ?? ""}
+                    projectName={projectDataDetail?.location ?? ""}
                     projectId={projectDataDetail?.id ?? ""}
                     refetchCashFlowData={refetchCashFlowData}
                     cashFlowData={cashFlowData ? [cashFlowData] : undefined}
                   />
                   <EditCashFlowReportModal
-                    projectName={projectDataDetail?.project_name ?? ""}
+                    projectName={projectDataDetail?.location ?? ""}
                     refetchCashFlowData={refetchCashFlowData}
                     cashFlowData={cashFlowData?.data ?? []}
                   />
 
                   <GetCashFlowReportModal
-                    projectName={projectDataDetail?.project_name ?? "-"}
+                    projectName={projectDataDetail?.location ?? "-"}
                     cashFlowData={cashFlowData?.data ?? []}
                     totalCost={totalCashIn}
                   />

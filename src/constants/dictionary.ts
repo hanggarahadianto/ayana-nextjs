@@ -21,6 +21,18 @@ export const houseSaleStatuses = [
   { value: "canceled", label: "Dibatalkan (Cenceled)" },
 ];
 
+export const projectStatusOptions = [
+  { value: "ready", label: "Siap Dibangun" },
+  { value: "on_progress", label: "Dalam Pembangunan" },
+  { value: "done", label: "Selesai" },
+];
+
+export const projectStatusColors: Record<string, string> = {
+  ready: "yellow", // Lebih cerah, eye-catching untuk status awal
+  on_progress: "teal", // Lebih fresh, jelas untuk proses berjalan
+  done: "blue",
+};
+
 export const paymentMethods = [
   { value: "cash", label: "Tunai" },
   { value: "cash_installment", label: "Cicilan" }, // cicilan langsung ke developer

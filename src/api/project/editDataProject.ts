@@ -3,7 +3,6 @@ import { showNotification } from "@mantine/notifications";
 import { APIAxiosInstance } from "../../lib";
 
 const handleEditProjectForm = async (values: IProjectUpdate) => {
-  console.log("values on fetching", values);
   const response = await APIAxiosInstance.put(`/project/edit`, values);
   return response.data; // Return the response data
 };
@@ -13,7 +12,6 @@ export const useUpdateProjectForm = (refetchProjectData: () => void, closeModal:
   return useMutation({
     mutationFn: (values: any) => handleEditProjectForm(values),
     onSuccess: (data: any) => {
-      console.log("pesan sukses terkirim");
       refetchProjectData();
       closeModal();
       showNotification({

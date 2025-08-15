@@ -5,6 +5,7 @@ import Link from "next/link";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import { getProjectStatusDateWithColor } from "@/helper/formatStatusPorject";
+import { projectStatusColors, projectStatusOptions } from "@/constants/dictionary";
 
 interface ProjectCardAdminProps {
   project: IProjectItem;
@@ -12,7 +13,17 @@ interface ProjectCardAdminProps {
 }
 
 const ProjectCardAdmin = ({ project, onDelete }: ProjectCardAdminProps) => {
-  const { text, sisaWaktu, color } = getProjectStatusDateWithColor(project.project_start, project.project_time);
+  const { text, sisaWaktu, color: progressColor } = getProjectStatusDateWithColor(project.project_start, project.project_time);
+
+  const normalizeStatus = (s?: string) => (s || "").toLowerCase().trim();
+
+  // --- Map status -> label & color (pakai dictionary) ---
+  const statusValue = normalizeStatus(project.project_status);
+  const statusOption = projectStatusOptions.find((o) => o.value === statusValue);
+  const statusLabel = statusOption?.label ?? (project.project_status || "");
+  const statusColorName = projectStatusColors[statusValue] ?? "gray";
+  // gunakan warna Mantine agar konsisten (tone 6 untuk kontras bagus)
+  const ribbonBg = `var(--mantine-color-${statusColorName}-6)`;
 
   return (
     <Card
@@ -27,15 +38,38 @@ const ProjectCardAdmin = ({ project, onDelete }: ProjectCardAdminProps) => {
         cursor: "pointer",
         transition: "transform 0.3s ease-in-out, opacity 0.3s ease-in-out",
         transform: "scale(1)",
+        overflow: "hidden",
       }}
       onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
       onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
     >
+      {/* Ribbon status mirip label SALE */}
+      <div
+        aria-label={`Status proyek: ${statusLabel}`}
+        style={{
+          position: "absolute",
+          top: "14px",
+          right: "-42px", // geser ke luar supaya diagonal pas
+          transform: "rotate(45deg)",
+          background: ribbonBg,
+          color: "white",
+          padding: "6px 44px",
+          fontSize: 12,
+          fontWeight: 800,
+          letterSpacing: 0.5,
+          textTransform: "uppercase",
+          pointerEvents: "none",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+        }}
+      >
+        {statusLabel}
+      </div>
+
       <Link href={`/admin/sidebar/project/${project.id}`} passHref style={{ textDecoration: "none" }}>
         <Stack>
           <Stack align="start" gap="md">
             <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
-              {project.project_name}
+              ${project?.location} ${project?.location} ${project.unit}
             </Text>
 
             <Text mt={-12} fw={500} size="sm" style={{ color: "#ffffff" }}>
@@ -57,18 +91,26 @@ const ProjectCardAdmin = ({ project, onDelete }: ProjectCardAdminProps) => {
 
             <Group justify="space-between" align="start" style={{ borderRadius: 8 }}>
               <Stack gap={2} style={{ minHeight: 48 }}>
-                <Text fw={600} c={color}>
+                <Text fw={600} c={progressColor}>
                   {text}
                 </Text>
-                <Text size="xs" fw={300} c="red" style={{ visibility: color === "green" ? "visible" : "hidden", marginTop: -4 }}>
-                  {color === "green" ? sisaWaktu : "placeholder"}
+                <Text
+                  size="xs"
+                  fw={300}
+                  c="red"
+                  style={{
+                    visibility: progressColor === "green" ? "visible" : "hidden",
+                    marginTop: -4,
+                  }}
+                >
+                  {progressColor === "green" ? sisaWaktu : "placeholder"}
                 </Text>
               </Stack>
 
               <ButtonDeleteWithConfirmation
                 isLoading={false}
                 onDelete={() => onDelete(project.id)}
-                description={`Apakah anda ingin menghapus proyek ${project?.project_name} ?`}
+                description={`Apakah anda ingin menghapus proyek ${project?.location} ${project?.location} ${project.unit}} ?`}
                 size={2.5}
               />
             </Group>
