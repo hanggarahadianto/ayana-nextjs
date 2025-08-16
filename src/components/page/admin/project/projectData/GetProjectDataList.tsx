@@ -1,15 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import { Card, Group, SimpleGrid, Text, Stack } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { getDataProject } from "@/api/project/getDataProject";
 import { useDeleteDataProject } from "@/api/project/deleteDataProject";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
-import AddProjectModal from "@/components/page/admin/project/AddProjectModal";
+import AddProjectModal from "@/components/page/admin/project/projectData/AddProjectModal";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import useScreenSize from "@/lib/hook/useScreenSize";
-import { useState } from "react";
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import ProjectCardAdmin from "./ProjectCard";
@@ -55,7 +55,6 @@ const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) 
   const endIndex = Math.min(page * limit, projectData?.data.total || 0);
 
   const { mutate: mutateDeleteDataProject, isPending: isLoadingDeleteDataProject } = useDeleteDataProject(isRefetchProjectData);
-
   const handleDeleteProject = (idToDelete: string) => {
     mutateDeleteDataProject(idToDelete);
   };
@@ -85,10 +84,6 @@ const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) 
               endDate={endDate}
               setEndDate={setEndDate}
               readonly={false}
-              transactionType={null}
-              debitAccountType={null}
-              creditAccountType={null}
-              useCategory={false}
               onRefresh={isRefetchProjectData}
               isFetching={isFetchingProjectData}
             />
@@ -96,7 +91,7 @@ const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) 
         </Card>
 
         <Card shadow="sm" padding="lg" radius="md" withBorder bg={"dark.8"} p={40} mt={20}>
-          <LoadingGlobal visible={isLoadingDeleteDataProject || isLoadingGetProjectData} />
+          <LoadingGlobal visible={isLoadingGetProjectData} />
           <SimpleGrid
             spacing="lg"
             cols={
@@ -105,7 +100,12 @@ const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) 
             style={{ gap: "24px" }}
           >
             {projectList.map((project) => (
-              <ProjectCardAdmin key={project.id} project={project} onDelete={handleDeleteProject} />
+              <ProjectCardAdmin
+                key={project.id}
+                project={project}
+                isLoading={isLoadingDeleteDataProject}
+                handleDeleteProject={handleDeleteProject}
+              />
             ))}
           </SimpleGrid>
           {!isLoadingGetProjectData && (

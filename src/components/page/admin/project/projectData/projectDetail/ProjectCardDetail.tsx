@@ -1,7 +1,7 @@
 import { Card, Grid, Text, Group, Stack, SimpleGrid, Box, Divider, Badge } from "@mantine/core";
-import AddCashFlowReportModal from "../cashFlow/AddCashFlowReportModal";
-import EditCashFlowReportModal from "../cashFlow/EditCashFlowReportModal";
-import GetCashFlowReportModal from "../cashFlow/GetCashFlowReportModal";
+import AddCashFlowReportModal from "./cashFlow/AddCashFlowReportModal";
+import EditCashFlowReportModal from "./cashFlow/EditCashFlowReportModal";
+import GetCashFlowReportModal from "./cashFlow/GetCashFlowReportModal";
 import { FC } from "react";
 import EditProjectModal from "./EditProjectModal";
 import { projectStatusColors, projectStatusOptions } from "@/constants/dictionary";
@@ -11,7 +11,7 @@ const ProjectCardDetail: FC<{
   cashFlowData?: ICashFlowResponse;
   refetchProjectData: () => void;
   refetchCashFlowData: () => void;
-  totalCashIn: any;
+  totalCashIn: number;
 }> = ({ projectDataDetail, cashFlowData, refetchProjectData, refetchCashFlowData, totalCashIn }) => {
   const statusValue = projectDataDetail?.project_status || "";
   const statusLabel = projectStatusOptions.find((opt) => opt.value === statusValue)?.label || statusValue;
@@ -32,7 +32,7 @@ const ProjectCardDetail: FC<{
         <Grid>
           <Grid.Col span={6}>
             <Text fw={900} size="xl">
-              ${projectDataDetail?.location} ${projectDataDetail?.location} ${projectDataDetail?.unit}
+              {projectDataDetail?.project_name}
             </Text>
           </Grid.Col>
           <Grid.Col span={6}>

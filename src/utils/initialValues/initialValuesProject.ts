@@ -8,8 +8,8 @@ export const getInitialValuesCreateProject = (companyId?: string) => ({
   total_cost: 0,
   project_start: "",
   project_end: "",
-  note: "",
   project_status: "ready", // ✅ default langsung ready
+  note: "",
   company_id: companyId ?? "", // ✅ fallback ke string kosong
 });
 

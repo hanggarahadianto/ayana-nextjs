@@ -9,11 +9,16 @@ import { projectStatusColors, projectStatusOptions } from "@/constants/dictionar
 
 interface ProjectCardAdminProps {
   project: IProjectItem;
-  onDelete: (id: string) => void;
+  isLoading: boolean;
+  handleDeleteProject: (id: string) => void;
 }
 
-const ProjectCardAdmin = ({ project, onDelete }: ProjectCardAdminProps) => {
-  const { text, sisaWaktu, color: progressColor } = getProjectStatusDateWithColor(project.project_start, project.project_time);
+const ProjectCardAdmin = ({ project, isLoading, handleDeleteProject }: ProjectCardAdminProps) => {
+  const {
+    text,
+    sisaWaktu,
+    color: progressColor,
+  } = getProjectStatusDateWithColor(project.project_start ? project.project_start.toString() : "", String(project.project_time ?? ""));
 
   const normalizeStatus = (s?: string) => (s || "").toLowerCase().trim();
 
@@ -22,7 +27,7 @@ const ProjectCardAdmin = ({ project, onDelete }: ProjectCardAdminProps) => {
   const statusOption = projectStatusOptions.find((o) => o.value === statusValue);
   const statusLabel = statusOption?.label ?? (project.project_status || "");
   const statusColorName = projectStatusColors[statusValue] ?? "gray";
-  // gunakan warna Mantine agar konsisten (tone 6 untuk kontras bagus)
+
   const ribbonBg = `var(--mantine-color-${statusColorName}-6)`;
 
   return (
@@ -49,27 +54,33 @@ const ProjectCardAdmin = ({ project, onDelete }: ProjectCardAdminProps) => {
         style={{
           position: "absolute",
           top: "14px",
-          right: "-42px", // geser ke luar supaya diagonal pas
+          right: "-42px",
           transform: "rotate(45deg)",
           background: ribbonBg,
           color: "white",
           padding: "6px 44px",
-          fontSize: 12,
+          fontSize: "12px",
           fontWeight: 800,
           letterSpacing: 0.5,
           textTransform: "uppercase",
           pointerEvents: "none",
           boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          maxWidth: "160px",
+          textAlign: "center",
         }}
       >
         {statusLabel}
       </div>
 
-      <Link href={`/admin/sidebar/project/${project.id}`} passHref style={{ textDecoration: "none" }}>
-        <Stack>
+      <Stack>
+        <Link href={`/admin/sidebar/project/${project.id}`} style={{ textDecoration: "none", color: "inherit" }}>
           <Stack align="start" gap="md">
+            {/* Hanya nama project yang jadi link */}
             <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
-              ${project?.location} ${project?.location} ${project.unit}
+              {project?.project_name}
             </Text>
 
             <Text mt={-12} fw={500} size="sm" style={{ color: "#ffffff" }}>
@@ -83,40 +94,41 @@ const ProjectCardAdmin = ({ project, onDelete }: ProjectCardAdminProps) => {
               }).format(project.total_cost || 0)}
             </Text>
           </Stack>
+        </Link>
 
-          <Stack>
-            <Text fw={200} size="sm" style={{ color: "#ffffff" }}>
-              {formatDateIndonesia(project.project_start)} - {formatDateIndonesia(project.project_end)}
-            </Text>
+        <Stack>
+          <Text fw={200} size="sm" style={{ color: "#ffffff" }}>
+            {formatDateIndonesia(project.project_start ?? "")} - {formatDateIndonesia(project.project_end ?? "")}
+          </Text>
 
-            <Group justify="space-between" align="start" style={{ borderRadius: 8 }}>
-              <Stack gap={2} style={{ minHeight: 48 }}>
-                <Text fw={600} c={progressColor}>
-                  {text}
-                </Text>
-                <Text
-                  size="xs"
-                  fw={300}
-                  c="red"
-                  style={{
-                    visibility: progressColor === "green" ? "visible" : "hidden",
-                    marginTop: -4,
-                  }}
-                >
-                  {progressColor === "green" ? sisaWaktu : "placeholder"}
-                </Text>
-              </Stack>
+          <Group justify="space-between" align="start" style={{ borderRadius: 8 }}>
+            <Stack gap={2} style={{ minHeight: 48 }}>
+              <Text fw={600} c={progressColor}>
+                {text}
+              </Text>
+              <Text
+                size="xs"
+                fw={300}
+                c="red"
+                style={{
+                  visibility: progressColor === "green" ? "visible" : "hidden",
+                  marginTop: -4,
+                }}
+              >
+                {progressColor === "green" ? sisaWaktu : "placeholder"}
+              </Text>
+            </Stack>
 
-              <ButtonDeleteWithConfirmation
-                isLoading={false}
-                onDelete={() => onDelete(project.id)}
-                description={`Apakah anda ingin menghapus proyek ${project?.location} ${project?.location} ${project.unit}} ?`}
-                size={2.5}
-              />
-            </Group>
-          </Stack>
+            {/* Tombol delete aman, tidak ikut ke link */}
+            <ButtonDeleteWithConfirmation
+              isLoading={isLoading}
+              onDelete={() => handleDeleteProject(project?.id)}
+              description={`Apakah anda ingin menghapus proyek ${project.project_name} ?`}
+              size={2.5}
+            />
+          </Group>
         </Stack>
-      </Link>
+      </Stack>
     </Card>
   );
 };

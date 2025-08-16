@@ -1,16 +1,16 @@
 "use client";
 
+import { FC } from "react";
 import { Divider, Grid, Stack } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { getDataProjectDetail } from "@/api/project/getDataProjectDetail";
 import { getDataWeeklyProgress } from "@/api/weekly-progress/getDataWeeklyProgress";
 import { getDataCashFlowListByProjectId } from "@/api/cash-flow/getCashFlowListProject";
-import { FC } from "react";
-import ProjectCardDetail from "@/components/page/admin/project/projectDetail/ProjectCardDetail";
-import ProjectCardSummary from "@/components/page/admin/project/projectDetail/ProjectCardSummary";
-import WeeklyProgressMenu from "@/components/page/admin/project/weeklyProgress/WeeklyProgressMenu";
+import ProjectCardDetail from "@/components/page/admin/project/projectData/projectDetail/ProjectCardDetail";
+import ProjectCardSummary from "@/components/page/admin/project/projectData/projectDetail/ProjectCardSummary";
+import WeeklyProgressMenu from "@/components/page/admin/project/projectData/projectDetail/weeklyProgress/WeeklyProgressMenu";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import ProgressBar from "@/components/page/admin/project/projectDetail/progressBar";
+import ProgressBar from "@/components/page/admin/project/projectData/projectDetail/progressBar";
 import { progressProject, totalMaterialCost, totalWorkerCost } from "@/lib/projectProgressUtils";
 
 interface ProjectDetailProps {
@@ -67,7 +67,7 @@ const AdminProjectDetailComponent: FC<ProjectDetailProps> = ({ projectId, initia
             cashFlowData={cashFlowData || undefined}
             refetchProjectData={refetchProjectData}
             refetchCashFlowData={refetchCashFlowData}
-            totalCashIn={totalCashIn}
+            totalCashIn={totalCashIn ?? 0}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 10, sm: 5, md: 5 }}>

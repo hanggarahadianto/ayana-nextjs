@@ -61,7 +61,7 @@ const AddProjectModal = ({ refetchProjectData, companyId }: AddProjectModalProps
           onSubmit={handleSubmit}
         >
           {({ values, errors, touched, setFieldValue, handleBlur }) => {
-            console.log(errors);
+            // console.log(errors);
             return (
               <>
                 <Form>

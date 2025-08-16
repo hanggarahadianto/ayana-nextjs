@@ -4,7 +4,7 @@ import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import GlobalTab from "@/components/common/tab/TabGlobal";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import GetProjectAdminData from "./GetProjectData";
+import GetProjectAdminData from "./projectData/GetProjectDataList";
 
 const ProjectAdminComponent = () => {
   const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();

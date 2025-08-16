@@ -24,7 +24,7 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
     setSubmitting(false);
   };
 
-  const handleChangeProject = (field: keyof IProjectCreate, value: any, setFieldValue: (field: string, value: any) => void) => {
+  const handleChangeProject = (field: keyof IProjectUpdate, value: any, setFieldValue: (field: string, value: any) => void) => {
     setFieldValue(field, value);
   };
 
@@ -48,14 +48,15 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
           onSubmit={handleSubmit}
         >
           {({ values, errors, touched, setFieldValue, handleBlur }) => {
-            console.log("values", values);
-            console.log("erorr", errors);
+            // console.log("values", values);
+            // console.log("erorr", errors);
             return (
               <Form>
                 <Stack p={20}>
                   <Group>
                     <TextInput
                       label="Nama Lokasi"
+                      value={values?.location.toUpperCase()}
                       withAsterisk
                       error={touched.location && errors.location ? errors.location : undefined}
                       placeholder="Pilih Lokasi"
