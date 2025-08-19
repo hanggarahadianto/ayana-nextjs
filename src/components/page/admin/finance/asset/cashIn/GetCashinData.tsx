@@ -14,6 +14,7 @@ import { columnsBaseCashIn } from "./CashInColumn";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import { useDebounce } from "use-debounce";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -24,6 +25,7 @@ interface CashSummaryCardProps {
 }
 
 export const GetCashinData = ({ companyId, companyName, assetType, transactionType, title }: CashSummaryCardProps) => {
+  const { user } = useLoggedInUser();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>("");
@@ -34,6 +36,8 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "inputed_date";
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
+
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: cashinSummaryData,
@@ -68,7 +72,7 @@ export const GetCashinData = ({ companyId, companyName, assetType, transactionTy
         sortBy,
         sortOrder,
       }),
-    enabled: !!companyId,
+    enabled: queryEnabled,
     refetchOnWindowFocus: false,
   });
   const cashInList = cashinSummaryData?.data.assetList ?? [];

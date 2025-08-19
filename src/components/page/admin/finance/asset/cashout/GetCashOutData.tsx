@@ -15,6 +15,7 @@ import PaginationWithLimit from "@/components/common/pagination/PaginationWithLi
 import { useDebounce } from "use-debounce";
 import { columnsBaseCashout } from "./CashOutColumn";
 import DownloadJournalButton from "../../journalEntry/DownloadJournalTransaction";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface CashSummaryCardProps {
   companyId: string;
@@ -25,6 +26,7 @@ interface CashSummaryCardProps {
 }
 
 export const GetCashOutData = ({ companyId, companyName, assetType, transactionType, title }: CashSummaryCardProps) => {
+  const { user } = useLoggedInUser();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
@@ -36,6 +38,8 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "date_inputed"; // bisa juga dari Select nanti
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
+
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: cashOutSummaryData,
@@ -70,7 +74,7 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
         sortBy,
         sortOrder,
       }),
-    enabled: !!companyId,
+    enabled: queryEnabled,
     refetchOnWindowFocus: false,
   });
   const cashOutList = cashOutSummaryData?.data.assetList ?? [];

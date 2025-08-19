@@ -13,6 +13,7 @@ import UpdateTransactionCategory from "./UpdateTransactionCategory";
 import { getDataTransactionCategory } from "@/api/transaction-category/getDataTransactionCategory";
 import { accountTypeOptions, paymentStatus, transactionTypeOptions } from "@/constants/dictionary";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface AccountCardProps {
   companyId: string;
@@ -20,12 +21,16 @@ interface AccountCardProps {
 }
 
 export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardProps) => {
+  const { user } = useLoggedInUser();
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [selectedDebitAccount, setSelectedDebitAccount] = useState<string | null>(null);
   const [selectedCreditAccount, setSelectedCreditAccount] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string | null>("");
+
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: transactionCategoryData,
@@ -43,7 +48,7 @@ export const TransactionCategoryCard = ({ companyId, companyName }: AccountCardP
         selectedCreditAccount,
         status: selectedStatus, // bisa juga dihapus kalau tidak dipakai
       }),
-    enabled: !!companyId,
+    enabled: queryEnabled,
     refetchOnWindowFocus: false,
   });
 

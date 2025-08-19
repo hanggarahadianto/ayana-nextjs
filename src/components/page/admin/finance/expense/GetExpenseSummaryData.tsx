@@ -14,6 +14,7 @@ import SearchTable from "@/components/common/table/SearchTableComponent";
 import { columnsBaseExpense } from "./ExpenseColumn";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import { useDebounce } from "use-debounce";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface GetExpenseDataProps {
   companyId: string;
@@ -21,6 +22,8 @@ interface GetExpenseDataProps {
   title: string;
 }
 export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpenseDataProps) => {
+  const { user } = useLoggedInUser();
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -36,6 +39,8 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
 
   const expenseType = "base";
   const transactionType = "payout";
+
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: expenseData,
@@ -72,7 +77,7 @@ export const GetExpenseSummaryData = ({ companyId, companyName, title }: GetExpe
             sortOrder,
           })
         : null,
-    enabled: !!companyId,
+    enabled: queryEnabled,
     refetchOnWindowFocus: false,
   });
 

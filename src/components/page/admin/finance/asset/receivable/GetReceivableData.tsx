@@ -14,6 +14,7 @@ import { columnsBaseReceivableAsset } from "./ReceivableAssetColumn";
 import { useDebounce } from "use-debounce";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -24,6 +25,8 @@ interface AssetSummaryCardProps {
 }
 
 export const GetReceivableAssetData = ({ companyId, companyName, title, assetType, transactionType }: AssetSummaryCardProps) => {
+  const { user } = useLoggedInUser();
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>("Piutang");
@@ -37,6 +40,8 @@ export const GetReceivableAssetData = ({ companyId, companyName, title, assetTyp
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
   const [selectedReceivableAsset, setSelectedReceivableAsset] = useState<IAssetSummaryItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: receivableAssetSummaryData,
@@ -70,7 +75,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, title, assetTyp
         sortBy,
         sortOrder,
       }),
-    enabled: !!companyId,
+    enabled: queryEnabled,
     refetchOnWindowFocus: false,
   });
 

@@ -14,6 +14,7 @@ import PaginationWithLimit from "@/components/common/pagination/PaginationWithLi
 import { useDebounce } from "use-debounce";
 import { getEquitySummary } from "@/api/finance/getEquitySummary";
 import { columnsBaseEquity } from "./EquityColumn";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface GetEquityDataProps {
   companyId: string;
@@ -22,6 +23,8 @@ interface GetEquityDataProps {
   title: string;
 }
 export const GetEquitySummaryData = ({ companyId, companyName, equityType, title }: GetEquityDataProps) => {
+  const { user } = useLoggedInUser();
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -35,6 +38,8 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
   const sortBy = "date_inputed";
 
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
+
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: equityData,
@@ -68,7 +73,7 @@ export const GetEquitySummaryData = ({ companyId, companyName, equityType, title
             sortOrder,
           })
         : null,
-    enabled: !!companyId,
+    enabled: queryEnabled,
     refetchOnWindowFocus: false,
   });
 

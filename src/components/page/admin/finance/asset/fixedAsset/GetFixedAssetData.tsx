@@ -13,6 +13,7 @@ import SearchTable from "@/components/common/table/SearchTableComponent";
 import { columnsBaseFixAsset } from "./FixAssetColumn";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import { useDebounce } from "use-debounce";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface AssetSummaryCardProps {
   companyId: string;
@@ -23,6 +24,8 @@ interface AssetSummaryCardProps {
 }
 
 export const GetFixedAssetData = ({ companyId, companyName, assetType, transactionType, title }: AssetSummaryCardProps) => {
+  const { user } = useLoggedInUser();
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>("Aset Tetap");
@@ -35,6 +38,8 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "inputed_date"; // bisa juga dari Select nanti
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
+
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: fixAssetSummaryData,
@@ -68,7 +73,7 @@ export const GetFixedAssetData = ({ companyId, companyName, assetType, transacti
         sortBy,
         sortOrder,
       }),
-    enabled: !!companyId,
+    enabled: queryEnabled,
     refetchOnWindowFocus: false,
   });
 

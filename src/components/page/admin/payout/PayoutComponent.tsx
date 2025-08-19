@@ -4,7 +4,7 @@ import UseCompanyTabs from "@/components/common/tab/TabGetCompany";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import GlobalTab from "@/components/common/tab/TabGlobal";
-import { GetOutstandingDebtData } from "../finance/outstandingDebt/GetOutstandingDebtData";
+import { GetOutstandingDebtData } from "../finance/debt/GetOutstandingDebtData";
 import { GetCashOutData } from "../finance/asset/cashout/GetCashOutData";
 import { GetExpenseSummaryData } from "../finance/expense/GetExpenseSummaryData";
 

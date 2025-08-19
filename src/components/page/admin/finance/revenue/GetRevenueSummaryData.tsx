@@ -14,6 +14,7 @@ import PaginationWithLimit from "@/components/common/pagination/PaginationWithLi
 import { useDebounce } from "use-debounce";
 import { getRevenueSummary } from "@/api/finance/getRevenueSummary";
 import { columnsBaseRevenue } from "./RevenueColumn";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface GetRevenueDataProps {
   companyId: string;
@@ -22,6 +23,8 @@ interface GetRevenueDataProps {
   title: string;
 }
 export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, title }: GetRevenueDataProps) => {
+  const { user } = useLoggedInUser();
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -34,6 +37,8 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "date_inputed"; // bisa juga dari Select nanti
+
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: revenueData,
@@ -71,7 +76,7 @@ export const GetRevenueSummaryData = ({ companyId, companyName, revenueType, tit
             sortOrder,
           })
         : null,
-    enabled: !!companyId,
+    enabled: queryEnabled,
     refetchOnWindowFocus: false,
   });
 

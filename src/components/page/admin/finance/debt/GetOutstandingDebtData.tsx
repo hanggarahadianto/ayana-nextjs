@@ -13,6 +13,7 @@ import { columnsBaseDebt } from "./OutstandingDebtColumn";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import { useDebounce } from "use-debounce";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface GetOutStandingDebtDataProps {
   companyId: string;
@@ -23,6 +24,8 @@ interface GetOutStandingDebtDataProps {
 }
 
 export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType, transactionType }: GetOutStandingDebtDataProps) => {
+  const { user } = useLoggedInUser();
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -36,6 +39,8 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "repayment_date";
+
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: outstandingDebtData,
@@ -67,7 +72,7 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType
             endDate: formattedEndDate,
           })
         : null,
-    enabled: !!companyId,
+    enabled: queryEnabled,
     refetchOnWindowFocus: false,
   });
 
