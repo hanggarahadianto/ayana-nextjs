@@ -18,7 +18,6 @@ export const CompanyByUserTable = () => {
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [loadingId, setLoadingId] = useState<string | null>(null);
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "date_inputed";
@@ -55,19 +54,16 @@ export const CompanyByUserTable = () => {
 
   const { mutate: mutateDeleteDatacompanyById, isPending: isLoadingDeletecompanyById } = useDeleteDataCompanyByUser();
   const handleDeleteCompanyByUser = (idToDelete: string) => {
-    setLoadingId(idToDelete);
     mutateDeleteDatacompanyById(idToDelete, {
-      onSettled: () => {
-        setLoadingId(null); // reset setelah selesai
-      },
+      onSettled: () => {},
     });
   };
 
-  const openEditModal = (companyById: string) => {
-    useModalStore.getState().openModal("editCompany", companyById);
+  const openEditModal = (companyData: ICompanyItem) => {
+    useModalStore.getState().openModal("editCompany", companyData);
   };
-  const openAssignModal = (company: ICompanyItem) => {
-    useModalStore.getState().openModal("assignUser", company);
+  const openAssignModal = (companyData: ICompanyItem) => {
+    useModalStore.getState().openModal("assignUser", companyData);
   };
 
   const columns = columnsBaseCompany(openEditModal, openAssignModal, handleDeleteCompanyByUser, isLoadingDeletecompanyById);
@@ -98,7 +94,7 @@ export const CompanyByUserTable = () => {
           />
         )}
       </Box>
-      <UpdateCompanyModal initialValues={useModalStore((state) => state.modalData)} />
+      <UpdateCompanyModal />
       <AssignUserHandleCompany />
       {!isLoadingCompanyData && (
         <PaginationWithLimit

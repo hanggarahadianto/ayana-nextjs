@@ -1,10 +1,11 @@
-import { Card, Grid, Text, Group, Stack, SimpleGrid, Box, Divider, Badge } from "@mantine/core";
+import { Card, Grid, Text, Group, Stack, SimpleGrid, Box, Divider, Badge, Tooltip } from "@mantine/core";
 import AddCashFlowReportModal from "./cashFlow/AddCashFlowReportModal";
 import EditCashFlowReportModal from "./cashFlow/EditCashFlowReportModal";
 import GetCashFlowReportModal from "./cashFlow/GetCashFlowReportModal";
 import { FC } from "react";
 import EditProjectModal from "./EditProjectModal";
 import { projectStatusColors, projectStatusOptions } from "@/constants/dictionary";
+import FinishProjectModal from "./UpdateFinishProject";
 
 const ProjectCardDetail: FC<{
   projectDataDetail?: IProjectItem;
@@ -36,9 +37,19 @@ const ProjectCardDetail: FC<{
             </Text>
           </Grid.Col>
           <Grid.Col span={6}>
-            <Stack variant="white" style={{ cursor: "pointer" }} align="flex-end">
-              <EditProjectModal initialData={projectDataDetail} refetchProjectData={refetchProjectData} />
-            </Stack>
+            <Group style={{ cursor: "pointer" }} align="flex-end" justify="flex-end">
+              <Tooltip label="Selesaikan Project" color="green" withArrow>
+                <div>
+                  <FinishProjectModal initialData={projectDataDetail} refetchProjectData={refetchProjectData} />
+                </div>
+              </Tooltip>
+
+              <Tooltip label="Edit Project" color="blue" withArrow>
+                <div>
+                  <EditProjectModal initialData={projectDataDetail} refetchProjectData={refetchProjectData} />
+                </div>
+              </Tooltip>
+            </Group>
           </Grid.Col>
         </Grid>
         <Group justify="space-between">

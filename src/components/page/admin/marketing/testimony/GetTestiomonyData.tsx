@@ -18,6 +18,7 @@ import { useDeleteTestimony } from "@/api/testimony/deleteTestimony";
 import { columnsBaseTestimony } from "./TestimonyCustomerColumn";
 import { TestimonyCardCarousel } from "./TestimonyCard";
 import UpdateTestimonyModal from "./UpdateTestimonyModal";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface TestimonyTableProps {
   companyId: string;
@@ -25,8 +26,8 @@ interface TestimonyTableProps {
 }
 
 export const TestimonyTable = ({ companyId, companyName }: TestimonyTableProps) => {
-  const { getToken } = useCookies();
-  const token = getToken();
+  const { user } = useLoggedInUser();
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
@@ -39,7 +40,7 @@ export const TestimonyTable = ({ companyId, companyName }: TestimonyTableProps) 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "created_at";
 
-  const queryEnabled = !!token && !!companyId;
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: testimonyData,

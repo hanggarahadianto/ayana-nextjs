@@ -13,12 +13,15 @@ import useScreenSize from "@/lib/hook/useScreenSize";
 import SearchTable from "@/components/common/table/SearchTableComponent";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import ProjectCardAdmin from "./ProjectCard";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface ProjectAdminDataProps {
   companyId: string;
   companyName?: string;
 }
 const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) => {
+  const { user } = useLoggedInUser();
+
   const { isSmallScreen, isMediumScreen, isLaptopScreen } = useScreenSize();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
@@ -28,6 +31,8 @@ const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) 
   const [endDate, setEndDate] = useState<Date | null>(null);
 
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
+
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: projectData,
@@ -46,7 +51,7 @@ const GetProjectAdminData = ({ companyId, companyName }: ProjectAdminDataProps) 
         endDate: formattedEndDate,
         searchTerm: searchTerm ?? undefined,
       }),
-    enabled: !!companyId,
+    enabled: queryEnabled,
     refetchOnWindowFocus: false,
   });
 

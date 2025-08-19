@@ -1,19 +1,13 @@
 import React, { memo, useCallback } from "react";
 import { Modal, TextInput, Button, Group, Stack, Switch, Text } from "@mantine/core";
 import { Form, Formik } from "formik";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import { initialCompanyValuesUpdate } from "@/utils/initialValues/initialValuesCompany";
 import { useUpdateCompanyForm } from "@/api/company/updateDataCompany";
 import { useModalStore } from "@/store/modalStore";
 import { companyValidationSchema } from "@/utils/validation/company-validation";
 
-interface UpdateCompanyModalProps {
-  initialValues: ICompanyUpdate; // data dari store/modal
-}
-
-const UpdateCompanyModal = ({ initialValues }: UpdateCompanyModalProps) => {
+const UpdateCompanyModal = () => {
   const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
-
   const { mutate: postCompany, isPending: isLoadingSubmitCompany } = useUpdateCompanyForm();
 
   const handleSubmit = useCallback((values: ICompanyUpdate, { setSubmitting }: any) => {
@@ -29,18 +23,15 @@ const UpdateCompanyModal = ({ initialValues }: UpdateCompanyModalProps) => {
   }, []);
 
   if (modalName !== "editCompany" || !opened || !initialData) return null;
+  // console.log("initial data", initialData);
 
   return (
     <>
       <Modal opened={opened} onClose={closeModal} size="lg" yOffset="100px">
-        <Formik
-          initialValues={initialCompanyValuesUpdate(initialValues)}
-          validationSchema={companyValidationSchema}
-          onSubmit={handleSubmit}
-        >
+        <Formik initialValues={initialCompanyValuesUpdate(initialData)} validationSchema={companyValidationSchema} onSubmit={handleSubmit}>
           {({ values, errors, touched, setFieldValue, handleBlur, isSubmitting }) => {
-            console.log("values", values);
-            console.log("error", errors);
+            // console.log("values", values);
+            // console.log("error", errors);
             return (
               <Form>
                 <Stack p={20} gap={20}>
@@ -49,7 +40,7 @@ const UpdateCompanyModal = ({ initialValues }: UpdateCompanyModalProps) => {
                   <TextInput
                     withAsterisk
                     label="Nama Perusahaan"
-                    placeholder="Contoh: Agung Sejahtera"
+                    placeholder="Contoh: Maju Sejahtera"
                     value={values.title}
                     onChange={(e) => setFieldValue("title", e.currentTarget.value)}
                     onBlur={handleBlur}

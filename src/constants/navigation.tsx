@@ -1,5 +1,5 @@
 // src/constants/navigation.ts
-import { FaProjectDiagram, FaUser, FaCog, FaNewspaper, FaShoppingBag, FaIdeal, FaMoneyBill, FaWallet, FaUserAlt } from "react-icons/fa";
+import { FaProjectDiagram, FaCog, FaNewspaper, FaShoppingBag, FaIdeal, FaMoneyBill, FaWallet, FaUserAlt } from "react-icons/fa";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { HiOutlineCash } from "react-icons/hi";
 import { ReactNode } from "react"; // Import ReactNode untuk tipe icon

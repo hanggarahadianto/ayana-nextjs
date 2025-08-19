@@ -23,9 +23,9 @@ interface ICompanyCreate {
   title: string;
   company_code: string;
   color: string;
+  has_product: boolean;
   has_customer: boolean;
   has_project: boolean;
-  has_product: boolean;
   is_retail: boolean;
 }
 

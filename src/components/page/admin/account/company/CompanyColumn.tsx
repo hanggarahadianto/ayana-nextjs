@@ -13,7 +13,7 @@ interface Column<T> {
 }
 
 export const columnsBaseCompany = (
-  openEditModal: (row: string) => void,
+  openEditModal: (row: ICompanyItem) => void,
   openAssignModal: (row: ICompanyItem) => void,
   handleDeleteDataCompanyById: (id: string) => void,
   isLoading: boolean
@@ -76,7 +76,7 @@ export const columnsBaseCompany = (
             backgroundColor="#5DADE2"
           />
 
-          <BreathingActionIcon onClick={() => openEditModal(row.id)} icon={<IconPencil size="1rem" />} size={"2.2rem"} />
+          <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="1rem" />} size={"2.2rem"} />
           <ButtonDeleteWithConfirmation
             isLoading={isLoading}
             onDelete={() => handleDeleteDataCompanyById(row.id)}

@@ -55,13 +55,13 @@ const AddCompanyModal = ({ refetchCompanyData }: AddCompanyModalProps) => {
                     error={touched.title && errors.title}
                   />
 
-                  <NumberInput
-                    hideControls
+                  <TextInput
+                    type="number"
                     withAsterisk
                     label="Kode Perusahaan"
                     placeholder="Contoh: 001"
                     value={values.company_code}
-                    onChange={(e) => setFieldValue("company_code", e.toString())}
+                    onChange={(e) => setFieldValue("company_code", e.currentTarget.value)}
                     onBlur={handleBlur}
                     error={touched.company_code && errors.company_code}
                   />

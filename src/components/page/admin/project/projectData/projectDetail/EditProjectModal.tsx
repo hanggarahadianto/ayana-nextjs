@@ -10,7 +10,7 @@ import { FiSettings } from "react-icons/fi";
 import { useUpdateProjectForm } from "@/api/project/editDataProject";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { getInitialValuesUpdateProject } from "@/utils/initialValues/initialValuesProject";
-import { projectStatusOptions } from "@/constants/dictionary";
+import { projectStatusOptions, updateprojectStatusOptions } from "@/constants/dictionary";
 import { validationSchemaProject } from "@/utils/validation/project-validation";
 
 const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: IProjectUpdate; refetchProjectData: () => void }) => {
@@ -191,7 +191,7 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
                     placeholder="Pilih Status"
                     value={values.project_status}
                     onChange={(value) => handleChangeProject("project_status", value, setFieldValue)}
-                    data={projectStatusOptions}
+                    data={updateprojectStatusOptions}
                     required
                   />
                   <Group justify="flex-end" mt="md">

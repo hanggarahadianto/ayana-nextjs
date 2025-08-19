@@ -4,8 +4,7 @@ import { Card, Group, Stack, Text } from "@mantine/core";
 import Link from "next/link";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
-import { getProjectStatusDateWithColor } from "@/helper/formatStatusPorject";
-import { projectStatusColors, projectStatusOptions } from "@/constants/dictionary";
+import { projectStatusOptions } from "@/constants/dictionary";
 
 interface ProjectCardAdminProps {
   project: IProjectItem;
@@ -14,21 +13,13 @@ interface ProjectCardAdminProps {
 }
 
 const ProjectCardAdmin = ({ project, isLoading, handleDeleteProject }: ProjectCardAdminProps) => {
-  const {
-    text,
-    sisaWaktu,
-    color: progressColor,
-  } = getProjectStatusDateWithColor(project.project_start ? project.project_start.toString() : "", String(project.project_time ?? ""));
+  // Ambil label sesuai status
+  const statusOption = projectStatusOptions.find((opt) => opt.value === project.project_status);
+  const statusLabel = project.status_text || statusOption?.label || "Tidak diketahui";
 
-  const normalizeStatus = (s?: string) => (s || "").toLowerCase().trim();
+  const ribbonBg = `var(--mantine-color-${project.color}-6)`;
 
-  // --- Map status -> label & color (pakai dictionary) ---
-  const statusValue = normalizeStatus(project.project_status);
-  const statusOption = projectStatusOptions.find((o) => o.value === statusValue);
-  const statusLabel = statusOption?.label ?? (project.project_status || "");
-  const statusColorName = projectStatusColors[statusValue] ?? "gray";
-
-  const ribbonBg = `var(--mantine-color-${statusColorName}-6)`;
+  // console.log("project", project);
 
   return (
     <Card
@@ -48,7 +39,7 @@ const ProjectCardAdmin = ({ project, isLoading, handleDeleteProject }: ProjectCa
       onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
       onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
     >
-      {/* Ribbon status mirip label SALE */}
+      {/* Ribbon status */}
       <div
         aria-label={`Status proyek: ${statusLabel}`}
         style={{
@@ -78,7 +69,6 @@ const ProjectCardAdmin = ({ project, isLoading, handleDeleteProject }: ProjectCa
       <Stack>
         <Link href={`/admin/sidebar/project/${project.id}`} style={{ textDecoration: "none", color: "inherit" }}>
           <Stack align="start" gap="md">
-            {/* Hanya nama project yang jadi link */}
             <Text fw={900} size="xl" style={{ color: "#ffffff" }}>
               {project?.project_name}
             </Text>
@@ -101,25 +91,22 @@ const ProjectCardAdmin = ({ project, isLoading, handleDeleteProject }: ProjectCa
             {formatDateIndonesia(project.project_start ?? "")} - {formatDateIndonesia(project.project_end ?? "")}
           </Text>
 
+          {/*  */}
           <Group justify="space-between" align="start" style={{ borderRadius: 8 }}>
             <Stack gap={2} style={{ minHeight: 48 }}>
-              <Text fw={600} c={progressColor}>
-                {text}
+              <Text fw={600} c={project.color}>
+                {project.status_text || statusLabel}
               </Text>
-              <Text
-                size="xs"
-                fw={300}
-                c="red"
-                style={{
-                  visibility: progressColor === "green" ? "visible" : "hidden",
-                  marginTop: -4,
-                }}
-              >
-                {progressColor === "green" ? sisaWaktu : "placeholder"}
-              </Text>
-            </Stack>
 
-            {/* Tombol delete aman, tidak ikut ke link */}
+              {project.finish_status && (
+                <Text size="xs" fw={300} c={project.is_on_time ? "green" : "red"} mt={-4}>
+                  {project.finish_status}
+                </Text>
+              )}
+            </Stack>
+            {/*  */}
+
+            {/* Tombol delete */}
             <ButtonDeleteWithConfirmation
               isLoading={isLoading}
               onDelete={() => handleDeleteProject(project?.id)}

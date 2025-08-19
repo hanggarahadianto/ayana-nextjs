@@ -11,16 +11,6 @@ export const initialCompanyValuesCreate: ICompanyCreate = {
   is_retail: false,
 };
 
-// Fungsi untuk menghasilkan nilai awal ketika update company
-// export const getInitialCompanyValues = (initialValues?: ICompanyUpdate): ICompanyUpdate => ({
-//   id: initialValues?.id ?? "",
-//   name: initialValues?.name ?? "",
-//   address: initialValues?.address ?? "",
-//   phone: initialValues?.phone ?? "",
-//   email: initialValues?.email ?? "",
-//   npwp: initialValues?.npwp ?? "",
-// });
-
 export const initialCompanyValuesUpdate = (initialValues?: Partial<ICompanyUpdate>): ICompanyUpdate => ({
   id: initialValues?.id ?? "",
   title: initialValues?.title ?? "",

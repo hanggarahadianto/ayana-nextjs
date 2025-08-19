@@ -8,6 +8,7 @@ import { useState } from "react";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
 import EmployeePerformSales from "./EmployeePerfomanceSales";
 import AgentPerformSales from "./AgentPerfomanceSales";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface SalesDashboardParentProps {
   companyId: string;
@@ -15,15 +16,14 @@ interface SalesDashboardParentProps {
 }
 
 const SalesDashboardParent = ({ companyId, companyName }: SalesDashboardParentProps) => {
-  const { getToken } = useCookies();
-  const token = getToken();
+  const { user } = useLoggedInUser();
 
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
 
-  const queryEnabled = !!token && !!companyId;
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: internalData,

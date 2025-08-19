@@ -15,14 +15,15 @@ import SearchTable from "@/components/common/table/SearchTableComponent";
 import { useDebounce } from "use-debounce";
 import { columnsBaseCustomer } from "./CustomerColumn";
 import SelectCustomerFilter from "@/components/common/select/SelectCustomerStatus";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface CustomerTableProps {
   companyId: string;
   companyName?: string;
 }
 export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) => {
-  const { getToken } = useCookies();
-  const token = getToken();
+  const { user } = useLoggedInUser();
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [statusCustomer, setStatusCustomer] = useState<string | null>(null);
@@ -37,7 +38,7 @@ export const CustomerTable = ({ companyId, companyName }: CustomerTableProps) =>
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "date_inputed";
 
-  const queryEnabled = !!token && !!companyId;
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: customerData,

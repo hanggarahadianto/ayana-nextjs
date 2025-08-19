@@ -21,6 +21,10 @@ export const houseSaleStatuses = [
   { value: "canceled", label: "Dibatalkan (Cenceled)" },
 ];
 
+export const updateprojectStatusOptions = [
+  { value: "ready", label: "Siap Dibangun" },
+  { value: "on_progress", label: "Dalam Pembangunan" },
+];
 export const projectStatusOptions = [
   { value: "ready", label: "Siap Dibangun" },
   { value: "on_progress", label: "Dalam Pembangunan" },
