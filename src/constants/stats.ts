@@ -13,11 +13,11 @@ export const DASHBOARD_QUERY_KEYS = [
 
 // Untuk title non-dashboard
 export const TITLE_QUERY_KEY_MAP: Record<string, string | ((query: any) => boolean)> = {
-  "asset tetap": "jamal",
-  "aset tetaps": "getFixedAssetData",
+  "aset tetap": "getFixedAssetData",
   "uang masuk": "getCashinData",
   "barang dagangan": "getInventoryAssetData",
-  "piutang konsumen": "getReceivableAssetData",
+  "piutang berjalan": "getReceivableAssetData",
+  "piutang lunas": "getReceivableAssetData",
   "uang keluar": "getCashOutData",
   "Pengeluaran biaya": "getExpenseSummaryData",
   "hutang berjalan": "getOutstandingDebtByCompanyId",
