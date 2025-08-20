@@ -79,11 +79,13 @@ export const transactionTypeOptions = [
 ];
 
 export const projectDuration = [
-  { value: "35", label: "35 Hari" },
+  { value: "45", label: "45 Hari" },
   { value: "65", label: "65 Hari" },
   { value: "95", label: "95 Hari" },
   { value: "125", label: "125 Hari" },
-  { value: "150", label: "150 Hari" },
+  { value: "155", label: "155 Hari" },
+  { value: "195", label: "195 Hari" },
+  { value: "265", label: "265 Hari" },
 ];
 
 export const investmentOption = [

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Modal, TextInput, Button, Group, Select, Textarea, InputWrapper, NumberInput, ActionIcon, Stack } from "@mantine/core";
+import { Modal, TextInput, Button, Group, Select, Textarea, InputWrapper, Stack } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
@@ -10,7 +10,7 @@ import { FiSettings } from "react-icons/fi";
 import { useUpdateProjectForm } from "@/api/project/editDataProject";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { getInitialValuesUpdateProject } from "@/utils/initialValues/initialValuesProject";
-import { projectStatusOptions, updateprojectStatusOptions } from "@/constants/dictionary";
+import { projectDuration, updateprojectStatusOptions } from "@/constants/dictionary";
 import { validationSchemaProject } from "@/utils/validation/project-validation";
 
 const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: IProjectUpdate; refetchProjectData: () => void }) => {
@@ -121,13 +121,7 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
                         placeholder="Pilih Durasi Waktu"
                         value={values.project_time}
                         onChange={(value) => handleChangeProject("project_time", value, setFieldValue)}
-                        data={[
-                          { value: "35", label: "35 Hari" },
-                          { value: "45", label: "45 Hari" },
-                          { value: "65", label: "65 Hari" },
-                          { value: "95", label: "95 Hari" },
-                          { value: "125", label: "125 Hari" },
-                        ]}
+                        data={projectDuration}
                       />
                     </InputWrapper>
 
@@ -186,14 +180,17 @@ const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: I
                     error={touched.note && errors.note ? errors.note : undefined}
                     onChange={(event) => handleChangeProject("note", event.target.value.toUpperCase(), setFieldValue)}
                   />
-                  <Select
-                    error={touched.project_status && errors.project_status ? errors.project_status : undefined}
-                    placeholder="Pilih Status"
-                    value={values.project_status}
-                    onChange={(value) => handleChangeProject("project_status", value, setFieldValue)}
-                    data={updateprojectStatusOptions}
-                    required
-                  />
+                  {values.project_status !== "done" && (
+                    <Select
+                      error={touched.project_status && errors.project_status ? errors.project_status : undefined}
+                      placeholder="Pilih Status"
+                      value={values.project_status}
+                      onChange={(value) => handleChangeProject("project_status", value, setFieldValue)}
+                      data={updateprojectStatusOptions}
+                      required
+                    />
+                  )}
+
                   <Group justify="flex-end" mt="md">
                     <Button onClick={close} variant="default">
                       Cancel
