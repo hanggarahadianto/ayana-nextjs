@@ -22,19 +22,22 @@ const SelectCategoryFilter: React.FC<SelectCategoryFilterProps> = ({
   onChange,
   readonly = false,
 }) => {
-  // console.log("transaction type di select category", transactionType);
-
   const { data: transactionCategoryData, isLoading } = useQuery({
-    queryKey: ["getTransactionCategoryByCategoryOnly", companyId, , transactionType || "payin", , debitAccountType, creditAccountType],
-    queryFn: () => getTransactionCategoryByCategoryOnly(companyId, transactionType || "payin", debitAccountType, creditAccountType),
+    queryKey: ["getTransactionCategoryByCategoryOnly", companyId, transactionType, debitAccountType, creditAccountType],
+    queryFn: () => getTransactionCategoryByCategoryOnly(companyId, transactionType, debitAccountType, creditAccountType),
     enabled: !!companyId,
   });
 
   const options =
     transactionCategoryData?.data?.map((category: string) => ({
       label: category,
-      value: category,
+      value: category, // karena BE kasih string, jadi langsung pakai string itu
     })) || [];
+
+  // kalau data kosong return null
+  if (!isLoading && options.length === 0) {
+    return null;
+  }
 
   return (
     <Select
@@ -43,7 +46,7 @@ const SelectCategoryFilter: React.FC<SelectCategoryFilterProps> = ({
       label="Kategori Transaksi"
       placeholder={isLoading ? "Memuat..." : "Pilih Kategori"}
       data={options}
-      value={value}
+      value={value ?? null}
       onChange={onChange}
       searchable
       styles={{

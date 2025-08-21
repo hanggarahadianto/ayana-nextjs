@@ -4,8 +4,8 @@ import { AppShell, Burger, NavLink, Stack, rem, useMantineTheme, useMantineColor
 import { useDisclosure } from "@mantine/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import { useResponsiveLayout } from "@/styles/resposnsiveLayout/resposnvieLayout";
 import Navbar from "@/components/page/landing/navbar";

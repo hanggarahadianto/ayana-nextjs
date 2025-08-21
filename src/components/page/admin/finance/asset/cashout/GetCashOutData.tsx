@@ -26,6 +26,7 @@ interface CashSummaryCardProps {
 }
 
 export const GetCashOutData = ({ companyId, companyName, assetType, transactionType, title }: CashSummaryCardProps) => {
+  console.log("transaction type", transactionType);
   const { user } = useLoggedInUser();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -135,8 +136,8 @@ export const GetCashOutData = ({ companyId, companyName, assetType, transactionT
           setEndDate={setEndDate}
           readonly={false}
           transactionType={transactionType}
-          debitAccountType={"Asset"}
-          creditAccountType={null}
+          debitAccountType={null}
+          creditAccountType={"Asset"}
           useCategory={true}
           onRefresh={isRefetchCashOutData}
           isFetching={isFetchingCashOutData}

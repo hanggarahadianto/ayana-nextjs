@@ -12,6 +12,7 @@ export const getTransactionCategoryByCategoryOnly = async (
   }
 
   const selectByCategory = "true";
+  // const selectByCategory = "true";
 
   const queryParams = new URLSearchParams({
     company_id: companyId,
@@ -22,7 +23,7 @@ export const getTransactionCategoryByCategoryOnly = async (
   }
 
   if (selectByCategory) {
-    queryParams.append("select_by_category", "true");
+    queryParams.append("select_by_category", selectByCategory);
   }
 
   if (debitAccountType) {
