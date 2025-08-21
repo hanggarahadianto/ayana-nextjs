@@ -30,7 +30,15 @@ export const columnsBaseDebt = (
       title: "Kategori",
       width: 180,
       minWidth: 180,
-      render: (item) => (debtType === "going" ? item.debit_category || "-" : item.credit_category || "-"),
+      render: (item) => {
+        if (debtType === "done") {
+          return item.debit_category || "-";
+        }
+        if (debtType === "going") {
+          return item.credit_category || "-";
+        }
+        return "-"; // fallback kalau ada tipe lain
+      },
     },
     {
       key: "amount",

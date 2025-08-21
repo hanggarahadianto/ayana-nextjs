@@ -20,7 +20,7 @@ interface AssetSummaryCardProps {
   companyId: string;
   companyName?: string;
   title: string;
-  assetType?: string;
+  assetType: string;
   transactionType: "payout" | "payin";
 }
 
@@ -29,7 +29,7 @@ export const GetReceivableAssetData = ({ companyId, companyName, title, assetTyp
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>("Piutang");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500); // delay 500ms
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -67,8 +67,8 @@ export const GetReceivableAssetData = ({ companyId, companyName, title, assetTyp
         page,
         limit,
         assetType,
-        debitCategory: selectedCategory,
-        creditCategory: null,
+        debitCategory: null,
+        creditCategory: selectedCategory,
         search: debouncedSearch, // 🔍
         startDate: formattedStartDate,
         endDate: formattedEndDate,
@@ -98,7 +98,13 @@ export const GetReceivableAssetData = ({ companyId, companyName, title, assetTyp
     mutateDeleteDataJournal({ ids });
   };
 
-  const columns = columnsBaseReceivableAsset(handleSendClick, openEditModal, deleteJournalWithIdsOnly, isLoadingDeleteReceivableAsset);
+  const columns = columnsBaseReceivableAsset(
+    handleSendClick,
+    openEditModal,
+    deleteJournalWithIdsOnly,
+    assetType,
+    isLoadingDeleteReceivableAsset
+  );
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -117,16 +123,16 @@ export const GetReceivableAssetData = ({ companyId, companyName, title, assetTyp
         companyId={companyId}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
-        selectedCategory={"Piutang"}
+        selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
         startDate={startDate}
         setStartDate={setStartDate}
         endDate={endDate}
         setEndDate={setEndDate}
-        readonly={true}
-        transactionType={null}
-        debitAccountType={"Asset"}
-        creditAccountType={null}
+        readonly={false}
+        transactionType={transactionType}
+        debitAccountType={null}
+        creditAccountType={"Revenue"}
         useCategory={true}
         onRefresh={isRefetchReceivableAsset}
         isFetching={isFetchingReceivableAsset}

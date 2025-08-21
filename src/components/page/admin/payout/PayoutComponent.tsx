@@ -28,20 +28,20 @@ export default function PayoutComponent() {
 
         <GetExpenseSummaryData companyId={activeTab?.id || ""} companyName={activeTab?.title} title="Pengeluaran" />
 
-        {/* <GetOutstandingDebtData
+        <GetOutstandingDebtData
           companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
           title="Hutang Berjalan"
           debtType="going"
           transactionType={transactionType}
-        /> */}
-        {/* <GetOutstandingDebtData
+        />
+        <GetOutstandingDebtData
           companyId={activeTab?.id || ""}
           companyName={activeTab?.title}
           title="Hutang Lunas"
           debtType="done"
           transactionType={transactionType}
-        /> */}
+        />
       </SimpleGridGlobal>
     </SimpleGridGlobal>
   );

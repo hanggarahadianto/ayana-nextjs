@@ -48,6 +48,13 @@ export default function SearchTable({
   useDateFilter = true,
   useSearch = true,
 }: SearchTableProps) {
+  // console.log("company id", companyId);
+
+  // console.log("SelectCategoryFilter MOUNTED", { companyId, transactionType, debitAccountType, creditAccountType });
+
+  // console.log("use category", useCategory);
+  // console.log("select category", selectedCategory);
+  // console.log("readonly", readonly);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const clearDates = () => {
@@ -59,22 +66,20 @@ export default function SearchTable({
     if (setSearchTerm) setSearchTerm(undefined);
   };
 
-  // console.log("readonly di search table", readonly);
-
-  // console.log("transaction type di search table", transactionType);
-
   return (
     <Group>
       {useCategory && (
-        <SelectCategoryFilter
-          companyId={companyId}
-          value={selectedCategory ?? null}
-          onChange={setSelectedCategory ?? (() => {})}
-          readonly={readonly}
-          transactionType={transactionType ?? null}
-          debitAccountType={debitAccountType ?? null}
-          creditAccountType={creditAccountType ?? null}
-        />
+        <>
+          <SelectCategoryFilter
+            companyId={companyId}
+            value={selectedCategory ?? null}
+            onChange={setSelectedCategory ?? (() => {})}
+            readonly={readonly}
+            transactionType={transactionType ?? null}
+            debitAccountType={debitAccountType ?? null}
+            creditAccountType={creditAccountType ?? null}
+          />
+        </>
       )}
 
       {useSearch && (

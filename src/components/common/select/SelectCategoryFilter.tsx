@@ -40,20 +40,22 @@ const SelectCategoryFilter: React.FC<SelectCategoryFilterProps> = ({
   }
 
   return (
-    <Select
-      clearable={!readonly}
-      disabled={isLoading || readonly}
-      label="Kategori Transaksi"
-      placeholder={isLoading ? "Memuat..." : "Pilih Kategori"}
-      data={options}
-      value={value ?? null}
-      onChange={onChange}
-      searchable
-      styles={{
-        input: { cursor: "pointer" },
-        dropdown: { cursor: "pointer" },
-      }}
-    />
+    <>
+      <Select
+        clearable={!readonly}
+        disabled={isLoading || readonly}
+        label="Kategori Transaksi"
+        placeholder={isLoading ? "Memuat..." : "Pilih Kategori"}
+        data={options}
+        value={value ?? null}
+        onChange={onChange}
+        searchable
+        styles={{
+          input: { cursor: "pointer" },
+          dropdown: { cursor: "pointer" },
+        }}
+      />
+    </>
   );
 };
 

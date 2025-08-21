@@ -10,6 +10,7 @@ export const columnsBaseReceivableAsset = (
   handleSendClick: (row: IAssetSummaryItem) => void,
   openEditModal: (row: IAssetSummaryItem) => void,
   mutateDeleteJournal: (ids: string[]) => void,
+  assetType: string,
   isLoading: boolean
 ) => {
   const baseColumns = [
@@ -36,6 +37,21 @@ export const columnsBaseReceivableAsset = (
       width: 140,
       minWidth: 120,
       render: (item: IAssetSummaryItem) => (item.due_date ? formatDateIndonesia(item.due_date) : " - "),
+    },
+    {
+      key: "kategori",
+      title: "Kategori",
+      width: 180,
+      minWidth: 180,
+      render: (item) => {
+        if (assetType === "receivable") {
+          return item.credit_category || "-";
+        }
+        if (assetType === "receivable_history") {
+          return item.credit_category || "-";
+        }
+        return "-"; // fallback kalau ada tipe lain
+      },
     },
     {
       key: "payment_note",

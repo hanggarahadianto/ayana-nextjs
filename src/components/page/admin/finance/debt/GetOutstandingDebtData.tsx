@@ -24,6 +24,7 @@ interface GetOutStandingDebtDataProps {
 }
 
 export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType, transactionType }: GetOutStandingDebtDataProps) => {
+  // console.log("company id", companyId);
   const { user } = useLoggedInUser();
 
   const [page, setPage] = useState(1);
@@ -119,10 +120,10 @@ export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType
         setStartDate={setStartDate}
         endDate={endDate}
         setEndDate={setEndDate}
-        transactionType={null}
+        readonly={false}
+        transactionType={transactionType}
         debitAccountType={null}
         creditAccountType={"Liability"}
-        readonly={false}
         useCategory={true}
         onRefresh={isRefetchOutstandingDebtData}
         isFetching={isFetchingOutstandingDebtData}
