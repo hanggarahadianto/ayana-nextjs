@@ -9,12 +9,6 @@ interface SelectWeekCashFlowReportProps {
 }
 
 const SelectWeekCashFlowReport: React.FC<SelectWeekCashFlowReportProps> = ({ cashFlowData, value, onChange, error }) => {
-  // Mengambil data minggu yang pertama (earliest)
-  //   const earliestCashFlow = useMemo(() => {
-  //     return cashFlowData.sort((a, b) => Number(a.week_number) - Number(b.week_number))[0];
-  //   }, [cashFlowData]);
-
-  // Membuat options untuk Select
   const weekOptions = useMemo(() => {
     return cashFlowData.map((item) => ({
       label: `Minggu Ke ${item.week_number}`,

@@ -1,5 +1,3 @@
-"use client";
-
 import { getDataCluster } from "@/api/cluster/getCluster";
 import { Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";

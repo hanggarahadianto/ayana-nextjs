@@ -1,4 +1,3 @@
-"use client";
 import { Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { getDataProduct } from "@/api/products/getDataProduct";
