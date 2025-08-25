@@ -6,21 +6,20 @@ import GlobalTab from "@/components/common/tab/TabGlobal";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { EmployeeTable } from "./employee/GetEmployeeData";
 import { AgentTable } from "./agent/GetAgentData";
-import { useCookies } from "@/utils/hook/useCookies";
 import { dayDictionary } from "@/constants/dictionary";
 import { getDataPresenceRule } from "@/api/employee/getPresenceRule";
 import { useQuery } from "@tanstack/react-query";
 import { PresenceTable } from "./presence/GetPresenceData";
 import { PresenceRuleTable } from "./presenceRule/GetPresenceRuleData";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 const HumanResourceAdminCard = () => {
-  const { getToken } = useCookies();
+  const { user } = useLoggedInUser(); // atau "/login"
 
   const { filteredCompanies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs({ has_customer: true });
   const companyId = activeTab?.id;
-  const token = getToken();
 
-  const queryEnabled = !!token && !!companyId;
+  const queryEnabled = !!user && !!companyId;
   const {
     data: presenceRuleData,
     refetch: isRefetchPresenceRuleData,

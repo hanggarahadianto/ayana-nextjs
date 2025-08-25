@@ -1,9 +1,9 @@
 import React, { memo } from "react";
-import { Modal, Button, Group, Stack, SimpleGrid } from "@mantine/core";
 import { Formik, Form } from "formik";
+import { useModalStore } from "@/store/modalStore";
+import { Modal, Button, Group, Stack, SimpleGrid } from "@mantine/core";
 import { initialValuesJournalEntryUpdate } from "@/utils/initialValues/initialValuesJournalEntry";
 import { validationSchemaJournalEntry } from "@/utils/validation/journalEntry-validation";
-import { useModalStore } from "@/store/modalStore";
 import JournalEntryFormUpdate from "./JournalEntryFormUpdate";
 import { useSubmitJournalEntryUpdate } from "@/api/finance/updateDataJournalEntry";
 
@@ -17,6 +17,7 @@ const UpdateJournalEntryModal: React.FC<IUpdateJournalEntryModalProps> = ({ tran
   const { opened, modalName, modalData: initialData, closeModal } = useModalStore();
 
   const { mutate: submitJournal, isPending: isLoadingUpdateJournalEntry } = useSubmitJournalEntryUpdate(closeModal);
+
   const handleSubmit = ({ journalEntries }: { journalEntries: IJournalEntryUpdate[] }) => {
     if (!journalEntries?.length) {
       console.warn("Tidak ada entri jurnal yang dikirim.");
@@ -39,6 +40,7 @@ const UpdateJournalEntryModal: React.FC<IUpdateJournalEntryModalProps> = ({ tran
     "editExpenseData",
     "editEquityData",
     "editOutstadingData",
+    "editInventoryAssetData",
   ];
   if (!modalName || !validModals.includes(modalName) || !opened || !initialData) return null;
 

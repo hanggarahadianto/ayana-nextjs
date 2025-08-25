@@ -32,6 +32,7 @@ export const useSubmitJournalEntryUpdate = (closeModal: () => void) => {
           queryClient.refetchQueries({ queryKey: ["getFixedAssetData", companyId] }),
           queryClient.refetchQueries({ queryKey: ["getReceivableAssetData", companyId] }),
           queryClient.refetchQueries({ queryKey: ["getEquitySummaryData", companyId] }),
+          queryClient.refetchQueries({ queryKey: ["getInventoryAssetData", companyId] }),
         ]);
 
         closeModal?.();

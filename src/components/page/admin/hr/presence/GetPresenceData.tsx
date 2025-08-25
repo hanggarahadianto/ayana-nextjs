@@ -1,7 +1,6 @@
 import { Card, Text, Stack, Group, Box, Skeleton, Grid, GridCol, Checkbox, SegmentedControl } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useCookies } from "@/utils/hook/useCookies";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import SearchTable from "@/components/common/table/SearchTableComponent";
@@ -14,6 +13,7 @@ import { columnsBasePresence } from "./PresenceColumn";
 import { useListState } from "@mantine/hooks";
 import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeletePresenceBulk } from "@/api/employee/deletePresence";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface PresenceTableProps {
   companyId: string;
@@ -21,8 +21,8 @@ interface PresenceTableProps {
   presenceRuleList: IPresenceRuleItem[];
 }
 export const PresenceTable = ({ companyId, companyName, presenceRuleList }: PresenceTableProps) => {
-  const { getToken } = useCookies();
-  const token = getToken();
+  const { user } = useLoggedInUser(); // atau "/login"
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -36,7 +36,7 @@ export const PresenceTable = ({ companyId, companyName, presenceRuleList }: Pres
 
   const [presenceType, setPresenceType] = useState<"all" | "arrival" | "departure" | undefined>("all");
 
-  const queryEnabled = !!token && !!companyId;
+  const queryEnabled = !!user && !!companyId;
   const {
     data: presenceData,
     isLoading: isLoadingPresenceData,

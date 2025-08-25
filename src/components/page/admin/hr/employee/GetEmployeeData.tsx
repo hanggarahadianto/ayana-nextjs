@@ -1,7 +1,6 @@
 import { Card, Text, Stack, Group, Box, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useCallback, useMemo, useState } from "react";
-import { useCookies } from "@/utils/hook/useCookies";
 import { useModalStore } from "@/store/modalStore";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
@@ -14,14 +13,15 @@ import TableComponent from "@/components/common/table/TableComponent";
 import { columnsBaseEmployee } from "./EmployeeColumn";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import EditEmployeeModal from "./EditEmployeeModal";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface EmployeeTableProps {
   companyId: string;
   companyName?: string;
 }
 export const EmployeeTable = ({ companyId, companyName }: EmployeeTableProps) => {
-  const { getToken } = useCookies();
-  const token = getToken();
+  const { user } = useLoggedInUser(); // atau "/login"
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -33,7 +33,7 @@ export const EmployeeTable = ({ companyId, companyName }: EmployeeTableProps) =>
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const sortBy = "date_inputed";
 
-  const queryEnabled = !!token && !!companyId;
+  const queryEnabled = !!user && !!companyId;
   const isAgent = false;
   const {
     data: EmployeeData,

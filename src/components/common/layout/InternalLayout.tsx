@@ -1,11 +1,11 @@
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
 import { AppShell, Burger, NavLink, Stack, rem, useMantineTheme, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import { useResponsiveLayout } from "@/styles/resposnsiveLayout/resposnvieLayout";
 import Navbar from "@/components/page/landing/navbar";
@@ -28,6 +28,8 @@ export default function InternalLayoutClient({ children }: { children: React.Rea
 
   const { user, isLoadingUser } = useLoggedInUser(); // atau "/login"
 
+  // console.log("user", user);
+
   if (isLoadingUser) {
     return <LoadingGlobal visible={true} />; // tampilkan loading, bukan null
   }
@@ -46,6 +48,11 @@ export default function InternalLayoutClient({ children }: { children: React.Rea
       setIsClosed((prev) => !prev); // Sama di desktop
     }
   };
+
+  const company = user?.companies;
+
+  // Filter menu sesuai kondisi
+  const filteredMenuItems = mainMenuItems.filter((item) => !item.condition || item.condition(company));
 
   return (
     <AppShell
@@ -93,7 +100,7 @@ export default function InternalLayoutClient({ children }: { children: React.Rea
             </Stack>
 
             <AnimatePresence>
-              {mainMenuItems.map((item, index) => (
+              {filteredMenuItems.map((item, index) => (
                 <motion.div
                   key={item.href}
                   initial={{ opacity: 0, x: -20 }}
