@@ -11,10 +11,10 @@ import { getDataClusterById } from "@/api/cluster/getClusterById";
 import AddClusterModal from "./AddClusterModal";
 import { useDeleteDataCluster } from "@/api/cluster/deleteCluster";
 import { getDataCluster } from "@/api/cluster/getCluster";
-import Cookies from "js-cookie";
 import EditClusterModal from "./UpdateClusterModal";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconPencil } from "@tabler/icons-react";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface ClusterOption {
   id: string;
@@ -29,12 +29,13 @@ interface Props {
 }
 
 const ClusterAdminCard = ({ setSelectedClusterId, setSelectedClusterName, selectedClusterId, selectedClusterName }: Props) => {
+  const { user } = useLoggedInUser();
+
   const [defaultClusterId, setDefaultClusterId] = useState<string | null>(null);
   const [selectedClusterData, setSelectedClusterData] = useState<IClusterUpdate | null>(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
 
-  // console.log("Edit modal open:", editModalOpen);
-  // console.log("Selected cluster data:", selectedClusterData);
+  const queryEnabled = !!user;
 
   const {
     data: allClusters,
@@ -43,7 +44,7 @@ const ClusterAdminCard = ({ setSelectedClusterId, setSelectedClusterName, select
   } = useQuery({
     queryKey: ["getAllClusters"],
     queryFn: getDataCluster,
-    enabled: !!Cookies.get("token"),
+    enabled: queryEnabled,
   });
 
   const clusterList = allClusters?.data ?? [];

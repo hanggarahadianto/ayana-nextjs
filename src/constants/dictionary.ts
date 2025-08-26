@@ -230,3 +230,16 @@ export const dayDictionary = [
   { value: "saturday", label: "Sabtu" },
   { value: "sunday", label: "Minggu" },
 ];
+
+export const getBadgeColor = (status: string | undefined) => {
+  switch (status) {
+    case "available":
+      return { bg: "green" };
+    case "booking":
+      return { bg: "yellow" };
+    case "sold":
+      return { bg: "red" };
+    default:
+      return { bg: "gray" };
+  }
+};

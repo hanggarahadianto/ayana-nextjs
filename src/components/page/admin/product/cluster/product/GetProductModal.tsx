@@ -1,11 +1,9 @@
 import React from "react";
 import { Modal, Paper, Text, ScrollArea, Flex, Group, Badge, Stack, Grid, Image, TextInput, Divider, Card, Textarea } from "@mantine/core";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import NextImage from "next/image";
-
 import { useQuery } from "@tanstack/react-query";
 import { getImages } from "@/api/products/getImagesProduct";
-import CloudinaryImage from "@/components/common/image/CloudinaryImage";
+import { getBadgeColor } from "@/constants/dictionary";
 
 const GetProductModal = ({
   opened,
@@ -32,18 +30,6 @@ const GetProductModal = ({
 
   // console.log("productData", productData);
 
-  const getBadgeColor = (status: string | undefined) => {
-    switch (status) {
-      case "available":
-        return { bg: "green" };
-      case "booking":
-        return { bg: "yellow" };
-      case "sold":
-        return { bg: "red" };
-      default:
-        return { bg: "gray" };
-    }
-  };
   const { bg } = getBadgeColor(productData?.status);
   return (
     <>

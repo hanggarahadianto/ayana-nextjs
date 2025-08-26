@@ -35,6 +35,8 @@ const ProductAdminCard = ({ clusterId }: Props) => {
     setOpenedModal(true);
   };
 
+  // console.log("Selected Product ID:", selectedProductId);
+
   const {
     data: productDataByClusterId,
     refetch: refetchProductData,
