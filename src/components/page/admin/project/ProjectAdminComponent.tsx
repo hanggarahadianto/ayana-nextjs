@@ -7,13 +7,13 @@ import LoadingGlobal from "@/styles/loading/loading-global";
 import GetProjectAdminData from "./projectData/GetProjectDataList";
 
 const ProjectAdminComponent = () => {
-  const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
+  const { companies, isLoadingCompanies, setActiveTab, activeTab } = UseCompanyTabs();
   const customerCompanies = companies?.filter((company: ICompanyItem) => company.has_project === true) || [];
 
   return (
     <>
       <SimpleGridGlobal cols={1}>
-        <GlobalTab data={customerCompanies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
+        <GlobalTab data={customerCompanies} activeTab={activeTab?.company_code ?? null} onTabChange={setActiveTab} />
         <LoadingGlobal visible={isLoadingCompanies} />
         <GetProjectAdminData companyId={activeTab?.id || ""} companyName={activeTab?.title || ""} />
       </SimpleGridGlobal>

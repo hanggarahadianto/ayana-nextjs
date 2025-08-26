@@ -1,23 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { AppShell, Burger, NavLink, Stack, rem, useMantineTheme, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
-import { useResponsiveLayout } from "@/styles/resposnsiveLayout/resposnvieLayout";
+
 import Navbar from "@/components/page/landing/navbar";
 import { mainMenuItems, userMenuItem } from "@/constants/navigation";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
+import { useResponsiveLayout } from "@/styles/resposnsiveLayout/resposnvieLayout";
 import LoadingGlobal from "@/styles/loading/loading-global";
+import { useCompanyStore } from "@/constants/company-store";
 
 export default function InternalLayoutClient({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
-
-  const { isMobile, isTablet, isLaptop } = useResponsiveLayout();
-
   const [isClosed, setIsClosed] = useState(false);
   const [isToggleTriggered, setIsToggleTriggered] = useState(false);
 
@@ -25,34 +24,52 @@ export default function InternalLayoutClient({ children }: { children: React.Rea
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
   const isDark = colorScheme === "dark";
+  const { isMobile, isTablet } = useResponsiveLayout();
 
-  const { user, isLoadingUser } = useLoggedInUser(); // atau "/login"
+  const { user, isLoadingUser } = useLoggedInUser();
+  const activeCompany = useCompanyStore((s) => s.activeTab);
 
-  // console.log("user", user);
+  // useEffect(() => {
+  //   console.log("Active Company in InternalLayoutClient:", activeCompany);
+  // }, [activeCompany]);
+
+  // 🔹 Filter menu berdasarkan kondisi + activeCompany
+  const filteredMenuItems = useMemo(
+    () => mainMenuItems.filter((item) => !item.condition || item.condition(activeCompany)),
+    [activeCompany]
+  );
 
   if (isLoadingUser) {
-    return <LoadingGlobal visible={true} />; // tampilkan loading, bukan null
+    return <LoadingGlobal visible />;
   }
-
-  if (!user) return null;
+  if (!user) {
+    return null;
+  }
 
   const isClosedOrMobile = isClosed || isMobile || isTablet;
   const computedWidth = isToggleTriggered ? (isClosed ? 105 : 200) : isClosedOrMobile ? 105 : 200;
 
-  // Toggle functions
   const toggleNav = () => {
     setIsToggleTriggered(true);
-    if (isMobile || isTablet) {
-      setIsClosed((prev) => !prev); // Toggle di mode mobile/tablet
-    } else {
-      setIsClosed((prev) => !prev); // Sama di desktop
-    }
+    setIsClosed((prev) => !prev);
   };
 
-  const company = user?.companies;
-
-  // Filter menu sesuai kondisi
-  const filteredMenuItems = mainMenuItems.filter((item) => !item.condition || item.condition(company));
+  const navLinkStyles = {
+    root: {
+      color: "white",
+      fontWeight: "bold",
+      borderRadius: rem(8),
+      padding: rem(12),
+      transition: "background-color 0.3s ease, transform 0.3s ease",
+      "&:hover": {
+        transform: "scale(1.05)",
+        backgroundColor: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.2)",
+      },
+    },
+    label: {
+      whiteSpace: "nowrap",
+    },
+  };
 
   return (
     <AppShell
@@ -69,11 +86,13 @@ export default function InternalLayoutClient({ children }: { children: React.Rea
         minHeight: "100vh",
       }}
     >
+      {/* HEADER */}
       <AppShell.Header>
         <Navbar />
         <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
       </AppShell.Header>
 
+      {/* SIDEBAR */}
       <AppShell.Navbar
         pt="xl"
         p="xl"
@@ -85,6 +104,7 @@ export default function InternalLayoutClient({ children }: { children: React.Rea
       >
         <Stack justify="space-between" style={{ height: "100%" }}>
           <Stack gap="md">
+            {/* Toggle button */}
             <Stack justify="flex-end" align="flex-end" style={{ width: "100%" }}>
               <button
                 onClick={toggleNav}
@@ -99,6 +119,7 @@ export default function InternalLayoutClient({ children }: { children: React.Rea
               </button>
             </Stack>
 
+            {/* MENU LIST */}
             <AnimatePresence>
               {filteredMenuItems.map((item, index) => (
                 <motion.div
@@ -114,29 +135,14 @@ export default function InternalLayoutClient({ children }: { children: React.Rea
                     label={!isClosed ? item.label : undefined}
                     leftSection={item.icon}
                     active={pathname === item.href}
-                    styles={(theme) => ({
-                      root: {
-                        color: "white",
-                        fontWeight: "bold",
-                        borderRadius: rem(8),
-                        padding: rem(12),
-                        transition: "background-color 0.3s ease, transform 0.3s ease",
-                        "&:hover": {
-                          transform: "scale(1.05)",
-                          backgroundColor: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.2)",
-                        },
-                      },
-                      label: {
-                        whiteSpace: "nowrap",
-                      },
-                    })}
+                    styles={navLinkStyles}
                   />
                 </motion.div>
               ))}
             </AnimatePresence>
           </Stack>
 
-          {/* USER MENU AT BOTTOM */}
+          {/* USER MENU */}
           <NavLink
             component={Link}
             href={userMenuItem.href}
@@ -144,26 +150,14 @@ export default function InternalLayoutClient({ children }: { children: React.Rea
             leftSection={userMenuItem.icon}
             active={pathname === userMenuItem.href}
             styles={{
-              root: {
-                marginBottom: "12px",
-                color: "white",
-                fontWeight: "bold",
-                borderRadius: rem(8),
-                padding: rem(12),
-                transition: "background-color 0.3s ease, transform 0.3s ease",
-                "&:hover": {
-                  transform: "scale(1.05)",
-                  backgroundColor: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0.2)",
-                },
-              },
-              label: {
-                whiteSpace: "nowrap",
-              },
+              ...navLinkStyles,
+              root: { ...navLinkStyles.root, marginBottom: "12px" },
             }}
           />
         </Stack>
       </AppShell.Navbar>
 
+      {/* MAIN */}
       <AppShell.Main style={{ marginTop: 20 }}>{children}</AppShell.Main>
     </AppShell>
   );

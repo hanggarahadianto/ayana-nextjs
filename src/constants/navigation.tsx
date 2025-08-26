@@ -27,7 +27,7 @@ export const mainMenuItems: MenuItem[] = [
     label: "Project",
     icon: <FaProjectDiagram />,
     href: "/admin/sidebar/project",
-    condition: (company) => company?.hasProject === true, // hanya muncul kalau true
+    condition: (company) => company?.has_project === true,
   },
   { label: "HR", icon: <FaPeopleGroup />, href: "/admin/sidebar/hr" },
   { label: "Setting", icon: <FaCog />, href: "/admin/sidebar/setting" },

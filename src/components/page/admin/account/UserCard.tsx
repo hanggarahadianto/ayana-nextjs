@@ -7,7 +7,8 @@ import { CompanyByUserTable } from "./company/GetCompanyByUser";
 import { UserForSuperadminTable } from "./user/GetUserSuperadmin";
 
 export default function UserCard() {
-  const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
+  const { companies, isLoadingCompanies, setActiveTab, activeTab } = UseCompanyTabs(); // Use the custom hook
+
   const { user } = useLoggedInUser();
 
   return (

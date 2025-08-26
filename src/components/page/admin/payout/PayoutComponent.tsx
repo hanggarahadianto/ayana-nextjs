@@ -9,13 +9,14 @@ import { GetCashOutData } from "../finance/asset/cashout/GetCashOutData";
 import { GetExpenseSummaryData } from "../finance/expense/GetExpenseSummaryData";
 
 export default function PayoutComponent() {
-  const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
+  const { companies, isLoadingCompanies, setActiveTab, activeTab } = UseCompanyTabs(); // Use the custom hook
+
   const transactionType = "payout";
 
   return (
     <SimpleGridGlobal cols={1}>
       <LoadingGlobal visible={isLoadingCompanies} />
-      <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
+      <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={setActiveTab} />
 
       <SimpleGridGlobal cols={1} gap="20px">
         <GetCashOutData

@@ -20,7 +20,7 @@ import { GetJournalEntryData } from "./journalEntryData";
 import { EquityStats } from "@/components/common/stats/EquityStatus";
 
 export const DashboardComponent = () => {
-  const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs();
+  const { companies, isLoadingCompanies, setActiveTab, activeTab } = UseCompanyTabs(); // Use the custom hook
 
   const [totalCashIn, setTotalCashIn] = useState(0);
   const [totalCashOut, setTotalCashOut] = useState(0);
@@ -33,7 +33,7 @@ export const DashboardComponent = () => {
   return (
     <SimpleGridGlobal cols={1}>
       <LoadingGlobal visible={isLoadingCompanies} />
-      <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
+      <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={setActiveTab} />
 
       <Grid>
         <Grid.Col span={6}>

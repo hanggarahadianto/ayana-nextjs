@@ -63,7 +63,9 @@ const AssignUserHandleCompanyModal = () => {
         onSubmit={handleSubmit}
         enableReinitialize
       >
-        {({ values, setFieldValue, isSubmitting }) => {
+        {({ values, errors, setFieldValue, isSubmitting }) => {
+          // console.log(errors, errors);
+
           const handleRemoveUser = (id: string) => {
             setFieldValue(
               "user_ids",

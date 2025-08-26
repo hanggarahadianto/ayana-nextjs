@@ -9,12 +9,12 @@ import GetSalesData from "./sales/GetSalesData";
 import { TestimonyTable } from "./testimony/GetTestiomonyData";
 
 const MarketingAdminCard = () => {
-  const { filteredCompanies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs({ has_customer: true });
+  const { filteredCompanies, isLoadingCompanies, setActiveTab, activeTab } = UseCompanyTabs({ has_customer: true });
 
   return (
     <>
       <SimpleGridGlobal cols={1}>
-        <GlobalTab data={filteredCompanies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
+        <GlobalTab data={filteredCompanies} activeTab={activeTab?.company_code ?? null} onTabChange={setActiveTab} />
         <LoadingGlobal visible={isLoadingCompanies} />
         <GetSalesData companyId={activeTab?.id || ""} />
         <TestimonyTable companyId={activeTab?.id || ""} />

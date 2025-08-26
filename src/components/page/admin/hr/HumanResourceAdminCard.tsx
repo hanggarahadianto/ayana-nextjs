@@ -16,7 +16,8 @@ import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 const HumanResourceAdminCard = () => {
   const { user } = useLoggedInUser(); // atau "/login"
 
-  const { filteredCompanies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs({ has_customer: true });
+  const { filteredCompanies, isLoadingCompanies, setActiveTab, activeTab } = UseCompanyTabs({ has_customer: true });
+
   const companyId = activeTab?.id;
 
   const queryEnabled = !!user && !!companyId;
@@ -47,7 +48,7 @@ const HumanResourceAdminCard = () => {
   return (
     <>
       <SimpleGridGlobal cols={1}>
-        <GlobalTab data={filteredCompanies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
+        <GlobalTab data={filteredCompanies} activeTab={activeTab?.company_code ?? null} onTabChange={setActiveTab} />
         <LoadingGlobal visible={isLoadingCompanies || isLoadingPresenceRuleData} />
         <PresenceTable companyId={activeTab?.id || ""} companyName={activeTab?.title} presenceRuleList={presenceRuleList} />
         <PresenceRuleTable

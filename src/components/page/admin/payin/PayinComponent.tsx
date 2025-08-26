@@ -10,13 +10,14 @@ import { GetReceivableAssetData } from "../finance/asset/receivable/GetReceivabl
 import { GetInventoryAssetData } from "../finance/asset/inventory/GetInventoryAssetData";
 
 export default function PayinComponent() {
-  const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
-  // console.log("companies", companies);
+  // const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
+
+  const { companies, isLoadingCompanies, activeTab, setActiveTab } = UseCompanyTabs();
 
   return (
     <SimpleGridGlobal cols={1}>
       <LoadingGlobal visible={isLoadingCompanies} />
-      <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
+      <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={setActiveTab} />
 
       <SimpleGridGlobal cols={1} gap="20px">
         <GetCashinData

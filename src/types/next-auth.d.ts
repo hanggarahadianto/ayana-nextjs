@@ -2,7 +2,7 @@ interface IUser {
   id: string;
   username: string;
   role: string;
-  companies: [];
+  companies: ICompanyItem[];
 }
 interface IUserPayload {
   username: string;
@@ -16,6 +16,7 @@ interface IAuthResponse {
       created_at: string;
       password: string;
       role: string;
+      companies: ICompanyItem[];
       updated_at: string;
       username: string;
     };

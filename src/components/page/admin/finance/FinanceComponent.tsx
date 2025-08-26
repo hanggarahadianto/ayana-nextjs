@@ -11,12 +11,11 @@ import { GetEquitySummaryData } from "./equity/GetEquitySummaryData";
 import { GetRevenueSummaryData } from "./revenue/GetRevenueSummaryData";
 
 export default function FinanceComponent() {
-  const { companies, isLoadingCompanies, activeTab, handleTabChange } = UseCompanyTabs(); // Use the custom hook
+  const { companies, isLoadingCompanies, setActiveTab, activeTab } = UseCompanyTabs(); // Use the custom hook
 
   return (
     <SimpleGridGlobal cols={1}>
-      <LoadingGlobal visible={isLoadingCompanies} />
-      <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={handleTabChange} />
+      <GlobalTab data={companies} activeTab={activeTab?.company_code ?? null} onTabChange={setActiveTab} />
       <SimpleGrid cols={1}>
         <GetRevenueSummaryData
           companyId={activeTab?.id || ""}
