@@ -22,10 +22,15 @@ export default function UseCompanyTabs(filter: CompanyFilter = {}) {
     const storedTabCode = localStorage.getItem("activeCompanyTab");
     const storedCompany = filtered.find((c) => c.company_code === storedTabCode);
 
-    if (filtered.length > 0 && !activeTab) {
-      setActiveTab(storedCompany || filtered[0]);
+    if (filtered.length > 0) {
+      if (!activeTab || !filtered.some((c) => c.id === activeTab.id)) {
+        // kalau activeTab tidak valid untuk filter ini, reset
+        const newActive = storedCompany || filtered[0];
+        setActiveTab(newActive);
+        localStorage.setItem("activeCompanyTab", newActive.company_code);
+      }
     }
-  }, [companies, JSON.stringify(filter)]); // jangan depend ke activeTab biar ga loop
+  }, [companies, JSON.stringify(filter)]);
 
   return {
     ...useCompanyStore.getState(), // expose semua dari store

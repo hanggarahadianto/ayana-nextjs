@@ -44,8 +44,6 @@ const UpdateTestimonyModal = ({ companyId }: AddTestimonyModalProps) => {
 
   return (
     <SimpleGridGlobal cols={1}>
-      <ButtonAdd onClick={() => {}} size="3.5rem" />
-
       <Modal opened={opened} onClose={closeModal} size="55%" yOffset="100px">
         <Formik
           initialValues={getInitialValuesUpdateTestimony(initialData)}

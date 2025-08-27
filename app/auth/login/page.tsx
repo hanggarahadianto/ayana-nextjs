@@ -1,20 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { TextInput, Button, Card, Title, Group, Stack, InputWrapper } from "@mantine/core";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import { Formik, Field, Form } from "formik";
-import { useRouter } from "next/navigation";
 import { initialValuesUser, validationSchemaUser } from "./initialValuesUser";
 import { useLoginMutation } from "@/api/auth/login";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const [showPassword, setShowPassword] = useState(false);
 
   const { mutate, isPending: isLoadingLogin } = useLoginMutation();
-  const router = useRouter();
 
   const { user, isLoadingUser } = useLoggedInUser("admin/sidebar/project");
   // console.log("user di halaman auth", user);

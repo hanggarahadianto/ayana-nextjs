@@ -1,21 +1,15 @@
 "use client";
 
-import { Card, Text, Stack, Group, Box, Skeleton } from "@mantine/core";
+import { Card, Text, Stack, Group } from "@mantine/core";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useCookies } from "@/utils/hook/useCookies";
 import { useDebounce } from "use-debounce";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
 import { useModalStore } from "@/store/modalStore";
 
 import AddTestimonyModal from "./AddTestimonyModal";
-import TableComponent from "@/components/common/table/TableComponent";
-import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
-import SearchTable from "@/components/common/table/SearchTableComponent";
-import LoadingGlobal from "@/styles/loading/loading-global";
 import { getDataTestimony } from "@/api/testimony/getDataTestiomony";
 import { useDeleteTestimony } from "@/api/testimony/deleteTestimony";
-import { columnsBaseTestimony } from "./TestimonyCustomerColumn";
 import { TestimonyCardCarousel } from "./TestimonyCard";
 import UpdateTestimonyModal from "./UpdateTestimonyModal";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
@@ -28,8 +22,6 @@ interface TestimonyTableProps {
 export const TestimonyTable = ({ companyId, companyName }: TestimonyTableProps) => {
   const { user } = useLoggedInUser();
 
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
   const [debouncedSearch] = useDebounce(searchTerm, 500);
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -46,24 +38,13 @@ export const TestimonyTable = ({ companyId, companyName }: TestimonyTableProps) 
     data: testimonyData,
     isLoading,
     refetch,
-    isFetching,
   } = useQuery({
-    queryKey: [
-      "getTestimonyData",
-      companyId,
-      page,
-      limit,
-      debouncedSearch,
-      formattedStartDate ?? null,
-      formattedEndDate ?? null,
-      sortBy,
-      sortOrder,
-    ],
+    queryKey: ["getTestimonyData", companyId, debouncedSearch, formattedStartDate ?? null, formattedEndDate ?? null, sortBy, sortOrder],
     queryFn: () =>
       getDataTestimony({
         companyId,
-        page,
-        limit,
+        page: 1,
+        limit: 9999, // ambil semua data, carousel yang handle chunk
         search: debouncedSearch,
         startDate: formattedStartDate,
         endDate: formattedEndDate,
@@ -75,11 +56,8 @@ export const TestimonyTable = ({ companyId, companyName }: TestimonyTableProps) 
   });
 
   const testimonyList = testimonyData?.data?.testimonyList ?? [];
-  const totalTestimony = testimonyData?.data?.total ?? 0;
-  const startIndex = (page - 1) * limit + 1;
-  const endIndex = Math.min(page * limit, totalTestimony);
 
-  const { mutate: mutateDeleteTestimony, isPending: isDeleting } = useDeleteTestimony(refetch);
+  const { mutate: mutateDeleteTestimony } = useDeleteTestimony(refetch);
 
   const handleDeleteTestimony = (id: string) => {
     mutateDeleteTestimony(id);
@@ -99,26 +77,10 @@ export const TestimonyTable = ({ companyId, companyName }: TestimonyTableProps) 
           <AddTestimonyModal companyId={companyId} />
         </Group>
       </Stack>
-      <TestimonyCardCarousel testimonyList={testimonyList} openEditModal={openEditModal} onDelete={handleDeleteTestimony} />
-      <UpdateTestimonyModal companyId={companyId} initialData={useModalStore((s) => s.modalData)} />
 
-      {!isLoading && (
-        <PaginationWithLimit
-          total={totalTestimony}
-          page={page}
-          limit={limit}
-          startIndex={startIndex}
-          endIndex={endIndex}
-          onPageChange={setPage}
-          onLimitChange={(newLimit) => {
-            setLimit(newLimit);
-            setPage(1);
-          }}
-          sortBy={sortBy}
-          sortOrder={sortOrder}
-          onSortChange={setSortOrder}
-        />
-      )}
+      <TestimonyCardCarousel testimonyList={testimonyList} openEditModal={openEditModal} onDelete={handleDeleteTestimony} />
+
+      <UpdateTestimonyModal companyId={companyId} initialData={useModalStore((s) => s.modalData)} />
     </Card>
   );
 };
