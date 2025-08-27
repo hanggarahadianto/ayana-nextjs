@@ -16,7 +16,7 @@ interface MenuItem {
 // src/constants/navigation.ts
 export const mainMenuItems: MenuItem[] = [
   { label: "Dashboard", icon: <AiOutlineDashboard />, href: "/admin/sidebar/dashboard" },
-  { label: "Feed", icon: <FaNewspaper />, href: "/admin/sidebar/feed" },
+  // { label: "Feed", icon: <FaNewspaper />, href: "/admin/sidebar/feed" },
   { label: "Product", icon: <FaShoppingBag />, href: "/admin/sidebar/product" },
   { label: "Marketing", icon: <FaIdeal />, href: "/admin/sidebar/marketing" },
   { label: "Payin", icon: <HiOutlineCash />, href: "/admin/sidebar/payin" },
@@ -30,7 +30,7 @@ export const mainMenuItems: MenuItem[] = [
     condition: (company) => company?.has_project === true,
   },
   { label: "HR", icon: <FaPeopleGroup />, href: "/admin/sidebar/hr" },
-  { label: "Setting", icon: <FaCog />, href: "/admin/sidebar/setting" },
+  // { label: "Setting", icon: <FaCog />, href: "/admin/sidebar/setting" },
 ];
 
 export const userMenuItem: MenuItem = {

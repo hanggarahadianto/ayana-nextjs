@@ -8,7 +8,7 @@ export const ProductImageGallery = ({ items }: { items: { original: string; thum
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(max-width: 1024px)");
 
-  const originalSize = isMobile ? "w_800,h_400" : isTablet ? "w_1200,h_600" : "w_1600,h_500";
+  const originalSize = isMobile ? "w_800,h_400" : isTablet ? "w_1200,h_600" : "w_1800,h_900";
   const thumbnailSize = isMobile ? "w_120,h_90" : isTablet ? "w_200,h_150" : "w_250,h_160";
 
   const resizedItems = items.map((item) => ({

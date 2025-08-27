@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { AppShell, Burger, NavLink, Stack, rem, useMantineTheme, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -28,10 +28,6 @@ export default function InternalLayoutClient({ children }: { children: React.Rea
 
   const { user, isLoadingUser } = useLoggedInUser();
   const activeCompany = useCompanyStore((s) => s.activeTab);
-
-  // useEffect(() => {
-  //   console.log("Active Company in InternalLayoutClient:", activeCompany);
-  // }, [activeCompany]);
 
   // 🔹 Filter menu berdasarkan kondisi + activeCompany
   const filteredMenuItems = useMemo(
