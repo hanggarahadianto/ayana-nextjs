@@ -1,6 +1,6 @@
 import React from "react";
-import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
+import ImageGallery from "react-image-gallery";
 import { Box, Stack } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 

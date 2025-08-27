@@ -17,7 +17,7 @@ export default function LoginPage() {
   const router = useRouter();
 
   const { user, isLoadingUser } = useLoggedInUser("admin/sidebar/project");
-  console.log("user di halaman auth", user);
+  // console.log("user di halaman auth", user);
 
   if (isLoadingUser) return <LoadingGlobal visible={isLoadingLogin} />;
   if (user) return null; // Sudah auto redirect oleh hook
