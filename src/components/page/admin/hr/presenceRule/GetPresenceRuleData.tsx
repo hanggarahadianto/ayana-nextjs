@@ -7,9 +7,9 @@ import CreatePresenceRuleModal from "./AddPresenceRuleModal";
 import { useResponsiveLayout } from "@/styles/resposnsiveLayout/resposnvieLayout";
 import { useDeleteDataPresenceRule } from "@/api/employee/deletePresenceRule";
 import UpdatePresenceRuleModal from "./UpdatePresenceRuleModal";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { useModalStore } from "@/store/modalStore";
 import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
+import BreathingActionIcon from "@/components/common/button/ButtonActionGo";
 
 interface PresenceRuleTableProps {
   companyId: string;

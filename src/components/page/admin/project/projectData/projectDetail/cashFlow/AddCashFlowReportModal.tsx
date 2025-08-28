@@ -3,7 +3,6 @@ import { Modal, TextInput, Button, Group, Select, Text, Stack, SimpleGrid, Grid,
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
 import { useSubmitCashFlowForm } from "@/api/cash-flow/postDataCashFlow";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconPlus } from "@tabler/icons-react";
 import { useSubmitGoodForm } from "@/api/good/postDataGood";
 import { showNotification } from "@mantine/notifications";
@@ -12,6 +11,7 @@ import { initialValuesCashFlowCreate } from "@/utils/initialValues/initialValues
 import FormGoods from "./FormGoods";
 import { validationSchemaCashFlowCreate } from "@/utils/validation/cashFlow-validation";
 import { calculateAccountBalance, calculateCashOut } from "@/helper/calculateCashFlowProjet";
+import BreathingActionIcon from "@/components/common/button/ButtonActionGo";
 
 const AddCashFlowReportModal = ({
   projectName,

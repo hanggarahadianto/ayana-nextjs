@@ -1,16 +1,15 @@
-"use client";
 import React, { useCallback } from "react";
 import { Modal, TextInput, Button, Group, Select, Textarea, NumberInput, SimpleGrid, Divider, Text, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { availabilityOptions } from "@/constants/dictionary";
 import { initialValuesClusterCreate } from "@/utils/initialValues/initialValuesCluster";
 import { validationSchemaClusterCreate } from "@/utils/validation/cluster-validation";
 import { useSubmitClusterForm } from "@/api/cluster/postCluster";
 import NearByForm from "./NearByForm";
+import ButtonAdd from "@/components/common/button/ButtonActionAdd";
 
 const handleChangeCluster = (field: keyof IClusterCreate, value: any, setFieldValue: (field: string, value: any) => void) => {
   setFieldValue(field, value);

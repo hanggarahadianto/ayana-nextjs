@@ -8,10 +8,10 @@ import { useSubmitProductForm } from "@/api/products/postDataProduct";
 import { availabilityOptions } from "@/constants/dictionary";
 import { validationSchemaProduct } from "@/utils/validation/product-validation";
 import { initialValueProductCreate } from "@/utils/initialValues/initialValuesProduct";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import UploadImageField from "./UploadProductImageForm";
 import { useUploadImages } from "@/api/products/uploadImageProduct";
+import ButtonAdd from "@/components/common/button/ButtonActionAdd";
 
 interface Props {
   clusterId?: string | null;

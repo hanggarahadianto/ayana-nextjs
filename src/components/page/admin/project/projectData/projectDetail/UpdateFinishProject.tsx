@@ -1,17 +1,15 @@
-"use client";
-
 import React from "react";
 import { Modal, Button, Group, Stack, Text, Card } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
 import * as Yup from "yup";
 import { useFinishDataProject } from "@/api/project/useFinishProject";
 import { IconCalendar } from "@tabler/icons-react";
 import { FaCheckCircle } from "react-icons/fa";
 import { format } from "date-fns";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
+import BreathingActionIcon from "@/components/common/button/ButtonActionGo";
 
 const FinishProjectModal = ({ initialData, refetchProjectData }: { initialData?: IProjectUpdate; refetchProjectData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);

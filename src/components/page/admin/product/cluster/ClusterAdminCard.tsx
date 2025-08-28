@@ -1,5 +1,3 @@
-"use client";
-
 import { Card, Text, Stack, Flex, Group, Badge, Grid } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -11,10 +9,10 @@ import AddClusterModal from "./AddClusterModal";
 import { useDeleteDataCluster } from "@/api/cluster/deleteCluster";
 import { getDataCluster } from "@/api/cluster/getCluster";
 import EditClusterModal from "./UpdateClusterModal";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconPencil } from "@tabler/icons-react";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
+import BreathingActionIcon from "@/components/common/button/ButtonActionGo";
 
 interface ClusterOption {
   id: string;

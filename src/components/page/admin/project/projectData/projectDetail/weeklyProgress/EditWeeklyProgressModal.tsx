@@ -1,17 +1,15 @@
-"use client";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import { Modal, Button, Group, Select, Textarea, Text, Stack, NumberInput, SimpleGrid, Divider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
-
 import { useUpdateWeeklyProgressForm } from "@/api/weekly-progress/editDataWeeklyProgress";
 import { getInitialValuesUpdateWeeklyProgress } from "@/utils/initialValues/initialValuesWeeklyProgress";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconPencil } from "@tabler/icons-react";
 import { allWeeks } from "@/constants/dictionary";
 import FormAddMaterial from "./FormAddMaterial";
 import FormAddWorker from "./FormAddWorker";
 import { validationSchemaWeeklyProgressCreate } from "@/utils/validation/weeeklyProgress-validation";
+import BreathingActionIcon from "@/components/common/button/ButtonActionGo";
 
 const EditWeeklyProgressModal = ({
   projectId,

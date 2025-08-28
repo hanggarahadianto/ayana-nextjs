@@ -1,15 +1,14 @@
-"use client";
 import React, { useCallback, useMemo } from "react";
 import { Modal, TextInput, Button, Group, Select, SimpleGrid, Divider, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { useSubmitEmployeerForm } from "@/api/employee/postDataEmployee";
 import { departmentOptions, employeeGenderOptions, employeeStatusOptions } from "@/constants/dictionary";
 import { getInitialValueAgentCreate } from "@/utils/initialValues/initialValuesAgent";
 import { validationSchemaAgent } from "@/utils/validation/agent-validation";
+import ButtonAdd from "@/components/common/button/ButtonActionAdd";
 
 const isoDate = (dateStr: string) => {
   const parsed = new Date(dateStr);

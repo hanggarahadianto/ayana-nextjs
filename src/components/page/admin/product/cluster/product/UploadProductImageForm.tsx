@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Group, Text, Card, Image, ActionIcon } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { IconX } from "@tabler/icons-react";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
+import ButtonAdd from "@/components/common/button/ButtonActionAdd";
 
 interface UpdateImageFieldProps {
   onFilesChange: (files: File[]) => void;

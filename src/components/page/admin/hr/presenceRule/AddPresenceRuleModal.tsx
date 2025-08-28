@@ -4,12 +4,12 @@ import React, { useCallback } from "react";
 import { Modal, TextInput, Button, Group, Stack, Text, NumberInput, Select, MultiSelect } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { useSubmitPresenceRulesForm } from "@/api/employee/postPresenceRule";
 import { initialValuePresenceRuleCreate } from "@/utils/initialValues/initialValuesPresenceRule";
 import { validationSchemaPresenceRule } from "@/utils/validation/presenceRule-validation";
 import { dayDictionary } from "@/constants/dictionary";
+import ButtonAdd from "@/components/common/button/ButtonActionAdd";
 
 interface CreatePresenceRuleModalProps {
   companyId: string;

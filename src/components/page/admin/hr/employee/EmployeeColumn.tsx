@@ -1,4 +1,4 @@
-import BreathingActionIcon from "@/components/common/button/buttonAction";
+import BreathingActionIcon from "@/components/common/button/ButtonActionGo";
 import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import { Badge, Flex } from "@mantine/core";

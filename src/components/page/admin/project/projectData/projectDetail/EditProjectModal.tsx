@@ -8,10 +8,10 @@ import { Form, Formik } from "formik";
 import { IconCalendar } from "@tabler/icons-react";
 import { FiSettings } from "react-icons/fi";
 import { useUpdateProjectForm } from "@/api/project/editDataProject";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { getInitialValuesUpdateProject } from "@/utils/initialValues/initialValuesProject";
 import { projectDuration, updateprojectStatusOptions } from "@/constants/dictionary";
 import { validationSchemaProject } from "@/utils/validation/project-validation";
+import BreathingActionIcon from "@/components/common/button/ButtonActionGo";
 
 const EditProjectModal = ({ initialData, refetchProjectData }: { initialData?: IProjectUpdate; refetchProjectData: () => void }) => {
   const [opened, { open, close }] = useDisclosure(false);

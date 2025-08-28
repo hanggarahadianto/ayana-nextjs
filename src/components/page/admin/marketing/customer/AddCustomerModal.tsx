@@ -5,7 +5,6 @@ import { Modal, TextInput, Button, Group, Select, SimpleGrid, Divider, Stack, Te
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
 import { showNotification } from "@mantine/notifications";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { useSubmitCustomerForm } from "@/api/customer/postDataCustomer";
 import SelectProduct from "@/components/common/select/SelectProduct";
@@ -15,6 +14,7 @@ import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar } from "@tabler/icons-react";
 import { getInitialValuesCreateCustomer } from "@/utils/initialValues/initialValuesCustomer";
 import SelectEmployee from "@/components/common/select/SelectEmployee";
+import ButtonAdd from "@/components/common/button/ButtonActionAdd";
 
 interface AddMarketingModalProps {
   companyId: string;

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Group, Text, Card, Image, ActionIcon } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { showNotification } from "@mantine/notifications";
+import ButtonAdd from "@/components/common/button/ButtonActionAdd";
 
 interface ExistingImage {
   id: string;

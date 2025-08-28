@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useCallback, useState } from "react";
-import { Modal, TextInput, Button, Group, Stack, Text, Rating, Textarea } from "@mantine/core";
+import { Modal, Button, Group, Stack, Text, Rating, Textarea } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form, FormikHelpers } from "formik";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import { useSubmitTestimonyForm } from "@/api/testimony/postDataTestimony";
 import { getInitialValuesCreateTestimony } from "@/utils/initialValues/initialValuesTestiony";
 import { validationSchemaTestimony } from "@/utils/validation/testimony-validation";
 import SelectCustomerTestimony from "@/components/common/select/SelectCustomerTestimony";
+import ButtonAdd from "@/components/common/button/ButtonActionAdd";
 
 interface AddTestimonyModalProps {
   companyId: string;
