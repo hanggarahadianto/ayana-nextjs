@@ -14,7 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getDataGoodsByCashFlowId } from "@/api/good/getDataGoodsByCashFlowId";
 import { getInitialValuesCashFlow } from "@/utils/initialValues/initialValuesCashFlow";
 import LoadingGlobal from "@/styles/loading/loading-global";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 
 const EditCashFlowReportModal = ({
   projectName,

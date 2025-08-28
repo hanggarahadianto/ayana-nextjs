@@ -3,7 +3,7 @@ import { Badge, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import { MdEmojiPeople } from "react-icons/md";
 import { ReactNode } from "react";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 
 interface Column<T> {
   key: string;
@@ -94,16 +94,20 @@ export const columnsBaseCompany = (
         {/* Assign User - superadmin only */}
         {renderSuperadminAction(user, () => openAssignModal(row), <MdEmojiPeople size="1rem" />)}
 
-        {/* Edit - selalu aktif */}
-        <BreathingActionIcon onClick={() => openEditModal(row)} icon={<IconPencil size="1rem" />} size="2.2rem" />
+        {/* Edit - superadmin only */}
+        {renderSuperadminAction(user, () => openEditModal(row), <IconPencil size="1rem" />)}
 
-        {/* Delete - selalu aktif */}
-        <ButtonDeleteWithConfirmation
-          isLoading={isLoading}
-          onDelete={() => handleDeleteDataCompanyById(row.id)}
-          description={`Hapus perusahaan ${row.title}?`}
-          size={2.2}
-        />
+        {/* Delete - superadmin only */}
+        {renderSuperadminAction(
+          user,
+          () => handleDeleteDataCompanyById(row.id),
+          <ButtonDeleteWithConfirmation
+            isLoading={isLoading}
+            onDelete={() => handleDeleteDataCompanyById(row.id)}
+            description={`Hapus perusahaan ${row.title}?`}
+            size={2.2}
+          />
+        )}
       </Group>
     ),
   },

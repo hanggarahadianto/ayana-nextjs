@@ -3,7 +3,6 @@
 import { Card, Text, Stack, Flex, Group, Badge, Grid } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import SelectCluster from "@/components/common/select/SelectCluster";
@@ -15,6 +14,7 @@ import EditClusterModal from "./UpdateClusterModal";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconPencil } from "@tabler/icons-react";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 
 interface ClusterOption {
   id: string;

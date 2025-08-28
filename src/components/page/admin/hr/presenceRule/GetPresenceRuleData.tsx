@@ -5,11 +5,11 @@ import { IconCalendarOff, IconClockHour7, IconPencil } from "@tabler/icons-react
 import { dayDictionary } from "@/constants/dictionary";
 import CreatePresenceRuleModal from "./AddPresenceRuleModal";
 import { useResponsiveLayout } from "@/styles/resposnsiveLayout/resposnvieLayout";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeleteDataPresenceRule } from "@/api/employee/deletePresenceRule";
 import UpdatePresenceRuleModal from "./UpdatePresenceRuleModal";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { useModalStore } from "@/store/modalStore";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 
 interface PresenceRuleTableProps {
   companyId: string;

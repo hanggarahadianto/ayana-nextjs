@@ -1,10 +1,10 @@
 import { formatCurrency } from "@/helper/formatCurrency";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { Badge, Group } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import { houseSaleStatuses, paymentMethods } from "@/constants/dictionary";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 
 export const columnsBaseCustomer = (openEditModal: (row: ICustomerItem) => void, handleDeleteDataCustomer: (id: string) => void) => [
   { key: "name", title: "Nama", width: 200, minWidth: 200 },

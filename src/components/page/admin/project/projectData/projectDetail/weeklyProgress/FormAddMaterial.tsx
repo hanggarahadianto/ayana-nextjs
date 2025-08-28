@@ -1,9 +1,9 @@
 import React, { memo, useCallback, useEffect, useMemo } from "react";
 import { Group, TextInput, NumberInput, Select, Card, Stack, Text } from "@mantine/core";
 import ButtonAdd from "@/components/common/button/buttonAdd";
-import ButtonDelete from "@/components/common/button/butttonDelete";
 import { satuan } from "@/constants/dictionary";
 import { useFormikContext } from "formik";
+import ButtonDelete from "@/components/common/button/ButtonDeleteWithoutConfirmation";
 
 interface FormAddMaterialProps {
   materials: IMaterialCreate[];

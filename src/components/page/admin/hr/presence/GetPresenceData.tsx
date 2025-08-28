@@ -11,9 +11,9 @@ import UploadPresence from "./UploadPresence";
 import { getDataPresence } from "@/api/employee/getDataPresence";
 import { columnsBasePresence } from "./PresenceColumn";
 import { useListState } from "@mantine/hooks";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { useDeletePresenceBulk } from "@/api/employee/deletePresence";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 
 interface PresenceTableProps {
   companyId: string;

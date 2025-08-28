@@ -1,10 +1,8 @@
 import React from "react";
 import { FieldArray, FieldArrayRenderProps } from "formik";
 import { Group, Stack, TextInput, Text, ActionIcon } from "@mantine/core";
-import { IconTrash } from "@tabler/icons-react"; // icon trash, install dulu tabler icons
 import ButtonAdd from "@/components/common/button/buttonAdd";
-import ButtonDelete from "@/components/common/button/butttonDelete";
-
+import ButtonDelete from "@/components/common/button/ButtonDeleteWithoutConfirmation";
 interface INearByCreate {
   name: string;
   distance: string;

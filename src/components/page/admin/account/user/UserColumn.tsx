@@ -1,5 +1,5 @@
 import BreathingActionIcon from "@/components/common/button/buttonAction";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 import { Group } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import { ReactNode } from "react";

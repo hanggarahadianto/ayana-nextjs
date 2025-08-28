@@ -1,9 +1,9 @@
 import React, { memo, useCallback, useEffect, useMemo } from "react";
 import { Group, TextInput, Select, Card, Stack, Text } from "@mantine/core";
 import ButtonAdd from "@/components/common/button/buttonAdd";
-import ButtonDelete from "@/components/common/button/butttonDelete";
 import { useFormikContext } from "formik";
 import { debounce } from "lodash";
+import ButtonDelete from "@/components/common/button/ButtonDeleteWithoutConfirmation";
 
 interface FormAddWorkerProps {
   workers: IWorkerCreate[];

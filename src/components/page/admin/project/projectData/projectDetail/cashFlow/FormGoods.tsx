@@ -1,5 +1,5 @@
 import ButtonAdd from "@/components/common/button/buttonAdd";
-import ButtonDelete from "@/components/common/button/butttonDelete";
+import ButtonDelete from "@/components/common/button/ButtonDeleteWithoutConfirmation";
 import { paymentCategory, satuan } from "@/constants/dictionary";
 import { Card, Group, NumberInput, Select, Stack, Text, TextInput } from "@mantine/core";
 import { useFormikContext } from "formik";

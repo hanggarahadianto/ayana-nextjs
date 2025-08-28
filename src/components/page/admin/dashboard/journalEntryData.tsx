@@ -1,7 +1,7 @@
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { Card, Text, Stack, Box, Group, Button, Checkbox, Skeleton } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import TableComponent from "@/components/common/table/TableComponent";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
@@ -12,7 +12,7 @@ import { columnsBaseJournalEntry } from "./journalEntryColumn";
 import { getJournalEntryData } from "@/api/finance/getJournalEntryData";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 import { useListState, randomId } from "@mantine/hooks";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 
 interface GetJournalEntryDataProps {
   companyId: string;

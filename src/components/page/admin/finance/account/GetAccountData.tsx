@@ -9,10 +9,10 @@ import { useModalStore } from "@/store/modalStore";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconPencil } from "@tabler/icons-react";
 import { useDeleteDataAccount } from "@/api/account/deleteDataAccount";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import UpdateAccountModal from "./UpdateAccountModal";
 import { accountTypeOptions } from "@/constants/dictionary";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 
 interface AccountCardProps {
   companyId: string;

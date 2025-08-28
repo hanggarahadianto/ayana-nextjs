@@ -8,13 +8,13 @@ import SimpleGridGlobal from "@/components/common/grid/SimpleGridGlobal";
 import CardComponentResponsive from "@/components/common/card/CardComponentResponsive";
 import AddProductModal from "./AddProductModal";
 import GetProductModal from "./GetProductModal";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { getDataProductByClusterId } from "@/api/products/getProductByClusterId";
 import { useState } from "react";
 import { getDataProductDetail } from "@/api/products/getDataProductDetail";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconEye, IconPencil } from "@tabler/icons-react";
 import UpdateProductModal from "./EditProductModal";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 
 interface Props {
   clusterId: string | null;

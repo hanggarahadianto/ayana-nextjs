@@ -2,7 +2,7 @@ import { Group, Badge } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 
 export const columnsBaseTestimony = (openEditModal: (row: any) => void, handleDelete: (id: string) => void) => [
   {

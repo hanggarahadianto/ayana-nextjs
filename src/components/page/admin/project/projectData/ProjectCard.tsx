@@ -2,9 +2,9 @@
 
 import { Card, Group, Stack, Text } from "@mantine/core";
 import Link from "next/link";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import { projectStatusOptions } from "@/constants/dictionary";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 
 interface ProjectCardAdminProps {
   project: IProjectItem;

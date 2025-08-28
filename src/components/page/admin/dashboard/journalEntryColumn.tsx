@@ -1,4 +1,4 @@
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 import { formatCurrency } from "@/helper/formatCurrency";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import { Checkbox, Flex, Stack } from "@mantine/core";

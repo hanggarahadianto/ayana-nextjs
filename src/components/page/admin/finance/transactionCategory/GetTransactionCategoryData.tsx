@@ -5,7 +5,6 @@ import { useState } from "react";
 import TableComponent from "@/components/common/table/TableComponent";
 import AddTransactionCategoryModal from "./AddTransactionCategoryModal";
 import BreathingActionIcon from "@/components/common/button/buttonAction";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
 import { useDeleteDataTransactionCategory } from "@/api/transaction-category/deleteDataTransactionCategory";
@@ -14,6 +13,7 @@ import { getDataTransactionCategory } from "@/api/transaction-category/getDataTr
 import { accountTypeOptions, paymentStatus, transactionTypeOptions } from "@/constants/dictionary";
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 
 interface AccountCardProps {
   companyId: string;

@@ -1,4 +1,3 @@
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
 import { Card, Grid, Group, RingProgress, SimpleGrid, Stack, Text } from "@mantine/core";
 import AddWeeklyProgressModal from "./AddWeeklyProgressModal";
 import { useDeleteDataWeeklyProgress } from "@/api/weekly-progress/deleteDataWeeklyProgress";
@@ -6,6 +5,7 @@ import EditWeeklyProgressModal from "./EditWeeklyProgressModal";
 import { useState } from "react";
 import { useMediaQuery } from "@mantine/hooks";
 import { formatCurrency } from "@/helper/formatCurrency";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 
 const WeeklyProgressMenu = ({ refetchWeeklyProgressData, projectDataDetail, weeklyProgressData }) => {
   const isSmallScreen = useMediaQuery("(max-width: 767px)"); // Mobile

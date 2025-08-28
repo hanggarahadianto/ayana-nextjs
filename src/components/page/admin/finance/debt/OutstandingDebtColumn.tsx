@@ -1,5 +1,5 @@
 import BreathingActionIcon from "@/components/common/button/buttonAction";
-import ButtonDeleteWithConfirmation from "@/components/common/button/buttonDeleteConfirmation";
+import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 import ButtonReversedJournal from "@/components/common/button/buttonReversedJournal";
 import { formatCurrency } from "@/helper/formatCurrency";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
