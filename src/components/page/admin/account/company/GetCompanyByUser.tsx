@@ -75,9 +75,11 @@ export const CompanyByUserTable = () => {
           <Text size="xl" fw={600}>
             Daftar Perusahaan {""}
           </Text>
-          <Stack align="flex-end" mb={16}>
-            <AddCompanyModal refetchCompanyData={isRefetchCompanyByIdData} />
-          </Stack>
+          {user?.username === "superadmin" && (
+            <Stack align="flex-end" mb={16}>
+              <AddCompanyModal refetchCompanyData={isRefetchCompanyByIdData} />
+            </Stack>
+          )}
         </Group>
       </Stack>
       <LoadingGlobal visible={isLoadingCompanyData} />

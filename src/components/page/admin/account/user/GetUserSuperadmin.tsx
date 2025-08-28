@@ -62,9 +62,11 @@ export const UserForSuperadminTable = ({ companyId, companyName }: UserForSupera
           <Text size="xl" fw={600}>
             Daftar Pengguna {companyName}
           </Text>
-          <Stack align="flex-end" mb={16}>
-            <AddUserModal refetchUserData={refetchUserById} />
-          </Stack>
+          {user?.username === "superadmin" && (
+            <Stack align="flex-end" mb={16}>
+              <AddUserModal refetchUserData={refetchUserById} />
+            </Stack>
+          )}
         </Group>
       </Stack>
 
