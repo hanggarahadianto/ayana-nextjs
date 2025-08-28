@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
+import { ReactNode, MouseEvent } from "react";
 
 interface BreathingActionIconProps {
-  onClick: () => void;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   size: string | number;
   icon: ReactNode;
   backgroundColor?: string;
@@ -10,7 +10,6 @@ interface BreathingActionIconProps {
 }
 
 const BreathingActionIcon = ({ onClick, size, icon, backgroundColor, gradient, disabled }: BreathingActionIconProps) => {
-  // Tentukan warna background:
   const finalBackground = disabled ? "#1e293b" : backgroundColor || gradient || "linear-gradient(135deg, #38a169, #2f855a)";
 
   const cursorStyle = disabled ? "not-allowed" : "pointer";

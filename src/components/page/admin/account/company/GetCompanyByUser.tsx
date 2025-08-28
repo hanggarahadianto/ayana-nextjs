@@ -66,7 +66,7 @@ export const CompanyByUserTable = () => {
     useModalStore.getState().openModal("assignUser", companyData);
   };
 
-  const columns = columnsBaseCompany(openEditModal, openAssignModal, handleDeleteCompanyByUser, isLoadingDeletecompanyById);
+  const columns = columnsBaseCompany(user, openEditModal, openAssignModal, handleDeleteCompanyByUser, isLoadingDeletecompanyById);
 
   return (
     <Card shadow="sm" padding="lg">

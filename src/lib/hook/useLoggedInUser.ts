@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import { useRouter, usePathname } from "next/navigation";
+import Cookies from "js-cookie";
 
 export function useLoggedInUser(redirectIfLoggedInTo?: string) {
   const [user, setUser] = useState<IUser | null>(null);
@@ -8,8 +8,11 @@ export function useLoggedInUser(redirectIfLoggedInTo?: string) {
   const router = useRouter();
   const pathname = usePathname();
 
+  // console.log("useLoggedInUser called, current user:", user);
+
   useEffect(() => {
     const userCookie = Cookies.get("user");
+    // console.log("User cookie:", userCookie);
 
     if (!userCookie) {
       // Belum login

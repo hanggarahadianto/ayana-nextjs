@@ -17,12 +17,11 @@ interface MenuItem {
 export const mainMenuItems: MenuItem[] = [
   { label: "Dashboard", icon: <AiOutlineDashboard />, href: "/admin/sidebar/dashboard" },
   // { label: "Feed", icon: <FaNewspaper />, href: "/admin/sidebar/feed" },
-  { label: "Product", icon: <FaShoppingBag />, href: "/admin/sidebar/product" },
-  { label: "Marketing", icon: <FaIdeal />, href: "/admin/sidebar/marketing" },
+  { label: "Product", icon: <FaShoppingBag />, href: "/admin/sidebar/product", condition: (company) => company?.has_product === true },
+  { label: "Marketing", icon: <FaIdeal />, href: "/admin/sidebar/marketing", condition: (company) => company?.has_customer === true },
   { label: "Payin", icon: <HiOutlineCash />, href: "/admin/sidebar/payin" },
   { label: "Payout", icon: <FaMoneyBill />, href: "/admin/sidebar/payout" },
   { label: "Finance", icon: <FaWallet />, href: "/admin/sidebar/finance" },
-  // { label: "Project", icon: <FaProjectDiagram />, href: "/admin/sidebar/project" },
   {
     label: "Project",
     icon: <FaProjectDiagram />,

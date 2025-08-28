@@ -1,6 +1,6 @@
 import { Card, Text, Stack, Group, Box, Skeleton } from "@mantine/core";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query"; // assumed path
+import { useQuery } from "@tanstack/react-query";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import TableComponent from "@/components/common/table/TableComponent";
 import { useModalStore } from "@/store/modalStore";
@@ -12,11 +12,12 @@ import AddUserModal from "./AddUserModal";
 import UpdateUserByIdModal from "./UpdateUserModal";
 import { useDeleteDataUser } from "@/api/user/deleteDataUser";
 
-interface userForSuperadminTableProps {
+interface UserForSuperadminTableProps {
   companyId: string;
   companyName?: string;
 }
-export const UserForSuperadminTable = ({ companyId, companyName }: userForSuperadminTableProps) => {
+
+export const UserForSuperadminTable = ({ companyId, companyName }: UserForSuperadminTableProps) => {
   const { user } = useLoggedInUser();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -29,34 +30,37 @@ export const UserForSuperadminTable = ({ companyId, companyName }: userForSupera
     data: userByIdData,
     isLoading: isLoadingUserData,
     refetch: refetchUserById,
-    isFetching: isFetchingUserData,
+    isError: isErrorUserById,
+    error: errorUserById,
   } = useQuery({
     queryKey: ["getUserByIdData", user?.id],
     queryFn: () => getUserByIdForSuperadmin({ id: user?.id }),
     enabled: queryEnabled,
     refetchOnWindowFocus: false,
+    retry: false, // error langsung dilempar
   });
 
-  const userList = userByIdData?.data.userList ?? [];
-  const startIndex = (page - 1) * limit + 1;
-  const endIndex = Math.min(page * limit, userByIdData?.data.total_data || 0);
+  const userList = userByIdData?.data?.userList ?? [];
+  const totalData = userByIdData?.data?.total_data ?? 0;
 
-  const { mutate: mutateDeleteDataCompanyById, isPending: isLoadingDeletecompanyById } = useDeleteDataUser();
-  const handleDeleteCompanyByUser = (idToDelete: string) => {
-    mutateDeleteDataCompanyById(idToDelete);
-  };
+  const startIndex = (page - 1) * limit + 1;
+  const endIndex = Math.min(page * limit, totalData);
+
+  const { mutate: deleteUser, isPending: isDeleting } = useDeleteDataUser();
+  const handleDelete = (id: string) => deleteUser(id);
 
   const openEditModal = (user: IUserUpdate) => {
     useModalStore.getState().openModal("editUser", user);
   };
-  const columns = columnsBaseUser(openEditModal, handleDeleteCompanyByUser, isLoadingDeletecompanyById);
+
+  const columns = columnsBaseUser(openEditModal, handleDelete, isDeleting);
 
   return (
     <Card shadow="sm" padding="lg">
       <Stack>
         <Group justify="space-between">
           <Text size="xl" fw={600}>
-            Daftar Pengguna {""} {companyName}
+            Daftar Pengguna {companyName}
           </Text>
           <Stack align="flex-end" mb={16}>
             <AddUserModal refetchUserData={refetchUserById} />
@@ -68,22 +72,45 @@ export const UserForSuperadminTable = ({ companyId, companyName }: userForSupera
         {isLoadingUserData ? (
           <Skeleton height={limit * 60} />
         ) : (
-          <TableComponent
-            startIndex={startIndex}
-            data={userList}
-            totalAmount={userByIdData?.data.total_data}
-            height={"580"}
-            columns={columns}
-          />
+          <Box style={{ position: "relative" }}>
+            <TableComponent
+              startIndex={startIndex}
+              data={isErrorUserById ? [] : userList}
+              totalAmount={isErrorUserById ? 0 : totalData}
+              height={"580"}
+              columns={columns}
+            />
+
+            {isErrorUserById && (
+              <Box
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backdropFilter: "blur(6px)",
+                  backgroundColor: "rgba(0,0,0,0.6)", // lebih gelap
+                  color: "white",
+                  zIndex: 1,
+                }}
+              >
+                <Text size="xl" fw={700} c="red">
+                  Superadmin Only
+                </Text>
+              </Box>
+            )}
+          </Box>
         )}
 
         <LoadingGlobal visible={isLoadingUserData} />
       </Box>
+
       <UpdateUserByIdModal initialValues={useModalStore((state) => state.modalData)} />
 
-      {!isLoadingUserData && (
+      {!isLoadingUserData && !isErrorUserById && (
         <PaginationWithLimit
-          total={userByIdData?.data.total_data ?? 0}
+          total={totalData}
           page={page}
           limit={limit}
           startIndex={startIndex}

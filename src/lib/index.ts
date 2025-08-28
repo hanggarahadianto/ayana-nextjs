@@ -7,23 +7,23 @@ if (!baseURL) {
   throw new Error("❌ BASE_URL is not defined in .env file");
 }
 
-export const APIAxiosInstance = axios.create({
-  baseURL,
-  timeout: 1000 * 60,
-  withCredentials: true,
-});
+// export const APIAxiosInstance = axios.create({
+//   baseURL,
+//   timeout: 1000 * 60,
+//   withCredentials: true,
+// });
 
-export const APIAxiosInstanceWithoutCredential = axios.create({
-  baseURL,
-  timeout: 1000 * 60,
-  withCredentials: false,
-});
+// export const APIAxiosInstanceWithoutCredential = axios.create({
+//   baseURL,
+//   timeout: 1000 * 60,
+//   withCredentials: false,
+// });
 
-export const APIAxiosInstanceMultipart = axios.create({
-  baseURL,
-  timeout: 1000 * 60,
-  withCredentials: true, // set sesuai kebutuhan
-});
+// export const APIAxiosInstanceMultipart = axios.create({
+//   baseURL,
+//   timeout: 1000 * 60,
+//   withCredentials: true, // set sesuai kebutuhan
+// });
 
 export const httpHeader = (token?: string, isMultipart = false) => {
   const headers: Record<string, string> = {};
@@ -33,3 +33,21 @@ export const httpHeader = (token?: string, isMultipart = false) => {
 
   return { headers };
 };
+
+export const APIAxiosInstance = axios.create({
+  baseURL,
+  timeout: 10000, // 10 detik cukup
+  withCredentials: true, // ubah ke true hanya jika pakai cookie auth
+});
+
+export const APIAxiosInstanceWithoutCredential = axios.create({
+  baseURL,
+  timeout: 10000,
+  withCredentials: false,
+});
+
+export const APIAxiosInstanceMultipart = axios.create({
+  baseURL,
+  timeout: 10000,
+  withCredentials: false, // biasanya JWT di header, multipart tetap jalan
+});

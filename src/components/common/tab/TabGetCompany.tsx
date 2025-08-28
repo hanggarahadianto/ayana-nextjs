@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
-import useGetCompanies from "@/components/common/tab/GetCompanyTab";
 import { useCompanyStore } from "@/constants/company-store";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 type CompanyFilter = Partial<Pick<ICompanyItem, "has_customer" | "has_project" | "has_product">>;
 
 export default function UseCompanyTabs(filter: CompanyFilter = {}) {
-  const { companies, isLoading } = useGetCompanies();
+  // const { companies, isLoading } = useGetCompanies();
+  const { user, isLoadingUser } = useLoggedInUser();
+  const companies = user?.companies || [];
   const { companies: storeCompanies, setCompanies, setFilteredCompanies, setActiveTab, activeTab } = useCompanyStore();
 
   useEffect(() => {
@@ -34,6 +36,6 @@ export default function UseCompanyTabs(filter: CompanyFilter = {}) {
 
   return {
     ...useCompanyStore.getState(), // expose semua dari store
-    isLoadingCompanies: isLoading,
+    isLoadingCompanies: isLoadingUser,
   };
 }
