@@ -2,10 +2,10 @@ import React, { memo, useCallback } from "react";
 import { Modal, TextInput, Button, Group, Stack, PasswordInput, Select, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import { useSubmitUserForm } from "@/api/auth/register";
 import { userValidationSchemaCreate } from "@/utils/validation/user-validation";
 import { getInitialValuesCreateUser } from "@/utils/initialValues/initialValuesUser";
+import ButtonAdd from "@/components/common/button/ButtonActionAdd";
 
 interface AddUserModalProps {
   refetchUserData: () => void;

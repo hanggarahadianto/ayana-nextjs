@@ -1,6 +1,6 @@
-import BreathingActionIcon from "@/components/common/button/buttonAction";
+import BreathingActionIcon from "@/components/common/button/ButtonActionGo";
+import ButtonReversedJournal from "@/components/common/button/ButtonActionReservedJournal";
 import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
-import ButtonReversedJournal from "@/components/common/button/buttonReversedJournal";
 import { formatCurrency } from "@/helper/formatCurrency";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
 import { Badge, Flex, Text } from "@mantine/core";

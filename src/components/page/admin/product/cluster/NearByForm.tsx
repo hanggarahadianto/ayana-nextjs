@@ -1,8 +1,8 @@
 import React from "react";
 import { FieldArray, FieldArrayRenderProps } from "formik";
 import { Group, Stack, TextInput, Text, ActionIcon } from "@mantine/core";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import ButtonDelete from "@/components/common/button/ButtonDeleteWithoutConfirmation";
+import ButtonAdd from "@/components/common/button/ButtonActionAdd";
 interface INearByCreate {
   name: string;
   distance: string;

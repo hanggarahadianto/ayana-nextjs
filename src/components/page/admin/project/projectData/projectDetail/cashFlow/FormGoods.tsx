@@ -1,4 +1,4 @@
-import ButtonAdd from "@/components/common/button/buttonAdd";
+import ButtonAdd from "@/components/common/button/ButtonActionAdd";
 import ButtonDelete from "@/components/common/button/ButtonDeleteWithoutConfirmation";
 import { paymentCategory, satuan } from "@/constants/dictionary";
 import { Card, Group, NumberInput, Select, Stack, Text, TextInput } from "@mantine/core";

@@ -2,7 +2,7 @@
 
 import { Tooltip } from "@mantine/core";
 import { ReactNode } from "react";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
+import BreathingActionIcon from "../button/ButtonActionGo";
 
 interface SuperadminActionProps {
   user: IUser | null;

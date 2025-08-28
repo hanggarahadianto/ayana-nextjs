@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query"; // assumed path
 import { useState } from "react";
 import TableComponent from "@/components/common/table/TableComponent";
 import AddTransactionCategoryModal from "./AddTransactionCategoryModal";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconPencil } from "@tabler/icons-react";
 import { useModalStore } from "@/store/modalStore";
 import { useDeleteDataTransactionCategory } from "@/api/transaction-category/deleteDataTransactionCategory";
@@ -14,6 +13,7 @@ import { accountTypeOptions, paymentStatus, transactionTypeOptions } from "@/con
 import PaginationWithLimit from "@/components/common/pagination/PaginationWithLimit";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
+import BreathingActionIcon from "@/components/common/button/ButtonActionGo";
 
 interface AccountCardProps {
   companyId: string;

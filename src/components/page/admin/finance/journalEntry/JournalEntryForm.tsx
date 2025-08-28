@@ -4,8 +4,8 @@ import { DatePickerInput } from "@mantine/dates";
 import { IconCalendar, IconTrash } from "@tabler/icons-react";
 import { useFormikContext, FieldArray } from "formik";
 import SelectFinanceTransactionCategory from "@/components/common/select/SelectTransactiontCategory";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import { calculateTotalBagiHasil } from "@/helper/calculateBagiHasil";
+import ButtonAdd from "@/components/common/button/ButtonActionAdd";
 
 interface JournalFormProps {
   companyId?: string;

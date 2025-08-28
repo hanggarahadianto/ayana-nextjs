@@ -3,9 +3,9 @@
 import { Card, Text, Stack, Rating, Box, Group, SimpleGrid, ActionIcon } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import { IconBuilding, IconHome, IconPencil, IconUser, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { useResponsiveLayout } from "@/styles/resposnsiveLayout/resposnvieLayout";
 import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
+import BreathingActionIcon from "@/components/common/button/ButtonActionGo";
 
 interface TestimonyCardCarouselProps {
   testimonyList: ITestimonyItem[];

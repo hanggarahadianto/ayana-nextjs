@@ -2,12 +2,12 @@ import React, { memo, useCallback } from "react";
 import { Modal, Button, Group, Stack, SimpleGrid } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Formik, Form } from "formik";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import { initialValuesJournalEntry } from "@/utils/initialValues/initialValuesJournalEntry";
 import { validationSchemaJournalEntry } from "@/utils/validation/journalEntry-validation";
 
 import JournalEntryForm from "./JournalEntryForm";
 import { useSubmitJournalEntry } from "@/api/finance/postDataJournalEntry";
+import ButtonAdd from "@/components/common/button/ButtonActionAdd";
 
 interface ICreateJournalEntryModalProps {
   transactionType: "payin" | "payout";

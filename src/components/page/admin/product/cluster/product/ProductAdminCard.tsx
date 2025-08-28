@@ -11,10 +11,10 @@ import GetProductModal from "./GetProductModal";
 import { getDataProductByClusterId } from "@/api/products/getProductByClusterId";
 import { useState } from "react";
 import { getDataProductDetail } from "@/api/products/getDataProductDetail";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { IconEye, IconPencil } from "@tabler/icons-react";
 import UpdateProductModal from "./EditProductModal";
 import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
+import BreathingActionIcon from "@/components/common/button/ButtonActionGo";
 
 interface Props {
   clusterId: string | null;

@@ -1,9 +1,9 @@
 import { formatCurrency } from "@/helper/formatCurrency";
 import { formatDateIndonesia } from "@/helper/formatDateIndonesia";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
 import { Flex } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
+import BreathingActionIcon from "@/components/common/button/ButtonActionGo";
 
 export const columnsBaseRevenue = (
   mutateDeleteJournal: (ids: string[]) => void,

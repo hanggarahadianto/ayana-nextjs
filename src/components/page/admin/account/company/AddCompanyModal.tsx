@@ -4,10 +4,10 @@ import React, { memo, useCallback } from "react";
 import { Modal, TextInput, Button, Group, Stack, Switch, Text, NumberInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Form, Formik } from "formik";
-import ButtonAdd from "@/components/common/button/buttonAdd";
 import { useSubmitCompany } from "@/api/company/postDataCompany";
 import { companyValidationSchema } from "@/utils/validation/company-validation";
 import { initialCompanyValuesCreate } from "@/utils/initialValues/initialValuesCompany";
+import ButtonAdd from "@/components/common/button/ButtonActionAdd";
 
 interface AddCompanyModalProps {
   refetchCompanyData: () => void;

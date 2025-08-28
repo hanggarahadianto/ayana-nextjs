@@ -5,7 +5,6 @@ import { showNotification } from "@mantine/notifications";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPencil } from "@tabler/icons-react";
 import { validationSchemaCashFlowCreate } from "@/utils/validation/cashFlow-validation";
-import BreathingActionIcon from "@/components/common/button/buttonAction";
 import FormGoods from "./FormGoods";
 import { useUpdateCashFlowForm } from "@/api/cash-flow/editDataCashFlow";
 import { useEditGoodForm } from "@/api/good/editGoods";
@@ -15,6 +14,7 @@ import { getDataGoodsByCashFlowId } from "@/api/good/getDataGoodsByCashFlowId";
 import { getInitialValuesCashFlow } from "@/utils/initialValues/initialValuesCashFlow";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
+import BreathingActionIcon from "@/components/common/button/ButtonActionGo";
 
 const EditCashFlowReportModal = ({
   projectName,

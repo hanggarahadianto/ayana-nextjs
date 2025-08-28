@@ -1,4 +1,4 @@
-import BreathingActionIcon from "@/components/common/button/buttonAction";
+import BreathingActionIcon from "@/components/common/button/ButtonActionGo";
 import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
 import { Badge, Flex } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
