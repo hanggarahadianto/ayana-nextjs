@@ -6,13 +6,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 import { formatDateRange } from "@/helper/formatDateIndonesia";
 import { useModalStore } from "@/store/modalStore";
-
 import AddTestimonyModal from "./AddTestimonyModal";
 import { getDataTestimony } from "@/api/testimony/getDataTestiomony";
 import { useDeleteTestimony } from "@/api/testimony/deleteTestimony";
 import { TestimonyCardCarousel } from "./TestimonyCard";
 import UpdateTestimonyModal from "./UpdateTestimonyModal";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
+import LoadingGlobal from "@/styles/loading/loading-global";
 
 interface TestimonyTableProps {
   companyId: string;
@@ -78,7 +78,15 @@ export const TestimonyTable = ({ companyId, companyName }: TestimonyTableProps) 
         </Group>
       </Stack>
 
-      <TestimonyCardCarousel testimonyList={testimonyList} openEditModal={openEditModal} onDelete={handleDeleteTestimony} />
+      {isLoading ? (
+        <LoadingGlobal visible={isLoading} />
+      ) : testimonyList.length === 0 ? (
+        <Text c="dimmed" ta="center" mt="md">
+          Testimony Tidak Tersedia
+        </Text>
+      ) : (
+        <TestimonyCardCarousel testimonyList={testimonyList} openEditModal={openEditModal} onDelete={handleDeleteTestimony} />
+      )}
 
       <UpdateTestimonyModal companyId={companyId} initialData={useModalStore((s) => s.modalData)} />
     </Card>

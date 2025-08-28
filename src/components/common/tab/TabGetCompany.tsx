@@ -7,16 +7,18 @@ import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 type CompanyFilter = Partial<Pick<ICompanyItem, "has_customer" | "has_project" | "has_product">>;
 
 export default function UseCompanyTabs(filter: CompanyFilter = {}) {
-  // const { companies, isLoading } = useGetCompanies();
   const { user, isLoadingUser } = useLoggedInUser();
   const companies = user?.companies || [];
   const { companies: storeCompanies, setCompanies, setFilteredCompanies, setActiveTab, activeTab } = useCompanyStore();
 
   useEffect(() => {
-    setCompanies(companies);
+    // 🔹 sort dulu sebelum diset
+    const sortedCompanies = [...companies].sort((a, b) => Number(a.company_code) - Number(b.company_code));
+
+    setCompanies(sortedCompanies);
 
     // filter dinamis
-    const filtered = companies.filter((company) => {
+    const filtered = sortedCompanies.filter((company) => {
       return Object.entries(filter).every(([key, val]) => company[key as keyof CompanyFilter] === val);
     });
     setFilteredCompanies(filtered);

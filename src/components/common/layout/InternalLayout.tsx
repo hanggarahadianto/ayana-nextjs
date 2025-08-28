@@ -30,10 +30,26 @@ export default function InternalLayoutClient({ children }: { children: React.Rea
   const activeCompany = useCompanyStore((s) => s.activeTab);
 
   // 🔹 Filter menu berdasarkan kondisi + activeCompany
-  const filteredMenuItems = useMemo(
-    () => mainMenuItems.filter((item) => !item.condition || item.condition(activeCompany)),
-    [activeCompany]
-  );
+  // 🔹 Filter menu berdasarkan kondisi + activeCompany
+  const sortedCompany = useMemo(() => {
+    if (!activeCompany) return activeCompany;
+
+    // Kalau activeCompany berupa array of company
+    if (Array.isArray(activeCompany)) {
+      return [...activeCompany].sort((a, b) => Number(a.company_code) - Number(b.company_code));
+    }
+
+    // Kalau cuma single object, return langsung
+    return activeCompany;
+  }, [activeCompany]);
+
+  // 🔹 Filter menu berdasarkan kondisi + sortedCompany
+  const filteredMenuItems = useMemo(() => {
+    if (user?.username === "superadmin") {
+      return mainMenuItems; // akses semua menu
+    }
+    return mainMenuItems.filter((item) => !item.condition || item.condition(sortedCompany));
+  }, [sortedCompany, user]);
 
   if (isLoadingUser) {
     return <LoadingGlobal visible />;
