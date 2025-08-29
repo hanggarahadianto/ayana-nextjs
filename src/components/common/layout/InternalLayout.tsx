@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
 import Link from "next/link";
+import { useState, useMemo } from "react";
 import { AppShell, Burger, NavLink, Stack, rem, useMantineTheme, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
-
 import Navbar from "@/components/page/landing/navbar";
 import { mainMenuItems, userMenuItem } from "@/constants/navigation";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
@@ -29,27 +28,23 @@ export default function InternalLayoutClient({ children }: { children: React.Rea
   const { user, isLoadingUser } = useLoggedInUser();
   const activeCompany = useCompanyStore((s) => s.activeTab);
 
-  // 🔹 Filter menu berdasarkan kondisi + activeCompany
-  // 🔹 Filter menu berdasarkan kondisi + activeCompany
-  const sortedCompany = useMemo(() => {
-    if (!activeCompany) return activeCompany;
+  const currentCompany = useMemo(() => {
+    if (!activeCompany) return null;
 
-    // Kalau activeCompany berupa array of company
     if (Array.isArray(activeCompany)) {
-      return [...activeCompany].sort((a, b) => Number(a.company_code) - Number(b.company_code));
+      return activeCompany[0]; // ambil pertama aja
     }
 
-    // Kalau cuma single object, return langsung
     return activeCompany;
   }, [activeCompany]);
 
   // 🔹 Filter menu berdasarkan kondisi + sortedCompany
   const filteredMenuItems = useMemo(() => {
     if (user?.username === "superadmin") {
-      return mainMenuItems; // akses semua menu
+      return mainMenuItems;
     }
-    return mainMenuItems.filter((item) => !item.condition || item.condition(sortedCompany));
-  }, [sortedCompany, user]);
+    return mainMenuItems.filter((item) => !item.condition || item.condition(currentCompany));
+  }, [currentCompany, user]);
 
   if (isLoadingUser) {
     return <LoadingGlobal visible />;

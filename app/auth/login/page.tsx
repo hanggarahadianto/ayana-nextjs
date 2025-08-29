@@ -26,7 +26,7 @@ export default function LoginPage() {
   const handleSubmit = (values: { username: string; password: string }) => {
     mutate(values, {
       onSuccess: () => {
-        router.push("/admin/sidebar/product");
+        router.push("/admin/sidebar/dashboard");
       },
     });
   };
