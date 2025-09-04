@@ -24,7 +24,6 @@ interface GetOutStandingDebtDataProps {
 }
 
 export const GetOutstandingDebtData = ({ companyId, companyName, title, debtType, transactionType }: GetOutStandingDebtDataProps) => {
-  // console.log("company id", companyId);
   const { user } = useLoggedInUser();
 
   const [page, setPage] = useState(1);

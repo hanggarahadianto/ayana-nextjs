@@ -2,17 +2,17 @@
 
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import { AppShell, Burger, NavLink, Stack, rem, useMantineTheme, useMantineColorScheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
-import Navbar from "@/components/page/landing/navbar";
 import { mainMenuItems, userMenuItem } from "@/constants/navigation";
 import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 import { useResponsiveLayout } from "@/styles/resposnsiveLayout/resposnvieLayout";
 import LoadingGlobal from "@/styles/loading/loading-global";
 import { useCompanyStore } from "@/constants/company-store";
+import Navbar from "@/components/page/landing/navbar";
+import { AppShell, Burger, NavLink, Stack, rem, useMantineTheme, useMantineColorScheme } from "@mantine/core";
 
 export default function InternalLayoutClient({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();

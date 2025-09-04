@@ -13,6 +13,7 @@ import { getJournalEntryData } from "@/api/finance/getJournalEntryData";
 import { useDeleteDataJournalEntry } from "@/api/finance/deleteDataJournalEntry";
 import { useListState, randomId } from "@mantine/hooks";
 import ButtonDeleteWithConfirmation from "@/components/common/button/ButtonDeleteWithConfirmation";
+import { useLoggedInUser } from "@/lib/hook/useLoggedInUser";
 
 interface GetJournalEntryDataProps {
   companyId: string;
@@ -21,6 +22,8 @@ interface GetJournalEntryDataProps {
 }
 
 export const GetJournalEntryData = ({ companyId, companyName, title }: GetJournalEntryDataProps) => {
+  const { user } = useLoggedInUser();
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -30,6 +33,8 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const { formattedStartDate, formattedEndDate } = formatDateRange(startDate ?? undefined, endDate ?? undefined);
+
+  const queryEnabled = !!user && !!companyId;
 
   const {
     data: journalEntryData,
@@ -57,7 +62,7 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
         startDate: formattedStartDate,
         endDate: formattedEndDate,
       }),
-    enabled: !!companyId,
+    enabled: queryEnabled,
     refetchOnWindowFocus: false,
   });
 
@@ -74,6 +79,17 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
   const indeterminate = selectedCount > 0 && selectedCount < total;
 
   const { mutate: mutateDeleteDataJournal, isPending: isLoadingDeleteJournalEntry } = useDeleteDataJournalEntry(title);
+
+  const handleDelete = () => {
+    const selectedIds = checkboxStates.filter((c) => c.checked).map((c) => c.id);
+
+    if (selectedIds.length === 0) return; // optional, cegah request kosong
+
+    mutateDeleteDataJournal({
+      ids: selectedIds,
+      forDashboard: true, // ✅ kalau memang untuk dashboard
+    });
+  };
 
   useEffect(() => {
     if (journalList.length > 0) {
@@ -147,10 +163,7 @@ export const GetJournalEntryData = ({ companyId, companyName, title }: GetJourna
               <ButtonDeleteWithConfirmation
                 size={2.5}
                 description="Hapus yang ditandai"
-                onDelete={async () => {
-                  const selectedIds = checkboxStates.filter((c) => c.checked).map((c) => c.id);
-                  mutateDeleteDataJournal({ ids: selectedIds }); // ✅ dibungkus dalam objek
-                }}
+                onDelete={handleDelete}
                 isLoading={isLoadingDeleteJournalEntry}
               />
             )}

@@ -1,4 +1,5 @@
 export const DASHBOARD_QUERY_KEYS = [
+  "getJournalEntryData",
   "getCashinDataStats",
   "getCashOutDataStats",
   "getCashInStat",
